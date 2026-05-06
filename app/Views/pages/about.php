@@ -1,1 +1,0 @@
-Lorem ipsum dolor sit, amet consectetur adipisicing elit. Porro ut libero sed sint doloribus aspernatur similique, expedita praesentium exercitationem accusamus laudantium quaerat unde voluptate quas labore voluptas natus reprehenderit temporibus?
