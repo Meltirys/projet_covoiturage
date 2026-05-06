@@ -1,10 +1,12 @@
 <?php
 
 use CodeIgniter\Router\RouteCollection;
-use App\Controllers\News;
-use App\Controllers\Pages;
+use App\Controllers\Auth;
 
 /**
  * @var RouteCollection $routes
  */
 $routes->get('/', 'Home::index');
+
+// Login
+$routes->get('login', [Auth::class, 'login']);
