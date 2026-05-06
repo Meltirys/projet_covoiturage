@@ -25,7 +25,7 @@ class CreateBookingTable extends Migration
         ]);
         $this->forge->addPrimaryKey('id_booking');
         $this->forge->addForeignKey('id_user', 'Users', 'id_user', 'CASCADE', 'NO ACTION');
-        $this->forge->addForeignKey('id_journey_drive', 'JourneyDrive', 'journey_drive_key', 'CASCADE', 'NO ACTION');
+        $this->forge->addForeignKey('id_journey_drive', 'JourneyDrive', 'id_journey_drive', 'CASCADE', 'NO ACTION');
         $this->forge->createTable('Booking');
     }
 

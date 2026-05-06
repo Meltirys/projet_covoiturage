@@ -15,7 +15,7 @@ class CreateTrackTable extends Migration
                 'auto_increment' => true,
             ],
             'geojson'       => ['type' => 'JSON', 'null' => false],
-            'distance'      => ['type' => 'DECIMAL', 'null' => false],
+            'distance'      => ['type' => 'DECIMAL', 'constraint' => '15,3', 'null' => false],
             'duration'      => ['type' => 'VARCHAR', 'constraint' =>50],
         ]);
         $this->forge->addPrimaryKey('id_track');
