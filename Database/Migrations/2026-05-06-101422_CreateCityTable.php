@@ -15,7 +15,7 @@ class CreateCityTable extends Migration
                 'auto_increment' => true,
             ],
             'name'      => ['type' => 'VARCHAR', 'constraint' => 50, 'null' => false],
-            'postcode'  => ['type' => 'VARCHAR', 'constraint' => 50, 'null' => false],
+            'postcode'  => ['type' => 'VARCHAR', 'constraint' => 5, 'null' => false],
         ]);
         $this->forge->addPrimaryKey('id_city');
         $this->forge->createTable('City');

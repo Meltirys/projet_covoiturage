@@ -21,12 +21,14 @@ class CreateUserReportTable extends Migration
             'id_user_1'   => ['type' => 'INT', 'null' => false, 'unsigned' => true],
         ]);
         $this->forge->addPrimaryKey('id_report');
-        $this->forge->addForeignKey('id_user',);
+        $this->forge->addForeignKey('id_user', 'Users', 'id_user', 'RESTRICT', 'NO ACTION');
+        $this->forge->addForeignKey('id_user_1', 'Users', 'id_user', 'RESTRICT', 'NO ACTION');
+        $this->forge->createTable('Report');
         
     }
 
     public function down()
     {
-        //
+        $this->forge->dropTable('Report');
     }
 }

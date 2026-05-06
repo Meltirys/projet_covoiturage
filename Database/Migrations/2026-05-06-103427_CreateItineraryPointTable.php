@@ -26,6 +26,6 @@ class CreateItineraryPointTable extends Migration
 
     public function down()
     {
-        $this->forge->dropTable('ItineraryPoint');
+        $this->forge->dropTable('Location');
     }
 }
