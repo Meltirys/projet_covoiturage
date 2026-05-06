@@ -14,7 +14,7 @@ class CreateOptionTable extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'option' => ['type' => 'VARCHAR', 'constraint' => 50],
+            'option_label' => ['type' => 'VARCHAR', 'constraint' => 50],
         ]);
         $this->forge->addPrimaryKey('id_option');
         $this->forge->createTable('Option');

@@ -22,7 +22,7 @@ class CreateUserJourneyRequestTable extends Migration
         ]);
         $this->forge->addPrimaryKey('id_journey_request');
         $this->forge->addForeignKey('id_itinerary_point', 'ItineraryPoint', 'id_itinerary_point', 'RESTRICT', 'NO ACTION');
-        $this->forge->addForeignKey('id_itinerary_point_1', 'ItineraryPoint', 'id_itinerary_point_1', 'RESTRICT', 'NO ACTION');
+        $this->forge->addForeignKey('id_itinerary_point_1', 'ItineraryPoint', 'id_itinerary_point', 'RESTRICT', 'NO ACTION');
         $this->forge->createTable('JourneyRequest');
     }
 

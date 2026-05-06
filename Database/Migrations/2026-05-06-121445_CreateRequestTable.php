@@ -16,8 +16,8 @@ class CreateRequestTable extends Migration
             ],
             'seat_taken'         => ['type' => 'INT'],
             'request_date'       => ['type' => 'DATE'],
-            'id_journey_request' => ['type' => 'INT', 'unsigned' => true],
-            'id_user'            => ['type' => 'INT', 'unsigned' => true],
+            'id_journey_request' => ['type' => 'INT', 'unsigned' => true, 'null' => false],
+            'id_user'            => ['type' => 'INT', 'unsigned' => true, 'null' => false],
         ]);
         $this->forge->addPrimaryKey('id_request');
         $this->forge->addForeignKey('id_journey_request', 'JourneyRequest', 'id_journey_request', 'CASCADE', 'NO ACTION');

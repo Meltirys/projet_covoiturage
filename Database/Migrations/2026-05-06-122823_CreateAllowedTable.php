@@ -20,6 +20,7 @@ class CreateAllowedTable extends Migration
                 'null'      => false,
             ],
         ]);
+        $this->forge->addPrimaryKey(['id_user', 'id_user_permission']);
         $this->forge->addForeignKey('id_user', 'Users', 'id_user', 'RESTRICT', 'NO ACTION');
         $this->forge->addForeignKey('id_user_permission', 'UserPermission', 'id_user_permission', 'RESTRICT', 'NO ACTION');
         $this->forge->createTable('Allowed');

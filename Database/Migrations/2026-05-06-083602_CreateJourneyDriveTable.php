@@ -26,8 +26,8 @@ class CreateJourneyDriveTable extends Migration
         $this->forge->addPrimaryKey('id_journey_drive');
         $this->forge->addForeignKey('id_track', 'Track', 'id_track', 'CASCADE', 'NO ACTION');
         $this->forge->addForeignKey('id_itinerary_point', 'ItineraryPoint', 'id_itinerary_point', 'RESTRICT', 'NO ACTION');
-        $this->forge->addForeignKey('id_itinerary_point_1', 'ItineraryPoint', 'id_itinerary_point_1', 'RESTRICT', 'NO ACTION');
-        $this->forge->addForeignKey('id_car', 'CAR', 'id_car', 'RESTRICT', 'NO ACTION');
+        $this->forge->addForeignKey('id_itinerary_point_1', 'ItineraryPoint', 'id_itinerary_point', 'RESTRICT', 'NO ACTION');
+        $this->forge->addForeignKey('id_car', 'Car', 'id_car', 'RESTRICT', 'NO ACTION');
         $this->forge->createTable('JourneyDrive');
     }
 
