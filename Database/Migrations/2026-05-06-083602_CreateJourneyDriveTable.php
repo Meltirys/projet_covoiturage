@@ -19,14 +19,14 @@ class CreateJourneyDriveTable extends Migration
             'departure'            => ['type' => 'DATETIME', 'null' => false],
             'estimated_arrival'    => ['type' => 'DATETIME', 'null' => false],
             'id_track'             => ['type' => 'INT', 'null' => false, 'unsigned' => true],
-            'id_itinerary_point'   => ['type' => 'INT', 'null' => false, 'unsigned' => true],
-            'id_itinerary_point_1' => ['type' => 'INT', 'null' => false, 'unsigned' => true],
+            'start'   => ['type' => 'INT', 'null' => false, 'unsigned' => true],
+            'end' => ['type' => 'INT', 'null' => false, 'unsigned' => true],
             'id_car'               => ['type' => 'INT', 'null' => false, 'unsigned' => true],
         ]);
         $this->forge->addPrimaryKey('id_journey_drive');
         $this->forge->addForeignKey('id_track', 'Track', 'id_track', 'CASCADE', 'NO ACTION');
-        $this->forge->addForeignKey('id_itinerary_point', 'ItineraryPoint', 'id_itinerary_point', 'RESTRICT', 'NO ACTION');
-        $this->forge->addForeignKey('id_itinerary_point_1', 'ItineraryPoint', 'id_itinerary_point', 'RESTRICT', 'NO ACTION');
+        $this->forge->addForeignKey('start', 'ItineraryPoint', 'id_location', 'RESTRICT', 'NO ACTION');
+        $this->forge->addForeignKey('end', 'ItineraryPoint', 'id_location', 'RESTRICT', 'NO ACTION');
         $this->forge->addForeignKey('id_car', 'Car', 'id_car', 'RESTRICT', 'NO ACTION');
         $this->forge->createTable('JourneyDrive');
     }

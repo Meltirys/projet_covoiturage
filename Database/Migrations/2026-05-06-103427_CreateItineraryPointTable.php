@@ -4,12 +4,12 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class CreateItineraryPointTable extends Migration
+class CreateLocationTable extends Migration
 {
     public function up()
     {
         $this->forge->addField([
-            'id_itinerary_point' => [
+            'id_location' => [
                 'type'              => 'INT',
                 'unsigned'          => true,
                 'auto_increment'    => true,
@@ -19,9 +19,9 @@ class CreateItineraryPointTable extends Migration
             'longitude'     => ['type' => 'DECIMAL', 'constraint' => '11,8', 'null' => false],
             'id_city'       => ['type' => 'INT', 'unsigned' => true, 'null' => false],
         ]);
-        $this->forge->addPrimaryKey('id_itinerary_point');
+        $this->forge->addPrimaryKey('id_location');
         $this->forge->addForeignKey('id_city', 'City', 'id_city', 'RESTRICT', 'NO ACTION');
-        $this->forge->createTable('ItineraryPoint');
+        $this->forge->createTable('Location');
     }
 
     public function down()

@@ -16,13 +16,13 @@ class CreateUserJourneyRequestTable extends Migration
             ],
             'description'           => ['type' => 'VARCHAR', 'constraint' => 255],
             'range_of_time'         => ['type' => 'VARCHAR', 'constraint' => 50],
-            'id_itinerary_point'    => ['type' => 'INT', 'unsigned' => true, 'null' => false],
-            'id_itinerary_point_1'  => ['type' => 'INT', 'unsigned' => true, 'null' => false],
+            'start'    => ['type' => 'INT', 'unsigned' => true, 'null' => false],
+            'end'  => ['type' => 'INT', 'unsigned' => true, 'null' => false],
 
         ]);
         $this->forge->addPrimaryKey('id_journey_request');
-        $this->forge->addForeignKey('id_itinerary_point', 'ItineraryPoint', 'id_itinerary_point', 'RESTRICT', 'NO ACTION');
-        $this->forge->addForeignKey('id_itinerary_point_1', 'ItineraryPoint', 'id_itinerary_point', 'RESTRICT', 'NO ACTION');
+        $this->forge->addForeignKey('start', 'ItineraryPoint', 'id_location', 'RESTRICT', 'NO ACTION');
+        $this->forge->addForeignKey('end', 'ItineraryPoint', 'id_location', 'RESTRICT', 'NO ACTION');
         $this->forge->createTable('JourneyRequest');
     }
 
