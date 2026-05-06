@@ -2,6 +2,8 @@
 
 namespace App\Controllers;
 
+use App\Controllers\BaseController;
+use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\UserModel;
 
 class Auth extends BaseController
@@ -87,7 +89,13 @@ class Auth extends BaseController
     public function registerAttempt()
     {
         $rules = [
-            'email' => 'required|valid_email',
+            'email' => [
+                'rules' => 'required|valid_email',
+                'errors' => [
+                    'required' => "Adresse email requise",
+                    'valid_email' => "Veuillez entrer une adresse email valide"
+                ]
+            ],
             'password' => [
                 'rules' => 'required|min_length[8]|max_length[255]|regex_match[/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};:"\\|,.<>\/?]).+$/]',
                 'errors' => [
@@ -98,7 +106,7 @@ class Auth extends BaseController
                 ]
             ]
         ];
-        
+
         // If there are errors, returns to view with them in the following format :
         // [ 'field1' => 'error message', 'field2' => 'error message', ]
         if (! $this->validate($rules)) {
@@ -108,7 +116,7 @@ class Auth extends BaseController
 
         // Checks whether the email is used within the database
         $model = new UserModel;
-        $isUsed = $model-> ;
+        $isUsed = $model->insert(['first_name' => ]);
         // If it's already in use, returns to the view with an error
         if ($isUsed) {
             return redirect()->back()
