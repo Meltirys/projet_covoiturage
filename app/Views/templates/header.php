@@ -11,4 +11,8 @@
 </head>
 
 <body>
-    <h1><?= esc($title) ?></h1>
+    <header>
+        <h1><?= esc($title) ?></h1>
+    </header>
+
+    <main>
