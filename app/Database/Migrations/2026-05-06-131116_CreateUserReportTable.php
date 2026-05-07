@@ -17,12 +17,12 @@ class CreateUserReportTable extends Migration
             'date'        => ['type' => 'DATE', 'null' => false],
             'comment'     => ['type' => 'TEXT'],
             'is_resolved' => ['type' => 'BOOLEAN', 'null' => false, 'default' => false],
-            'id_user'     => ['type' => 'INT', 'null' => false, 'unsigned' => true],
-            'id_user_1'   => ['type' => 'INT', 'null' => false, 'unsigned' => true],
+            'reporter'     => ['type' => 'INT', 'null' => false, 'unsigned' => true],
+            'reported'   => ['type' => 'INT', 'null' => false, 'unsigned' => true],
         ]);
         $this->forge->addPrimaryKey('id_report');
-        $this->forge->addForeignKey('id_user', 'Users', 'id_user', 'RESTRICT', 'NO ACTION');
-        $this->forge->addForeignKey('id_user_1', 'Users', 'id_user', 'RESTRICT', 'NO ACTION');
+        $this->forge->addForeignKey('reporter', 'Users', 'id_user', 'RESTRICT', 'NO ACTION');
+        $this->forge->addForeignKey('reported', 'Users', 'id_user', 'RESTRICT', 'NO ACTION');
         $this->forge->createTable('Report');
         
     }
