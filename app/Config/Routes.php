@@ -19,5 +19,6 @@ $routes->post('connexion', 'AuthController::loginAttempt');
 $routes->post('signup', 'AuthController::registerAttempt');
 
 // Itinéraire
-$routes->get('trajet', 'PagesController::itinerary');
+$routes->get('trajet', 'PagesController::itineraries');
 $routes->post('trajet-recherche', 'ItineraryController::search');
+$routes->get('nouveau-trajet', 'PageController::newItinerary');

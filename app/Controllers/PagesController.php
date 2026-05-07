@@ -13,11 +13,19 @@ class PagesController extends BaseController
         return view('HomeView');
     }
 
-    public function itinerary()
+    public function itineraries()
     {
         helper('form');
         return view('commons/header')
-            . view('itinerary/RouteView')
+            . view('itinerary/search/SearchView')
+            . view('commons/footer');
+    }
+
+    public function newItinerary()
+    {
+        helper('form');
+        return view('commons/header')
+            . view('itinerary/create/CreateView')
             . view('commons/footer');
     }
 }

@@ -34,18 +34,32 @@
 </div>
 
 <div>
+    <label for="car">Véhicule&nbsp;:</label><br>
+    <select name="car" id="car"
+        value="<?= set_value('car') ?>" required>
+        <option value="">--Choisissez le véhicule--</option>
+        <?php // Ajoute au dropdown la ou les voitures de l'utilisateur
+        if (isset($user['cars'])) {
+            foreach ($user['cars'] as $car) { ?>
+                <option value="<?= $car['label'] ?>"><?= $car['label'] ?></option>
+        <?php }
+        } ?>
+        <?php if (isset($errors["car"])) echo ("<br><span class='error'>" . $errors["car"] . "</span>"); ?>
+</div>
+
+<div>
+    <label for="seats">Nombre de places&nbsp;:</label><br>
+    <select type="text" name="seats" id="seats"
+        value="<?= set_value('seats') ?>" required>
+        <?php if (isset($errors["seats"])) echo ("<br><span class='error'>" . $errors["seats"] . "</span>"); ?>
+</div>
+
+<div>
     <label for="options">Options&nbsp;:</label><br>
     <input type="text" name="options" id="options"
         value="<?= set_value('options') ?>"
         placeholder="Entrez vos options" required>
     <?php if (isset($errors["options"])) echo ("<br><span class='error'>" . $errors["options"] . "</span>"); ?>
-</div>
-
-<div>
-    <label for="car">Choisissez votre voiture&nbsp;:</label><br>
-    <select type="car-select" name="car" id="car"
-        value="<?= set_value('car') ?>" required>
-        <?php if (isset($errors["car"])) echo ("<br><span class='error'>" . $errors["car"] . "</span>"); ?>
 </div>
 
 <div>
