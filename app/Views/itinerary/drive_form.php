@@ -1,4 +1,4 @@
-<?php form_open('itinerary/search') ?>
+<?php form_open('itinerary/create') ?>
 <div>
     <label for="start">Départ&nbsp;:</label><br>
     <input type="text" name="start" id="start"
@@ -16,10 +16,17 @@
 </div>
 
 <div>
+    <label for="stops">Arrêts (optionnels)&nbsp;:</label><br>
+    <input type="text" name="stops" id="stops"
+        value="<?= set_value('stops') ?>"
+        placeholder="Entrez les arrêts" required>
+    <?php if (isset($errors["stops"])) echo ("<br><span class='error'>" . $errors["stops"] . "</span>"); ?>
+</div>
+
+<div>
     <label for="start-time">Heure départ&nbsp;:</label><br>
     <input type="datetime-local" name="start-time" id="start-time"
         value="<?= set_value('start') ?>" required>
-
     <label for="end-time">Heure arrivée&nbsp;:</label><br>
     <input type="datetime-local" name="end-time" id="end-time"
         value="<?= set_value('end') ?>" required>
@@ -27,11 +34,18 @@
 </div>
 
 <div>
-    <label for="filter">Filtres&nbsp;:</label><br>
-    <input type="text" name="filter" id="filter"
-        value="<?= set_value('filter') ?>"
-        placeholder="Entrez votre filtre" required>
-    <?php if (isset($errors["filter"])) echo ("<br><span class='error'>" . $errors["filter"] . "</span>"); ?>
+    <label for="options">Options&nbsp;:</label><br>
+    <input type="text" name="options" id="options"
+        value="<?= set_value('options') ?>"
+        placeholder="Entrez vos options" required>
+    <?php if (isset($errors["options"])) echo ("<br><span class='error'>" . $errors["options"] . "</span>"); ?>
+</div>
+
+<div>
+    <label for="car">Choisissez votre voiture&nbsp;:</label><br>
+    <select type="car-select" name="car" id="car"
+        value="<?= set_value('car') ?>" required>
+        <?php if (isset($errors["car"])) echo ("<br><span class='error'>" . $errors["car"] . "</span>"); ?>
 </div>
 
 <div>
