@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration
                 'null'            => false,
                 'auto_increment'  => true,
             ],
-            'first_name'      => ['type' => 'VARCHAR', 'null' => false, 'constraint' => 50], 
+            'first_name'      => ['type' => 'VARCHAR', 'null' => false, 'constraint' => 50],
             'last_name'       => ['type' => 'VARCHAR', 'null' => false, 'constraint' => 50],
             'password'        => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => false],
             'email'           => ['type' => 'VARCHAR', 'null' => false, 'constraint' => 255, 'unique' => true],
@@ -23,8 +23,14 @@ class CreateUsersTable extends Migration
             'birth_date'      => ['type' => 'DATE', 'null' => false],
             'gender'          => ['type' => 'VARCHAR', 'null' => false, 'constraint' => 50],
             'avatar_filename' => ['type' => 'VARCHAR', 'constraint' => 255, 'unique' => true],
+            'id_user_permission' => [
+                'type'      => 'INT',
+                'unsigned'  => true,
+                'null'      => false,
+            ],
         ]);
         $this->forge->addPrimaryKey('id_user');
+        $this->forge->addForeignKey('id_user_permission', 'UserPermission', 'id_user_permission', 'RESTRICT', 'NO ACTION');
         $this->forge->createTable('Users');
     }
 
@@ -33,5 +39,3 @@ class CreateUsersTable extends Migration
         $this->forge->dropTable('Users');
     }
 }
-
-
