@@ -25,7 +25,7 @@ class AuthController extends BaseController
     /**
      * Attempts a login with provided email and password
      */
-    public function loginAttempt()
+    public function authenticate()
     {
         $userModel = new UserModel();
 
@@ -76,7 +76,7 @@ class AuthController extends BaseController
     /**
      * Attempts registration from post content
      */
-    public function registerAttempt()
+    public function saveUser()
     {
 
         helper('form');
