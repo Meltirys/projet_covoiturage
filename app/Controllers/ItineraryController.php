@@ -7,8 +7,5 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class ItineraryController extends BaseController
 {
-    public function index()
-    {
-        //
-    }
+    public function search() {}
 }
