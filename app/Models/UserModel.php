@@ -30,13 +30,15 @@ class UserModel extends Model
 
     // Validation
     protected $validationRules      = [
-        'first_name' => 'required|min_length[2]|max_length(100)',
-        'last_name' => 'required|min_length[2]|max_length(100)',
-        'email' => 'required|valid_email|is_unique[users.email]',
-        'password' => 'required|min_length[8]|max_length[255]|regex_match[/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};:"\\|,.<>\/?]).+$/]',
-        'mobile' => 'permit_empty|regex_match[/^(?:(?:\+33|0)[67])(?:[\s.-]?\d{2}){4}$/]',
-        'birth_date' => 'required|valid_date[Y-m-d]|adultCheck',
-        'gender' => 'required|in_list[homme,femme,autre]',
+        'register' => [
+            'first_name' => 'required|min_length[2]|max_length(100)',
+            'last_name' => 'required|min_length[2]|max_length(100)',
+            'email' => 'required|valid_email|is_unique[users.email]',
+            'password' => 'required|min_length[8]|max_length[255]|regex_match[/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};:"\\|,.<>\/?]).+$/]',
+            'mobile' => 'permit_empty|regex_match[/^(?:(?:\+33|0)[67])(?:[\s.-]?\d{2}){4}$/]',
+            'birth_date' => 'required|valid_date[Y-m-d]|adultCheck',
+            'gender' => 'required|in_list[homme,femme,autre]',
+        ]
     ];
 
     protected $validationMessages   = [
