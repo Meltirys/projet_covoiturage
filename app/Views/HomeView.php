@@ -44,7 +44,7 @@
 
 
             <?= form_open('/signup') ?>
-            
+
                 <div class="auth-field-group">
                     <div class="auth-field">
                         <label class="auth-label" for="first_name">Prénom</label>
@@ -73,13 +73,13 @@
 
                 <div class="auth-field-group">
                     <div class="auth-field">
-                        <label class="auth-label" for="passwd">Mot de passe</label>
-                        <input class="auth-input" type="password" name="passwd" value="<?= set_value('passwd') ?>" required>
+                        <label class="auth-label" for="password">Mot de passe</label>
+                        <input class="auth-input" type="password" name="password" value="<?= set_value('password') ?>" required>
                     </div>
 
                     <div class="auth-field">
-                        <label class="auth-label" for="passwdconf">Confirmation du mot de passe</label>
-                        <input class="auth-input" type="password" name="passwdconf" value="<?= set_value('passwdconf') ?>" required>
+                        <label class="auth-label" for="passwordconf">Confirmation du mot de passe</label>
+                        <input class="auth-input" type="password" name="passwordconf" value="<?= set_value('passwordconf') ?>" required>
                     </div>
                 </div>
 
