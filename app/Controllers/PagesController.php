@@ -13,13 +13,11 @@ class PagesController extends BaseController
         return view('HomeView');
     }
 
-    public function login()
-    {
-        return view('AuthView');
-    }
-
     public function itinerary()
     {
-        return view('RouteView');
+        helper('form');
+        return view('commons/header')
+            . view('itinerary/RouteView')
+            . view('commons/footer');
     }
 }
