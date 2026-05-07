@@ -9,10 +9,8 @@ use App\Validators\RegistrationValidator;
 
 class AuthController extends BaseController
 {
-    public function index() {}
-
     /**
-     * Returns the login view (consider renaming this to view() and loginAttempt() to just login() later)
+     * Returns the login view
      */
     public function login()
     {
