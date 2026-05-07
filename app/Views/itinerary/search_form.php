@@ -1,4 +1,4 @@
-<form action="/search-route" method="post">
+<form action="/trajet-recherche" method="post">
     <?= csrf_field() ?>
 
     <div>
