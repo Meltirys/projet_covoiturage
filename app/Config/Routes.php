@@ -16,7 +16,7 @@ $routes->get('/', 'PagesController::index');
 // Authentification
 $routes->get('authentification', 'PagesController::login');
 $routes->post('connexion', 'AuthController::loginAttempt');
-$routes->post('inscription', 'AuthController::registerAttempt');
+$routes->post('signup', 'AuthController::registerAttempt');
 
 // Itinéraire
 $routes->get('trajet', 'PagesController::itinerary');

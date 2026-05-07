@@ -8,6 +8,8 @@ use App\Models\UserModel;
 
 class AuthController extends BaseController
 {
+    public function index(){
+    }
 
     /**
      * Returns the login view (consider renaming this to view() and loginAttempt() to just login() later)
@@ -74,6 +76,10 @@ class AuthController extends BaseController
      */
     public function registerAttempt()
     {
+        
+        helper('form');
+
+        return redirect()->to('/');
         $userModel = new UserModel();
 
         $data = [
