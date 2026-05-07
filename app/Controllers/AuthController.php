@@ -13,7 +13,7 @@ class AuthController extends BaseController
     }
 
     /**
-     * Returns the login view
+     * Returns the login view (consider renaming this to view() and loginAttempt() to just login() later)
      */
     public function login()
     {
@@ -27,40 +27,22 @@ class AuthController extends BaseController
      */
     public function loginAttempt()
     {
-        $rules = [
-            'email' => [
-                'rules' => 'required|valid_email',
-                'errors' => [
-                    'required' => "Adresse email requise",
-                    'valid_email' => "L'adresse email entrée n'est pas valide",
-                ]
-            ],
-            'password' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => "Mot de passe requis"
-                ]
-            ]
+        $userModel = new UserModel();
+
+        $data = [
+            'email'      => $this->request->getPost('email'),
+            'password'   => $this->request->getPost('password'),
         ];
 
-        // If there are errors, returns to view with them in the following format :
-        // [ 'field1' => 'error message', 'field2' => 'error message', ]
-        if (! $this->validate($rules)) {
-            return redirect()->back()->withInput()
-                ->with('errors', $this->validator->getErrors());
+        $user = $userModel->where('email', $data['email'])->first();
+
+        // If not found or if passwords don't match, fail login
+        if (!$user || !password_verify($data['password'], $user['password'])) {
+            return redirect()->back()
+                ->withInput()
+                ->with('errors', 'Identifiants invalides');
         }
 
-        // Checks if the email and password match a user in database
-        $model = new UserModel;
-        $user = $model->tryLogin(
-            $this->request->getPost('email'),
-            $this->request->getPost('password')
-        );
-        // If it doesn't, returns to the view with a message in $error
-        if (! $user) {
-            return redirect()->back()
-                ->with('error', 'Identifiants invalides');
-        }
         // If all checks succeed, sets the user information in the session
         session()->set([
             'user_id' => $user['id'],
