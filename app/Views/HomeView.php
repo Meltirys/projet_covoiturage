@@ -66,6 +66,24 @@
                     <?php endif ?>
 
                 </div>
+                <div class="auth-field">
+                    <div class="auth-input">
+                        <label class="auth-label" for="gender">Civilité</label>
+                        <input class="auth-input" type="radio" name="gender" value="male" <?= set_radio('gender', "male") ?> required>
+                        <label for="male">Homme</label>
+
+                        <input class="auth-input" type="radio" name="gender" value="female" <?= set_radio('gender', "female") ?> required>
+                        <label for="male">Femme</label>
+
+                        <input class="auth-input" type="radio" name="gender" value="none" <?= set_radio('gender', "none") ?> required>
+                        <label for="male">Non renseigné</label>
+
+                    </div>
+                    <?php if ($errors['gender'] ?? null): ?>
+                        <span class="error"><?= $errors['gender'] ?></span>
+                    <?php endif ?>
+
+                </div>
             </div>
 
             <div class="auth-field-group">
@@ -116,6 +134,7 @@
                         <span class="error"><?= $errors['passwordconf'] ?></span>
                     <?php endif ?>
                 </div>
+
             </div>
 
             <div class="auth-group">
