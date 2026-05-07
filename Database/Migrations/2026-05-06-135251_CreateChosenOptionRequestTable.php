@@ -12,16 +12,15 @@ class CreateChosenOptionRequestTable extends Migration
             'id_option' => [
                 'type'           => 'INT',
                 'unsigned'       => true,
-                'auto_increment' => true,
             ],
-            'id_journey_drive' => [
+            'id_journey_request' => [
                 'type'           => 'INT',
                 'unsigned'       => true,
-                'auto_increment' => true,
             ],
         ]);
-        $this->forge->addPrimaryKey(['id_option', 'id_journey_drive']);
-        $this->forge->addForeignKeyt('id_option', 'Option', 'id_option', 'RESTRICT', 'NO ACTION');
+        $this->forge->addPrimaryKey(['id_option', 'id_journey_request']);
+        $this->forge->addForeignKey('id_option', 'Option', 'id_option', 'RESTRICT', 'NO ACTION');
+        $this->forge->addForeignKey('id_journey_request', 'JourneyRequest', 'id_journey_request', 'RESTRICT', 'NO ACTION');
         $this->forge->createTable('OptionRequest');
     }
 

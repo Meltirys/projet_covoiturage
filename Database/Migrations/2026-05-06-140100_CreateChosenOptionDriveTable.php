@@ -12,12 +12,10 @@ class CreateChosenOptionDriveTable extends Migration
             'id_journey_drive'  => [
                 'type'           => 'INT',
                 'unsigned'       => true,
-                'auto_increment' => true,
             ],
             'id_option'  => [
                 'type'           => 'INT',
                 'unsigned'       => true,
-                'auto_increment' => true,
             ],
         ]);
         $this->forge->addPrimaryKey(['id_journey_drive', 'id_option']);

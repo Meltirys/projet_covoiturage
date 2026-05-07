@@ -20,11 +20,12 @@ class CreateStagesTable extends Migration
                 'unsigned'      => true
             ],
 
-            'order' => ['type' => 'INT',]
+            'order' => ['type' => 'INT'],
 
         ]);
-        $this->forge->addForeignKey('id_journey_drive', 'JourneyDrive', 'id_journey_drive', 'RESTRICT', 'NO_ACTION');
-        $this->forge->addForeignKey('id_location', 'Location', 'id_location', 'RESTRICT', 'NO_ACTION');
+        $this->forge->addPrimaryKey(['id_journey_drive', 'id_location']);
+        $this->forge->addForeignKey('id_journey_drive', 'JourneyDrive', 'id_journey_drive', 'RESTRICT', 'NO ACTION');
+        $this->forge->addForeignKey('id_location', 'Location', 'id_location', 'RESTRICT', 'NO ACTION');
         $this->forge->createTable('Stages');
     }
 
