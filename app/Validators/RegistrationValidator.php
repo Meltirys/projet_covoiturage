@@ -33,6 +33,14 @@ class RegistrationValidator extends BaseValidator
                 ]
             ],
 
+            'gender' => [
+                'rules' => 'required|in_list[male,female,none]',
+                'errors' => [
+                    'required' => 'Genre requis',
+                    'in_list'  => 'Genre invalide',
+                ]
+            ],
+
             'email' => [
                 'rules'  => 'required|valid_email|is_unique[Users.email]|max_length[255]',
                 'errors' => [

@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             'mobile'          => ['type' => 'VARCHAR', 'constraint' => 50],
             'birth_date'      => ['type' => 'DATE', 'null' => false],
             'gender'          => ['type' => 'VARCHAR', 'null' => false, 'constraint' => 50],
-            'avatar_filename' => ['type' => 'VARCHAR', 'constraint' => 255, 'unique' => true],
+            'avatar_filename' => ['type' => 'VARCHAR', 'constraint' => 255],
             'id_user_permission' => [
                 'type'      => 'INT',
                 'unsigned'  => true,

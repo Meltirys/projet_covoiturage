@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\UserModel;
 use App\Validators\RegistrationValidator;
+use Exception;
 
 class AuthController extends BaseController
 {
@@ -84,25 +85,29 @@ class AuthController extends BaseController
         $post = $this->request->getPost();
 
         $validator = new RegistrationValidator();
+        
 
         //If an error is detected, return to the form with the errors described
         if (!$validator->validate($post)) {
+
+            var_dump($validator->getErrors());
+
             return view('HomeView', [
                 'errors' => $validator->getErrors()
             ]);
         }
 
-
         $userModel = new UserModel();
 
         $data = [
-            'first_name' => $this->request->getPost('first_name'),
-            'last_name'  => $this->request->getPost('last_name'),
-            'email'      => $this->request->getPost('email'),
-            'password'   => $this->request->getPost('password'),
-            'mobile'     => $this->request->getPost('phone'),
-            'birth_date' => $this->request->getPost('birth_date'),
-            'gender'     => $this->request->getPost('gender'),
+            'first_name' => $post['first_name'],
+            'last_name'  => $post['last_name'],
+            'email'      => $post['email'],
+            'password'   => $post['password'],
+            'mobile'     => $post['phone'],
+            'birth_date' => $post['birth_date'],
+            'gender'     => $post['gender'],
+            'id_user_permission' => '1',
         ];
 
         /* 
@@ -112,7 +117,7 @@ class AuthController extends BaseController
          */
         if (! $userModel->save($data)) {
             return redirect()->to('/')
-                ->with('status', 'Compte créé avec succès');
+                ->with('status', 'Votre compte n\'a pas pu être crée');
         }
 
         return redirect()->to('/')
