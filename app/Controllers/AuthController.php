@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\UserModel;
+use App\Validators\RegistrationValidator;
 
 class AuthController extends BaseController
 {
@@ -97,7 +98,18 @@ class AuthController extends BaseController
         
         helper('form');
 
-        return redirect()->to('/');
+        $post = $this->request->getPost();
+
+        $validator = new RegistrationValidator();
+
+        //If an error is detected, return to the form with the errors described
+        if (!$validator->validate($post)) {
+            return view('HomeView', [
+                'errors' => $validator->getErrors()
+            ]);
+        }
+        
+
         $userModel = new UserModel();
 
         $data = [

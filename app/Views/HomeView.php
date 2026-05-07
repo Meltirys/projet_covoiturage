@@ -45,63 +45,116 @@
 
             <?= form_open('/signup') ?>
 
-                <div class="auth-field-group">
-                    <div class="auth-field">
+            <div class="auth-field-group">
+                <div class="auth-field">
+                    <div class="auth-input">
                         <label class="auth-label" for="first_name">Prénom</label>
                         <input class="auth-input" type="text" name="first_name" value="<?= set_value('first_name') ?>" required>
                     </div>
+                    <?php if ($errors['first_name'] ?? null): ?>
+                        <span class="error"><?= $errors['first_name'] ?></span>
+                    <?php endif ?>
+                </div>
 
-                    <div class="auth-field">
+                <div class="auth-field">
+                    <div class="auth-input">
                         <label class="auth-label" for="last_name">Nom</label>
                         <input class="auth-input" type="text" name="last_name" value="<?= set_value('last_name') ?>" required>
                     </div>
-                </div>
+                   <?php if ($errors['last_name'] ?? null): ?>
+                        <span class="error"><?= $errors['last_name'] ?></span>
+                    <?php endif ?>
 
-                <div class="auth-field-group">
-                    <div class="auth-field">
+                </div>
+            </div>
+
+            <div class="auth-field-group">
+                <div class="auth-field">
+                    <div class="auth-input">
                         <label class="auth-label" for="email">Mail</label>
                         <input class="auth-input" type="email" name="email" value="<?= set_value('email') ?>" required>
                     </div>
 
-                    <div class="auth-field">
-                        <label class="auth-label" for="phone">Téléphone</label>
-                        <input class="auth-input" type="phone" name="phone" value="<?= set_value('phone') ?>">
-                    </div>
+                   <?php if ($errors['email'] ?? null): ?>
+                        <span class="error"><?= $errors['email'] ?></span>
+                    <?php endif ?>
 
-                </div>
-
-
-                <div class="auth-field-group">
-                    <div class="auth-field">
-                        <label class="auth-label" for="password">Mot de passe</label>
-                        <input class="auth-input" type="password" name="password" value="<?= set_value('password') ?>" required>
-                    </div>
-
-                    <div class="auth-field">
-                        <label class="auth-label" for="passwordconf">Confirmation du mot de passe</label>
-                        <input class="auth-input" type="password" name="passwordconf" value="<?= set_value('passwordconf') ?>" required>
-                    </div>
                 </div>
 
                 <div class="auth-field">
+                    <div class="auth-input">
+                        <label class="auth-label" for="phone">Téléphone</label>
+                        <input class="auth-input" type="phone" name="phone" value="<?= set_value('phone') ?>">
+                    </div>
+                   <?php if ($errors['phone'] ?? null): ?>
+                        <span class="error"><?= $errors['phone'] ?></span>
+                    <?php endif ?>
+                </div>
+
+            </div>
+
+
+            <div class="auth-field-group">
+                <div class="auth-field">
+                    <div class="auth-input">
+                        <label class="auth-label" for="password">Mot de passe</label>
+                        <input class="auth-input" type="password" name="password" required>
+                    </div>
+
+                   <?php if ($errors['password'] ?? null): ?>
+                        <span class="error"><?= $errors['password'] ?></span>
+                    <?php endif ?>
+                </div>
+
+                <div class="auth-field">
+                    <div class="auth-input">
+                        <label class="auth-label" for="passwordconf">Confirmation du mot de passe</label>
+                        <input class="auth-input" type="password" name="passwordconf" required>
+                    </div>
+
+                   <?php if ($errors['passwordconf'] ?? null): ?>
+                        <span class="error"><?= $errors['passwordconf'] ?></span>
+                    <?php endif ?>
+                </div>
+            </div>
+
+            <div class="auth-field">
+                <div class="auth-input">
                     <label class="auth-label" for="address">Adresse</label>
                     <input class="auth-input" type="text" name="address" value="<?= set_value('address') ?>" required>
                 </div>
 
-                <div class="auth-field-group">
-                    <div class="auth-field">
+                   <?php if ($errors['address'] ?? null): ?>
+                        <span class="error"><?= $errors['address'] ?></span>
+                    <?php endif ?>
+            </div>
+
+            <div class="auth-field-group">
+                <div class="auth-field">
+                    <div class="auth-input">
                         <label class="auth-label" for="city">Ville</label>
                         <input class="auth-input" type="text" name="city" value="<?= set_value('city') ?>" required>
                     </div>
 
-                    <div class="auth-field">
-                        <label class="auth-label" for="post_code">Code Postal</label>
-                        <input class="auth-input" type="text" name="post_code" value="<?= set_value('post_code') ?>">
-                    </div>
+                   <?php if ($errors['city'] ?? null): ?>
+                        <span class="error"><?= $errors['city'] ?></span>
+                    <?php endif ?>
                 </div>
 
-                <button type="submit" name="submit">Je m'inscris</button>
-            <?= form_close('/signup') ?>
+                <div class="auth-field">
+                    <div class="auth-input">
+                        <label class="auth-label" for="post_code">Code Postal</label>
+                        <input class="auth-input" type="text" name="post_code" value="<?= set_value('post_code') ?>" required>
+                    </div>
+
+                   <?php if ($errors['post_code'] ?? null): ?>
+                        <span class="error"><?= $errors['post_code'] ?></span>
+                    <?php endif ?>
+                </div>
+            </div>
+
+            <button type="submit" name="submit">Je m'inscris</button>
+            <?= form_close() ?>
 
             <div class="auth-field">
                 <label class="auth-label" for="reg-pseudo">Pseudo</label>
