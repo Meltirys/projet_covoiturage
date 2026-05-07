@@ -97,7 +97,7 @@ class AuthController extends BaseController
         
         helper('form');
 
-        return redirect()->to('/')
+        return redirect()->to('/');
         $userModel = new UserModel();
 
         $data = [

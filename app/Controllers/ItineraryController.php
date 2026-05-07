@@ -1,14 +1,11 @@
-<?php 
+<?php
 
 namespace App\Controllers;
 
-class ItineraryController extends BaseController {
+use App\Controllers\BaseController;
+use CodeIgniter\HTTP\ResponseInterface;
 
-    public function index() 
-    {
-        return view('RouteView');
-    }
-
+class ItineraryController extends BaseController
+{
+    public function search() {}
 }
-
-?>
