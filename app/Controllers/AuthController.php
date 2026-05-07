@@ -9,8 +9,7 @@ use App\Validators\RegistrationValidator;
 
 class AuthController extends BaseController
 {
-    public function index(){
-    }
+    public function index() {}
 
     /**
      * Returns the login view (consider renaming this to view() and loginAttempt() to just login() later)
@@ -34,9 +33,10 @@ class AuthController extends BaseController
             'password'   => $this->request->getPost('password'),
         ];
 
+        // Gets the row corresponding to the user's email
         $user = $userModel->where('email', $data['email'])->first();
 
-        // If not found or if passwords don't match, fail login
+        // If nothing found or if passwords don't match, login fail
         if (!$user || !password_verify($data['password'], $user['password'])) {
             return redirect()->back()
                 ->withInput()
@@ -77,7 +77,7 @@ class AuthController extends BaseController
      */
     public function registerAttempt()
     {
-        
+
         helper('form');
 
         $post = $this->request->getPost();
@@ -90,7 +90,7 @@ class AuthController extends BaseController
                 'errors' => $validator->getErrors()
             ]);
         }
-        
+
 
         $userModel = new UserModel();
 
