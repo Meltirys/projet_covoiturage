@@ -11,12 +11,12 @@ use CodeIgniter\Router\RouteCollection;
 // $routes->méthodehttp(get ou post)('url que l'on souhaite afficher', 'nomducontrolleur::méthode)
 // => $route->get('url', 'controller::méthode')
 
-$routes->get('/', 'HomeController::index');
+$routes->get('/', 'PagesController::index');
 
-$routes->get('authentification', 'AuthController::index');
+$routes->get('authentification', 'PagesController::login');
 
-$routes->get('trajet', 'ItineraryController::index');
+$routes->get('trajet', 'PagesController::itinerary');
 
-$routes->post('auth/connexion', 'AuthController::login');
+$routes->post('connexion', 'AuthController::loginAttempt');
 
-$routes->post('auth/inscription', 'AuthController::register');
+$routes->post('inscription', 'AuthController::registerAttempt');
