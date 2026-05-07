@@ -9,8 +9,7 @@ use App\Validators\RegistrationValidator;
 
 class AuthController extends BaseController
 {
-    public function index(){
-    }
+    public function index() {}
 
     /**
      * Returns the login view (consider renaming this to view() and loginAttempt() to just login() later)
@@ -77,7 +76,7 @@ class AuthController extends BaseController
      */
     public function registerAttempt()
     {
-        
+
         helper('form');
 
         $post = $this->request->getPost();
@@ -90,7 +89,7 @@ class AuthController extends BaseController
                 'errors' => $validator->getErrors()
             ]);
         }
-        
+
 
         $userModel = new UserModel();
 
@@ -99,7 +98,7 @@ class AuthController extends BaseController
             'last_name'  => $this->request->getPost('last_name'),
             'email'      => $this->request->getPost('email'),
             'password'   => $this->request->getPost('password'),
-            'mobile'     => $this->request->getPost('mobile'),
+            'mobile'     => $this->request->getPost('phone'),
             'birth_date' => $this->request->getPost('birth_date'),
             'gender'     => $this->request->getPost('gender'),
         ];
@@ -110,12 +109,11 @@ class AuthController extends BaseController
          * [ 'field1' => 'error message', 'field2' => 'error message', ]
          */
         if (! $userModel->save($data)) {
-            return redirect()->back()
-                ->withInput()
-                ->with('errors', $userModel->errors());
+            return redirect()->to('/')
+                ->with('status', 'Compte créé avec succès');
         }
 
-        return redirect()->to('/login')
-            ->with('success', 'Compte créé avec succès');
+        return redirect()->to('/')
+            ->with('status', 'Compte créé avec succès');
     }
 }

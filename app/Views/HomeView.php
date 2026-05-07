@@ -61,7 +61,7 @@
                         <label class="auth-label" for="last_name">Nom</label>
                         <input class="auth-input" type="text" name="last_name" value="<?= set_value('last_name') ?>" required>
                     </div>
-                   <?php if ($errors['last_name'] ?? null): ?>
+                    <?php if ($errors['last_name'] ?? null): ?>
                         <span class="error"><?= $errors['last_name'] ?></span>
                     <?php endif ?>
 
@@ -75,7 +75,7 @@
                         <input class="auth-input" type="email" name="email" value="<?= set_value('email') ?>" required>
                     </div>
 
-                   <?php if ($errors['email'] ?? null): ?>
+                    <?php if ($errors['email'] ?? null): ?>
                         <span class="error"><?= $errors['email'] ?></span>
                     <?php endif ?>
 
@@ -86,7 +86,7 @@
                         <label class="auth-label" for="phone">Téléphone</label>
                         <input class="auth-input" type="phone" name="phone" value="<?= set_value('phone') ?>">
                     </div>
-                   <?php if ($errors['phone'] ?? null): ?>
+                    <?php if ($errors['phone'] ?? null): ?>
                         <span class="error"><?= $errors['phone'] ?></span>
                     <?php endif ?>
                 </div>
@@ -101,7 +101,7 @@
                         <input class="auth-input" type="password" name="password" required>
                     </div>
 
-                   <?php if ($errors['password'] ?? null): ?>
+                    <?php if ($errors['password'] ?? null): ?>
                         <span class="error"><?= $errors['password'] ?></span>
                     <?php endif ?>
                 </div>
@@ -112,22 +112,36 @@
                         <input class="auth-input" type="password" name="passwordconf" required>
                     </div>
 
-                   <?php if ($errors['passwordconf'] ?? null): ?>
+                    <?php if ($errors['passwordconf'] ?? null): ?>
                         <span class="error"><?= $errors['passwordconf'] ?></span>
                     <?php endif ?>
                 </div>
             </div>
 
-            <div class="auth-field">
-                <div class="auth-input">
-                    <label class="auth-label" for="address">Adresse</label>
-                    <input class="auth-input" type="text" name="address" value="<?= set_value('address') ?>" required>
-                </div>
+            <div class="auth-group">
+                <div class="auth-field">
+                    <div class="auth-input">
+                        <label class="auth-label" for="address">Adresse</label>
+                        <input class="auth-input" type="text" name="address" value="<?= set_value('address') ?>" required>
+                    </div>
 
-                   <?php if ($errors['address'] ?? null): ?>
+                    <?php if ($errors['address'] ?? null): ?>
                         <span class="error"><?= $errors['address'] ?></span>
                     <?php endif ?>
+                </div>
+
+                <div class="auth-field">
+                    <div class="auth-input">
+                        <label class="auth-label" for="birth_date">Date de naissance</label>
+                        <input class="auth-input" type="date" name="birth_date" value="<?= set_value('birth_date') ?>" required>
+                    </div>
+
+                    <?php if ($errors['birth_date'] ?? null): ?>
+                        <span class="error"><?= $errors['birth_date'] ?></span>
+                    <?php endif ?>
+                </div>
             </div>
+
 
             <div class="auth-field-group">
                 <div class="auth-field">
@@ -136,7 +150,7 @@
                         <input class="auth-input" type="text" name="city" value="<?= set_value('city') ?>" required>
                     </div>
 
-                   <?php if ($errors['city'] ?? null): ?>
+                    <?php if ($errors['city'] ?? null): ?>
                         <span class="error"><?= $errors['city'] ?></span>
                     <?php endif ?>
                 </div>
@@ -147,7 +161,7 @@
                         <input class="auth-input" type="text" name="post_code" value="<?= set_value('post_code') ?>" required>
                     </div>
 
-                   <?php if ($errors['post_code'] ?? null): ?>
+                    <?php if ($errors['post_code'] ?? null): ?>
                         <span class="error"><?= $errors['post_code'] ?></span>
                     <?php endif ?>
                 </div>

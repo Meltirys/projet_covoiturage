@@ -52,10 +52,12 @@ class RegistrationValidator extends BaseValidator
             ],
 
             'password' => [
-                'rules'  => 'required|min_length[8]',
+                'rules'  => 'required|min_length[8]|max_length[60]',
                 'errors' => [
                     'required'   => 'Le mot de passe est obligatoire.',
                     'min_length' => 'Le mot de passe doit contenir au moins 8 caractères.',
+                    'max_length' => 'Le mot de passene doit pas dépasser 60 caractères.',
+
                 ]
             ],
 
@@ -77,6 +79,16 @@ class RegistrationValidator extends BaseValidator
 
                 ]
             ],
+
+            'birth_date' => [
+                'rules'  => 'required|valid_date[Y-m-d]|adultCheck',
+                'errors' => [
+                    'required'   => 'L\'adresse est obligatoire.',
+                    'valid_date' => 'Veuillez entrer une date au bon format',
+                    'adultCheck' => 'Vous devez être majeur pour vous inscrire'
+                ]
+            ],
+
 
             'city' => [
                 'rules'  => 'required|min_length[3]|max_length[50]|regex_match[/^([a-zA-Z\-\s]*)$/]',
