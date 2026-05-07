@@ -12,7 +12,7 @@
         <nav>
             <ul>
                 <li><a href="<?= site_url('trajet') ?>">Trajet</a></li>
-                <li><a href="#">Nouveau trajet</a></li>
+                <li><a href="/nouveau-trajet">Nouveau trajet</a></li>
                 <li><a href="#">Contact</a></li>
                 <li><a href="<?= site_url('authentification') ?>">Authentification</a></li>
             </ul>
