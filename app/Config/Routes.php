@@ -13,10 +13,11 @@ use CodeIgniter\Router\RouteCollection;
 
 $routes->get('/', 'PagesController::index');
 
+// Authentification
 $routes->get('authentification', 'PagesController::login');
-
-$routes->get('trajet', 'PagesController::itinerary');
-
 $routes->post('connexion', 'AuthController::loginAttempt');
-
 $routes->post('inscription', 'AuthController::registerAttempt');
+
+// Itinéraire
+$routes->get('trajet', 'PagesController::itinerary');
+$routes->post('trajet-recherche', 'ItineraryController::search');
