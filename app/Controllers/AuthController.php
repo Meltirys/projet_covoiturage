@@ -103,11 +103,11 @@ class AuthController extends BaseController
             'first_name' => $post['first_name'],
             'last_name'  => $post['last_name'],
             'email'      => $post['email'],
-            'password'   => $post['password'],
+            'password'   => password_hash($post['password'], PASSWORD_DEFAULT),
             'mobile'     => $post['phone'],
             'birth_date' => $post['birth_date'],
             'gender'     => $post['gender'],
-            'id_user_permission' => '1',
+            'id_user_permission' => 1,
         ];
 
         /* 

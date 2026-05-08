@@ -1,7 +1,7 @@
 <?= view('commons/header') ?>
 
 <main>
-    <?php //utilisateur non connecté 
+    <?php if(!session('logged_in')) : //Non conected user
     ?>
     <div class="auth-screen">
 
@@ -20,7 +20,7 @@
                 <div class="auth-message"><?= $message ?></div>
             <?php endif; ?>
 
-            <form action="<?= site_url('auth/connexion') ?>" method="POST" class="auth-form">
+            <form action="<?= site_url('authentification') ?>" method="POST" class="auth-form">
                 <div class="auth-field">
                     <label class="auth-label" for="login-email">Email</label>
                     <input class="auth-input" type="email" id="login-email" name="email" required>
@@ -207,8 +207,10 @@
         </div>
     </div>
 
-    <?php //utilisateur connecté 
+    <?php else: //utilisateur connecté 
+    COUCOU
     ?>
+    <?php endif; ?>
 
 </main>
 

@@ -15,7 +15,7 @@ $routes->get('/', 'PagesController::home');
 
 // Authentification
 $routes->get('authentification', 'PagesController::login');
-$routes->post('connexion', 'AuthController::authenticate');
+$routes->post('authentification', 'AuthController::authenticate');
 $routes->post('signup', 'AuthController::saveUser');
 
 // Itinéraire
