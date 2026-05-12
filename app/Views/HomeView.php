@@ -1,7 +1,9 @@
 <?= view('commons/header') ?>
 
 <main>
-    <?php if(!session('logged_in')) : //Non conected user
+    <?php 
+    var_dump(session('logged_in'));
+    if(!session('logged_in')) : //Non conected user
     ?>
     <div class="auth-screen">
 
@@ -126,12 +128,12 @@
 
                 <div class="auth-field">
                     <div class="auth-input">
-                        <label class="auth-label" for="passwordconf">Confirmation du mot de passe</label>
-                        <input class="auth-input" type="password" name="passwordconf" required>
+                        <label class="auth-label" for="password_conf">Confirmation du mot de passe</label>
+                        <input class="auth-input" type="password" name="password_conf" required>
                     </div>
 
-                    <?php if ($errors['passwordconf'] ?? null): ?>
-                        <span class="error"><?= $errors['passwordconf'] ?></span>
+                    <?php if ($errors['password_conf'] ?? null): ?>
+                        <span class="error"><?= $errors['password_conf'] ?></span>
                     <?php endif ?>
                 </div>
 

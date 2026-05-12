@@ -72,7 +72,7 @@ class RegistrationValidator extends BaseValidator
                 ]
             ],
 
-            'passwordconf' => [
+            'password_conf' => [
                 'rules'  => 'required|matches[password]',
                 'errors' => [
                     'required' => 'La confirmation est obligatoire.',

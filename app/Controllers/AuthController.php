@@ -87,7 +87,7 @@ class AuthController extends BaseController
             'last_name'    => $this->request->getPost('last_name'),
             'email'        => $this->request->getPost('email'),
             'password'     => $this->request->getPost('password'),
-            'passwordconf' => $this->request->getPost('passwordconf'),
+            'password_conf' => $this->request->getPost('password_conf'),
             'mobile'       => $this->request->getPost('phone'),
             'birth_date'   => $this->request->getPost('birth_date'),
             'gender'       => $this->request->getPost('gender'),
