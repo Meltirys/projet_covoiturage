@@ -43,4 +43,22 @@ class CarModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    /**
+     * Retrieves the list of the user's saved cars
+     * 
+     * @param int $userID The user's ID
+     * 
+     * @return array The user's saved cars
+     */
+    public function getCarsByUser(int $userID)
+    {
+        $cars = $this->select()
+            ->where('id_user', $userID)
+            ->findAll();
+
+        if (empty($cars)) return null;
+
+        return $cars;
+    }
 }
