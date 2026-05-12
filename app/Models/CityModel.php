@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class UserModel extends Model
+class CityModel extends Model
 {
-    protected $table            = 'Users';
-    protected $primaryKey       = 'id_user';
+    protected $table            = 'City';
+    protected $primaryKey       = 'id_city';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['first_name', 'last_name', 'email', 'password', 'mobile', 'birth_date', 'gender', 'avatar_filename', 'id_user_permission'];
+    protected $allowedFields    = ['name', 'postcode'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -35,7 +35,7 @@ class UserModel extends Model
 
     // Callbacks
     protected $allowCallbacks = true;
-    protected $beforeInsert   = ['hashPassword'];
+    protected $beforeInsert   = [];
     protected $afterInsert    = [];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
@@ -43,30 +43,4 @@ class UserModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-    /**
-     * Converts the user's password into a secure hash
-     */
-    protected function hashPassword(array $data)
-    {
-        $data['data']['password'] = password_hash($data['data']['password'], PASSWORD_DEFAULT);
-
-        return $data;
-    }
-
-    /**
-     * @param int $idUser The user id whom we want the name
-     * 
-     * @return string|null The name in format first_name." ".last_name or null if the user is not found
-     */
-    public function getUserName(int $idUser): ?string
-    {
-        $user = $this->select('first_name, last_name')
-            ->where($this->primaryKey, $idUser)
-            ->first();
-
-        if (!$user) return null;
-
-        return $user['first_name'] . " " . $user['last_name'];
-    }
 }
