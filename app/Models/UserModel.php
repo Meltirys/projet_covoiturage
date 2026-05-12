@@ -46,6 +46,10 @@ class UserModel extends Model
 
     /**
      * Converts the user's password into a secure hash
+     * 
+     * @param array $data An array containing user data for insertion
+     * 
+     * @return array $data The user's data, now with a securely hashed password
      */
     protected function hashPassword(array $data)
     {
