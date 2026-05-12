@@ -53,4 +53,15 @@ class UserModel extends Model
 
         return $data;
     }
+
+    public function getUserName(int $idUser) : ?string{
+        $user = $this->select('first_name, last_name')
+                     ->where($this->primaryKey, $idUser)
+                     ->first();
+
+        if(!$user) return null;
+
+        return $user['first_name'] . " " . $user['last_name'];
+
+    }
 }

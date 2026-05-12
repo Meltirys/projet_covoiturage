@@ -218,6 +218,7 @@
 
     <?php else: //utilisateur connecté 
     ?>
+    <p>Bonjour <?= session()->user_name ?></p>
     <a href="/logout">Se déconnecter</a>
     <?php endif; ?>
 
