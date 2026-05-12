@@ -27,7 +27,7 @@
                 </div>
                 <div class="auth-field">
                     <label class="auth-label" for="login-mdp">Mot de passe</label>
-                    <input class="auth-input" type="password" id="login-mdp" name="mdp" required>
+                    <input class="auth-input" type="password" id="login-mdp" name="password" required>
                 </div>
                 <button type="submit" class="btn-auth">Se connecter</button>
             </form>
@@ -43,7 +43,7 @@
 
 
 
-            <?= form_open('/signup') ?>
+            <?= form_open(site_url('signup')) ?>
 
             <div class="auth-field-group">
                 <div class="auth-field">
@@ -199,7 +199,7 @@
             </div>
             <div class="auth-field">
                 <label class="auth-label" for="reg-mdp">Mot de passe <span class="auth-required">(8 caractères min.)</span></label>
-                <input class="auth-input" type="password" id="reg-mdp" name="mdp" required>
+                <input class="auth-input" type="password" id="reg-mdp" name="password" required>
             </div>
             <button type="submit" class="btn-auth">Créer mon compte</button>
 
