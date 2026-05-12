@@ -62,11 +62,12 @@ class RegistrationValidator extends BaseValidator
             ],
 
             'password' => [
-                'rules'  => 'required|min_length[8]|max_length[60]',
+                'rules'  => 'required|min_length[8]|max_length[60]|regex_match[/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};:"\\|,.<>\/?]).+$/]',
                 'errors' => [
                     'required'   => 'Le mot de passe est obligatoire.',
                     'min_length' => 'Le mot de passe doit contenir au moins 8 caractères.',
                     'max_length' => 'Le mot de passene doit pas dépasser 60 caractères.',
+                    'regex_match' => 'Le mot de passe doit contenir au moins une majuscule, minuscule, un nombre et un caractère spécial',
 
                 ]
             ],
