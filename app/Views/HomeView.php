@@ -21,33 +21,37 @@
                     <div class="auth-message"><?= $message ?></div>
                 <?php endif; ?>
 
-                <form action="<?= site_url('authentification') ?>" method="POST" class="auth-form">
-                    <div class="auth-field">
-                        <label class="auth-label" for="email-auth">Email</label>
-                        <input class="auth-input" type="email" id="email-auth" name="email-auth" required>
-                    </div>
-                    <div class="auth-field">
-                        <label class="auth-label" for="password-auth">Mot de passe</label>
-                        <input class="auth-input" type="password" id="password-auth" name="password-auth" required>
-                    </div>
-                    <button type="submit" class="btn-auth">Se connecter</button>
-                </form>
-
+                <?php form_open("/authentification") ?>
+                <div class="auth-field">
+                    <label class="auth-label" for="email-auth">Email</label>
+                    <input class="auth-input" type="email" id="email-auth" name="email-auth" required>
+                </div>
+                <div class="auth-field">
+                    <label class="auth-label" for="password-auth">Mot de passe</label>
+                    <input class="auth-input" type="password" id="password-auth" name="password-auth" required>
+                </div>
+                <?php if (session()->getFlashdata('error')): ?>
+                    <p class="alert error">
+                        <?= session()->getFlashdata('error') ?>
+                    </p>
+                <?php endif ?>
+                <button type="submit" class="btn-auth">Se connecter</button>
+                <?php form_close(); ?>
             </div>
 
             <!-- Formulaire Inscription -->
             <div id="tab-inscription" class="auth-form-panel <?= ($activeTab ?? 'login') === 'inscription' ? 'active' : '' ?>">
 
                 <?php if (session()->getFlashdata('success')): ?>
-                    <div class="alert success">
+                    <p class="alert success">
                         <?= session()->getFlashdata('success') ?>
-                    </div>
+                    </p>
                 <?php endif ?>
 
                 <?php if (session()->getFlashdata('error')): ?>
-                    <div class="alert error">
+                    <p class="alert error">
                         <?= session()->getFlashdata('error') ?>
-                    </div>
+                    </p>
                 <?php endif ?>
 
 
@@ -202,25 +206,13 @@
                     <label class="auth-label" for="reg-pseudo">Pseudo</label>
                     <input class="auth-input" type="text" id="reg-pseudo" name="pseudo" required>
                 </div>
-                <div class="auth-field">
-                    <label class="auth-label" for="reg-email">Email</label>
-                    <input class="auth-input" type="email" id="reg-email" name="email" required>
-                </div>
-                <div class="auth-field">
-                    <label class="auth-label" for="reg-mdp">Mot de passe <span class="auth-required">(8 caractères min.)</span></label>
-                    <input class="auth-input" type="password" id="reg-mdp" name="mdp" required>
-                </div>
-                <button type="submit" class="btn-auth">Créer mon compte</button>
-
-
             </div>
-        </div>
 
-    <?php else: //utilisateur connecté 
-    ?>
-    <p>Bonjour <?= session()->user_name ?></p>
-    <a href="/logout">Se déconnecter</a>
-    <?php endif; ?>
+        <?php else: //utilisateur connecté 
+        ?>
+            <p>Bonjour <?= session()->user_name ?></p>
+            <a href="/logout">Se déconnecter</a>
+        <?php endif; ?>
 
 </main>
 

@@ -45,7 +45,7 @@ class AuthController extends BaseController
         if (!$user || !password_verify($post['password'], $user['password'])) {
             return redirect()->back()
                 ->withInput()
-                ->with('errors', 'Identifiants invalides');
+                ->with('error', 'Identifiants invalides');
         }
 
         var_dump($post);
