@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
-use App\Validation\CustomRules;
 
 class UserModel extends Model
 {
