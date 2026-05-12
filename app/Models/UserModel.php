@@ -54,6 +54,11 @@ class UserModel extends Model
         return $data;
     }
 
+    /**
+     * @param int $idUser The user id whom we want the name
+     * 
+     * @return string|null The name in format first_name." ".last_name or null if the user is not found
+     */
     public function getUserName(int $idUser) : ?string{
         $user = $this->select('first_name, last_name')
                      ->where($this->primaryKey, $idUser)
