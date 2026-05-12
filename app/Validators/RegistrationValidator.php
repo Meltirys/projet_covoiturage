@@ -2,6 +2,8 @@
 
 namespace App\Validators;
 
+use App\Validation\CustomRules;
+
 class RegistrationValidator extends BaseValidator
 {
 
