@@ -4,6 +4,8 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
+use App\Models\ItineraryModel;
+use CodeIgniter\Exceptions\PageNotFoundException;
 
 class ItineraryController extends BaseController
 {
@@ -25,7 +27,20 @@ class ItineraryController extends BaseController
      * 
      * parameter : itinerary id
      */
-    public function show($id) {}
+    public function show(?string $slug = null)
+    {
+        $model = model(ItineraryModel::class);
+
+        $data['itinerary'] = $model->getItinerary($slug);
+
+        if ($data['itinerary'] === null) {
+            throw new PageNotFoundException('Cannot find the news item: ' . $slug);
+        }
+
+        return view('templates/header', $data)
+            . view('news/view', $data)
+            . view('templates/footer');
+    }
 
     /**
      * Displays the creation page for a new itinerary
@@ -43,7 +58,11 @@ class ItineraryController extends BaseController
     /**
      * Saves an itinerary
      */
-    public function save() {}
+    public function save()
+    {
+        // Valeurs :
+        // string(start) string(end) array(string(stop), string(stop)) string(start-time) string(end-time) array(car) string(seats) string(options)
+    }
 
     /**
      * Updates an existing itinerary
