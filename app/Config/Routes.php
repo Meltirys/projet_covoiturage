@@ -15,6 +15,7 @@ $routes->get('/', 'PagesController::home');
 
 // Authentification
 $routes->get('authentification', 'PagesController::login');
+$routes->get('logout', 'AuthController::logout');
 $routes->post('authentification', 'AuthController::authenticate');
 $routes->post('signup', 'AuthController::saveUser');
 

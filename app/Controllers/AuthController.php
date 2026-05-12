@@ -8,6 +8,8 @@ use App\Models\UserModel;
 use App\Validators\RegistrationValidator;
 use Exception;
 
+use function PHPUnit\Framework\throwException;
+
 class AuthController extends BaseController
 {
 
@@ -31,13 +33,14 @@ class AuthController extends BaseController
         $userModel = model(UserModel::class);
 
         $post = [
-            'email'      => $this->request->getPost('email'),
-            'password'   => $this->request->getPost('password'),
+            'email'      => $this->request->getPost('email-auth'),
+            'password'   => $this->request->getPost('password-auth'),
         ];
+
+
 
         // Gets the row corresponding to the user's email
         $user = $userModel->where('email', $post['email'])->first();
-
         // If nothing found or if passwords don't match, login fail
         if (!$user || !password_verify($post['password'], $user['password'])) {
             return redirect()->back()
@@ -45,13 +48,17 @@ class AuthController extends BaseController
                 ->with('errors', 'Identifiants invalides');
         }
 
+        var_dump($post);
+        
+
         // If all checks succeed, sets the user information in the session
         session()->set([
-            'user_id' => $user['id'],
+            'user_id' => $user['id_user'],
             'user_email' => $user['email'],
-            'user_role' => $user['role'],
+            'user_role' => $user['id_user_permission'],
             'logged_in' => true,
         ]);
+
         return redirect()->to('/'); // return to index
     }
 
@@ -85,7 +92,7 @@ class AuthController extends BaseController
         $user = [
             'first_name'   => $this->request->getPost('first_name'),
             'last_name'    => $this->request->getPost('last_name'),
-            'email'        => $this->request->getPost('email'),
+            'email'        => $this->request->getPost('email-signup'),
             'password'     => $this->request->getPost('password'),
             'password_conf' => $this->request->getPost('password_conf'),
             'mobile'       => $this->request->getPost('phone'),
@@ -93,8 +100,11 @@ class AuthController extends BaseController
             'gender'       => $this->request->getPost('gender'),
         ];*/
 
-        //Calling the specific validator
+
         $user = $this->request->getPost();
+        $user['email'] = $this->request->getPost('email-signup');
+
+        //Calling the specific validator
         $validator = new RegistrationValidator();
 
         //If an error is detected, return to the form with the errors described
@@ -105,6 +115,7 @@ class AuthController extends BaseController
         }
 
         $userModel = model(UserModel::class);
+
 
         /* 
          * Tries to save a new user. 
@@ -117,10 +128,10 @@ class AuthController extends BaseController
             return redirect()->to('/')
                 ->with('errors', $errors)
                 ->withInput()
-                ->with('status', 'Votre compte n\'a pas pu être crée');
+                ->with('error', 'Votre compte n\'a pas pu être crée');
         }
 
         return redirect()->to('/')
-            ->with('status', 'Compte créé avec succès');
+            ->with('success', 'Compte créé avec succès');
     }
 }
