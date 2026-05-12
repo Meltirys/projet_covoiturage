@@ -4,9 +4,10 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
-use App\Models\JourneyDriveModel;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use App\Validators\RegistrationValidator;
+use App\Models\JourneyDriveModel;
+use App\Models\CarModel;
 
 class ItineraryController extends BaseController
 {
@@ -30,7 +31,7 @@ class ItineraryController extends BaseController
      */
     public function show(?string $slug = null)
     {
-        $model = model(ItineraryModel::class);
+        $model = model(JourneyDriveModel::class);
 
         $data['itinerary'] = $model->getItinerary($slug);
 
@@ -48,7 +49,12 @@ class ItineraryController extends BaseController
      */
     public function create()
     {
-        $data = ['type' => 'drive'];
+        $carModel = model(CarModel::class);
+
+        $data = [
+            'type' => 'drive',
+            'cars' => $carModel->getCarsByUser(session('user_id'))
+        ];
 
         helper('form');
         return view('commons/header')
@@ -80,10 +86,24 @@ class ItineraryController extends BaseController
             'end'        => $this->request->getPost('end'),
             'stop'       => $this->request->getPost('stop'),
             'start-time' => $this->request->getPost('start-time'),
-            'car'        => intval($this->request->getPost('car')),
+            'car'     => intval($this->request->getPost('car')),
             'seats'      => intval($this->request->getPost('seats')),
             'options'    => $this->request->getPost('options'),
+            'user_id'    => session()->get('user_id')
         ];
+
+        $carModel = model(CarModel::class);
+
+        // Replaces the "car" field from the car's ID to all its information in the Car table
+        $journey['car'] = $carModel
+            ->where('id_car', $journey['car_id'])
+            ->where('id_user', $journey['user_id'])
+            ->first();
+
+        if (! $journey['car']) {
+            return redirect()->back()
+                ->with('error', 'Voiture invalide');
+        }
 
         //Calling the specific validator
         $validator = new RegistrationValidator();
