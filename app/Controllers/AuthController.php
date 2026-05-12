@@ -91,8 +91,6 @@ class AuthController extends BaseController
         //If an error is detected, return to the form with the errors described
         if (!$validator->validate($post)) {
 
-            var_dump($validator->getErrors());
-
             return view('HomeView', [
                 'errors' => $validator->getErrors()
             ]);
