@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class BookingModel extends Model
+class JourneyDriveModel extends Model
 {
-    protected $table            = 'Booking';
-    protected $primaryKey       = 'id_booking';
+    protected $table            = 'JourneyDrive';
+    protected $primaryKey       = 'id_journey_drive';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['booking_date', 'seat_taken', 'is_validated', 'is_driver', 'delete_booking_date', 'id_user', 'id_journey_drive'];
+    protected $allowedFields    = ['number_of_place', 'departure', 'estimated_arrival', 'id_track', 'start', 'end', 'id_car'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
