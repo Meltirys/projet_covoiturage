@@ -67,10 +67,7 @@ class ItineraryController extends BaseController
      */
     public function save()
     {
-        // Valeurs :
-        // string(start) string(end) array{string(stop),string(stop)} string(start-time) string(end-time) array(car) string(seats) string(options)
-
-        // What I need to do :
+        // Etapes :
         // 1. Vérifier voiture
         // 2. Créer city/location
         // 3. Créer trajet
