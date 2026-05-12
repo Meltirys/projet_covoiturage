@@ -27,6 +27,8 @@ class CreateUsersTable extends Migration
                 'type'      => 'INT',
                 'unsigned'  => true,
                 'null'      => false,
+                'default' => 1
+
             ],
         ]);
         $this->forge->addPrimaryKey('id_user');

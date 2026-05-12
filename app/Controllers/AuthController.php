@@ -81,7 +81,7 @@ class AuthController extends BaseController
     {
 
         helper('form');
-
+        /* To uncomment whent the address/city are made
         $user = [
             'first_name'   => $this->request->getPost('first_name'),
             'last_name'    => $this->request->getPost('last_name'),
@@ -91,9 +91,10 @@ class AuthController extends BaseController
             'mobile'       => $this->request->getPost('phone'),
             'birth_date'   => $this->request->getPost('birth_date'),
             'gender'       => $this->request->getPost('gender'),
-        ];
+        ];*/
 
         //Calling the specific validator
+        $user = $this->request->getPost();
         $validator = new RegistrationValidator();
 
         //If an error is detected, return to the form with the errors described
