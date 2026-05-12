@@ -13,17 +13,17 @@ class RegistrationValidator extends BaseValidator
     {
         return [
             'first_name' => [
-                'rules'  => 'required|min_length[3]|max_length[50]|regex_match[/^([a-zA-Z\-]*)$/]',
+                'rules'  => 'required|min_length[3]|max_length[50]|regex_match[/^[\p{L}\s\-]+$/u]',
                 'errors' => [
                     'required'   => 'Le prénom est obligatoire.',
                     'min_length' => 'Le prénom doit contenir au moins 3 caractères.',
                     'max_length' => 'Le prénom ne peut pas dépasser 50 caractères.',
-                    'regex_match' => 'Veuillez ne pas utiliser de caractères spéciaux pour le prénom (seul le tiret est autorisé)'
+                    'regex_match' => 'Veuillez ne pas utiliser de caractères spéciaux pour le prénom (seul le tiret et l\espace sont autorisés)'
                 ]
             ],
 
             'last_name' => [
-                'rules'  => 'required|min_length[3]|max_length[50]|regex_match[/^([a-zA-Z\-\s]*)$/]',
+                'rules'  => 'required|min_length[3]|max_length[50]|regex_match[/^[\p{L}\s\-]+$/u]',
                 'errors' => [
                     'required'   => 'Le nom est obligatoire.',
                     'min_length' => 'Le nom doit contenir au moins 3 caractères.',
@@ -78,7 +78,7 @@ class RegistrationValidator extends BaseValidator
             ],
 
             'address' => [
-                'rules'  => 'required|min_length[3]|max_length[100]|regex_match[/^([a-zA-Z\-\s]*)$/]',
+                'rules'  => 'required|min_length[3]|max_length[100]|regex_match[/^[\p{L}\s\d\-\',\.]+$/u]',
                 'errors' => [
                     'required'   => 'L\'adresse est obligatoire.',
                     'min_length' => 'L\'adresse doit contenir au moins 3 caractères.',
@@ -99,7 +99,7 @@ class RegistrationValidator extends BaseValidator
 
 
             'city' => [
-                'rules'  => 'required|min_length[3]|max_length[50]|regex_match[/^([a-zA-Z\-\s]*)$/]',
+                'rules'  => 'required|min_length[3]|max_length[50]|regex_match[/^[\p{L}\s\-]+$/u]',
                 'errors' => [
                     'required'   => 'Le nom de la ville est obligatoire.',
                     'min_length' => 'Le nom de la ville doit contenir au moins 3 caractères.',
@@ -114,7 +114,7 @@ class RegistrationValidator extends BaseValidator
                 'rules'  => 'required|regex_match[/^(F-)?((2[A|B])|[0-9]{2})[0-9]{3}$/]',
                 'errors' => [
                     'required'    => 'Le code postal est obligatoire.',
-                    'regex_match' => 'Le format du code postal n\'est valide'
+                    'regex_match' => 'Le format du code postal n\'est pas valide'
                 ]
             ],
         ];

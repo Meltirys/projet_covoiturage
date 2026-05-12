@@ -84,6 +84,7 @@ class AuthController extends BaseController
 
         $post = $this->request->getPost();
 
+        //Calling the specific validator
         $validator = new RegistrationValidator();
         
 
@@ -97,8 +98,10 @@ class AuthController extends BaseController
             ]);
         }
 
+
         $userModel = new UserModel();
 
+        //Loading the datas in the database
         $data = [
             'first_name' => $post['first_name'],
             'last_name'  => $post['last_name'],
