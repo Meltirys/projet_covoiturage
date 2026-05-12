@@ -59,14 +59,14 @@ class UserModel extends Model
      * 
      * @return string|null The name in format first_name." ".last_name or null if the user is not found
      */
-    public function getUserName(int $idUser) : ?string{
+    public function getUserName(int $idUser): ?string
+    {
         $user = $this->select('first_name, last_name')
-                     ->where($this->primaryKey, $idUser)
-                     ->first();
+            ->where($this->primaryKey, $idUser)
+            ->first();
 
-        if(!$user) return null;
+        if (!$user) return null;
 
         return $user['first_name'] . " " . $user['last_name'];
-
     }
 }
