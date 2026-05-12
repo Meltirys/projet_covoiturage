@@ -23,7 +23,7 @@ class CreateJourneyDriveTable extends Migration
             'start'   => ['type' => 'INT', 'null' => false, 'unsigned' => true],
             'end' => ['type' => 'INT', 'null' => false, 'unsigned' => true],
             'id_car'               => ['type' => 'INT', 'null' => false, 'unsigned' => true],
-            'driver' => ['type' =>'INT', 'unsigned' => true]
+            'driver' => ['type' =>'INT', 'null' => false, 'unsigned' => true]
         ]);
 
         $this->forge->addPrimaryKey('id_journey_drive');
