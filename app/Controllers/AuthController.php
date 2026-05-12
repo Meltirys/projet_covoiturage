@@ -82,21 +82,22 @@ class AuthController extends BaseController
 
         helper('form');
 
-        $post = [
-            'first_name' => $this->request->getPost('first_name'),
-            'last_name'  => $this->request->getPost('last_name'),
-            'email'      => $this->request->getPost('email'),
-            'password'   => $this->request->getPost('password'),
-            'mobile'     => $this->request->getPost('phone'),
-            'birth_date' => $this->request->getPost('birth_date'),
-            'gender'     => $this->request->getPost('gender'),
+        $user = [
+            'first_name'   => $this->request->getPost('first_name'),
+            'last_name'    => $this->request->getPost('last_name'),
+            'email'        => $this->request->getPost('email'),
+            'password'     => $this->request->getPost('password'),
+            'passwordconf' => $this->request->getPost('passwordconf'),
+            'mobile'       => $this->request->getPost('phone'),
+            'birth_date'   => $this->request->getPost('birth_date'),
+            'gender'       => $this->request->getPost('gender'),
         ];
 
         //Calling the specific validator
         $validator = new RegistrationValidator();
 
         //If an error is detected, return to the form with the errors described
-        if (!$validator->validate($post)) {
+        if (!$validator->validate($user)) {
             return view('HomeView', [
                 'errors' => $validator->getErrors()
             ]);
@@ -109,7 +110,7 @@ class AuthController extends BaseController
          * If there were errors, returns to view with them in the following format :
          * [ 'field1' => 'error message', 'field2' => 'error message', ]
          */
-        if (! $userModel->save($post)) {
+        if (! $userModel->save($user)) {
             $errors = $userModel->errors();
 
             return redirect()->to('/')
