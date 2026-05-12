@@ -47,9 +47,9 @@ class AuthController extends BaseController
 
         // If all checks succeed, sets the user information in the session
         session()->set([
-            'user_id' => $user['id'],
+            'user_id' => $user['id_user'],
             'user_email' => $user['email'],
-            'user_role' => $user['role'],
+            'user_role' => $user['id_user_permission'],
             'logged_in' => true,
         ]);
         return redirect()->to('/'); // return to index
@@ -90,8 +90,6 @@ class AuthController extends BaseController
 
         //If an error is detected, return to the form with the errors described
         if (!$validator->validate($post)) {
-
-            var_dump($validator->getErrors());
 
             return view('HomeView', [
                 'errors' => $validator->getErrors()
