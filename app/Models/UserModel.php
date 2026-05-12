@@ -45,7 +45,7 @@ class UserModel extends Model
     protected $afterDelete    = [];
 
     /**
-     * Converts the user's password into a secure hash
+     * Automatic "beforeInsert" function. Converts the user's password into a secure hash.
      * 
      * @param array $data An array containing user data for insertion
      * 
@@ -59,7 +59,7 @@ class UserModel extends Model
     }
 
     /**
-     * @param int $idUser The user id whom we want the name
+     * @param int $idUser The user id of whom we want the name
      * 
      * @return string|null The name in format first_name." ".last_name or null if the user is not found
      */
