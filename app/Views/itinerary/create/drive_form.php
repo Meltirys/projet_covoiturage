@@ -17,9 +17,11 @@
 
 <div>
     <label for="stops">Arrêts (optionnels)&nbsp;:</label><br>
-    <input type="text" name="stops" id="stops"
-        value="<?= set_value('stops') ?>"
-        placeholder="Entrez les arrêts" required>
+    <input type="text" name="stops[]" id="stops"
+        value="<?= set_value('stops[0]') ?>"
+        placeholder="Entrer un arrêt" required>
+    <?php // Rajouter des input après chaque input rempli, probablement en JS  
+    ?>
     <?php if (isset($errors["stops"])) echo ("<br><span class='error'>" . $errors["stops"] . "</span>"); ?>
 </div>
 

@@ -28,18 +28,18 @@ class AuthController extends BaseController
      */
     public function authenticate()
     {
-        $userModel = new UserModel();
+        $userModel = model(UserModel::class);
 
-        $data = [
+        $post = [
             'email'      => $this->request->getPost('email'),
             'password'   => $this->request->getPost('password'),
         ];
 
         // Gets the row corresponding to the user's email
-        $user = $userModel->where('email', $data['email'])->first();
+        $user = $userModel->where('email', $post['email'])->first();
 
         // If nothing found or if passwords don't match, login fail
-        if (!$user || !password_verify($data['password'], $user['password'])) {
+        if (!$user || !password_verify($post['password'], $user['password'])) {
             return redirect()->back()
                 ->withInput()
                 ->with('errors', 'Identifiants invalides');
@@ -81,43 +81,42 @@ class AuthController extends BaseController
     {
 
         helper('form');
-
-        $post = $this->request->getPost();
+        /* To uncomment whent the address/city are made
+        $user = [
+            'first_name'   => $this->request->getPost('first_name'),
+            'last_name'    => $this->request->getPost('last_name'),
+            'email'        => $this->request->getPost('email'),
+            'password'     => $this->request->getPost('password'),
+            'password_conf' => $this->request->getPost('password_conf'),
+            'mobile'       => $this->request->getPost('phone'),
+            'birth_date'   => $this->request->getPost('birth_date'),
+            'gender'       => $this->request->getPost('gender'),
+        ];*/
 
         //Calling the specific validator
+        $user = $this->request->getPost();
         $validator = new RegistrationValidator();
-        
 
         //If an error is detected, return to the form with the errors described
-        if (!$validator->validate($post)) {
-
+        if (!$validator->validate($user)) {
             return view('HomeView', [
                 'errors' => $validator->getErrors()
             ]);
         }
 
-
-        $userModel = new UserModel();
-
-        //Loading the datas in the database
-        $data = [
-            'first_name' => $post['first_name'],
-            'last_name'  => $post['last_name'],
-            'email'      => $post['email'],
-            'password'   => password_hash($post['password'], PASSWORD_DEFAULT),
-            'mobile'     => $post['phone'],
-            'birth_date' => $post['birth_date'],
-            'gender'     => $post['gender'],
-            'id_user_permission' => 1,
-        ];
+        $userModel = model(UserModel::class);
 
         /* 
          * Tries to save a new user. 
          * If there were errors, returns to view with them in the following format :
          * [ 'field1' => 'error message', 'field2' => 'error message', ]
          */
-        if (! $userModel->save($data)) {
+        if (! $userModel->save($user)) {
+            $errors = $userModel->errors();
+
             return redirect()->to('/')
+                ->with('errors', $errors)
+                ->withInput()
                 ->with('status', 'Votre compte n\'a pas pu être crée');
         }
 

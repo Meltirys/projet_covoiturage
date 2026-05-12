@@ -34,7 +34,7 @@ abstract class BaseValidator
     }
 
     /**
-     * @param string $field
+     * @param string $field The field we want the error from
      * 
      * @return string The error for the given string
      */
