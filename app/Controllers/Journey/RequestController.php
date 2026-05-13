@@ -64,11 +64,7 @@ class ItineraryController extends BaseController
         helper('form');
 
         /* Needed inputs
-         * start_city, start_city_postcode, end_city, end_city_postcode,
-         * start, start_lat, start_long,
-         * end, end_lat, end_long,
-         * description, range_of_time
-         * 
+         * todo
          * 
          * options?
          */
