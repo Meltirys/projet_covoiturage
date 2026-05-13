@@ -22,7 +22,12 @@ class JourneyDriveValidator extends BaseValidator
                 ]
             ],
             'start_city' => [
-                'rules' => 'required|min_length[2]|max_length[50]'
+                'rules' => 'required|min_length[2]|max_length[50]',
+                'errors' => [
+                    'required' => 'La ville de départ est obligatoire',
+                    'min_length' => 'Le nom de la ville est trop court',
+                    'max_length' => 'Le nom de la ville est trop long',
+                ]
             ],
             'seats'      => [
                 'rules' => 'required|integer|max_length[2]',
