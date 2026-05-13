@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class BookingModel extends Model
+class StagesModel extends Model
 {
-    protected $table            = 'Booking';
-    protected $primaryKey       = 'id_booking';
-    protected $useAutoIncrement = true;
+    protected $table            = 'stages';
+    protected $primaryKey       = 'id_journey_drive'; // arbitrary, there is no primary ID
+    protected $useAutoIncrement = false;
     protected $returnType       = 'array';
-    protected $useSoftDeletes   = true;
+    protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['booking_date', 'seat_taken', 'is_validated', 'is_driver', 'delete_booking_date', 'id_user', 'id_journey_drive'];
+    protected $allowedFields    = ['id_journey_drive', 'id_location', 'order'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
