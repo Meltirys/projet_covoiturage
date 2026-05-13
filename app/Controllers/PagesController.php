@@ -10,6 +10,7 @@ class PagesController extends BaseController
     public function home()
     {
         helper('form');
+
         return view('HomeView');
     }
 }

@@ -30,7 +30,7 @@
                 <div>
                     <div>
                         <label for="brand">Marque</label>
-                        <input type="text" id="brand" name="brand">
+                        <input type="text" id="brand" name="brand" value="<?= old('brand') ?>">
                     </div>
                     <?php if ($errors['brand'] ?? null): ?>
                         <span class="error"><?= $errors['brand'] ?></span>
@@ -39,7 +39,7 @@
                 <div>
                     <div>
                         <label for="model">Modèle</label>
-                        <input type="text" id="model" name="model">
+                        <input type="text" id="model" name="model" value="<?= old('model') ?>">
                     </div>
                     <?php if ($errors['model'] ?? null): ?>
                         <span class="error"><?= $errors['model'] ?></span>
@@ -49,7 +49,7 @@
                 <div>
                     <div>
                         <label for="color">Couleur</label>
-                        <input type="text" id="color" name="color">
+                        <input type="text" id="color" name="color" value="<?= old('color') ?>">
                     </div>
                     <?php if ($errors['color'] ?? null): ?>
                         <span class="error"><?= $errors['color'] ?></span>
@@ -59,7 +59,7 @@
                 <div>
                     <div>
                         <label for="year">Année</label>
-                        <input type="text" id="year" name="year">
+                        <input type="text" id="year" name="year" value="<?= old('year') ?>">
                     </div>
                     <?php if ($errors['year'] ?? null): ?>
                         <span class="error"><?= $errors['year'] ?></span>
@@ -69,10 +69,10 @@
                 <div>
                     <div>
                         <label for="places">Nombre de places</label>
-                        <input type="number" id="places" name="places">
+                        <input type="number" id="places" name="places" value="<?= old('places') ?>">
                     </div>
-                    <?php if ($errors['places'] ?? null): ?>
-                        <span class="error"><?= $errors['places'] ?></span>
+                    <?php if ($errors['number_of_seat'] ?? null): //The name is different bcause the db name is used for test?>
+                        <span class="error"><?= $errors['number_of_seat'] ?></span>
                     <?php endif ?>
                 </div>
 
