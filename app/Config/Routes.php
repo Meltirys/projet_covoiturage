@@ -21,13 +21,14 @@ $routes->group('', ['filter' => 'guest'], function ($routes) {
     $routes->post('signup', 'AuthController::saveUser');
 });
 
-$routes->group('', ['filter' => 'auth'], function($routes){
+$routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('logout', 'AuthController::logout');
 
     //Profil
     $routes->get('myprofil', 'ProfilController::index');
     $routes->post('car/add', 'CarController::add');
     $routes->post('car/delete/(:num)', [CarController::class, 'delete']);
+    $routes->post('car/modify/(:num)', [CarController::class, 'modify']);
 });
 
 

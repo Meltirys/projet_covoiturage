@@ -81,4 +81,50 @@ class CarController extends BaseController
         return redirect()->to('/myprofil')
             ->with('car_success', 'Votre véhicule à bien été supprimé');
     }
+
+    public function modify(int $idCar)
+    {
+
+        $carModel = new CarModel();
+        $isOwner = session()->user_id == $carModel->find($idCar)['id_user']; //Check if the user is the owner
+
+        //If the user is not the owner, we redirect him
+        if (!$isOwner) {
+            return redirect('404');
+        }
+
+        $car = [
+            'brand'   => $this->request->getPost('brand'),
+            'model'    => $this->request->getPost('model'),
+            'color'        => $this->request->getPost('color'),
+            'year'     => $this->request->getPost('year'),
+            'number_of_seat' => $this->request->getPost('places'),
+        ];
+
+        //Calling the specific validator
+        $validator = new CarValidator();
+
+        //If an error is detected, we redirect the errors to the profil controller
+        if (!$validator->validate($car)) {
+            return redirect()->to('/myprofil')
+                ->with('error_in_car_form', true) //This variable is meant to tell the view that it needs to show the form to add a car on load
+                ->withInput()
+                ->with('errors', $validator->getErrors()); //We transfer the errors so the view can display it
+        }
+
+        //Adding the user id for the database request
+        $car['id_user'] = session()->user_id;
+
+        if (! $carModel->modify($idCar,  $car)) {
+            $errors = $carModel->errors();
+
+            return redirect()->to('/myprofil')
+                ->with('errors', $errors)
+                ->withInput()
+                ->with('car_error', 'Une erreur est survenue lors de la suppression du véhicule');
+        }
+
+        return redirect()->to('/myprofil')
+            ->with('car_success', 'Votre véhicule à bien été supprimé');
+    }
 }
