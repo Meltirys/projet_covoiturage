@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class BookingModel extends Model
+class CarModel extends Model
 {
-    protected $table            = 'Booking';
-    protected $primaryKey       = 'id_booking';
+    protected $table            = 'Car';
+    protected $primaryKey       = 'id_car';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['booking_date', 'seat_taken', 'is_validated', 'is_driver', 'delete_booking_date', 'id_user', 'id_journey_drive'];
+    protected $allowedFields    = ['brand', 'model', 'color', 'year', 'number_of_seat', 'id_user'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -43,4 +43,22 @@ class BookingModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    /**
+     * Retrieves the list of the user's saved cars
+     * 
+     * @param int $userID The user's ID
+     * 
+     * @return array The user's saved cars
+     */
+    public function getCarsByUser(int $userID)
+    {
+        $cars = $this->select()
+            ->where('id_user', $userID)
+            ->findAll();
+
+        if (empty($cars)) return null;
+
+        return $cars;
+    }
 }

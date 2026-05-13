@@ -14,12 +14,17 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'PagesController::home');
 
 // Authentification
-$routes->get('authentification', 'PagesController::login');
+$routes->group('', ['filter' => 'guest'], function($routes) {
+    $routes->get('authentification', 'PagesController::login');
+    $routes->post('authentification', 'AuthController::authenticate');
+    $routes->post('signup', 'AuthController::saveUser');
+});
 $routes->get('logout', 'AuthController::logout');
-$routes->post('authentification', 'AuthController::authenticate');
-$routes->post('signup', 'AuthController::saveUser');
+
+//Profil
+$routes->get('myprofil', 'ProfilController::index');
 
 // Itinéraire
 $routes->get('trajet', 'PagesController::itineraries');
 $routes->post('trajet-recherche', 'ItineraryController::search');
-$routes->get('nouveau-trajet', 'PageController::newItinerary');
+$routes->get('nouveau-trajet', 'PagesController::newItinerary');

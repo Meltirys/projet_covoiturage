@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class BookingModel extends Model
+class CityModel extends Model
 {
-    protected $table            = 'Booking';
-    protected $primaryKey       = 'id_booking';
+    protected $table            = 'City';
+    protected $primaryKey       = 'id_city';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['booking_date', 'seat_taken', 'is_validated', 'is_driver', 'delete_booking_date', 'id_user', 'id_journey_drive'];
+    protected $allowedFields    = ['name', 'postcode'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -43,4 +43,27 @@ class BookingModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    /**
+     * Gets the ID of the provided city. If it doesn't exist, insert as new city
+     * 
+     * @param string $cityName The name of the city
+     *
+     * @param string $postCode The city's postcode
+     * 
+     * @return int The city's ID
+     */
+    public function getOrCreate(string $cityName, string $postCode): int
+    {
+        $city = $this->where(['name' => $cityName, 'postcode' => $postCode])->first();
+
+        if ($city) {
+            return $city['id_city'];
+        }
+
+        return $this->insert([
+            'city_name' => $cityName,
+            'postcode' => $postCode
+        ]);
+    }
 }

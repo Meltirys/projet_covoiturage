@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class BookingModel extends Model
+class LocationModel extends Model
 {
-    protected $table            = 'Booking';
-    protected $primaryKey       = 'id_booking';
+    protected $table            = 'Location';
+    protected $primaryKey       = 'id_location';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['booking_date', 'seat_taken', 'is_validated', 'is_driver', 'delete_booking_date', 'id_user', 'id_journey_drive'];
+    protected $allowedFields    = ['address', 'latitude', 'longitude', 'id_city'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -43,4 +43,33 @@ class BookingModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    /**
+     * Gets the ID of the provided location. If it doesn't exist, insert as new location
+     * 
+     * @param string $address
+     *
+     * @param int $cityID The ID of the city
+     * 
+     * @param float $latitude
+     * 
+     * @param float $longitude
+     * 
+     * @return int The location ID
+     */
+    public function getOrCreate(string $address, int $cityID, float $latitude, float $longitude): int
+    {
+        $location = $this->where(['address' => $address, 'id_city' => $cityID])->first();
+
+        if ($location) {
+            return $location['id_location'];
+        }
+
+        return $this->insert([
+            'address' => $address,
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+            'id_city' => $cityID
+        ]);
+    }
 }

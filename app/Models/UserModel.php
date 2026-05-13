@@ -45,7 +45,11 @@ class UserModel extends Model
     protected $afterDelete    = [];
 
     /**
-     * Converts the user's password into a secure hash
+     * Automatic "beforeInsert" function. Converts the user's password into a secure hash.
+     * 
+     * @param array $data An array containing user data for insertion
+     * 
+     * @return array $data The user's data, now with a securely hashed password
      */
     protected function hashPassword(array $data)
     {
@@ -54,14 +58,19 @@ class UserModel extends Model
         return $data;
     }
 
-    public function getUserName(int $idUser) : ?string{
+    /**
+     * @param int $idUser The user id of whom we want the name
+     * 
+     * @return string|null The name in format first_name." ".last_name or null if the user is not found
+     */
+    public function getUserName(int $idUser): ?string
+    {
         $user = $this->select('first_name, last_name')
-                     ->where($this->primaryKey, $idUser)
-                     ->first();
+            ->where($this->primaryKey, $idUser)
+            ->first();
 
-        if(!$user) return null;
+        if (!$user) return null;
 
         return $user['first_name'] . " " . $user['last_name'];
-
     }
 }

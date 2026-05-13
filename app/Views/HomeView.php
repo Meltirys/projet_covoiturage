@@ -43,33 +43,39 @@
                 <div class="text-xs text-red-500 mb-3"><?= $message ?></div>
             <?php endif; ?>
 
-            <div class="bg-babyblue rounded-2xl p-5 border border-bluegrey flex flex-col gap-4">
-                <form action="<?= site_url('authentification') ?>" method="POST" class="flex flex-col gap-4">
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs font-medium tracking-widest text-bluegrey uppercase" for="email-auth">E-mail</label>
-                        <input class="w-full rounded-xl bg-lightblue! border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="email" id="email-auth" name="email-auth" required>
-                    </div>
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs font-medium tracking-widest text-bluegrey uppercase" for="password-auth">Mot de passe</label>
-                        <input class="w-full rounded-xl bg-lightblue! border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="password" id="password-auth" name="password-auth" required>
+                <?= form_open("/authentification") ?>
+                    <div class="auth-field">
+                        <label class="auth-label" for="email-auth">Email</label>
+                        <input class="auth-input" type="email" id="email-auth" name="email-auth" required>
                     </div>
                     <div class="flex justify-center mt-2">
                         <button type="submit" class="border border-bluegrey text-bluegrey text-xs font-medium px-6 py-2 rounded-full hover:bg-bluegrey hover:text-white transition-all">
                             Je me connecte
                         </button>
                     </div>
-                </form>
+                <?php if (session()->getFlashdata('auth-error')): ?>
+                    <p class="alert error">
+                        <?= session()->getFlashdata('auth-error') ?>
+                    </p>
+                <?php endif; ?>
+                <button type="submit" class="btn-auth">Se connecter</button>
+                <?= form_close(); ?>
             </div>
-        </div>
 
-        <!-- FORMULAIRE INSCRIPTION -->
-        <div id="tab-inscription" class="auth-form-panel hidden">
-            <?php if (session()->getFlashdata('success')): ?>
-                <div class="text-sm text-green-600 mb-3"><?= session()->getFlashdata('success') ?></div>
-            <?php endif ?>
-            <?php if (session()->getFlashdata('error')): ?>
-                <div class="text-sm text-red-500 mb-3"><?= session()->getFlashdata('error') ?></div>
-            <?php endif ?>
+            <!-- Formulaire Inscription -->
+            <div id="tab-inscription" class="auth-form-panel <?= ($activeTab ?? 'login') === 'inscription' ? 'active' : '' ?>">
+
+                <?php if (session()->getFlashdata('success')): ?>
+                    <p class="alert success">
+                        <?= session()->getFlashdata('success') ?>
+                    </p>
+                <?php endif ?>
+
+                <?php if (session()->getFlashdata('error')): ?>
+                    <p class="alert error">
+                        <?= session()->getFlashdata('error') ?>
+                    </p>
+                <?php endif ?>
 
             <div class="bg-babyblue rounded-2xl p-5 flex flex-col gap-4">
                 <?= form_open('/signup') ?>
@@ -127,13 +133,19 @@
                     </div>
 
                 <?= form_close() ?>
-            </div>
-        </div>
 
-    <?php else: ?>
-        <p class="text-bluegrey">Bonjour <?= session()->user_name ?></p>
-        <a href="/logout" class="text-sm text-grey underline">Se déconnecter</a>
-    <?php endif; ?>
+                <div class="auth-field">
+                    <label class="auth-label" for="reg-pseudo">Pseudo</label>
+                    <input class="auth-input" type="text" id="reg-pseudo" name="pseudo" required>
+                </div>
+            </div>
+
+        <?php else: //utilisateur connecté 
+        ?>
+            <p>Bonjour <?= session()->user_name ?></p>
+            <a href="/myprofil">Mon profil</a>
+            <a href="/logout">Se déconnecter</a>
+        <?php endif; ?>
 
 </main>
 

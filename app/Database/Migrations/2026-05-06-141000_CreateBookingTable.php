@@ -19,7 +19,7 @@ class CreateBookingTable extends Migration
             'seat_taken'          => ['type' => 'INT'],
             'is_validated'        => ['type' => 'BOOLEAN', 'null' => false, 'default' => false],
             'is_driver'           => ['type' => 'BOOLEAN', 'null' => false, 'default' => false],
-            'delete_booking_date' => ['type' => 'DATE'],
+            'deletion_date' => ['type' => 'DATE'],
             'id_user'             => ['type' => 'INT', 'unsigned' => true, 'null' => false],
             'id_journey_drive'    => ['type' => 'INT', 'unsigned' => true, 'null' => false],
         ]);

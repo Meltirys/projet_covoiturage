@@ -45,18 +45,16 @@ class AuthController extends BaseController
         if (!$user || !password_verify($post['password'], $user['password'])) {
             return redirect()->back()
                 ->withInput()
-                ->with('errors', 'Identifiants invalides');
+                ->with('auth-error', 'Identifiants invalides');
         }
-
-        var_dump($post);
-        
 
         // If all checks succeed, sets the user information in the session
         session()->set([
             'user_id' => $user['id_user'],
             'user_email' => $user['email'],
             'user_role' => $user['id_user_permission'],
-            'user_name' => $userModel->getUserName($user['id_user']),
+            'user_first_name' => $user['first_name'],
+            'user_last_name' => $user['last_name'],
             'logged_in' => true,
         ]);
 
@@ -129,7 +127,7 @@ class AuthController extends BaseController
             return redirect()->to('/')
                 ->with('errors', $errors)
                 ->withInput()
-                ->with('error', 'Votre compte n\'a pas pu être crée');
+                ->with('error', 'Votre compte n\'a pas pu être créé');
         }
 
         return redirect()->to('/')

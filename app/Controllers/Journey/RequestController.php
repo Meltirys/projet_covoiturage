@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
-use App\Models\ItineraryModel;
+use App\Models\JourneyRequestModel;
 use CodeIgniter\Exceptions\PageNotFoundException;
 
 class ItineraryController extends BaseController
@@ -29,7 +29,7 @@ class ItineraryController extends BaseController
      */
     public function show(?string $slug = null)
     {
-        $model = model(ItineraryModel::class);
+        $model = model(JourneyRequestModel::class);
 
         $data['itinerary'] = $model->getItinerary($slug);
 

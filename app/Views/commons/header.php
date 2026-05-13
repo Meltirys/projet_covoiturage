@@ -11,12 +11,16 @@
 
 <body>
     <header class="header">
-        <nav>
-            <ul class="font-poppins text-bluegrey">
-                <li><a href="<?= site_url('trajet') ?>">Trajet</a></li>
-                <li><a href="/nouveau-trajet">Nouveau trajet</a></li>
-                <li><a href="#">Contact</a></li>
-                <li><a href="<?= site_url('authentification') ?>">Authentification</a></li>
-            </ul>
-        </nav>
+        <?php if (session('logged_in')): ?>
+            <nav>
+                <ul>
+                    <li><a href="<?= site_url('trajet') ?>">Trajet</a></li>
+                    <li><a href="/nouveau-trajet">Nouveau trajet</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="/myprofil">Mon profil</a></li>
+                </ul>
+            </nav>
+        <?php else: ?>
+            <p>Non conntecté</p>
+        <?php endif; ?>
     </header>

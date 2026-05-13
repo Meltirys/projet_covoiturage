@@ -14,13 +14,14 @@ class CreateLocationTable extends Migration
                 'unsigned'          => true,
                 'auto_increment'    => true,
             ],
-            'address'       => ['type' => 'VARCHAR', 'constraint' => 100], 
+            'address'       => ['type' => 'VARCHAR', 'constraint' => 100],
             'latitude'      => ['type' => 'DECIMAL', 'constraint' => '10,8', 'null' => false],
             'longitude'     => ['type' => 'DECIMAL', 'constraint' => '11,8', 'null' => false],
             'id_city'       => ['type' => 'INT', 'unsigned' => true, 'null' => false],
         ]);
         $this->forge->addPrimaryKey('id_location');
         $this->forge->addForeignKey('id_city', 'City', 'id_city', 'RESTRICT', 'NO ACTION');
+        $this->forge->addUniqueKey(['address', 'id_city']);
         $this->forge->createTable('Location');
     }
 
