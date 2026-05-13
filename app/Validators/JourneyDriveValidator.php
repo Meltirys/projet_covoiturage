@@ -14,12 +14,48 @@ class JourneyDriveValidator extends BaseValidator
     public function rules(): array
     {
         return [
-            'seats'      => 'required|integer',
-            'car'        => 'required|integer',
-            'start-time' => 'required',
-            'end-time'   => 'required',
-            'start'      => 'required|string',
-            'end'        => 'required|string',
+            'id_car'        => [
+                'rules' => 'required|integer',
+                'errors' => [
+                    'required' => 'Le choix du véhicule est obligatoire',
+                    'integer' => 'Veuillez choisir un véhicule valide',
+                ]
+            ],
+            'start_city' => [
+                'rules' => 'required|min_length[2]|max_length[50]'
+            ],
+            'seats'      => [
+                'rules' => 'required|integer|max_length[2]',
+                'errors' => [
+                    'required' => 'Le nombre de places disponsibles est obligatoire',
+                    'integer' => 'Le nombre de place doit être un nombre',
+                ]
+            ],
+            'start-time' => [
+                'rules' => 'required',
+                'errors' => [
+                    'required' => 'Le temps de départ est obligatoire',
+                ]
+            ],
+            'end-time'   => [
+                'rules' => 'required',
+                'errors' => ['required' => 'Le temps d\'arrivée est obligatoire',]
+            ],
+            'start'      => [
+                'rules' => 'required|string',
+                'errors' => [
+                    'required' => 'L\'adresse de départ est obligatoire',
+                    'string' => 'L\'adresse de départ est invalide',
+                ]
+            ],
+
+            'end'        => [
+                'rules' => 'required|string',
+                'errors' => [
+                    'required' => 'L\'adresse d\'arrivée est obligatoire',
+                    'string' => 'L\adresse d\'arrivée est invalide'
+                ]
+            ],
         ];
     }
 }
