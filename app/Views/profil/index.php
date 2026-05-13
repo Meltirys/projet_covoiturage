@@ -77,7 +77,7 @@
                 </div>
 
                 <button type="submit">Ajouter</button>
-                <button onclick="hideForm('add-car-form')">Annuler</button>
+                <button type="button" onclick="hideForm('add-car-form')">Annuler</button>
                 <?= form_close() ?>
             </div>
 
@@ -97,8 +97,6 @@
 
 
 </section>
-
-<hr>
 
 <section id="passenger">
     <div id="stats-passenger">

@@ -14,7 +14,7 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'PagesController::home');
 
 // Authentification
-$routes->group('', ['filter' => 'guest'], function($routes) {
+$routes->group('', ['filter' => 'guest'], function ($routes) {
     $routes->get('authentification', 'PagesController::login');
     $routes->post('authentification', 'AuthController::authenticate');
     $routes->post('signup', 'AuthController::saveUser');
@@ -23,6 +23,9 @@ $routes->get('logout', 'AuthController::logout');
 
 //Profil
 $routes->get('myprofil', 'ProfilController::index');
+$routes->post('newCar', 'CarController::add');
+
+
 
 // Itinéraire
 $routes->get('trajet', 'PagesController::itineraries');
