@@ -13,54 +13,99 @@ class JourneyDriveValidator extends BaseValidator
      */
     public function rules(): array
     {
+        /*
+         * /!\ Reminder to add options once implemented /!\
+         */
+
+        $cityRules = [
+            'rules' => 'required|min_length[2]|max_length[50]',
+            'errors' => [
+                'required' => 'Choisir une ville est obligatoire',
+                'min_length' => 'Le nom de la ville est trop court',
+                'max_length' => 'Le nom de la ville est trop long',
+            ]
+        ];
+        $postcodeRules = [
+            'rules' => 'required|min_length[5]|max_length[10]',
+            'errors' => [
+                'required' => 'Le code postal est requis',
+                'min_length' => 'Le code postal est trop court',
+                'max_length' => 'Le code postal est trop long',
+            ]
+        ];
+        $latRules = [
+            'rules' => 'required|greater_than_equal_to[-90]|less_than_equal_to[90]',
+            'errors' => [
+                'required' => 'La latitude est obligatoire.',
+                'greater_than_equal_to' => 'La latitude doit être supérieure ou égale à -90.',
+                'less_than_equal_to' => 'La latitude doit être inférieure ou égale à 90.',
+            ],
+        ];
+        $longRules = [
+            'rules' =>  'required|greater_than_equal_to[-180]|less_than_equal_to[180]',
+            'errors' => [
+                'required' => 'La longitude est obligatoire.',
+                'greater_than_equal_to' => 'La longitude doit être supérieure ou égale à -180.',
+                'less_than_equal_to' => 'La longitude doit être inférieure ou égale à 180.',
+            ]
+        ];
+        $datetimeRules = [
+            'rules' => 'required|validateDatetime',
+            'errors' => [
+                'required' => 'La date et heure sont obligatoires.',
+                'validateDatetime' => 'La date et heure sont invalides.',
+            ]
+        ];
+
         return [
             'id_car'        => [
-                'rules' => 'required|integer',
+                'rules' => 'required|is_natural_no_zero',
                 'errors' => [
                     'required' => 'Le choix du véhicule est obligatoire',
-                    'integer' => 'Veuillez choisir un véhicule valide',
+                    'is_natural_no_zero' => 'Veuillez choisir un véhicule valide',
                 ]
             ],
-            'start_city' => [
-                'rules' => 'required|min_length[2]|max_length[50]',
-                'errors' => [
-                    'required' => 'La ville de départ est obligatoire',
-                    'min_length' => 'Le nom de la ville est trop court',
-                    'max_length' => 'Le nom de la ville est trop long',
-                ]
-            ],
+            'start_city' => $cityRules,
+            'start_city_postcode' => $postcodeRules,
+            'end_city' => $cityRules,
+            'end_city_postcode' => $postcodeRules,
             'seats'      => [
-                'rules' => 'required|integer|max_length[2]',
+                'rules' => 'required|min_length[1]|max_length[2]',
                 'errors' => [
                     'required' => 'Le nombre de places disponsibles est obligatoire',
-                    'integer' => 'Le nombre de place doit être un nombre',
+                    'min_length' => 'Le nombre de places choisi ne doit pas être inférieur à 1',
+                    'max_length' => 'Le nombre de places choisi est trop grand',
                 ]
             ],
-            'start-time' => [
-                'rules' => 'required',
-                'errors' => [
-                    'required' => 'Le temps de départ est obligatoire',
-                ]
-            ],
-            'end-time'   => [
-                'rules' => 'required',
-                'errors' => ['required' => 'Le temps d\'arrivée est obligatoire',]
-            ],
+            'start-time' => $datetimeRules,
+            'end-time'   => $datetimeRules,
             'start'      => [
-                'rules' => 'required|string',
+                'rules' => 'required|min_length[2]|max_length[100]',
                 'errors' => [
                     'required' => 'L\'adresse de départ est obligatoire',
-                    'string' => 'L\'adresse de départ est invalide',
+                    'min_length' => 'L\'adresse de départ doit faire plus de 2 caractères',
+                    'max_length' => 'L\'adresse de départ doit faire moins de 100 caractères',
                 ]
             ],
-
+            'start_lat' => $latRules,
+            'start_long' => $longRules,
             'end'        => [
-                'rules' => 'required|string',
+                'rules' => 'required|min_length[2]|max_length[100]',
                 'errors' => [
                     'required' => 'L\'adresse d\'arrivée est obligatoire',
-                    'string' => 'L\adresse d\'arrivée est invalide'
+                    'min_length' => 'L\'adresse d\'arrivée doit faire plus de 2 caractères',
+                    'max_length' => 'L\'adresse d\'arrivée doit faire moins de 100 caractères',
                 ]
             ],
+            'end_lat' => $latRules,
+            'end_long' => $longRules,
+            'stops' => [
+                'rules' => 'required|validStops',
+                'errors' => [
+                    'required' => 'Les arrêts sont obligatoires',
+                    'validStops' => 'Un ou plusieurs arrêts sont invalides',
+                ]
+            ]
         ];
     }
 }
