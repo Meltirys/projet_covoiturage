@@ -9,7 +9,7 @@ class ProfilController extends BaseController
 {
     public function index()
     {
-        return view('profil/profilView');
+        return view('profil/index');
     }
 
     public function modify(){
