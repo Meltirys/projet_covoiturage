@@ -137,9 +137,3 @@
     background-color: #f2f5f8; 
   }
 }
-
-@layer base {
-  body {
-    padding-top: 1rem;
-  }
-}
