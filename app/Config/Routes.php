@@ -1,6 +1,7 @@
 <?php
 
 use CodeIgniter\Router\RouteCollection;
+use App\Controllers\CarController;
 
 /**
  * @var RouteCollection $routes
@@ -26,6 +27,7 @@ $routes->group('', ['filter' => 'auth'], function($routes){
     //Profil
     $routes->get('myprofil', 'ProfilController::index');
     $routes->post('car/add', 'CarController::add');
+    $routes->post('car/delete/(:num)', [CarController::class, 'delete']);
 });
 
 

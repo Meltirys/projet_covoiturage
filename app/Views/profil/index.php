@@ -32,7 +32,12 @@
                             </p>
                         </div>
                         <div class="options">
+                            
+                            <button type="submit">Modifier</button>
 
+                            <?=  form_open('/car/delete/' . $car['id_car']) ?>
+                                <button type="submit">Supprimer</button>
+                            <?= form_close() ?>
                         </div>
                     </div>
                 <?php endforeach ?>
@@ -116,11 +121,11 @@
         </section>
 
         <!-- Area used after the user sumbitted a form -->
-        <?php if (session()->getFlashdata('car_added')): ?>
-            <p class="text-xs text-green-600 mb-3"><?= session()->getFlashdata('car_added') ?></p>
+        <?php if (session()->getFlashdata('car_success')): ?>
+            <p class="text-xs text-green-600 mb-3"><?= session()->getFlashdata('car_success') ?></p>
         <?php endif ?>
-        <?php if (session()->getFlashdata('car_not_added')): ?>
-            <p class="text-xs text-red-500 mb-3"><?= session()->getFlashdata('car_not_added') ?></p>
+        <?php if (session()->getFlashdata('car_error')): ?>
+            <p class="text-xs text-red-500 mb-3"><?= session()->getFlashdata('car_error') ?></p>
         <?php endif ?>
     </div>
 

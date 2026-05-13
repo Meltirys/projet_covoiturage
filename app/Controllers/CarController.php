@@ -33,7 +33,7 @@ class CarController extends BaseController
         }
 
         $carModel = new CarModel();
-        
+
         //Adding the user id for the database request
         $car['id_user'] = session()->user_id;
 
@@ -48,12 +48,37 @@ class CarController extends BaseController
             return redirect()->to('/myprofil')
                 ->with('errors', $errors)
                 ->withInput()
-                ->with('car_not_added', 'Une erreur est survenue lors de l\'ajout du véhicule');
+                ->with('car_error', 'Une erreur est survenue lors de l\'ajout du véhicule');
         }
 
         return redirect()->to('/myprofil')
-            ->with('car_added', 'Votre véhicule à bien été ajouté');
+            ->with('car_success', 'Votre véhicule à bien été ajouté');
     }
 
     public function update() {}
+
+    public function delete(int $idCar)
+    {
+
+        $carModel = new CarModel();
+        $isOwner = session()->user_id == $carModel->find($idCar)['id_user']; //Check if the user is the owner
+
+
+        //If the user is not the owner, we redirect him
+        if (!$isOwner) {
+            return redirect('404');
+        }
+
+        if (! $carModel->delete($idCar)) {
+            $errors = $carModel->errors();
+
+            return redirect()->to('/myprofil')
+                ->with('errors', $errors)
+                ->withInput()
+                ->with('car_error', 'Une erreur est survenue lors de la suppression du véhicule');
+        }
+
+        return redirect()->to('/myprofil')
+            ->with('car_success', 'Votre véhicule à bien été supprimé');
+    }
 }
