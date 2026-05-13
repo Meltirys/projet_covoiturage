@@ -9,6 +9,7 @@ class ProfilController extends BaseController
 {
     public function index()
     {
+        helper('form');
         return view('profil/index');
     }
 
