@@ -15,11 +15,11 @@ $routes->get('/', 'PagesController::home');
 
 // Authentification
 $routes->get('authentification', 'PagesController::login');
-$routes->get('logout', 'AuthController::logout');
+$routes->post('logout', 'AuthController::logout');
 $routes->post('authentification', 'AuthController::authenticate');
 $routes->post('signup', 'AuthController::saveUser');
 
 // Itinéraire
 $routes->get('trajet', 'PagesController::itineraries');
 $routes->post('trajet-recherche', 'ItineraryController::search');
-$routes->get('nouveau-trajet', 'PageController::newItinerary');
+$routes->get('nouveau-trajet', 'PagesController::newItinerary');
