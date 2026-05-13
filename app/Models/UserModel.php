@@ -74,8 +74,4 @@ class UserModel extends Model
         return $user['first_name'] . " " . $user['last_name'];
     }
 
-    public function getUserCars(int $id) : array{
-        $cars = $this->select()
-                    ->where()
-    }
 }

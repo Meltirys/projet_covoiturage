@@ -176,7 +176,9 @@
 </section>
 
 <section id="profil-buttons">
-    <button>Supprimer mon compte</button>
+    <?= form_open('user/delete')?>
+        <button type="submit">Supprimer mon compte</button>
+    <?= form_close() ?>
     <a href="/logout">Se déconnecter</a>
 </section>
 
