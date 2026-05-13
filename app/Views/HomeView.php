@@ -62,7 +62,6 @@
                     <?= session()->getFlashdata('auth-error') ?>
                 </p>
             <?php endif; ?>
-            <button type="submit" class="btn-auth">Se connecter</button>
             <?= form_close(); ?>
         </div>
 
