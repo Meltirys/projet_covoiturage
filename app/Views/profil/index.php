@@ -29,25 +29,54 @@
 
             <?= form_open("/newCar") ?>
             <div>
-                <label for="brand">Marque</label>
-                <input type="text" id="brand" name="brand">
+                <div>
+                    <label for="brand">Marque</label>
+                    <input type="text" id="brand" name="brand">
+                </div>
+                <?php if ($errors['brand'] ?? null): ?>
+                    <span class="error"><?= $errors['brand'] ?></span>
+                <?php endif ?>
             </div>
             <div>
-                <label for="model">Modèle</label>
-                <input type="text" id="model" name="model">
+                <div>
+                    <label for="model">Modèle</label>
+                    <input type="text" id="model" name="model">
+                </div>
+                <?php if ($errors['model'] ?? null): ?>
+                    <span class="error"><?= $errors['model'] ?></span>
+                <?php endif ?>
             </div>
+
             <div>
-                <label for="color">Couleur</label>
-                <input type="text" id="color" name="color">
+                <div>
+                    <label for="color">Couleur</label>
+                    <input type="text" id="color" name="color">
+                </div>
+                <?php if ($errors['color'] ?? null): ?>
+                    <span class="error"><?= $errors['color'] ?></span>
+                <?php endif ?>
             </div>
+
             <div>
-                <label for="year">Année</label>
-                <input type="text" id="year" name="year">
+                <div>
+                    <label for="year">Année</label>
+                    <input type="text" id="year" name="year">
+                </div>
+                <?php if ($errors['year'] ?? null): ?>
+                    <span class="error"><?= $errors['year'] ?></span>
+                <?php endif ?>
             </div>
+
             <div>
-                <label for="places">Nombre de places</label>
-                <input type="number" id="places" name="places">
+                <div>
+                    <label for="places">Nombre de places</label>
+                    <input type="number" id="places" name="places">
+                </div>
+                <?php if ($errors['places'] ?? null): ?>
+                    <span class="error"><?= $errors['places'] ?></span>
+                <?php endif ?>
             </div>
+
             <?= form_close() ?>
 
         </section>

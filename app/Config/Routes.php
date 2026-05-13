@@ -19,7 +19,7 @@ $routes->group('', ['filter' => 'guest'], function($routes) {
     $routes->post('authentification', 'AuthController::authenticate');
     $routes->post('signup', 'AuthController::saveUser');
 });
-$routes->post('logout', 'AuthController::logout');
+$routes->get('logout', 'AuthController::logout');
 
 //Profil
 $routes->get('myprofil', 'ProfilController::index');
