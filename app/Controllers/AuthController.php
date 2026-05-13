@@ -46,7 +46,7 @@ class AuthController extends BaseController
             return redirect()->back()
                 ->withInput()
                 ->with('error', 'Identifiants invalides');
-        }        
+        }
 
         // If all checks succeed, sets the user information in the session
         session()->set([
@@ -127,7 +127,7 @@ class AuthController extends BaseController
             return redirect()->to('/')
                 ->with('errors', $errors)
                 ->withInput()
-                ->with('error', 'Votre compte n\'a pas pu être crée');
+                ->with('error', 'Votre compte n\'a pas pu être créé');
         }
 
         return redirect()->to('/')
