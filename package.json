@@ -1,0 +1,29 @@
+{
+  "name": "projet_covoiturage",
+  "version": "1.0.0",
+  "description": "Ce projet est une application de covoiturage destiné aux stagiaires du GRETA-CFA Bretagne Sud.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Meltirys/projet_covoiturage.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Meltirys/projet_covoiturage/issues"
+  },
+  "homepage": "https://github.com/Meltirys/projet_covoiturage#readme",
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.0",
+    "tailwindcss": "^4.3.0",
+    "vite": "^8.0.12"
+  }
+}

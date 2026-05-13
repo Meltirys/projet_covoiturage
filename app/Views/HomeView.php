@@ -1,243 +1,157 @@
 <?= view('commons/header') ?>
 
-<main>
-    <?php
-    if (!session('logged_in')) : //Non conected user
-    ?>
-        <div class="auth-screen">
+<main class="bg-lightgrey min-h-screen px-5 py-8 font-poppins">
 
-            <div class="auth-menu">
-                <button class="auth-menu-btn <?= ($activeTab ?? 'login') === 'login' ? 'active' : '' ?>" data-tab="tab-login">
-                    <span class="auth-selector"></span> Connexion
-                </button>
-                <button class="auth-menu-btn <?= ($activeTab ?? 'login') === 'inscription' ? 'active' : '' ?>" data-tab="tab-inscription">
-                    <span class="auth-selector"></span> Inscription
-                </button>
+    <?php if (!session('logged_in')) : ?>
+
+        <!-- HERO -->
+        <section class="mb-8">
+            <div class="flex items-start gap-3 mb-4">
+                <img src="/img/logo.png" alt="PennRide" class="w-12 h-12 rounded-xl">
             </div>
-            <!-- Formulaire de Connexion -->
-            <div id="tab-login" class="auth-form-panel <?= ($activeTab ?? 'login') === 'login' ? 'active' : '' ?>">
+            <p class="text-xs tracking-widest text-grey uppercase mb-4">
+                L'application de covoiturage<br>réservée aux membres du GRETA.
+            </p>
+            <h1 class="text-xl font-light text-dark leading-snug font-medium mb-4">
+                Tu es membre du GRETA ?<br>
+                Tu cherches une solution<br>
+                de covoiturage ?<br>
+                Tu es au bon endroit. 🚗
+            </h1>
+            <p class="text-sm text-grey leading-relaxed">
+                <strong class="font-semibold">Cette application est uniquement accessible aux membres du GRETA.</strong><br>
+                S'il s'agit de ton cas, crée ton compte et commence à covoiturer avec tes collègues.
+            </p>
+        </section>
 
-                <?php if (!empty($message) && ($activeTab ?? 'login') === 'login'): ?>
-                    <div class="auth-message"><?= $message ?></div>
-                <?php endif; ?>
+        <!-- ONGLETS -->
+        <div class="flex gap-6 mb-5 border-b border-babyblue">
+            <button class="auth-menu-btn text-xs font-medium text-bluegrey border-b-2 border-bluegrey pb-2 -mb-px transition-all" data-tab="tab-login">
+                TE CONNECTER
+            </button>
+            <button class="auth-menu-btn text-xs font-medium text-grey border-b-2 border-transparent pb-2 -mb-px transition-all" data-tab="tab-inscription">
+                T'INSCRIRE
+            </button>
+            <button class="auth-menu-btn text-xs font-medium text-grey border-b-2 border-transparent pb-2 -mb-px transition-all" data-tab="tab-inscription">
+                NOUS CONTACTER
+            </button>
+        </div>
 
-                <form action="<?= site_url('authentification') ?>" method="POST" class="auth-form">
-                    <div class="auth-field">
-                        <label class="auth-label" for="email-auth">Email</label>
-                        <input class="auth-input" type="email" id="email-auth" name="email-auth" required>
+        <!-- FORMULAIRE CONNEXION -->
+        <div id="tab-login" class="auth-form-panel">
+            <?php if (!empty($message) && ($activeTab ?? 'login') === 'login'): ?>
+                <div class="text-xs text-red-500 mb-3"><?= $message ?></div>
+            <?php endif; ?>
+
+            <div class="bg-babyblue rounded-2xl p-5 border border-bluegrey flex flex-col gap-4">
+                <form action="<?= site_url('authentification') ?>" method="POST" class="flex flex-col gap-4">
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-medium tracking-widest text-bluegrey uppercase" for="email-auth">E-mail</label>
+                        <input class="w-full rounded-xl bg-lightblue! border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="email" id="email-auth" name="email-auth" required>
                     </div>
-                    <div class="auth-field">
-                        <label class="auth-label" for="password-auth">Mot de passe</label>
-                        <input class="auth-input" type="password" id="password-auth" name="password-auth" required>
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-medium tracking-widest text-bluegrey uppercase" for="password-auth">Mot de passe</label>
+                        <input class="w-full rounded-xl bg-lightblue! border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="password" id="password-auth" name="password-auth" required>
                     </div>
-                    <button type="submit" class="btn-auth">Se connecter</button>
+                    <div class="flex justify-center mt-2">
+                        <button type="submit" class="border border-bluegrey text-bluegrey text-xs font-medium px-6 py-2 rounded-full hover:bg-bluegrey hover:text-white transition-all">
+                            Je me connecte
+                        </button>
+                    </div>
                 </form>
-
-            </div>
-
-            <!-- Formulaire Inscription -->
-            <div id="tab-inscription" class="auth-form-panel <?= ($activeTab ?? 'login') === 'inscription' ? 'active' : '' ?>">
-
-                <?php if (session()->getFlashdata('success')): ?>
-                    <div class="alert success">
-                        <?= session()->getFlashdata('success') ?>
-                    </div>
-                <?php endif ?>
-
-                <?php if (session()->getFlashdata('error')): ?>
-                    <div class="alert error">
-                        <?= session()->getFlashdata('error') ?>
-                    </div>
-                <?php endif ?>
-
-
-
-                <?= form_open('/signup') ?>
-
-                <div class="auth-field-group">
-                    <div class="auth-field">
-                        <div class="auth-input">
-                            <label class="auth-label" for="first_name">Prénom</label>
-                            <input class="auth-input" type="text" name="first_name" value="<?= set_value('first_name') ?>" required>
-                        </div>
-                        <?php if ($errors['first_name'] ?? null): ?>
-                            <span class="error"><?= $errors['first_name'] ?></span>
-                        <?php endif ?>
-                    </div>
-
-                    <div class="auth-field">
-                        <div class="auth-input">
-                            <label class="auth-label" for="last_name">Nom</label>
-                            <input class="auth-input" type="text" name="last_name" value="<?= set_value('last_name') ?>" required>
-                        </div>
-                        <?php if ($errors['last_name'] ?? null): ?>
-                            <span class="error"><?= $errors['last_name'] ?></span>
-                        <?php endif ?>
-
-                    </div>
-                    <div class="auth-field">
-                        <div class="auth-input">
-                            <label class="auth-label" for="gender">Civilité</label>
-                            <input class="auth-input" type="radio" name="gender" value="male" <?= set_radio('gender', "male") ?> required>
-                            <label for="male">Homme</label>
-
-                            <input class="auth-input" type="radio" name="gender" value="female" <?= set_radio('gender', "female") ?> required>
-                            <label for="male">Femme</label>
-
-                            <input class="auth-input" type="radio" name="gender" value="none" <?= set_radio('gender', "none") ?> required>
-                            <label for="male">Non renseigné</label>
-
-                        </div>
-                        <?php if ($errors['gender'] ?? null): ?>
-                            <span class="error"><?= $errors['gender'] ?></span>
-                        <?php endif ?>
-
-                    </div>
-                </div>
-
-                <div class="auth-field-group">
-                    <div class="auth-field">
-                        <div class="auth-input">
-                            <label class="auth-label" for="email-signup">Mail</label>
-                            <input class="auth-input" type="email" name="email-signup" value="<?= set_value('email-signup') ?>" required>
-                        </div>
-
-                        <?php if ($errors['email'] ?? null): ?>
-                            <span class="error"><?= $errors['email'] ?></span>
-                        <?php endif ?>
-
-                    </div>
-
-                    <div class="auth-field">
-                        <div class="auth-input">
-                            <label class="auth-label" for="phone">Téléphone</label>
-                            <input class="auth-input" type="phone" name="phone" value="<?= set_value('phone') ?>">
-                        </div>
-                        <?php if ($errors['phone'] ?? null): ?>
-                            <span class="error"><?= $errors['phone'] ?></span>
-                        <?php endif ?>
-                    </div>
-
-                </div>
-
-
-                <div class="auth-field-group">
-                    <div class="auth-field">
-                        <div class="auth-input">
-                            <label class="auth-label" for="password">Mot de passe</label>
-                            <input class="auth-input" type="password" name="password" required>
-                        </div>
-
-                        <?php if ($errors['password'] ?? null): ?>
-                            <span class="error"><?= $errors['password'] ?></span>
-                        <?php endif ?>
-                    </div>
-
-                    <div class="auth-field">
-                        <div class="auth-input">
-                            <label class="auth-label" for="password_conf">Confirmation du mot de passe</label>
-                            <input class="auth-input" type="password" name="password_conf" required>
-                        </div>
-
-                        <?php if ($errors['password_conf'] ?? null): ?>
-                            <span class="error"><?= $errors['password_conf'] ?></span>
-                        <?php endif ?>
-                    </div>
-
-                </div>
-
-                <div class="auth-group">
-                    <div class="auth-field">
-                        <div class="auth-input">
-                            <label class="auth-label" for="address">Adresse</label>
-                            <input class="auth-input" type="text" name="address" value="<?= set_value('address') ?>" required>
-                        </div>
-
-                        <?php if ($errors['address'] ?? null): ?>
-                            <span class="error"><?= $errors['address'] ?></span>
-                        <?php endif ?>
-                    </div>
-
-                    <div class="auth-field">
-                        <div class="auth-input">
-                            <label class="auth-label" for="birth_date">Date de naissance</label>
-                            <input class="auth-input" type="date" name="birth_date" value="<?= set_value('birth_date') ?>" required>
-                        </div>
-
-                        <?php if ($errors['birth_date'] ?? null): ?>
-                            <span class="error"><?= $errors['birth_date'] ?></span>
-                        <?php endif ?>
-                    </div>
-                </div>
-
-
-                <div class="auth-field-group">
-                    <div class="auth-field">
-                        <div class="auth-input">
-                            <label class="auth-label" for="city">Ville</label>
-                            <input class="auth-input" type="text" name="city" value="<?= set_value('city') ?>" required>
-                        </div>
-
-                        <?php if ($errors['city'] ?? null): ?>
-                            <span class="error"><?= $errors['city'] ?></span>
-                        <?php endif ?>
-                    </div>
-
-                    <div class="auth-field">
-                        <div class="auth-input">
-                            <label class="auth-label" for="post_code">Code Postal</label>
-                            <input class="auth-input" type="text" name="post_code" value="<?= set_value('post_code') ?>" required>
-                        </div>
-
-                        <?php if ($errors['post_code'] ?? null): ?>
-                            <span class="error"><?= $errors['post_code'] ?></span>
-                        <?php endif ?>
-                    </div>
-                </div>
-
-                <button type="submit" name="submit">Je m'inscris</button>
-                <?= form_close() ?>
-
-                <div class="auth-field">
-                    <label class="auth-label" for="reg-pseudo">Pseudo</label>
-                    <input class="auth-input" type="text" id="reg-pseudo" name="pseudo" required>
-                </div>
-                <div class="auth-field">
-                    <label class="auth-label" for="reg-email">Email</label>
-                    <input class="auth-input" type="email" id="reg-email" name="email" required>
-                </div>
-                <div class="auth-field">
-                    <label class="auth-label" for="reg-mdp">Mot de passe <span class="auth-required">(8 caractères min.)</span></label>
-                    <input class="auth-input" type="password" id="reg-mdp" name="mdp" required>
-                </div>
-                <button type="submit" class="btn-auth">Créer mon compte</button>
-
-
             </div>
         </div>
 
-    <?php else: //utilisateur connecté 
-    ?>
-    <p>Bonjour <?= session()->user_name ?></p>
-    <a href="/logout">Se déconnecter</a>
+        <!-- FORMULAIRE INSCRIPTION -->
+        <div id="tab-inscription" class="auth-form-panel hidden">
+            <?php if (session()->getFlashdata('success')): ?>
+                <div class="text-sm text-green-600 mb-3"><?= session()->getFlashdata('success') ?></div>
+            <?php endif ?>
+            <?php if (session()->getFlashdata('error')): ?>
+                <div class="text-sm text-red-500 mb-3"><?= session()->getFlashdata('error') ?></div>
+            <?php endif ?>
+
+            <div class="bg-babyblue rounded-2xl p-5 flex flex-col gap-4">
+                <?= form_open('/signup') ?>
+
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">Nom</label>
+                        <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="text" name="last_name" value="<?= set_value('last_name') ?>" required>
+                        <?php if ($errors['last_name'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['last_name'] ?></span><?php endif ?>
+                    </div>
+
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">Prénom</label>
+                        <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="text" name="first_name" value="<?= set_value('first_name') ?>" required>
+                        <?php if ($errors['first_name'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['first_name'] ?></span><?php endif ?>
+                    </div>
+
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">E-mail</label>
+                        <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="email" name="email-signup" value="<?= set_value('email-signup') ?>" required>
+                        <?php if ($errors['email'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['email'] ?></span><?php endif ?>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">Téléphone</label>
+                            <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="tel" name="phone" value="<?= set_value('phone') ?>">
+                            <?php if ($errors['phone'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['phone'] ?></span><?php endif ?>
+                        </div>
+                        <div class="flex flex-col gap-1">
+                            <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">Date de naissance</label>
+                            <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="date" name="birth_date" value="<?= set_value('birth_date') ?>" required>
+                            <?php if ($errors['birth_date'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['birth_date'] ?></span><?php endif ?>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">
+                            Mot de passe
+                            <span class="normal-case font-light tracking-normal text-grey"> (8 caractères min., 1 majuscule, 1 chiffre)</span>
+                        </label>
+                        <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="password" name="password" required>
+                        <?php if ($errors['password'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['password'] ?></span><?php endif ?>
+                    </div>
+
+                    <div class="flex flex-col gap-1">
+                        <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">Confirmation du mot de passe</label>
+                        <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="password" name="password_conf" required>
+                        <?php if ($errors['password_conf'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['password_conf'] ?></span><?php endif ?>
+                    </div>
+
+                    <div class="flex justify-center mt-2">
+                        <button type="submit" name="submit" class="border border-bluegrey text-bluegrey text-sm font-medium px-6 py-2 rounded-full hover:bg-bluegrey hover:text-white transition-all">
+                            Je m'inscris
+                        </button>
+                    </div>
+
+                <?= form_close() ?>
+            </div>
+        </div>
+
+    <?php else: ?>
+        <p class="text-bluegrey">Bonjour <?= session()->user_name ?></p>
+        <a href="/logout" class="text-sm text-grey underline">Se déconnecter</a>
     <?php endif; ?>
 
 </main>
 
-<!-- Script de sélection du formulaire actif (à redéplacer dans un fichier JS)-->
 <script>
-    document.querySelectorAll('.auth-menu-btn').forEach(function(btn) {
-        btn.addEventListener('click', function() {
+    const btns = document.querySelectorAll('.auth-menu-btn');
+    const panels = document.querySelectorAll('.auth-form-panel');
 
-            // Changer l'onglet actif
-            document.querySelectorAll('.auth-menu-btn').forEach(function(b) {
-                b.classList.remove('active');
+    btns.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            panels.forEach(p => p.classList.add('hidden'));
+            document.getElementById(btn.dataset.tab).classList.remove('hidden');
+
+            btns.forEach(b => {
+                b.classList.remove('text-bluegrey', 'border-bluegrey');
+                b.classList.add('text-grey', 'border-transparent');
             });
-            document.querySelectorAll('.auth-form-panel').forEach(function(p) {
-                p.classList.remove('active');
-            });
-            btn.classList.add('active');
-            document.getElementById(btn.dataset.tab).classList.add('active');
+            btn.classList.remove('text-grey', 'border-transparent');
+            btn.classList.add('text-bluegrey', 'border-bluegrey');
         });
     });
 </script>
