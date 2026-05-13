@@ -30,9 +30,9 @@
                         <label class="auth-label" for="password-auth">Mot de passe</label>
                         <input class="auth-input" type="password" id="password-auth" name="password-auth" required>
                     </div>
-                <?php if (session()->getFlashdata('error')): ?>
+                <?php if (session()->getFlashdata('auth-error')): ?>
                     <p class="alert error">
-                        <?= session()->getFlashdata('error') ?>
+                        <?= session()->getFlashdata('auth-error') ?>
                     </p>
                 <?php endif; ?>
                 <button type="submit" class="btn-auth">Se connecter</button>

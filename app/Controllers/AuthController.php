@@ -45,7 +45,7 @@ class AuthController extends BaseController
         if (!$user || !password_verify($post['password'], $user['password'])) {
             return redirect()->back()
                 ->withInput()
-                ->with('error', 'Identifiants invalides');
+                ->with('auth-error', 'Identifiants invalides');
         }
 
         // If all checks succeed, sets the user information in the session
