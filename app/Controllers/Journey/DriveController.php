@@ -146,7 +146,7 @@ class ItineraryController extends BaseController
 
 
         if (! $journeyDriveModel->save($journey)) {
-            $errors = $userModel->errors();
+            $errors = $journeyDriveModel->errors();
 
             return redirect()->to('/')
                 ->with('errors', $errors)
