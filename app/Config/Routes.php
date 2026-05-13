@@ -19,6 +19,9 @@ $routes->post('logout', 'AuthController::logout');
 $routes->post('authentification', 'AuthController::authenticate');
 $routes->post('signup', 'AuthController::saveUser');
 
+//Profil
+$routes->get('myprofil', 'ProfilController::index');
+
 // Itinéraire
 $routes->get('trajet', 'PagesController::itineraries');
 $routes->post('trajet-recherche', 'ItineraryController::search');
