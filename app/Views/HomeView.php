@@ -21,22 +21,22 @@
                     <div class="auth-message"><?= $message ?></div>
                 <?php endif; ?>
 
-                <?php form_open("/authentification") ?>
-                <div class="auth-field">
-                    <label class="auth-label" for="email-auth">Email</label>
-                    <input class="auth-input" type="email" id="email-auth" name="email-auth" required>
-                </div>
-                <div class="auth-field">
-                    <label class="auth-label" for="password-auth">Mot de passe</label>
-                    <input class="auth-input" type="password" id="password-auth" name="password-auth" required>
-                </div>
+                <?= form_open("/authentification") ?>
+                    <div class="auth-field">
+                        <label class="auth-label" for="email-auth">Email</label>
+                        <input class="auth-input" type="email" id="email-auth" name="email-auth" required>
+                    </div>
+                    <div class="auth-field">
+                        <label class="auth-label" for="password-auth">Mot de passe</label>
+                        <input class="auth-input" type="password" id="password-auth" name="password-auth" required>
+                    </div>
                 <?php if (session()->getFlashdata('error')): ?>
                     <p class="alert error">
                         <?= session()->getFlashdata('error') ?>
                     </p>
-                <?php endif ?>
+                <?php endif; ?>
                 <button type="submit" class="btn-auth">Se connecter</button>
-                <?php form_close(); ?>
+                <?= form_close(); ?>
             </div>
 
             <!-- Formulaire Inscription -->

@@ -46,10 +46,7 @@ class AuthController extends BaseController
             return redirect()->back()
                 ->withInput()
                 ->with('error', 'Identifiants invalides');
-        }
-
-        var_dump($post);
-        
+        }        
 
         // If all checks succeed, sets the user information in the session
         session()->set([
