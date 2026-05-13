@@ -14,13 +14,13 @@ class CreateStagesTable extends Migration
                 'null'           => false,
                 'unsigned'       => true,
             ],
-            'id_location' => [
+            'id_location'      => [
                 'type'          => 'INT',
                 'null'          => false,
                 'unsigned'      => true
             ],
 
-            'order' => ['type' => 'INT'],
+            'order'            => ['type' => 'TINYINT', 'null' => false, 'unsigned' => true,],
 
         ]);
         $this->forge->addForeignKey('id_journey_drive', 'JourneyDrive', 'id_journey_drive', 'RESTRICT', 'NO ACTION');
@@ -30,5 +30,6 @@ class CreateStagesTable extends Migration
 
     public function down()
     {
-        $this->forge->dropTable('Stages');    }
+        $this->forge->dropTable('Stages');
+    }
 }

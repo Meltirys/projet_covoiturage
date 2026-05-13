@@ -9,21 +9,21 @@ class CreateJourneyDriveTable extends Migration
     public function up()
     {
         $this->forge->addField([
-            'id_journey_drive' => [
-                'type'           => 'INT',
-                'null'           => false,
-                'unsigned'       => true,
-                'auto_increment' => true,
+            'id_journey_drive'   => [
+                'type'            => 'INT',
+                'null'            => false,
+                'unsigned'        => true,
+                'auto_increment'  => true,
             ],
-            'number_of_place'      => ['type' => 'INT', 'null' => false],
-            'departure'            => ['type' => 'DATETIME', 'null' => false],
-            'estimated_arrival'    => ['type' => 'DATETIME', 'null' => false],
-            'deletion_date' => ['type' => 'DATE'],
-            'id_track'             => ['type' => 'INT', 'null' => false, 'unsigned' => true],
-            'start'   => ['type' => 'INT', 'null' => false, 'unsigned' => true],
-            'end' => ['type' => 'INT', 'null' => false, 'unsigned' => true],
-            'id_car'               => ['type' => 'INT', 'null' => false, 'unsigned' => true],
-            'driver' => ['type' =>'INT', 'null' => false, 'unsigned' => true]
+            'number_of_place'    => ['type' => 'INT', 'null' => false, 'unsigned' => true],
+            'departure'          => ['type' => 'DATETIME', 'null' => false],
+            'estimated_arrival'  => ['type' => 'DATETIME', 'null' => false],
+            'deletion_date'      => ['type' => 'DATE'],
+            'id_track'           => ['type' => 'INT', 'null' => false, 'unsigned' => true],
+            'start'              => ['type' => 'INT', 'null' => false, 'unsigned' => true],
+            'end'                => ['type' => 'INT', 'null' => false, 'unsigned' => true],
+            'id_car'             => ['type' => 'INT', 'null' => false, 'unsigned' => true],
+            'driver'             => ['type' => 'INT', 'null' => false, 'unsigned' => true]
         ]);
 
         $this->forge->addPrimaryKey('id_journey_drive');

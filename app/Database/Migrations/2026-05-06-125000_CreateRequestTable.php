@@ -14,7 +14,7 @@ class CreateRequestTable extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'seat_taken'         => ['type' => 'INT'],
+            'seat_taken'         => ['type' => 'TINYINT', 'unsigned' => true, 'null' => false],
             'request_date'       => ['type' => 'DATE'],
             'id_journey_request' => ['type' => 'INT', 'unsigned' => true, 'null' => false],
             'id_user'            => ['type' => 'INT', 'unsigned' => true, 'null' => false],

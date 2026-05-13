@@ -13,7 +13,7 @@ class CreateChosenOptionDriveTable extends Migration
                 'type'           => 'INT',
                 'unsigned'       => true,
             ],
-            'id_option'  => [
+            'id_option'         => [
                 'type'           => 'INT',
                 'unsigned'       => true,
             ],

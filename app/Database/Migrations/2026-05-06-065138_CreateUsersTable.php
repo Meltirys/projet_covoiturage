@@ -9,7 +9,7 @@ class CreateUsersTable extends Migration
     public function up()
     {
         $this->forge->addField([
-            'id_user' => [
+            'id_user'         => [
                 'type'            => 'INT',
                 'unsigned'        => true,
                 'null'            => false,

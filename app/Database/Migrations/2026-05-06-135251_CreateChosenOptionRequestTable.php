@@ -9,13 +9,13 @@ class CreateChosenOptionRequestTable extends Migration
     public function up()
     {
         $this->forge->addField([
-            'id_option' => [
-                'type'           => 'INT',
-                'unsigned'       => true,
+            'id_option'          => [
+                'type'            => 'INT',
+                'unsigned'        => true,
             ],
             'id_journey_request' => [
-                'type'           => 'INT',
-                'unsigned'       => true,
+                'type'            => 'INT',
+                'unsigned'        => true,
             ],
         ]);
         $this->forge->addPrimaryKey(['id_option', 'id_journey_request']);

@@ -14,11 +14,11 @@ class CreateUserJourneyRequestTable extends Migration
                 'unsigned'          => true,
                 'auto_increment'    => true,
             ],
-            'description'           => ['type' => 'VARCHAR', 'constraint' => 255],
-            'range_of_time'         => ['type' => 'VARCHAR', 'constraint' => 50],
-            'start'    => ['type' => 'INT', 'unsigned' => true, 'null' => false],
-            'end'  => ['type' => 'INT', 'unsigned' => true, 'null' => false],
-            'deletion_date' => ['type' => 'DATE'],
+            'description'        => ['type' => 'VARCHAR', 'constraint' => 255],
+            'range_of_time'      => ['type' => 'VARCHAR', 'constraint' => 50],
+            'start'              => ['type' => 'INT', 'unsigned' => true, 'null' => false],
+            'end'                => ['type' => 'INT', 'unsigned' => true, 'null' => false],
+            'deletion_date'      => ['type' => 'DATE'],
 
         ]);
         $this->forge->addPrimaryKey('id_journey_request');
