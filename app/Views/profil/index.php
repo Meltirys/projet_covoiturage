@@ -16,7 +16,26 @@
     <div id="car">
         <h3>Mes véhicules</h3>
         <div id="my-cars">
-            <?php if (isset($usersCar) && !empty($usersCar)): ?>
+            <?php if ($cars): ?>
+                <?php foreach ($cars as $car): ?>
+                    <div class="car">
+                        <div class="description">
+                            <p>
+                                <span><?= $car['brand'] ?></span>
+                                <span><?= $car['model'] ?></span>
+                            </p>
+                            <p>
+                                <span><?= $car['color'] ?></span> - 
+                                <span><?= $car['year'] ?></span> - 
+                                <span><?= $car['number_of_seat'] ?> places</span>
+
+                            </p>
+                        </div>
+                        <div class="options">
+
+                        </div>
+                    </div>
+                <?php endforeach ?>
             <?php else: ?>
                 <p>Aucune voiture ajoutée pour le moment</p>
             <?php endif; ?>
