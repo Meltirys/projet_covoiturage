@@ -8,6 +8,8 @@ use CodeIgniter\Exceptions\PageNotFoundException;
 use App\Validators\RegistrationValidator;
 use App\Models\JourneyDriveModel;
 use App\Models\CarModel;
+use App\Models\CityModel;
+use App\Models\LocationModel;
 
 class ItineraryController extends BaseController
 {
@@ -80,18 +82,28 @@ class ItineraryController extends BaseController
 
         $journey = [
             'start'      => $this->request->getPost('start'),
+            'start-lat' => 10,
+            'start-long' => 10,
+            'start-city' => mb_convert_case(trim('Vannes'), MB_CASE_TITLE, "UTF-8"),
+            'start-city-postcode' => '56000',
             'end'        => $this->request->getPost('end'),
+            'end-lat' => 10,
+            'end-long' => 10,
+            'end-city' => mb_convert_case(trim('Vannes'), MB_CASE_TITLE, "UTF-8"),
+            'end-city-postcode' => '56000',
             'stop'       => $this->request->getPost('stop'),
             'start-time' => $this->request->getPost('start-time'),
-            'car'     => intval($this->request->getPost('car')),
+            'car'        => intval($this->request->getPost('car')),
             'seats'      => intval($this->request->getPost('seats')),
             'options'    => $this->request->getPost('options'),
             'user_id'    => session()->get('user_id')
         ];
 
+        // TODO : Validation step
+
         $carModel = model(CarModel::class);
 
-        // Replaces the "car" field from the car's ID to all its information in the Car table
+        // Replaces the "car" field from the car's ID with all its information in the Car table
         $journey['car'] = $carModel
             ->where('id_car', $journey['car_id'])
             ->where('id_user', $journey['user_id'])
@@ -102,20 +114,19 @@ class ItineraryController extends BaseController
                 ->with('error', 'Voiture invalide');
         }
 
-        //Calling the specific validator
-        $validator = new RegistrationValidator();
+        $cityModel = model(CityModel::class);
 
-        //If an error is detected, return to the form with the errors described
-        if (!$validator->validate($journey)) {
-            return view('CreateView', [
-                'errors' => $validator->getErrors()
-            ]);
-        }
+        $startCityID = $cityModel->getOrCreate($journey['start-city'], $journey['start-city-postcode']);
+        $endCityID = $cityModel->getOrCreate($journey['end-city'], $journey['end-city-postcode']);
+
+        $locationModel = model(LocationModel::class);
+
+
 
         $journeyDriveModel = model(JourneyDriveModel::class);
 
         /* 
-         * Tries to save a new user.    
+         * Tries to save a new journey.    
          * If there were errors, returns to view with them in the following format :
          * [ 'field1' => 'error message', 'field2' => 'error message', ]
          */
