@@ -19,11 +19,16 @@ $routes->group('', ['filter' => 'guest'], function ($routes) {
     $routes->post('authentification', 'AuthController::authenticate');
     $routes->post('signup', 'AuthController::saveUser');
 });
-$routes->get('logout', 'AuthController::logout');
 
-//Profil
-$routes->get('myprofil', 'ProfilController::index');
-$routes->post('newCar', 'CarController::add');
+$routes->group('', ['filter' => 'auth'], function($routes){
+    $routes->get('logout', 'AuthController::logout');
+
+    //Profil
+    $routes->get('myprofil', 'ProfilController::index');
+    $routes->post('newCar', 'CarController::add');
+});
+
+
 
 
 
