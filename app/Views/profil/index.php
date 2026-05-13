@@ -27,7 +27,7 @@
 
             <div id="add-car-form" style="display: <?= (session()->getFlashdata('error_in_car_form')) ? 'flex' : 'none' ?>">
                 <!--- The form for adding a car -->
-                <?= form_open("/newCar") ?>
+                <?= form_open("car/add") ?>
                 <div>
                     <!-- Brand -->
                     <div>

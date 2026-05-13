@@ -25,7 +25,7 @@ $routes->group('', ['filter' => 'auth'], function($routes){
 
     //Profil
     $routes->get('myprofil', 'ProfilController::index');
-    $routes->post('newCar', 'CarController::add');
+    $routes->post('car/add', 'CarController::add');
 });
 
 
