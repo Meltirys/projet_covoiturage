@@ -43,4 +43,33 @@ class LocationModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    /**
+     * Gets the ID of the provided location. If it doesn't exist, insert as new location
+     * 
+     * @param string $address
+     *
+     * @param int $cityID The ID of the city
+     * 
+     * @param float $latitude
+     * 
+     * @param float $longitude
+     * 
+     * @return int The location ID
+     */
+    public function getOrCreate(string $address, int $cityID, float $latitude, float $longitude): int
+    {
+        $location = $this->where(['address' => $address, 'id_city' => $cityID])->first();
+
+        if ($location) {
+            return $location['id_location'];
+        }
+
+        return $this->insert([
+            'address' => $address,
+            'latitude' => $latitude,
+            'longitude' => $longitude,
+            'id_city' => $cityID
+        ]);
+    }
 }
