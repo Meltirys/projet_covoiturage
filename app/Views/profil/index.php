@@ -26,62 +26,83 @@
             <button onclick="showForm('add-car-form')">+ ajouter un véhicule</button>
 
             <div id="add-car-form" style="display: <?= (session()->getFlashdata('error_in_car_form')) ? 'flex' : 'none' ?>">
+                <!--- The form for adding a car -->
                 <?= form_open("/newCar") ?>
                 <div>
+                    <!-- Brand -->
                     <div>
                         <label for="brand">Marque</label>
                         <input type="text" id="brand" name="brand" value="<?= old('brand') ?>">
                     </div>
+                    <!-- Errors -->
                     <?php if ($errors['brand'] ?? null): ?>
                         <span class="error"><?= $errors['brand'] ?></span>
                     <?php endif ?>
                 </div>
+
+                <!-- Model -->
                 <div>
                     <div>
                         <label for="model">Modèle</label>
                         <input type="text" id="model" name="model" value="<?= old('model') ?>">
                     </div>
+                    <!-- Errors -->
                     <?php if ($errors['model'] ?? null): ?>
                         <span class="error"><?= $errors['model'] ?></span>
                     <?php endif ?>
                 </div>
 
+                <!-- Color -->
                 <div>
                     <div>
                         <label for="color">Couleur</label>
                         <input type="text" id="color" name="color" value="<?= old('color') ?>">
                     </div>
+                    <!-- Errors -->
                     <?php if ($errors['color'] ?? null): ?>
                         <span class="error"><?= $errors['color'] ?></span>
                     <?php endif ?>
                 </div>
 
+                <!-- Year -->
                 <div>
                     <div>
                         <label for="year">Année</label>
                         <input type="text" id="year" name="year" value="<?= old('year') ?>">
                     </div>
+                    <!-- Errors -->
                     <?php if ($errors['year'] ?? null): ?>
                         <span class="error"><?= $errors['year'] ?></span>
                     <?php endif ?>
                 </div>
 
+                <!-- Places -->
                 <div>
                     <div>
                         <label for="places">Nombre de places</label>
                         <input type="number" id="places" name="places" value="<?= old('places') ?>">
                     </div>
-                    <?php if ($errors['number_of_seat'] ?? null): //The name is different bcause the db name is used for test?>
+                    <!-- Errors -->
+                    <?php if ($errors['number_of_seat'] ?? null): //The name is different bcause the db name is used for test
+                    ?>
                         <span class="error"><?= $errors['number_of_seat'] ?></span>
                     <?php endif ?>
                 </div>
 
+                <!-- Button -->
                 <button type="submit">Ajouter</button>
                 <button type="button" onclick="hideForm('add-car-form')">Annuler</button>
                 <?= form_close() ?>
             </div>
-
         </section>
+
+        <!-- Area used after the user sumbitted a form -->
+        <?php if (session()->getFlashdata('car_added')): ?>
+            <p class="text-xs text-green-600 mb-3"><?= session()->getFlashdata('car_added') ?></p>
+        <?php endif ?>
+        <?php if (session()->getFlashdata('car_not_added')): ?>
+            <p class="text-xs text-red-500 mb-3"><?= session()->getFlashdata('car_not_added') ?></p>
+        <?php endif ?>
     </div>
 
     <div id="journey-driver">
