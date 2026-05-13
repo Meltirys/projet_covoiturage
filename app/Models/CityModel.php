@@ -45,7 +45,7 @@ class CityModel extends Model
     protected $afterDelete    = [];
 
     /**
-     * Gets the ID of the city provided. If it doesn't exist, insert as a new city
+     * Gets the ID of the provided city. If it doesn't exist, insert as new city
      * 
      * @param string $cityName The name of the city
      *
