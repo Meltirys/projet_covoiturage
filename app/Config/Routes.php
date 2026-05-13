@@ -16,7 +16,7 @@ $routes->get('/', 'PagesController::home');
 // Authentification
 $routes->group('', ['filter' => 'guest'], function($routes) {
     $routes->get('authentification', 'PagesController::login');
-    $routes->post('authentification', 'AuthController::anthenticate');
+    $routes->post('authentification', 'AuthController::authenticate');
     $routes->post('signup', 'AuthController::saveUser');
 });
 $routes->post('logout', 'AuthController::logout');
