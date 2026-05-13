@@ -56,7 +56,8 @@ class AuthController extends BaseController
             'user_id' => $user['id_user'],
             'user_email' => $user['email'],
             'user_role' => $user['id_user_permission'],
-            'user_name' => $userModel->getUserName($user['id_user']),
+            'user_first_name' => $user['first_name'],
+            'user_last_name' => $user['last_name'],
             'logged_in' => true,
         ]);
 

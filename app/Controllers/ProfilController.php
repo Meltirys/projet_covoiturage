@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Controllers;
+
+use App\Controllers\BaseController;
+
+
+class ProfilController extends BaseController
+{
+    public function index()
+    {
+        return view('profil/profilView');
+    }
+
+    public function modify(){
+
+    }
+
+    public function update() {
+        
+    }
+}

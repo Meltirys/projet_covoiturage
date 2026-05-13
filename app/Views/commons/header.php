@@ -9,22 +9,16 @@
 
 <body>
     <header class="header">
-        <nav>
-            <ul>
-                <li><a href="<?= site_url('trajet') ?>">Trajet</a></li>
-                <li><a href="/nouveau-trajet">Nouveau trajet</a></li>
-                <li><a href="#">Contact</a></li>
-                <?php if (session('logged_in')): ?>
-                    <li>
-                        <form action="<?= site_url('logout') ?>" method="POST">
-                            <?= csrf_field() ?>
-                            <button type="submit">Se déconnecter</button>
-                        </form>
-                    </li>
-                <?php else: ?>
-                    <li><a href="<?= site_url('authentification') ?>">Authentification</a></li>
-                <?php endif; ?>
-
-            </ul>
-        </nav>
+        <?php if (session('logged_in')): ?>
+            <nav>
+                <ul>
+                    <li><a href="<?= site_url('trajet') ?>">Trajet</a></li>
+                    <li><a href="/nouveau-trajet">Nouveau trajet</a></li>
+                    <li><a href="#">Contact</a></li>
+                    <li><a href="/myprofil">Mon profil</a></li>
+                </ul>
+            </nav>
+        <?php else: ?>
+            <p>Non conntecté</p>
+        <?php endif; ?>
     </header>
