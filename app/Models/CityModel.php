@@ -43,4 +43,27 @@ class CityModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    /**
+     * Gets the ID of the city provided. If it doesn't exist, insert as a new city
+     * 
+     * @param string $cityName The name of the city
+     *
+     * @param string $postCode The city's postcode
+     * 
+     * @return int The city's ID
+     */
+    public function getOrCreate(string $cityName, string $postCode): int
+    {
+        $city = $this->where(['name' => $cityName, 'postcode' => $postCode])->first();
+
+        if ($city) {
+            return $city['id_city'];
+        }
+
+        return $this->insert([
+            'city_name' => $cityName,
+            'postcode' => $postCode
+        ]);
+    }
 }
