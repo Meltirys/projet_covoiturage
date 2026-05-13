@@ -43,94 +43,98 @@
                 <div class="text-xs text-red-500 mb-3"><?= $message ?></div>
             <?php endif; ?>
 
-                <?= form_open("/authentification") ?>
-                    <div class="auth-field">
-                        <label class="auth-label" for="email-auth">Email</label>
-                        <input class="auth-input" type="email" id="email-auth" name="email-auth" required>
-                    </div>
-                    <div class="flex justify-center mt-2">
-                        <button type="submit" class="border border-bluegrey text-bluegrey text-xs font-medium px-6 py-2 rounded-full hover:bg-bluegrey hover:text-white transition-all">
-                            Je me connecte
-                        </button>
-                    </div>
-                <?php if (session()->getFlashdata('auth-error')): ?>
-                    <p class="alert error">
-                        <?= session()->getFlashdata('auth-error') ?>
-                    </p>
-                <?php endif; ?>
-                <button type="submit" class="btn-auth">Se connecter</button>
-                <?= form_close(); ?>
+            <?= form_open("/authentification") ?>
+            <div class="auth-field">
+                <label class="auth-label" for="email-auth">Email</label>
+                <input class="auth-input" type="email" id="email-auth" name="email-auth" required>
             </div>
+            <div class="auth-field">
+                <label class="auth-label" for="password-auth">Mot de passe</label>
+                <input class="auth-input" type="password" id="password-auth" name="password-auth" required>
+            </div>
+            <div class="flex justify-center mt-2">
+                <button type="submit" class="border border-bluegrey text-bluegrey text-xs font-medium px-6 py-2 rounded-full hover:bg-bluegrey hover:text-white transition-all">
+                    Je me connecte
+                </button>
+            </div>
+            <?php if (session()->getFlashdata('auth-error')): ?>
+                <p class="alert error">
+                    <?= session()->getFlashdata('auth-error') ?>
+                </p>
+            <?php endif; ?>
+            <button type="submit" class="btn-auth">Se connecter</button>
+            <?= form_close(); ?>
+        </div>
 
-            <!-- Formulaire Inscription -->
-            <div id="tab-inscription" class="auth-form-panel <?= ($activeTab ?? 'login') === 'inscription' ? 'active' : '' ?>">
+        <!-- Formulaire Inscription -->
+        <div id="tab-inscription" class="auth-form-panel <?= ($activeTab ?? 'login') === 'inscription' ? 'active' : '' ?>">
 
-                <?php if (session()->getFlashdata('success')): ?>
-                    <p class="alert success">
-                        <?= session()->getFlashdata('success') ?>
-                    </p>
-                <?php endif ?>
+            <?php if (session()->getFlashdata('success')): ?>
+                <p class="alert success">
+                    <?= session()->getFlashdata('success') ?>
+                </p>
+            <?php endif ?>
 
-                <?php if (session()->getFlashdata('error')): ?>
-                    <p class="alert error">
-                        <?= session()->getFlashdata('error') ?>
-                    </p>
-                <?php endif ?>
+            <?php if (session()->getFlashdata('error')): ?>
+                <p class="alert error">
+                    <?= session()->getFlashdata('error') ?>
+                </p>
+            <?php endif ?>
 
             <div class="bg-babyblue rounded-2xl p-5 flex flex-col gap-4">
                 <?= form_open('/signup') ?>
 
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">Nom</label>
+                    <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="text" name="last_name" value="<?= set_value('last_name') ?>" required>
+                    <?php if ($errors['last_name'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['last_name'] ?></span><?php endif ?>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">Prénom</label>
+                    <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="text" name="first_name" value="<?= set_value('first_name') ?>" required>
+                    <?php if ($errors['first_name'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['first_name'] ?></span><?php endif ?>
+                </div>
+
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">E-mail</label>
+                    <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="email" name="email-signup" value="<?= set_value('email-signup') ?>" required>
+                    <?php if ($errors['email'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['email'] ?></span><?php endif ?>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
                     <div class="flex flex-col gap-1">
-                        <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">Nom</label>
-                        <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="text" name="last_name" value="<?= set_value('last_name') ?>" required>
-                        <?php if ($errors['last_name'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['last_name'] ?></span><?php endif ?>
+                        <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">Téléphone</label>
+                        <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="tel" name="phone" value="<?= set_value('phone') ?>">
+                        <?php if ($errors['phone'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['phone'] ?></span><?php endif ?>
                     </div>
-
                     <div class="flex flex-col gap-1">
-                        <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">Prénom</label>
-                        <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="text" name="first_name" value="<?= set_value('first_name') ?>" required>
-                        <?php if ($errors['first_name'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['first_name'] ?></span><?php endif ?>
+                        <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">Date de naissance</label>
+                        <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="date" name="birth_date" value="<?= set_value('birth_date') ?>" required>
+                        <?php if ($errors['birth_date'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['birth_date'] ?></span><?php endif ?>
                     </div>
+                </div>
 
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">E-mail</label>
-                        <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="email" name="email-signup" value="<?= set_value('email-signup') ?>" required>
-                        <?php if ($errors['email'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['email'] ?></span><?php endif ?>
-                    </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">
+                        Mot de passe
+                        <span class="normal-case font-light tracking-normal text-grey"> (8 caractères min., 1 majuscule, 1 chiffre)</span>
+                    </label>
+                    <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="password" name="password" required>
+                    <?php if ($errors['password'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['password'] ?></span><?php endif ?>
+                </div>
 
-                    <div class="grid grid-cols-2 gap-3">
-                        <div class="flex flex-col gap-1">
-                            <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">Téléphone</label>
-                            <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="tel" name="phone" value="<?= set_value('phone') ?>">
-                            <?php if ($errors['phone'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['phone'] ?></span><?php endif ?>
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">Date de naissance</label>
-                            <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="date" name="birth_date" value="<?= set_value('birth_date') ?>" required>
-                            <?php if ($errors['birth_date'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['birth_date'] ?></span><?php endif ?>
-                        </div>
-                    </div>
+                <div class="flex flex-col gap-1">
+                    <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">Confirmation du mot de passe</label>
+                    <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="password" name="password_conf" required>
+                    <?php if ($errors['password_conf'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['password_conf'] ?></span><?php endif ?>
+                </div>
 
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">
-                            Mot de passe
-                            <span class="normal-case font-light tracking-normal text-grey"> (8 caractères min., 1 majuscule, 1 chiffre)</span>
-                        </label>
-                        <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="password" name="password" required>
-                        <?php if ($errors['password'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['password'] ?></span><?php endif ?>
-                    </div>
-
-                    <div class="flex flex-col gap-1">
-                        <label class="text-xs font-semibold tracking-widest text-bluegrey uppercase">Confirmation du mot de passe</label>
-                        <input class="w-full bg-transparent border-b border-bluegrey pb-1 text-sm text-bluegrey focus:outline-none" type="password" name="password_conf" required>
-                        <?php if ($errors['password_conf'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['password_conf'] ?></span><?php endif ?>
-                    </div>
-
-                    <div class="flex justify-center mt-2">
-                        <button type="submit" name="submit" class="border border-bluegrey text-bluegrey text-sm font-medium px-6 py-2 rounded-full hover:bg-bluegrey hover:text-white transition-all">
-                            Je m'inscris
-                        </button>
-                    </div>
+                <div class="flex justify-center mt-2">
+                    <button type="submit" name="submit" class="border border-bluegrey text-bluegrey text-sm font-medium px-6 py-2 rounded-full hover:bg-bluegrey hover:text-white transition-all">
+                        Je m'inscris
+                    </button>
+                </div>
 
                 <?= form_close() ?>
 

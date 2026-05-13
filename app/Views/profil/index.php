@@ -22,62 +22,64 @@
             <?php endif; ?>
         </div>
         <section id="add-car">
-            <button>
-                <i></i>
-                <p>ajouter un véhicule</p>
-            </button>
 
-            <?= form_open("/newCar") ?>
-            <div>
-                <div>
-                    <label for="brand">Marque</label>
-                    <input type="text" id="brand" name="brand">
-                </div>
-                <?php if ($errors['brand'] ?? null): ?>
-                    <span class="error"><?= $errors['brand'] ?></span>
-                <?php endif ?>
-            </div>
-            <div>
-                <div>
-                    <label for="model">Modèle</label>
-                    <input type="text" id="model" name="model">
-                </div>
-                <?php if ($errors['model'] ?? null): ?>
-                    <span class="error"><?= $errors['model'] ?></span>
-                <?php endif ?>
-            </div>
+            <button onclick="showForm('add-car-form')">+ ajouter un véhicule</button>
 
-            <div>
+            <div id="add-car-form" style="display: <?= (session()->getFlashdata('error_in_car_form')) ? 'flex' : 'none' ?>">
+                <?= form_open("/newCar") ?>
                 <div>
-                    <label for="color">Couleur</label>
-                    <input type="text" id="color" name="color">
+                    <div>
+                        <label for="brand">Marque</label>
+                        <input type="text" id="brand" name="brand">
+                    </div>
+                    <?php if ($errors['brand'] ?? null): ?>
+                        <span class="error"><?= $errors['brand'] ?></span>
+                    <?php endif ?>
                 </div>
-                <?php if ($errors['color'] ?? null): ?>
-                    <span class="error"><?= $errors['color'] ?></span>
-                <?php endif ?>
-            </div>
-
-            <div>
                 <div>
-                    <label for="year">Année</label>
-                    <input type="text" id="year" name="year">
+                    <div>
+                        <label for="model">Modèle</label>
+                        <input type="text" id="model" name="model">
+                    </div>
+                    <?php if ($errors['model'] ?? null): ?>
+                        <span class="error"><?= $errors['model'] ?></span>
+                    <?php endif ?>
                 </div>
-                <?php if ($errors['year'] ?? null): ?>
-                    <span class="error"><?= $errors['year'] ?></span>
-                <?php endif ?>
-            </div>
 
-            <div>
                 <div>
-                    <label for="places">Nombre de places</label>
-                    <input type="number" id="places" name="places">
+                    <div>
+                        <label for="color">Couleur</label>
+                        <input type="text" id="color" name="color">
+                    </div>
+                    <?php if ($errors['color'] ?? null): ?>
+                        <span class="error"><?= $errors['color'] ?></span>
+                    <?php endif ?>
                 </div>
-                <?php if ($errors['places'] ?? null): ?>
-                    <span class="error"><?= $errors['places'] ?></span>
-                <?php endif ?>
-            </div>
 
-            <?= form_close() ?>
+                <div>
+                    <div>
+                        <label for="year">Année</label>
+                        <input type="text" id="year" name="year">
+                    </div>
+                    <?php if ($errors['year'] ?? null): ?>
+                        <span class="error"><?= $errors['year'] ?></span>
+                    <?php endif ?>
+                </div>
+
+                <div>
+                    <div>
+                        <label for="places">Nombre de places</label>
+                        <input type="number" id="places" name="places">
+                    </div>
+                    <?php if ($errors['places'] ?? null): ?>
+                        <span class="error"><?= $errors['places'] ?></span>
+                    <?php endif ?>
+                </div>
+
+                <button type="submit">Ajouter</button>
+                <button onclick="hideForm('add-car-form')">Annuler</button>
+                <?= form_close() ?>
+            </div>
 
         </section>
     </div>
@@ -134,3 +136,15 @@
     <button>Supprimer mon compte</button>
     <a href="/logout">Se déconnecter</a>
 </section>
+
+<script>
+    function showForm(formId) {
+        let form = document.querySelector("#" + formId)
+        form.style.display = "block"
+    }
+
+    function hideForm(formId) {
+        let form = document.querySelector("#" + formId)
+        form.style.display = "none"
+    }
+</script>
