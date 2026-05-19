@@ -4,10 +4,13 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
-use App\Models\JourneyRequestModel;
 use CodeIgniter\Exceptions\PageNotFoundException;
+use App\Models\JourneyRequestModel;
+use App\Models\CarModel;
+use App\Validators\JourneyRequestValidator;
+use PDOException;
 
-class ItineraryController extends BaseController
+class RequestController extends BaseController
 {
     /**
      * Displays the search page listing itineraries

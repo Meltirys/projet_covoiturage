@@ -10,7 +10,7 @@ use App\Models\CarModel;
 use App\Validators\JourneyDriveValidator;
 use PDOException;
 
-class ItineraryController extends BaseController
+class DriveController extends BaseController
 {
     /**
      * Displays the search page listing itineraries
@@ -90,6 +90,8 @@ class ItineraryController extends BaseController
                 ->with('errors', $validator->getErrors())
                 ->withInput();
         }
+
+
 
         // Logic
         try {
