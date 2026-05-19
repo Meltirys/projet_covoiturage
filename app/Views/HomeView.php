@@ -79,57 +79,57 @@
 
                     <div class="flex flex-col gap-1">
                         <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Nom</label>
-                        <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="last_name" value="<?= set_value('last_name') ?>" required>
+                        <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="last_name" value="<?= old_value('last_name') ?>" required>
                         <?php if ($errors['last_name'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['last_name'] ?></span><?php endif ?>
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Prénom</label>
-                        <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="first_name" value="<?= set_value('first_name') ?>" required>
+                        <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="first_name" value="<?= old_value('first_name') ?>" required>
                         <?php if ($errors['first_name'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['first_name'] ?></span><?php endif ?>
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Genre</label>
-                        <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="gender" value="<?= set_value('gender') ?>" required>
+                        <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="gender" value="<?= old_value('gender') ?>" required>
                         <?php if ($errors['gender'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['gender'] ?></span><?php endif ?>
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">E-mail</label>
-                        <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="email" name="email-signup" value="<?= set_value('email-signup') ?>" required>
+                        <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="email" name="email-signup" value="<?= old_value('email-signup') ?>" required>
                         <?php if ($errors['email'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['email'] ?></span><?php endif ?>
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Adresse</label>
-                        <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="address" value="<?= set_value('address') ?>" required>
+                        <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="address" value="<?= old_value('address') ?>" required>
                         <?php if ($errors['address'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['address'] ?></span><?php endif ?>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div class="flex flex-col gap-1">
                             <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Code postal</label>
-                            <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="post_code" value="<?= set_value('post_code') ?>">
+                            <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="post_code" value="<?= old_value('post_code') ?>">
                             <?php if ($errors['post_code'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['post_code'] ?></span><?php endif ?>
                         </div>
                         <div class="flex flex-col gap-1">
                             <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Ville</label>
-                            <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="city" value="<?= set_value('city') ?>" required>
+                            <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="city" value="<?= old_value('city') ?>" required>
                             <?php if ($errors['city'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['city'] ?></span><?php endif ?>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div class="flex flex-col gap-1">
                             <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Téléphone</label>
-                            <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="tel" name="mobile" value="<?= set_value('mobile') ?>">
+                            <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="tel" name="mobile" value="<?= old_value('mobile') ?>">
                             <?php if ($errors['mobile'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['mobile'] ?></span><?php endif ?>
                         </div>
                         <div class="flex flex-col gap-1">
                             <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Date de naissance</label>
-                            <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="date" name="birth_date" value="<?= set_value('birth_date') ?>" required>
+                            <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="date" name="birth_date" value="<?= old_value('birth_date') ?>" required>
                             <?php if ($errors['birth_date'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['birth_date'] ?></span><?php endif ?>
                         </div>
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">
                             Mot de passe <br>
-                            <span class="normal-case font-light tracking-normal text-grey"> (8 caractères min., 1 majuscule, 1 chiffre)</span>
+                            <span class="normal-case font-light tracking-normal text-grey"> (8 caractères min., 1 majuscule, 1 chiffre et un caractère spécial)</span>
                         </label>
                         <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="password" name="password" required>
                         <?php if ($errors['password'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['password'] ?></span><?php endif ?>
@@ -146,9 +146,10 @@
                         Je m'inscris
                     </button>
                 </div>
-                <?= form_close() ?>
             </div>
+            <?= form_close() ?>
         </div>
+        
         <!-- FIN INSCRIPTION -->
 
         <!-- FORMULAIRE CONTACT -->
