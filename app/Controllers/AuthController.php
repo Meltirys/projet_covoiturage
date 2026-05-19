@@ -103,6 +103,7 @@ class AuthController extends BaseController
 
         $user = $this->request->getPost();
         $user['email'] = $this->request->getPost('email-signup');
+        $user['mobile'] = $this->request->getPost('phone');
 
         //Calling the specific validator
         $validator = new RegistrationValidator();
@@ -129,14 +130,14 @@ class AuthController extends BaseController
                 ->withInput()
                 ->with('singup_error', 'Votre compte n\'a pas pu être créé');
         }
-
+        /* Mail: To uncomment in production
         //Creating MailService object to be able to send the mail
         $mailService = new MailService();
 
         //We test if the mail is correctly sent or not, if not we insert a line in the logs
         if (!$mailService->sendWelcome($user['email'], $user['first_name'])) {
             log_message('error', 'Email de bienvenue non envoyé pour : ' . $user['email']);
-        }
+        }*/
 
         return redirect()->to('/')
             ->with('singup_success', 'Compte créé avec succès');

@@ -54,8 +54,8 @@ class RegistrationValidator extends BaseValidator
             ],
 
             //Regex found at https://regexpattern.com/phone-number/
-            'phone' => [
-                'rules'  => 'regex_match[/^(?:(?:\+|00)33[\s.-]{0,3}(?:\(0\)[\s.-]{0,3})?|0)[1-9](?:(?:[\s.-]?\d{2}){4}|\d{2}(?:[\s.-]?\d{3}){2})$/]',
+            'mobile' => [
+                'rules'  => 'permit_empty|regex_match[/^(?:(?:\+|00)33[\s.-]{0,3}(?:\(0\)[\s.-]{0,3})?|0)[1-9](?:(?:[\s.-]?\d{2}){4}|\d{2}(?:[\s.-]?\d{3}){2})$/]',
                 'errors' => [
                     'regex_match'   => 'Veuillez entrer un n° de téléphone français valide',
                 ]

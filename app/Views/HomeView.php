@@ -117,8 +117,8 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div class="flex flex-col gap-1">
                             <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Téléphone</label>
-                            <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="tel" name="phone" value="<?= set_value('phone') ?>">
-                            <?php if ($errors['phone'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['phone'] ?></span><?php endif ?>
+                            <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="tel" name="mobile" value="<?= set_value('mobile') ?>">
+                            <?php if ($errors['mobile'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['mobile'] ?></span><?php endif ?>
                         </div>
                         <div class="flex flex-col gap-1">
                             <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Date de naissance</label>

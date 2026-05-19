@@ -173,7 +173,7 @@
                 <h4 class="text-xs font-poppins text-[#9AA5B4] mb-2">Compte</h4>
                 <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
                     <li>
-                        <a href="user/update" class="flex justify-between items-center bg-white border border-[rgba(37,63,114,0.25)] rounded-xl px-4 py-3 hover:bg-[#D6E0F0] transition-colors duration-150">
+                        <a href="user/modify" class="flex justify-between items-center bg-white border border-[rgba(37,63,114,0.25)] rounded-xl px-4 py-3 hover:bg-[#D6E0F0] transition-colors duration-150">
                             <div>
                                 <p class="text-sm font-poppins text-[#253F72]">Informations personnelles</p>
                                 <p class="text-xs text-[#9AA5B4]">Nom, email, photo...</p>
