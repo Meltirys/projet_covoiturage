@@ -7,6 +7,7 @@ addressInputs.forEach((input) => {
     clearTimeout(timeout);
 
     timeout = setTimeout(() => {
+      console.log("searching");
       searchAddress(input);
     }, 300);
   });
@@ -43,7 +44,22 @@ async function searchAddress(inputElement) {
       option.textContent = element.properties.label;
 
       option.addEventListener("click", () => {
-        input.value = element.properties.label;
+        inputElement.value = element.properties.label;
+
+        const coords = element.geometry.coordinates;
+        const properties = element.properties;
+
+        const container = inputElement.parentElement;
+
+        container.querySelector('input[name$="_lat"]').value = coords[1];
+        container.querySelector('input[name$="_long"]').value = coords[0];
+
+        container.querySelector('input[name$="_city"]').value =
+          properties.city || "";
+        container.querySelector('input[name$="_city_postcode"]').value =
+          properties.postcode || "";
+
+        resultsBox.innerHTML = "";
       });
 
       resultsBox.appendChild(option);
