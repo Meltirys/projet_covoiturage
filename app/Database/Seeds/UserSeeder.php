@@ -27,6 +27,18 @@ class UserSeeder extends Seeder
             ],
         ];
 
+        $car = [
+            [
+                'brand' => 'FSO',
+                'model' => 'Warszawa',
+                'color' => 'Rouge',
+                'year' => 1958,
+                'number_of_seat' => 5,
+                'id_user' => 1
+            ]
+        ];
+
         $this->db->table('Users')->insertBatch($data);
+        $this->db->table('Car')->insertBatch($car);
     }
 }
