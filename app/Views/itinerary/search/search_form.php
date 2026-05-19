@@ -1,7 +1,7 @@
 <?php form_open('itinerary/search') ?>
 <div>
     <label for="start">Départ&nbsp;:</label><br>
-    <input type="text" name="start" id="start"
+    <input class="address-input" type="text" name="start" id="start"
         value="<?= set_value('start') ?>"
         placeholder="Entrez votre départ" required>
     <?php if (isset($errors['start'])) echo ("<br><span class='error'>" . $errors['start'] . "</span>"); ?>
@@ -9,7 +9,7 @@
 
 <div>
     <label for="end">Arrivée&nbsp;:</label><br>
-    <input type="text" name="end" id="end"
+    <input class="address-input" type="text" name="end" id="end"
         value="<?= set_value('end') ?>"
         placeholder="Entrez votre destination" required>
     <?php if (isset($errors["end"])) echo ("<br><span class='error'>" . $errors["end"] . "</span>"); ?>
