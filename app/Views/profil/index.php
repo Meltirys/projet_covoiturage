@@ -1,191 +1,245 @@
-<div>
-    <h2>Mon profil</h2>
-    <p>{button}</p>
+<?= view('commons/header') ?>
 
-    <div id="name">
-        <span id="first-name"><?= session('user_first_name') ?></span>
-        <span id="last-name"><?= session('user_last_name') ?></span>
-    </div>
-</div>
+<main class="w-full max-w-5xl mx-auto px-4 py-6 md:px-8 md:py-10">
 
-<section id="driver">
+    <!-- En-tête -->
+    <header class="flex justify-between items-center mb-6">
+        <h2 class="section-title">Mon profil</h2>
+        <p class="md:hidden">{button}</p>
+    </header>
 
-    <div id="stats-driver">
-        <h3>Mes statistiques</h3>
-    </div>
-    <div id="car">
-        <h3>Mes véhicules</h3>
-        <div id="my-cars">
-            <?php if ($cars): ?>
-                <?php foreach ($cars as $car): ?>
-                    <div class="car">
-                        <div class="description">
-                            <p>
-                                <span><?= $car['brand'] ?></span>
-                                <span><?= $car['model'] ?></span>
-                            </p>
-                            <p>
-                                <span><?= $car['color'] ?></span> - 
-                                <span><?= $car['year'] ?></span> - 
-                                <span><?= $car['number_of_seat'] ?> places</span>
+    <div class="flex flex-col md:flex-row gap-8 items-start">
 
-                            </p>
-                        </div>
-                        <div class="options">
-                            
-                            <button type="submit">Modifier</button>
+        <!-- Colonne gauche : identité -->
+        <aside class="w-full md:w-72 md:sticky md:top-8 flex flex-col gap-6">
 
-                            <?=  form_open('/car/delete/' . $car['id_car']) ?>
-                                <button type="submit">Supprimer</button>
+            <!-- Nom -->
+            <div id="name">
+                <h1 class="text-3xl font-bold text-gray-900">
+                    <span id="first-name"><?= session('user_first_name') ?></span><br>
+                    <span id="last-name"><?= session('user_last_name') ?></span>
+                </h1>
+                <p class="hidden md:block mt-3">{button}</p>
+            </div>
+
+        </aside>
+
+        <!-- Colonne droite : tout le contenu -->
+        <div class="flex-1 flex flex-col gap-6">
+
+            <!-- Section conducteur -->
+            <section id="driver">
+
+                <!-- Stats conducteur -->
+                <div id="stats-driver" class="mb-6">
+                    <h3 class="section-title">Mes statistiques</h3>
+                    <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        <li class="flex justify-between items-center bg-white border border-gray-200 rounded-xl px-4 py-3">
+                            <span class="text-sm text-gray-600">Trajets proposés</span>
+                            <span class="text-sm font-semibold text-gray-900">12</span>
+                        </li>
+                        <li class="flex justify-between items-center bg-white border border-gray-200 rounded-xl px-4 py-3">
+                            <span class="text-sm text-gray-600">Passagers transportés</span>
+                            <span class="text-sm font-semibold text-gray-900">28</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Véhicules -->
+                <div id="car" class="mb-6">
+                    <h3 class="section-title">Mes véhicules</h3>
+
+                    <div id="my-cars" class="grid grid-cols-1 gap-2 mb-3">
+                        <?php if ($cars): ?>
+                            <?php foreach ($cars as $car): ?>
+                                <div class="car flex justify-between items-center bg-white border border-gray-200 rounded-xl px-4 py-3">
+                                    <div class="description">
+                                        <p class="text-sm font-semibold text-gray-900">
+                                            <span><?= esc($car['brand']) ?></span>
+                                            <span><?= esc($car['model']) ?></span>
+                                        </p>
+                                        <p class="text-xs text-gray-400">
+                                            <span><?= esc($car['color']) ?></span> -
+                                            <span><?= esc($car['year']) ?></span> -
+                                            <span><?= esc($car['number_of_seat']) ?> places</span>
+                                        </p>
+                                    </div>
+                                    <div class="options">
+                                        <button type="submit">Modifier</button>
+                                        <?= form_open('/car/delete/' . $car['id_car']) ?>
+                                        <button type="submit">Supprimer</button>
+                                        <?= form_close() ?>
+                                    </div>
+                                </div>
+                            <?php endforeach ?>
+                        <?php else: ?>
+                            <p class="text-sm text-gray-400 text-center py-3">Aucune voiture ajoutée pour le moment</p>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Messages flash -->
+                    <?php if (session()->getFlashdata('car_added')): ?>
+                        <p class="text-xs text-green-600 mb-3"><?= session()->getFlashdata('car_added') ?></p>
+                    <?php endif ?>
+                    <?php if (session()->getFlashdata('car_not_added')): ?>
+                        <p class="text-xs text-red-500 mb-3"><?= session()->getFlashdata('car_not_added') ?></p>
+                    <?php endif ?>
+
+                    <section id="add-car">
+                        <button onclick="showForm('add-car-form')" class="text-xs text-gray-400 underline block text-right w-full mb-3">
+                            + ajouter un véhicule
+                        </button>
+
+                        <div id="add-car-form" style="display: <?= (session()->getFlashdata('error_in_car_form')) ? 'flex' : 'none' ?>" class="flex-col gap-3">
+                            <?= form_open("car/add") ?>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+
+                                <div class="flex flex-col gap-1">
+                                    <label for="brand" class="text-xs text-gray-500">Marque</label>
+                                    <input type="text" id="brand" name="brand" value="<?= old('brand') ?>" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#253F72]">
+                                    <?php if ($errors['brand'] ?? null): ?>
+                                        <span class="text-xs text-red-500"><?= $errors['brand'] ?></span>
+                                    <?php endif ?>
+                                </div>
+
+                                <div class="flex flex-col gap-1">
+                                    <label for="model" class="text-xs text-gray-500">Modèle</label>
+                                    <input type="text" id="model" name="model" value="<?= old('model') ?>" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#253F72]">
+                                    <?php if ($errors['model'] ?? null): ?>
+                                        <span class="text-xs text-red-500"><?= $errors['model'] ?></span>
+                                    <?php endif ?>
+                                </div>
+
+                                <div class="flex flex-col gap-1">
+                                    <label for="color" class="text-xs text-gray-500">Couleur</label>
+                                    <input type="text" id="color" name="color" value="<?= old('color') ?>" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#253F72]">
+                                    <?php if ($errors['color'] ?? null): ?>
+                                        <span class="text-xs text-red-500"><?= $errors['brand'] ?></span>
+                                    <?php endif ?>
+                                </div>
+
+                                <div class="flex flex-col gap-1">
+                                    <label for="year" class="text-xs text-gray-500">Année</label>
+                                    <input type="text" id="year" name="year" value="<?= old('year') ?>" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#253F72]">
+                                    <?php if ($errors['year'] ?? null): ?>
+                                        <span class="text-xs text-red-500"><?= $errors['year'] ?></span>
+                                    <?php endif ?>
+                                </div>
+
+                                <div class="flex flex-col gap-1 md:col-span-2">
+                                    <label for="places" class="text-xs text-gray-500">Nombre de places</label>
+                                    <input type="number" id="places" name="places" value="<?= old('places') ?>" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#253F72]">
+                                    <?php if ($errors['number_of_seat'] ?? null): ?>
+                                        <span class="text-xs text-red-500"><?= $errors['number_of_seat'] ?></span>
+                                    <?php endif ?>
+                                </div>
+
+                            </div>
+
+                            <div class="flex gap-2 mt-2">
+                                <button type="submit" class="flex-1 bg-[#253F72] hover:bg-[#1a2f55] text-white rounded-xl py-2 text-sm transition-colors duration-200">
+                                    Ajouter
+                                </button>
+                                <button type="button" onclick="hideForm('add-car-form')" class="flex-1 border border-gray-200 text-gray-600 rounded-xl py-2 text-sm hover:bg-gray-50 transition-colors duration-200">
+                                    Annuler
+                                </button>
+                            </div>
+
                             <?= form_close() ?>
                         </div>
+                    </section>
+                </div>
+
+                <!-- Trajets conducteur -->
+                <div id="journey-driver" class="mb-6">
+                    <h3 class="section-title">Mes trajets proposés</h3>
+
+                    <h4 class="text-xs font-semibold text-gray-400 mb-2">À venir</h4>
+                    <ul class="flex flex-col gap-2 mb-4">
+                        <!-- boucle trajets à venir -->
+                    </ul>
+
+                    <h4 class="text-xs font-semibold text-gray-400 mb-2">Passés</h4>
+                    <ul class="flex flex-col gap-2">
+                        <!-- boucle trajets passés -->
+                    </ul>
+                </div>
+
+                <!-- Demandes en attente -->
+                <?php if (isset($validationList)): ?>
+                    <div id="validations" class="mb-6">
+                        <h3 class="section-title">Demandes en attente de validation</h3>
+                        <ul class="flex flex-col gap-2">
+                            <!-- boucle validations -->
+                        </ul>
                     </div>
-                <?php endforeach ?>
-            <?php else: ?>
-                <p>Aucune voiture ajoutée pour le moment</p>
-            <?php endif; ?>
+                <?php endif; ?>
+
+            </section>
+
+            <!-- Section passager -->
+            <section id="passenger" class="mb-6">
+
+                <div id="stats-passenger" class="mb-6">
+                    <h3 class="section-title">Mes statistiques</h3>
+                    <ul class="flex flex-col gap-2">
+                        <li class="flex justify-between items-center bg-white border border-gray-200 rounded-xl px-4 py-3">
+                            <span class="text-sm text-gray-600">Trajets effectués</span>
+                            <span class="text-sm font-semibold text-gray-900">0</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div id="journey-passenger" class="mb-6">
+                    <h3 class="section-title">Mes trajets</h3>
+                    <!-- boucle trajets passager -->
+                </div>
+
+            </section>
+
+            <!-- Paramètres -->
+            <section id="parameters" class="mb-6">
+                <h3 class="section-title">Paramètres</h3>
+                <h4 class="text-xs font-semibold text-gray-400 mb-2">Compte</h4>
+                <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <li>
+                        <a href="#" class="flex justify-between items-center bg-white border border-gray-200 rounded-xl px-4 py-3">
+                            <div>
+                                <p class="text-sm font-semibold text-gray-900">Informations personnelles</p>
+                                <p class="text-xs text-gray-400">Nom, email, photo...</p>
+                            </div>
+                            <span class="text-gray-400">›</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="flex justify-between items-center bg-white border border-gray-200 rounded-xl px-4 py-3">
+                            <p class="text-sm font-semibold text-gray-900">Mot de passe</p>
+                            <span class="text-gray-400">›</span>
+                        </a>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Boutons -->
+            <section id="profil-buttons" class="flex flex-col md:flex-row-reverse gap-3">
+                <button class="w-full border border-gray-200 text-gray-600 rounded-xl py-3 text-sm hover:bg-gray-50 transition-colors duration-200">
+                    Supprimer mon compte
+                </button>
+                <a href="/logout" class="w-full border border-gray-200 text-gray-600 rounded-xl py-3 text-sm hover:bg-gray-50 transition-colors duration-200 text-center block">
+                    Se déconnecter
+                </a>
+            </section>
+
         </div>
-        <section id="add-car">
-
-            <button onclick="showForm('add-car-form')">+ ajouter un véhicule</button>
-
-            <div id="add-car-form" style="display: <?= (session()->getFlashdata('error_in_car_form')) ? 'flex' : 'none' ?>">
-                <!--- The form for adding a car -->
-                <?= form_open("car/add") ?>
-                <div>
-                    <!-- Brand -->
-                    <div>
-                        <label for="brand">Marque</label>
-                        <input type="text" id="brand" name="brand" value="<?= old('brand') ?>">
-                    </div>
-                    <!-- Errors -->
-                    <?php if ($errors['brand'] ?? null): ?>
-                        <span class="error"><?= $errors['brand'] ?></span>
-                    <?php endif ?>
-                </div>
-
-                <!-- Model -->
-                <div>
-                    <div>
-                        <label for="model">Modèle</label>
-                        <input type="text" id="model" name="model" value="<?= old('model') ?>">
-                    </div>
-                    <!-- Errors -->
-                    <?php if ($errors['model'] ?? null): ?>
-                        <span class="error"><?= $errors['model'] ?></span>
-                    <?php endif ?>
-                </div>
-
-                <!-- Color -->
-                <div>
-                    <div>
-                        <label for="color">Couleur</label>
-                        <input type="text" id="color" name="color" value="<?= old('color') ?>">
-                    </div>
-                    <!-- Errors -->
-                    <?php if ($errors['color'] ?? null): ?>
-                        <span class="error"><?= $errors['color'] ?></span>
-                    <?php endif ?>
-                </div>
-
-                <!-- Year -->
-                <div>
-                    <div>
-                        <label for="year">Année</label>
-                        <input type="text" id="year" name="year" value="<?= old('year') ?>">
-                    </div>
-                    <!-- Errors -->
-                    <?php if ($errors['year'] ?? null): ?>
-                        <span class="error"><?= $errors['year'] ?></span>
-                    <?php endif ?>
-                </div>
-
-                <!-- Places -->
-                <div>
-                    <div>
-                        <label for="places">Nombre de places</label>
-                        <input type="number" id="places" name="places" value="<?= old('places') ?>">
-                    </div>
-                    <!-- Errors -->
-                    <?php if ($errors['number_of_seat'] ?? null): //The name is different bcause the db name is used for test
-                    ?>
-                        <span class="error"><?= $errors['number_of_seat'] ?></span>
-                    <?php endif ?>
-                </div>
-
-                <!-- Button -->
-                <button type="submit">Ajouter</button>
-                <button type="button" onclick="hideForm('add-car-form')">Annuler</button>
-                <?= form_close() ?>
-            </div>
-        </section>
-
-        <!-- Area used after the user sumbitted a form -->
-        <?php if (session()->getFlashdata('car_success')): ?>
-            <p class="text-xs text-green-600 mb-3"><?= session()->getFlashdata('car_success') ?></p>
-        <?php endif ?>
-        <?php if (session()->getFlashdata('car_error')): ?>
-            <p class="text-xs text-red-500 mb-3"><?= session()->getFlashdata('car_error') ?></p>
-        <?php endif ?>
     </div>
 
-    <div id="journey-driver">
-        <h3>Mes trajets proposés</h3>
-    </div>
-
-    <?php if (isset($validationList)): //To modify when the function is done 
-    ?>
-        <div id="validations">
-            <h3>Demandes en attente de validation</h3>
-        </div>
-    <?php endif; ?>
-
-
-</section>
-
-<section id="passenger">
-    <div id="stats-passenger">
-        <h3>Mes statistiques</h3>
-    </div>
-
-    <div id="journey-passenger">
-
-    </div>
-
-
-</section>
-
-<section id="parameters">
-    <h3>Paramètres</h3>
-    <div>
-        <div>
-            <h4>Compte</h4>
-            <p>Informations personnelles</p>
-            <p>Nom, email, photo...</p>
-        </div>
-        <span>></span>
-    </div>
-
-    <div>
-        <div>
-            <p>Mot de passe</p>
-        </div>
-        <span>></span>
-    </div>
-
-</section>
-
-<section id="profil-buttons">
-    <?= form_open('user/delete')?>
-        <button type="submit">Supprimer mon compte</button>
-    <?= form_close() ?>
-    <a href="/logout">Se déconnecter</a>
-</section>
+</main>
 
 <script>
     function showForm(formId) {
         let form = document.querySelector("#" + formId)
-        form.style.display = "block"
+        form.style.display = "flex"
     }
 
     function hideForm(formId) {
