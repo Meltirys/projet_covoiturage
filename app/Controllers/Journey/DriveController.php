@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Journey;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -20,9 +20,7 @@ class DriveController extends BaseController
         $data = ['type' => 'drive'];
 
         helper('form');
-        return view('commons/header')
-            . view('itinerary/search/SearchView', $data)
-            . view('commons/footer');
+        return view('itinerary/search/SearchView', $data);
     }
 
     /**
