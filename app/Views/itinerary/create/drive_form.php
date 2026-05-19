@@ -1,15 +1,22 @@
+<!--  Données requises :
+          id_car, start_city, start_city_postcode, end_city, end_city_postcode,
+          start, start_lat, start_long,
+          end, end_lat, end_long,
+          number_of_place, departure, estimated_arrival
+          stops[city_name, city_postcode, address, latitude, longitude] -->
+
 <?php form_open('itinerary/create') ?>
 <div>
     <label for="start">Départ&nbsp;:</label><br>
-    <input type="text" name="start" id="start"
+    <input class="address-input" type="text" name="start" id="start"
         value="<?= set_value('start') ?>"
-        placeholder="Entrez votre départ" required>
+        placeholder="Entrez le point de départ" required>
     <?php if (isset($errors['start'])) echo ("<br><span class='error'>" . $errors['start'] . "</span>"); ?>
 </div>
 
 <div>
     <label for="end">Arrivée&nbsp;:</label><br>
-    <input type="text" name="end" id="end"
+    <input class="address-input" type="text" name="end" id="end"
         value="<?= set_value('end') ?>"
         placeholder="Entrez votre destination" required>
     <?php if (isset($errors["end"])) echo ("<br><span class='error'>" . $errors["end"] . "</span>"); ?>
@@ -17,7 +24,7 @@
 
 <div>
     <label for="stops">Arrêts (optionnels)&nbsp;:</label><br>
-    <input type="text" name="stops[]" id="stops"
+    <input class="address-input" type="text" name="stops[]" id="stops"
         value="<?= set_value('stops[0]') ?>"
         placeholder="Entrer un arrêt" required>
     <?php // Rajouter des input après chaque input rempli, probablement en JS  
