@@ -166,6 +166,8 @@
         </div>
         <!-- FIN CONTACT -->
 
+
+    <!-- Connected User -->
     <?php else: ?>
         <p>Bonjour <?= session()->user_name ?></p>
         <a href="/myprofil">Mon profil</a>
