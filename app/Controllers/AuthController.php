@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\UserModel;
 use App\Validators\RegistrationValidator;
+use App\Services\MailService;
 use Exception;
 
 use function PHPUnit\Framework\throwException;
@@ -115,7 +116,6 @@ class AuthController extends BaseController
 
         $userModel = model(UserModel::class);
 
-
         /* 
          * Tries to save a new user. 
          * If there were errors, returns to view with them in the following format :
@@ -128,6 +128,16 @@ class AuthController extends BaseController
                 ->with('errors', $errors)
                 ->withInput()
                 ->with('error', 'Votre compte n\'a pas pu être créé');
+        }
+
+        //Creating MailService object to be able to send the mail
+        $mailService = new MailService();
+
+        //We test if the mail is correctly sent or not, if not we insert a line in the logs
+        if (!$mailService->sendWelcome($user['email'], $user['first_name'])) {
+            throw new Exception("stop");
+
+            log_message('error', 'Email de bienvenue non envoyé pour : ' . $user['email']);
         }
 
         return redirect()->to('/')

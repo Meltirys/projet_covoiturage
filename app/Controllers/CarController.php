@@ -10,6 +10,9 @@ use App\Validators\CarValidator;
 class CarController extends BaseController
 {
 
+    /**
+     * Adds a car in the database, based on the post values. Access route is /car/add
+     */
     public function add()
     {
         helper('form');
@@ -57,6 +60,10 @@ class CarController extends BaseController
 
     public function update() {}
 
+    /**
+     * Delete the given car from the database. Access route is /car/delete/{id}
+     * @param int $idCar The id of the car we want to delete
+     */
     public function delete(int $idCar)
     {
 
