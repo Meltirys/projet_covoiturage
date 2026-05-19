@@ -37,13 +37,17 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     //User
     $routes->post('user/modify', [UserController::class, 'modify']);
     $routes->post('user/delete', [UserController::class, 'delete']);
+
+
+    // Itinéraire (conducteur)
+    $routes->get('drive/search', 'Journey\DriveController::search');
+    $routes->get('drive/show', 'Journey\DriveController::show');
+    $routes->get('drive/create', 'Journey\DriveController::create');
+    $routes->post('drive/save', 'Journey\DriveController::save');
+
+    // Itinéraire (requête)
+    $routes->get('request/search', 'Journey\RequestController::search');
+    $routes->get('request/show', 'Journey\RequestController::show');
+    $routes->get('request/create', 'Journey\RequestController::create');
+    $routes->post('request/save', 'Journey\RequestController::save');
 });
-
-
-
-
-
-// Itinéraire
-$routes->get('trajet', 'PagesController::itineraries');
-$routes->post('trajet-recherche', 'ItineraryController::search');
-$routes->get('nouveau-trajet', 'PagesController::newItinerary');
