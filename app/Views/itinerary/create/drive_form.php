@@ -2,44 +2,50 @@
 
 <div>
     <label for="start">Départ&nbsp;:</label><br>
-    <input class="address-input" type="text" name="start" id="start"
+    <input class="address-input" type="text" name="start_label" id="start"
         value="<?= set_value('start') ?>"
         placeholder="Entrez le point de départ" required>
     <?php if (isset($errors['start'])) echo ("<br><span class='error'>" . $errors['start'] . "</span>"); ?>
 
     <input type="hidden" name="start_lat">
-    <input type="hidden" name="start_long">
+    <input type="hidden" name="start_lon">
     <input type="hidden" name="start_city">
-    <input type="hidden" name="start_city_postcode">
+    <input type="hidden" name="start_postcode">
 </div>
 
 <div>
     <label for="end">Arrivée&nbsp;:</label><br>
-    <input class="address-input" type="text" name="end" id="end"
+    <input class="address-input" type="text" name="end_label" id="end"
         value="<?= set_value('end') ?>"
         placeholder="Entrez votre destination" required>
     <?php if (isset($errors["end"])) echo ("<br><span class='error'>" . $errors["end"] . "</span>"); ?>
 
 
     <input type="hidden" name="end_lat">
-    <input type="hidden" name="end_long">
+    <input type="hidden" name="end_lon">
     <input type="hidden" name="end_city">
-    <input type="hidden" name="end_city_postcode">
+    <input type="hidden" name="end_postcode">
 </div>
 
-<div>
-    <label for="stops">Arrêts (optionnels)&nbsp;:</label><br>
-    <input class="address-input" type="text" name="stops[]" id="stops"
-        value="<?= set_value('stops[0]') ?>"
-        placeholder="Entrer un arrêt" required>
-    <?php if (isset($errors["stops"])) echo ("<br><span class='error'>" . $errors["stops"] . "</span>"); ?>
+<div id="stops-container">
+    <label for="stop">Arrêts (optionnels)&nbsp;:</label><br>
 
-    <input type="hidden" name="stop[0][lat]">
-    <input type="hidden" name="stop[0][long]">
-    <input type="hidden" name="stop[0][city]">
-    <input type="hidden" name="stop[0][city_postcode]">
-    <?php // Rajouter des input après chaque input rempli avec JS 
-    ?>
+    <?php $stops = old('stops') ?? [[]]; ?>
+
+    <?php foreach ($stops as $index => $stop): ?>
+        <div class="stop address-field">
+            <input type="text" name="stops[<?= $index ?>][address]" class="address-input" value="<?= esc($stop['address'] ?? '') ?>">
+
+            <input type="hidden" name="stops[<?= $index ?>][lat]" value="<?= esc($stop['lat'] ?? '') ?>">
+            <input type="hidden" name="stops[<?= $index ?>][lon]" value="<?= esc($stop['lon'] ?? '') ?>">
+            <input type="hidden" name="stops[<?= $index ?>][city]" value="<?= esc($stop['city'] ?? '') ?>">
+            <input type="hidden" name="stops[<?= $index ?>][postcode]" value="<?= esc($stop['postcode'] ?? '') ?>">
+
+            <div class="results"></div> <button type="button" class="remove-stop">Retirer</button>
+        </div>
+    <?php endforeach; ?>
+
+    <?php if (isset($errors["stops"])) echo ("<br><span class='error'>" . $errors["stops"] . "</span>"); ?>
 </div>
 
 
