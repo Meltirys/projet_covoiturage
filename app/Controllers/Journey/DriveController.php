@@ -56,9 +56,7 @@ class DriveController extends BaseController
         ];
 
         helper('form');
-        return view('commons/header')
-            . view('itinerary/create/CreateView', $data)
-            . view('commons/footer');
+        return view('itinerary/create/CreateView', $data);
     }
 
     /**
