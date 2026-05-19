@@ -34,10 +34,10 @@
         placeholder="Entrer un arrêt" required>
     <?php if (isset($errors["stops"])) echo ("<br><span class='error'>" . $errors["stops"] . "</span>"); ?>
 
-    <input type="hidden" name="stop_lat[0]">
-    <input type="hidden" name="stop_long[0]">
-    <input type="hidden" name="stop_city[0]">
-    <input type="hidden" name="stop_city_postcode[0]">
+    <input type="hidden" name="stop[0][lat]">
+    <input type="hidden" name="stop[0][long]">
+    <input type="hidden" name="stop[0][city]">
+    <input type="hidden" name="stop[0][city_postcode]">
     <?php // Rajouter des input après chaque input rempli avec JS 
     ?>
 </div>
