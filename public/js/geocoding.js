@@ -1,27 +1,31 @@
-const addressInputs = document.querySelectorAll(".address-input");
-
-addressInputs.forEach((input) => {
+/**
+ * Adds an event listener to an address input
+ *
+ * @param {*} input
+ */
+function initializeAddressInput(input, onSelect = null) {
   let timeout;
+
   // A chaque lettre tapée, attend 300 milisecondes avant l'exécution du code
   input.addEventListener("input", () => {
     clearTimeout(timeout);
 
     timeout = setTimeout(() => {
-      console.log("searching");
-      searchAddress(input);
+      searchAddress(input, onSelect);
     }, 300);
   });
-});
+}
 
 /**
- * Function which allows geocoding queries using data.geopf.fr/geocodage API
+ * Function which allows the usage of geocoding queries with data.geopf.fr/geocodage API
+ *
+ * @param {*} inputElement
  */
-async function searchAddress(inputElement) {
-  const query = inputElement.value; // Récupère la valeur de l'input
+async function searchAddress(inputElement, onSelect = null) {
+  const query = inputElement.value;
+  const container = inputElement.parentElement;
+  const resultsBox = container.querySelector(".results");
 
-  const resultsBox = inputElement.nextElementSibling; // L'élément suivant dans le DOM
-
-  // Si l'utilisateur a entré moins de 3 caractères, ne fait rien
   if (query.length < 3) {
     resultsBox.innerHTML = "";
     return;
@@ -33,33 +37,19 @@ async function searchAddress(inputElement) {
     );
 
     const data = await response.json();
-
     resultsBox.innerHTML = "";
 
-    /*
-     * Affichage des données
-     */
-    data.features.forEach((element) => {
+    data.features.forEach((feature) => {
       const option = document.createElement("div");
-      option.textContent = element.properties.label;
+      option.textContent = feature.properties.label;
 
       option.addEventListener("click", () => {
-        inputElement.value = element.properties.label;
-
-        const coords = element.geometry.coordinates;
-        const properties = element.properties;
-
-        const container = inputElement.parentElement;
-
-        container.querySelector('input[name$="_lat"]').value = coords[1];
-        container.querySelector('input[name$="_long"]').value = coords[0];
-
-        container.querySelector('input[name$="_city"]').value =
-          properties.city || "";
-        container.querySelector('input[name$="_city_postcode"]').value =
-          properties.postcode || "";
-
+        inputElement.value = feature.properties.label;
         resultsBox.innerHTML = "";
+
+        if (onSelect) {
+          onSelect(feature, inputElement);
+        }
       });
 
       resultsBox.appendChild(option);
@@ -67,8 +57,6 @@ async function searchAddress(inputElement) {
   } catch (error) {
     resultsBox.textContent =
       "Erreur de chargement, veuillez réessayer plus tard.";
-
-    console.log("Erreur geocoding" + error);
-    return;
+    console.log(error);
   }
 }
