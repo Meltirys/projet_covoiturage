@@ -12,7 +12,7 @@ class BookingModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
-    protected $allowedFields    = ['booking_date', 'seat_taken', 'is_validated', 'is_driver', 'delete_booking_date', 'id_user', 'id_journey_drive'];
+    protected $allowedFields    = ['booking_date', 'seat_taken', 'is_validated', 'is_driver', 'deletion_date', 'id_user', 'id_journey_drive'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
