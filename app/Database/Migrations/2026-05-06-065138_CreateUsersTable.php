@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             'last_name'       => ['type' => 'VARCHAR', 'null' => false, 'constraint' => 50],
             'password'        => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => false],
             'email'           => ['type' => 'VARCHAR', 'null' => false, 'constraint' => 255, 'unique' => true],
-            'mobile'          => ['type' => 'VARCHAR', 'constraint' => 50],
+            'mobile'          => ['type' => 'VARCHAR', 'constraint' => 50, 'null' => true],
             'birth_date'      => ['type' => 'DATE', 'null' => false],
             'gender'          => ['type' => 'VARCHAR', 'null' => false, 'constraint' => 50],
             'avatar_filename' => ['type' => 'VARCHAR', 'constraint' => 255],
