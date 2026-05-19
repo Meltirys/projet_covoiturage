@@ -1,10 +1,3 @@
-<!--  Données requises :
-          id_car, start_city, start_city_postcode, end_city, end_city_postcode,
-          start, start_lat, start_long,
-          end, end_lat, end_long,
-          number_of_place, departure, estimated_arrival
-          stops[city_name, city_postcode, address, latitude, longitude] -->
-
 <?php form_open('itinerary/create') ?>
 <div>
     <label for="start">Départ&nbsp;:</label><br>
