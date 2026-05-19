@@ -31,8 +31,8 @@
          <div class="grid grid-cols-2 gap-3">
              <div class="flex flex-col gap-1">
                  <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Code postal</label>
-                 <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="post_code" value="<?= set_value('post_code') ?>">
-                 <?php if ($errors['post_code'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['post_code'] ?></span><?php endif ?>
+                 <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="postcode" value="<?= set_value('postcode') ?>">
+                 <?php if ($errors['postcode'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['postcode'] ?></span><?php endif ?>
              </div>
              <div class="flex flex-col gap-1">
                  <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Ville</label>

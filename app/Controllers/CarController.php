@@ -45,7 +45,7 @@ class CarController extends BaseController
          * If there were errors, returns to view with them in the following format :
          * [ 'field1' => 'error message', 'field2' => 'error message', ]
          */
-        if (! $carModel->save($car)) {
+        if (!$carModel->save($car)) {
             $errors = $carModel->errors();
 
             return redirect()->to('/myprofil')

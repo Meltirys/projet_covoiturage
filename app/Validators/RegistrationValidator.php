@@ -113,7 +113,7 @@ class RegistrationValidator extends BaseValidator
             ],
 
             //Regex found at https://regexpattern.com/france-postal-codes/
-            'post_code' => [
+            'postcode' => [
                 'rules'  => 'required|regex_match[/^(F-)?((2[A|B])|[0-9]{2})[0-9]{3}$/]',
                 'errors' => [
                     'required'    => 'Le code postal est obligatoire.',

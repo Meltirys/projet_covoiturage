@@ -8,10 +8,83 @@ use App\Models\UserModel;
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Validators\ChangePasswordValidator;
+use App\Models\CityModel;
 
 class UserController extends BaseController
 {
-    public function index() {}
+
+    /**
+     * Attempts registration from post content
+     */
+    public function saveUser()
+    {
+
+        helper('form');
+
+        $post = $this->request->getPost();
+        $post['email'] = $this->request->getPost('email-signup');
+
+        //Calling the specific validator
+        $validator = new RegistrationValidator();
+
+        //If an error is detected, return to the form with the errors described
+        if (!$validator->validate($post)) {
+            return view('HomeView', [
+                'errors' => $validator->getErrors()
+            ]);
+        }
+        // --- Saving in the user table ---
+        //Retrieving the information for the user table
+        $user = [
+            'first_name'   => $this->request->getPost('first_name'),
+            'last_name'    => $this->request->getPost('last_name'),
+            'email'        => $this->request->getPost('email-signup'),
+            'password'     => $this->request->getPost('password'),
+            'password_conf' => $this->request->getPost('password_conf'),
+            'mobile'       => $this->request->getPost('phone'),
+            'birth_date'   => $this->request->getPost('birth_date'),
+            'gender'       => $this->request->getPost('gender'),
+        ];
+
+        $userModel = model(UserModel::class);
+
+        /* 
+         * Tries to save a new user. 
+         * If there were errors, returns to view with them in the following format :
+         * [ 'field1' => 'error message', 'field2' => 'error message', ]
+         */
+        if (! $userModel->save($user)) {
+            $errors = $userModel->errors();
+
+            return redirect()->to('/')
+                ->with('errors', $errors)
+                ->withInput()
+                ->with('singup_error', 'Votre compte n\'a pas pu être créé');
+        }
+
+        // --- Saving in the city table ---
+        //Retrieving the city informations
+        $city = [
+            'postcode' => $this->request->getPost('postcode'),
+            'name' => $this->request->getPost('city')
+        ];
+        $cityModel = model('CityModel');
+        $cityId = $cityModel->getOrCreate($city['name'], $city['postcode']);
+
+
+
+        /* Mail: To uncomment in production
+        //Creating MailService object to be able to send the mail
+        $mailService = new MailService();
+
+        //We test if the mail is correctly sent or not, if not we insert a line in the logs
+        if (!$mailService->sendWelcome($user['email'], $user['first_name'])) {
+            log_message('error', 'Email de bienvenue non envoyé pour : ' . $user['email']);
+        }*/
+
+        return redirect()->to('/')
+            ->with('singup_success', 'Compte créé avec succès');
+    }
 
     /**
      * Delete the user from the data base. Access route is /user/delete
@@ -83,15 +156,15 @@ class UserController extends BaseController
         $userModel = new UserModel();
 
         //Checking if an error happens when saving the new password
-        if(!$userModel->update(session()->get('user_id'), [
+        if (!$userModel->update(session()->get('user_id'), [
             'password' => $password['password']
-        ])){
+        ])) {
             return redirect()->to('profil/changePassword')
-                    ->with('password_error', 'Une erreur est survenue lors de la modification, veuillez réessayer');
+                ->with('password_error', 'Une erreur est survenue lors de la modification, veuillez réessayer');
         }
 
         //If no errors
         return redirect()->to('profil/changePassword')
-                     ->with('password_success', 'Mot de passe modifié avec succès.');
+            ->with('password_success', 'Mot de passe modifié avec succès.');
     }
 }
