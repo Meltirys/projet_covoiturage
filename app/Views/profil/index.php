@@ -1,11 +1,11 @@
 <?= view('commons/header') ?>
 
-<main class="w-full max-w-5xl mx-auto px-4 py-6 md:px-8 md:py-10">
+<main class="w-full max-w-5xl mx-auto px-4 py-6 md:px-8 md:py-10 font-poppins">
 
     <!-- En-tête -->
     <header class="flex justify-between items-center mb-6">
-        <h2 class="section-title">Mon profil</h2>
-        <p class="md:hidden">{button}</p>
+        <h2 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Mon profil</h2>
+        <p>{button}</p>
     </header>
 
     <div class="flex flex-col md:flex-row gap-8 items-start">
@@ -15,11 +15,10 @@
 
             <!-- Nom -->
             <div id="name">
-                <h1 class="text-3xl font-bold text-gray-900">
+                <h1 class="text-3xl font-poppins text-gray-900">
                     <span id="first-name"><?= session('user_first_name') ?></span><br>
                     <span id="last-name"><?= session('user_last_name') ?></span>
                 </h1>
-                <p class="hidden md:block mt-3">{button}</p>
             </div>
 
         </aside>
@@ -32,33 +31,33 @@
 
                 <!-- Stats conducteur -->
                 <div id="stats-driver" class="mb-6">
-                    <h3 class="section-title">Mes statistiques</h3>
+                    <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes statistiques</h3>
                     <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                        <li class="flex justify-between items-center bg-white border border-gray-200 rounded-xl px-4 py-3">
-                            <span class="text-sm text-gray-600">Trajets proposés</span>
-                            <span class="text-sm font-semibold text-gray-900">12</span>
+                        <li class="flex justify-between items-center bg-white border border-[rgba(37,63,114,0.25)] rounded-xl px-4 py-3">
+                            <span class="text-sm text-[#253F72]">Trajets proposés</span>
+                            <span class="text-xs font-poppins text-[#253F72] bg-[#D6E0F0] rounded-full px-3 py-0.5">0</span>
                         </li>
-                        <li class="flex justify-between items-center bg-white border border-gray-200 rounded-xl px-4 py-3">
-                            <span class="text-sm text-gray-600">Passagers transportés</span>
-                            <span class="text-sm font-semibold text-gray-900">28</span>
+                        <li class="flex justify-between items-center bg-white border border-[rgba(37,63,114,0.25)] rounded-xl px-4 py-3">
+                            <span class="text-sm text-[#253F72]">Passagers transportés</span>
+                            <span class="text-xs font-poppins text-[#253F72] bg-[#D6E0F0] rounded-full px-3 py-0.5">0</span>
                         </li>
                     </ul>
                 </div>
 
                 <!-- Véhicules -->
                 <div id="car" class="mb-6">
-                    <h3 class="section-title">Mes véhicules</h3>
+                    <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes véhicules</h3>
 
                     <div id="my-cars" class="grid grid-cols-1 gap-2 mb-3">
                         <?php if ($cars): ?>
                             <?php foreach ($cars as $car): ?>
-                                <div class="car flex justify-between items-center bg-white border border-gray-200 rounded-xl px-4 py-3">
+                                <div class="car flex justify-between items-center bg-white border border-[rgba(37,63,114,0.25)] rounded-xl px-4 py-3">
                                     <div class="description">
-                                        <p class="text-sm font-semibold text-gray-900">
+                                        <p class="text-sm font-poppins text-[#253F72]">
                                             <span><?= esc($car['brand']) ?></span>
                                             <span><?= esc($car['model']) ?></span>
                                         </p>
-                                        <p class="text-xs text-gray-400">
+                                        <p class="text-xs text-[#9AA5B4]">
                                             <span><?= esc($car['color']) ?></span> -
                                             <span><?= esc($car['year']) ?></span> -
                                             <span><?= esc($car['number_of_seat']) ?> places</span>
@@ -73,7 +72,7 @@
                                 </div>
                             <?php endforeach ?>
                         <?php else: ?>
-                            <p class="text-sm text-gray-400 text-center py-3">Aucune voiture ajoutée pour le moment</p>
+                            <p class="text-sm text-[#9AA5B4] text-center py-3">Aucune voiture ajoutée pour le moment</p>
                         <?php endif; ?>
                     </div>
 
@@ -86,7 +85,7 @@
                     <?php endif ?>
 
                     <section id="add-car">
-                        <button onclick="showForm('add-car-form')" class="text-xs text-gray-400 underline block text-right w-full mb-3">
+                        <button onclick="showForm('add-car-form')" class="text-xs text-[#9AA5B4] underline block text-right w-full mb-3">
                             + ajouter un véhicule
                         </button>
 
@@ -96,40 +95,40 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
 
                                 <div class="flex flex-col gap-1">
-                                    <label for="brand" class="text-xs text-gray-500">Marque</label>
-                                    <input type="text" id="brand" name="brand" value="<?= old('brand') ?>" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#253F72]">
+                                    <label for="brand" class="text-xs text-[#9AA5B4]">Marque</label>
+                                    <input type="text" id="brand" name="brand" value="<?= old('brand') ?>" class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]">
                                     <?php if ($errors['brand'] ?? null): ?>
                                         <span class="text-xs text-red-500"><?= $errors['brand'] ?></span>
                                     <?php endif ?>
                                 </div>
 
                                 <div class="flex flex-col gap-1">
-                                    <label for="model" class="text-xs text-gray-500">Modèle</label>
-                                    <input type="text" id="model" name="model" value="<?= old('model') ?>" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#253F72]">
+                                    <label for="model" class="text-xs text-[#9AA5B4]">Modèle</label>
+                                    <input type="text" id="model" name="model" value="<?= old('model') ?>" class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]">
                                     <?php if ($errors['model'] ?? null): ?>
                                         <span class="text-xs text-red-500"><?= $errors['model'] ?></span>
                                     <?php endif ?>
                                 </div>
 
                                 <div class="flex flex-col gap-1">
-                                    <label for="color" class="text-xs text-gray-500">Couleur</label>
-                                    <input type="text" id="color" name="color" value="<?= old('color') ?>" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#253F72]">
+                                    <label for="color" class="text-xs text-[#9AA5B4]">Couleur</label>
+                                    <input type="text" id="color" name="color" value="<?= old('color') ?>" class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]">
                                     <?php if ($errors['color'] ?? null): ?>
                                         <span class="text-xs text-red-500"><?= $errors['brand'] ?></span>
                                     <?php endif ?>
                                 </div>
 
                                 <div class="flex flex-col gap-1">
-                                    <label for="year" class="text-xs text-gray-500">Année</label>
-                                    <input type="text" id="year" name="year" value="<?= old('year') ?>" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#253F72]">
+                                    <label for="year" class="text-xs text-[#9AA5B4]">Année</label>
+                                    <input type="text" id="year" name="year" value="<?= old('year') ?>" class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]">
                                     <?php if ($errors['year'] ?? null): ?>
                                         <span class="text-xs text-red-500"><?= $errors['year'] ?></span>
                                     <?php endif ?>
                                 </div>
 
                                 <div class="flex flex-col gap-1 md:col-span-2">
-                                    <label for="places" class="text-xs text-gray-500">Nombre de places</label>
-                                    <input type="number" id="places" name="places" value="<?= old('places') ?>" class="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#253F72]">
+                                    <label for="places" class="text-xs text-[#9AA5B4]">Nombre de places</label>
+                                    <input type="number" id="places" name="places" value="<?= old('places') ?>" class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]">
                                     <?php if ($errors['number_of_seat'] ?? null): ?>
                                         <span class="text-xs text-red-500"><?= $errors['number_of_seat'] ?></span>
                                     <?php endif ?>
@@ -141,7 +140,7 @@
                                 <button type="submit" class="flex-1 bg-[#253F72] hover:bg-[#1a2f55] text-white rounded-xl py-2 text-sm transition-colors duration-200">
                                     Ajouter
                                 </button>
-                                <button type="button" onclick="hideForm('add-car-form')" class="flex-1 border border-gray-200 text-gray-600 rounded-xl py-2 text-sm hover:bg-gray-50 transition-colors duration-200">
+                                <button type="button" onclick="hideForm('add-car-form')" class="flex-1 border border-[rgba(37,63,114,0.25)] text-[#253F72] rounded-xl py-2 text-sm hover:bg-[#D6E0F0] transition-colors duration-200">
                                     Annuler
                                 </button>
                             </div>
@@ -153,14 +152,14 @@
 
                 <!-- Trajets conducteur -->
                 <div id="journey-driver" class="mb-6">
-                    <h3 class="section-title">Mes trajets proposés</h3>
+                    <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes trajets proposés</h3>
 
-                    <h4 class="text-xs font-semibold text-gray-400 mb-2">À venir</h4>
+                    <h4 class="text-xs font-poppins text-[#9AA5B4] mb-2">À venir</h4>
                     <ul class="flex flex-col gap-2 mb-4">
                         <!-- boucle trajets à venir -->
                     </ul>
 
-                    <h4 class="text-xs font-semibold text-gray-400 mb-2">Passés</h4>
+                    <h4 class="text-xs font-poppins text-[#9AA5B4] mb-2">Passés</h4>
                     <ul class="flex flex-col gap-2">
                         <!-- boucle trajets passés -->
                     </ul>
@@ -169,7 +168,7 @@
                 <!-- Demandes en attente -->
                 <?php if (isset($validationList)): ?>
                     <div id="validations" class="mb-6">
-                        <h3 class="section-title">Demandes en attente de validation</h3>
+                        <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Demandes en attente de validation</h3>
                         <ul class="flex flex-col gap-2">
                             <!-- boucle validations -->
                         </ul>
@@ -182,17 +181,17 @@
             <section id="passenger" class="mb-6">
 
                 <div id="stats-passenger" class="mb-6">
-                    <h3 class="section-title">Mes statistiques</h3>
+                    <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes statistiques</h3>
                     <ul class="flex flex-col gap-2">
-                        <li class="flex justify-between items-center bg-white border border-gray-200 rounded-xl px-4 py-3">
-                            <span class="text-sm text-gray-600">Trajets effectués</span>
-                            <span class="text-sm font-semibold text-gray-900">0</span>
+                        <li class="flex justify-between items-center bg-white border border-[rgba(37,63,114,0.25)] rounded-xl px-4 py-3">
+                            <span class="text-sm text-[#253F72]">Trajets effectués</span>
+                            <span class="text-xs font-poppins text-[#253F72] bg-[#D6E0F0] rounded-full px-3 py-0.5">0</span>
                         </li>
                     </ul>
                 </div>
 
                 <div id="journey-passenger" class="mb-6">
-                    <h3 class="section-title">Mes trajets</h3>
+                    <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes trajets</h3>
                     <!-- boucle trajets passager -->
                 </div>
 
@@ -200,22 +199,22 @@
 
             <!-- Paramètres -->
             <section id="parameters" class="mb-6">
-                <h3 class="section-title">Paramètres</h3>
-                <h4 class="text-xs font-semibold text-gray-400 mb-2">Compte</h4>
+                <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Paramètres</h3>
+                <h4 class="text-xs font-poppins text-[#9AA5B4] mb-2">Compte</h4>
                 <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
                     <li>
-                        <a href="#" class="flex justify-between items-center bg-white border border-gray-200 rounded-xl px-4 py-3">
+                        <a href="#" class="flex justify-between items-center bg-white border border-[rgba(37,63,114,0.25)] rounded-xl px-4 py-3 hover:bg-[#D6E0F0] transition-colors duration-150">
                             <div>
-                                <p class="text-sm font-semibold text-gray-900">Informations personnelles</p>
-                                <p class="text-xs text-gray-400">Nom, email, photo...</p>
+                                <p class="text-sm font-poppins text-[#253F72]">Informations personnelles</p>
+                                <p class="text-xs text-[#9AA5B4]">Nom, email, photo...</p>
                             </div>
-                            <span class="text-gray-400">›</span>
+                            <span class="text-[#9AA5B4]">›</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="flex justify-between items-center bg-white border border-gray-200 rounded-xl px-4 py-3">
-                            <p class="text-sm font-semibold text-gray-900">Mot de passe</p>
-                            <span class="text-gray-400">›</span>
+                        <a href="#" class="flex justify-between items-center bg-white border border-[rgba(37,63,114,0.25)] rounded-xl px-4 py-3 hover:bg-[#D6E0F0] transition-colors duration-150">
+                            <p class="text-sm font-poppins text-[#253F72]">Mot de passe</p>
+                            <span class="text-[#9AA5B4]">›</span>
                         </a>
                     </li>
                 </ul>
@@ -223,10 +222,10 @@
 
             <!-- Boutons -->
             <section id="profil-buttons" class="flex flex-col md:flex-row-reverse gap-3">
-                <button class="w-full border border-gray-200 text-gray-600 rounded-xl py-3 text-sm hover:bg-gray-50 transition-colors duration-200">
+                <button class="w-full border border-[rgba(224,83,83,0.3)] text-[#E05353] rounded-xl py-3 text-sm hover:bg-red-50 transition-colors duration-200">
                     Supprimer mon compte
                 </button>
-                <a href="/logout" class="w-full border border-gray-200 text-gray-600 rounded-xl py-3 text-sm hover:bg-gray-50 transition-colors duration-200 text-center block">
+                <a href="/logout" class="w-full border border-[rgba(37,63,114,0.25)] text-[#253F72] rounded-xl py-3 text-sm hover:bg-[#D6E0F0] transition-colors duration-200 text-center block">
                     Se déconnecter
                 </a>
             </section>
