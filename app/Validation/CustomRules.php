@@ -94,4 +94,20 @@ class CustomRules
 
         return true;
     }
+
+    
+    /**
+     * This function compare a given password with the password of the connected user
+     * @param string $old_password The old password typed by the user
+     * 
+     * @return bool True if it matches the password in the database, false otherwise
+     */
+    public function isOldPassword(string $old_password) : bool{
+
+        $dbUser = model('UserModel');
+        $userInfo = $dbUser->find(session()->user_id);
+
+        return password_verify($old_password, $userInfo['password']);
+
+    }
 }
