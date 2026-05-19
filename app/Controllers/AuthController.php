@@ -127,7 +127,7 @@ class AuthController extends BaseController
             return redirect()->to('/')
                 ->with('errors', $errors)
                 ->withInput()
-                ->with('error', 'Votre compte n\'a pas pu être créé');
+                ->with('singup_error', 'Votre compte n\'a pas pu être créé');
         }
 
         //Creating MailService object to be able to send the mail
@@ -135,12 +135,10 @@ class AuthController extends BaseController
 
         //We test if the mail is correctly sent or not, if not we insert a line in the logs
         if (!$mailService->sendWelcome($user['email'], $user['first_name'])) {
-            throw new Exception("stop");
-
             log_message('error', 'Email de bienvenue non envoyé pour : ' . $user['email']);
         }
 
         return redirect()->to('/')
-            ->with('success', 'Compte créé avec succès');
+            ->with('singup_success', 'Compte créé avec succès');
     }
 }

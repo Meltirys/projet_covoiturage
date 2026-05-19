@@ -50,26 +50,27 @@
                     <label class="text-xs font-medium tracking-widest text-bluegrey uppercase" for="password-auth">Mot de passe</label>
                     <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="password" id="password-auth" name="password-auth" required>
                 </div>
+                <?php if (session()->getFlashdata('auth_error')): ?>
+                    <p class="text-xs text-red-500 mt-2"><?= session()->getFlashdata('auth_error') ?></p>
+                <?php endif; ?>
             </div>
             <div class="flex justify-center mt-2">
                 <button type="submit" class="border border-bluegrey text-bluegrey bg-babyblue text-sm font-medium px-6 py-2 rounded-full hover:bg-bluegrey hover:text-white transition-all">
                     Je me connecte
                 </button>
             </div>
-            <?php if (session()->getFlashdata('auth-error')): ?>
-                <p class="text-xs text-red-500 mt-2"><?= session()->getFlashdata('auth-error') ?></p>
-            <?php endif; ?>
+
             <?= form_close() ?>
         </div>
         <!-- FIN CONNEXION -->
 
         <!-- FORMULAIRE INSCRIPTION -->
         <div id="tab-inscription" class="auth-form-panel hidden">
-            <?php if (session()->getFlashdata('success')): ?>
-                <p class="text-xs text-green-600 mb-3"><?= session()->getFlashdata('success') ?></p>
+            <?php if (session()->getFlashdata('signup_success')): ?>
+                <p class="text-xs text-green-600 mb-3"><?= session()->getFlashdata('signup_success') ?></p>
             <?php endif ?>
-            <?php if (session()->getFlashdata('error')): ?>
-                <p class="text-xs text-red-500 mb-3"><?= session()->getFlashdata('error') ?></p>
+            <?php if (session()->getFlashdata('singup_error')): ?>
+                <p class="text-xs text-red-500 mb-3"><?= session()->getFlashdata('singup_error') ?></p>
             <?php endif ?>
 
             <?= form_open('/signup') ?>

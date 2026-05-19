@@ -37,7 +37,8 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->post('car/modify/(:num)', [CarController::class, 'modify']);
 
     //User
-    $routes->post('user/modify', [UserController::class, 'modify']);
+    $routes->get('user/modify', [UserController::class, 'modify']);
+    $routes->post('user/update', [UserController::class, 'update']);
     $routes->post('user/delete', [UserController::class, 'delete']);
 
 
