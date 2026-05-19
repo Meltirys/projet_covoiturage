@@ -40,17 +40,16 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('user/modify', [UserController::class, 'modify']);
     $routes->post('user/update', [UserController::class, 'update']);
     $routes->post('user/delete', [UserController::class, 'delete']);
-
-
-    // Itinéraire (conducteur)
-    $routes->get('drive/search', 'DriveController::search');
-    $routes->get('drive/show', 'DriveController::show');
-    $routes->get('drive/create', 'DriveController::create');
-    $routes->post('drive/save', 'DriveController::save');
-
-    // Itinéraire (requête)
-    $routes->get('request/search', 'RequestController::search');
-    $routes->get('request/show', 'RequestController::show');
-    $routes->get('request/create', 'RequestController::create');
-    $routes->post('request/save', 'RequestController::save');
 });
+
+// Itinéraire (conducteur)
+$routes->get('drive/search', 'Journey\DriveController::search');
+$routes->get('drive/show', 'Journey\DriveController::show');
+$routes->get('drive/create', 'Journey\DriveController::create');
+$routes->post('drive/save', 'Journey\DriveController::save');
+
+// Itinéraire (requête)
+$routes->get('request/search', 'Journey\RequestController::search');
+$routes->get('request/show', 'Journey\RequestController::show');
+$routes->get('request/create', 'Journey\RequestController::create');
+$routes->post('request/save', 'Journey\RequestController::save');
