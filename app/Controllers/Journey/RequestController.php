@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Controllers\Journey;
 
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
