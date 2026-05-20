@@ -35,6 +35,11 @@
 
     <?= $this->renderSection('scripts') ?>
 
+    <footer>
+        <ul>
+
+        </ul>
+    </footer>
 </body>
 
 </html>
