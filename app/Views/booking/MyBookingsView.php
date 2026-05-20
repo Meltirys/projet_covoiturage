@@ -75,7 +75,8 @@
                 <div>
                     <?php // Ville départ → arrivée - à afficher quand Track sera fini ?>
                     <p>Départ : <?= esc($journey['departure']) ?></p>
-                    <p>Places : <?= esc($journey['number_of_place']) ?></p>
+                    <p>Places : <?= esc($journey['places_restantes']) ?>/<?= esc($journey['number_of_place']) ?></p>
+
                 </div>
             <?php endforeach; ?>
         <?php endif; ?>

@@ -45,6 +45,13 @@ class BookingController extends BaseController
         $drivePast       = [];
         $pendingRequests  = [];
         foreach ($myJourneys as $journey) {
+            $placesOccupees = (int) $bookingModel
+                ->selectSum('seat_taken')
+                ->where('id_journey_drive', $journey['id_journey_drive'])
+                ->where('is_validated', true)
+                ->get()->getRow()->seat_taken;
+
+            $journey['places_restantes'] = $journey['number_of_place'] - $placesOccupees;
 
             if ($journey['departure'] < $today) {
                 $drivePast[] = $journey;
@@ -57,10 +64,12 @@ class BookingController extends BaseController
                 ->where('is_validated', false)
                 ->where('is_driver', false)
                 ->findAll();
-            foreach ($requests as $request) {
-                $pendingRequests[] = array_merge($request, ['journey' => $journey]);
+            foreach ($requests as $r) {
+                $pendingRequests[] = array_merge($r, ['journey' => $journey]);
             }
         }
+
+
 
         $data = [
             'upcomingConfirmed' => $upcomingConfirmed,
@@ -138,8 +147,9 @@ class BookingController extends BaseController
         }
 
         $bookingModel->insert(array_merge($data, [
-            'is_validated' => false,
-            'is_driver'    => false,
+            'is_validated'  => false,
+            'is_driver'     => false,
+            'deletion_date' => null,
         ]));
 
 
