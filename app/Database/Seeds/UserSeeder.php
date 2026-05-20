@@ -25,6 +25,16 @@ class UserSeeder extends Seeder
                 'gender'             => 'male',
                 'id_user_permission' => 1,
             ],
+            [
+                'first_name'         => 'Add',
+                'last_name'          => 'Mine',
+                'password'           => password_hash('password', PASSWORD_DEFAULT),
+                'email'              => 'andr.sapk@test.com',
+                'mobile'             => '0610928752',
+                'birth_date'         => '1948-06-21',
+                'gender'             => 'male',
+                'id_user_permission' => 1,
+            ],
         ];
 
         $car = [
