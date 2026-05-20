@@ -9,6 +9,8 @@ use CodeIgniter\Controller;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Validators\ChangePasswordValidator;
 use App\Models\CityModel;
+use App\Validators\RegistrationValidator;
+use App\Services\MailService;
 
 class UserController extends BaseController
 {
@@ -72,6 +74,9 @@ class UserController extends BaseController
         $cityId = $cityModel->getOrCreate($city['name'], $city['postcode']);
 
         // --- Saving in the location table ---
+        //getting the information of the latitude and longitude
+
+
         //Retrieving the location informations
         $location = [
             'address' => $this->request->getPost('address')
