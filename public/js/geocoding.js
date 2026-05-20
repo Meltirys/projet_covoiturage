@@ -1,7 +1,8 @@
 /**
  * Adds an event listener to an address input
  *
- * @param {*} input
+ * @param {*} input User input element
+ * @param {function} onSelect Callback function
  */
 function initializeAddressInput(input, onSelect = null) {
   let timeout;
@@ -19,7 +20,8 @@ function initializeAddressInput(input, onSelect = null) {
 /**
  * Function which allows the usage of geocoding queries with data.geopf.fr/geocodage API
  *
- * @param {*} inputElement
+ * @param {*} inputElement User input element
+ * @param {function} onSelect Callback function
  */
 async function searchAddress(inputElement, onSelect = null) {
   const query = inputElement.value;

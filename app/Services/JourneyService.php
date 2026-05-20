@@ -54,28 +54,28 @@ class JourneyService
 
             // 2. Cities
             $startCityId = $cityModel->getOrCreate(
-                $input['start_city'],
-                $input['start_postcode']
+                $input['start']['city'],
+                $input['start']['postcode'],
             );
 
             $endCityId = $cityModel->getOrCreate(
-                $input['end_city'],
-                $input['end_postcode']
+                $input['end']['city'],
+                $input['end']['postcode'],
             );
 
             // 3. Locations
             $startLocationId = $locationModel->getOrCreate(
-                $input['start_label'],
+                $input['start']['label'],
                 $startCityId,
-                $input['start_lat'] ?? null,
-                $input['start_lon'] ?? null
+                $input['start']['lat'] ?? null,
+                $input['start']['lon'] ?? null
             );
 
             $endLocationId = $locationModel->getOrCreate(
-                $input['end_label'],
+                $input['end']['label'],
                 $endCityId,
-                $input['end_lat'] ?? null,
-                $input['end_lon'] ?? null
+                $input['end']['lat'] ?? null,
+                $input['end']['lon'] ?? null
             );
 
             // 4. Journey
