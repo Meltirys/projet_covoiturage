@@ -35,6 +35,7 @@ class UserSeeder extends Seeder
                 'birth_date'         => '1948-06-21',
                 'gender'             => 'male',
                 'id_user_permission' => 1,
+                'is_validated' => true
             ],
             [
                 'id_user'            => 2,
@@ -46,6 +47,7 @@ class UserSeeder extends Seeder
                 'birth_date'         => '1948-06-21',
                 'gender'             => 'male',
                 'id_user_permission' => 2,
+                'is_validated' => true
             ],
         ];
 
