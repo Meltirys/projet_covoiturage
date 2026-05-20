@@ -116,6 +116,10 @@ class JourneyDriveValidator extends BaseValidator
             ],
             'start-time' => $datetimeRules,
             'end-time'   => $datetimeRules,
+            'options'   => [
+                'rules' => 'permit_empty',
+                'errors' => [],
+            ]
         ];
     }
 }
