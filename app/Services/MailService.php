@@ -70,4 +70,10 @@ class MailService
 
         return $this->send($to, 'Bienvenue sur notre application !', $body);
     }
+
+    public function sendBookingRequest(string $to, array $data): bool
+    {
+        $body = view('emails/booking_request', $data);
+        return $this->send($to, 'Nouvelle demande de réservation', $body);
+    }
 }

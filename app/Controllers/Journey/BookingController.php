@@ -153,6 +153,25 @@ class BookingController extends BaseController
         ]));
 
 
+        //Preparing the mail
+        $mailService = service('MailService');
+        $userModel = model('UserModel');
+        $passenger = $userModel->find(session()->user_id);
+        $driver = $userModel->find($journey['driver']);
+
+        //Gathering the infos for the mail
+        $mailService->sendBookingRequest($driver['email'], [
+            'driver_first_name'    => $driver['first_name'],
+            'journey_date'         => $journey['departure'],
+            'journey_departure'    => $journey['start'],
+            'journey_arrival'      => $journey['end'],
+            'journey_seats'        => $availableSeat,
+            'passenger_first_name' => $passenger['first_name'],
+            'passenger_last_name'  => $passenger['last_name'],
+            'passenger_email'      => $passenger['email'],
+            'passenger_mobile'     => $passenger['mobile'],
+        ]);
+
         return redirect()->to('mes-reservations')
             ->with('success', 'Réservation réussie');
     }
