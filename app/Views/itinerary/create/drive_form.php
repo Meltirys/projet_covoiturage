@@ -8,7 +8,7 @@
         <label for="start" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Départ</label>
         <input class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]"
             type="text" name="start[label]" id="start"
-            value="<?= set_value('start') ?>"
+            value="<?= set_value('start[label]') ?>"
             placeholder="Entrez le point de départ" required>
         <?php if (isset($errors['start'])): ?>
             <span class="text-xs text-red-500"><?= $errors['start'] ?></span>
@@ -25,7 +25,7 @@
         <label for="end" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Arrivée</label>
         <input class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]"
             type="text" name="end[label]" id="end"
-            value="<?= set_value('end') ?>"
+            value="<?= set_value('end[label]') ?>"
             placeholder="Entrez votre destination" required>
         <?php if (isset($errors['end'])): ?>
             <span class="text-xs text-red-500"><?= $errors['end'] ?></span>
@@ -48,16 +48,20 @@
         <?php $stops = old('stops') ?? [[]]; ?>
         <?php foreach ($stops as $index => $stop): ?>
             <div class="stop address-field flex flex-col gap-1">
-                <input type="text" name="stops[<?= $index ?>][address]"
-                    class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]"
-                    value="<?= esc($stop['address'] ?? '') ?>"
+                <input type="text" name="stops[<?= $index ?>][label]"
+                    class="stop-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]"
+                    value="<?= esc($stop['label'] ?? '') ?>"
                     placeholder="Entrer un arrêt">
                 <input type="hidden" name="stops[<?= $index ?>][lat]" value="<?= esc($stop['lat'] ?? '') ?>">
                 <input type="hidden" name="stops[<?= $index ?>][lon]" value="<?= esc($stop['lon'] ?? '') ?>">
                 <input type="hidden" name="stops[<?= $index ?>][city]" value="<?= esc($stop['city'] ?? '') ?>">
                 <input type="hidden" name="stops[<?= $index ?>][postcode]" value="<?= esc($stop['postcode'] ?? '') ?>">
                 <div class="results"></div>
-                <button type="button" class="remove-stop text-xs text-[rgba(37,63,114,0.5)] underline text-right bg-transparent border-none cursor-pointer">Retirer</button>
+                <?php if ($index > 0): ?>
+                    <button type="button" class="remove-stop text-xs text-[rgba(37,63,114,0.5)] underline text-right bg-transparent border-none cursor-pointer">
+                        Retirer
+                    </button>
+                <?php endif; ?>
             </div>
         <?php endforeach; ?>
     </div>
@@ -125,7 +129,7 @@
     <input type="text" name="options" id="options"
         value="<?= set_value('options') ?>"
         placeholder="Entrez vos options"
-        class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]" required>
+        class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]">
     <?php if (isset($errors['options'])): ?>
         <span class="text-xs text-red-500"><?= $errors['options'] ?></span>
     <?php endif ?>
