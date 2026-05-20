@@ -7,34 +7,34 @@
     <div class="flex flex-col gap-1">
         <label for="start" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Départ</label>
         <input class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]"
-            type="text" name="start_label" id="start"
+            type="text" name="start[label]" id="start"
             value="<?= set_value('start') ?>"
             placeholder="Entrez le point de départ" required>
         <?php if (isset($errors['start'])): ?>
             <span class="text-xs text-red-500"><?= $errors['start'] ?></span>
         <?php endif ?>
         <div class="address-results"></div>
-        <input type="hidden" name="start_lat">
-        <input type="hidden" name="start_lon">
-        <input type="hidden" name="start_city">
-        <input type="hidden" name="start_postcode">
+        <input type="hidden" name="start[lat]">
+        <input type="hidden" name="start[lon]">
+        <input type="hidden" name="start[city]">
+        <input type="hidden" name="start[postcode]">
     </div>
 
     <!-- Arrivée -->
     <div class="flex flex-col gap-1">
         <label for="end" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Arrivée</label>
         <input class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]"
-            type="text" name="end_label" id="end"
+            type="text" name="end[label]" id="end"
             value="<?= set_value('end') ?>"
             placeholder="Entrez votre destination" required>
         <?php if (isset($errors['end'])): ?>
             <span class="text-xs text-red-500"><?= $errors['end'] ?></span>
         <?php endif ?>
         <div class="address-results"></div>
-        <input type="hidden" name="end_lat">
-        <input type="hidden" name="end_lon">
-        <input type="hidden" name="end_city">
-        <input type="hidden" name="end_postcode">
+        <input type="hidden" name="end[lat]">
+        <input type="hidden" name="end[lon]">
+        <input type="hidden" name="end[city]">
+        <input type="hidden" name="end[postcode]">
     </div>
 
 </div>

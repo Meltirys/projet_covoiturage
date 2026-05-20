@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\BookingModel;
 use App\Models\JourneyDriveModel;
 use App\Models\UserModel;
+use App\Validators\BookingValidator;
 
 class BookingController extends BaseController
 {
@@ -22,20 +23,17 @@ class BookingController extends BaseController
         $upcomingConfirmed = [];
         $upcomingPending   = [];
         $pastJourney       = [];
-        foreach($allBookings as $booking) {
+        foreach ($allBookings as $booking) {
             $journey = $journeyModel->find($booking['id_journey_drive']);
             $booking['journey'] = $journey;
             $driver = $userModel->find($journey['driver']);
             $booking['driver_name'] = $driver['first_name'] . ' ' . substr($driver['last_name'], 0, 1) . '.';
 
-            if($journey['departure'] < $today) {
+            if ($journey['departure'] < $today) {
                 $pastJourney[] = $booking;
-            }
-            elseif($booking['is_validated']) {
+            } elseif ($booking['is_validated']) {
                 $upcomingConfirmed[] = $booking;
-            }
-            else
-            {
+            } else {
                 $upcomingPending[] = $booking;
             }
         }
@@ -46,13 +44,11 @@ class BookingController extends BaseController
         $driveUpcoming   = [];
         $drivePast       = [];
         $pendingRequests  = [];
-        foreach($myJourneys as $journey) {
+        foreach ($myJourneys as $journey) {
 
-            if($journey['departure'] < $today) {
+            if ($journey['departure'] < $today) {
                 $drivePast[] = $journey;
-            }
-            else
-            {
+            } else {
                 $driveUpcoming[] = $journey;
             }
 
@@ -61,9 +57,9 @@ class BookingController extends BaseController
                 ->where('is_validated', false)
                 ->where('is_driver', false)
                 ->findAll();
-                foreach ($requests as $request) {
-                    $pendingRequests[] = array_merge($request, ['journey' => $journey]);
-                }
+            foreach ($requests as $request) {
+                $pendingRequests[] = array_merge($request, ['journey' => $journey]);
+            }
         }
 
         $data = [
@@ -83,9 +79,9 @@ class BookingController extends BaseController
 
         $journeyModel = new JourneyDriveModel();
         $journey = $journeyModel->find($id_journey_drive);
-        if(!$journey) {
+        if (!$journey) {
             return redirect()->to('trajet')
-            ->with('error', 'Trajet introuvable');
+                ->with('error', 'Trajet introuvable');
         }
         return view('booking/BookingView', ['journey' => $journey]);
     }
@@ -97,21 +93,21 @@ class BookingController extends BaseController
         $journeyID = $this->request->getPost('id_journey_drive');
         $journey   = $journeyModel->find($journeyID);
         // If route doesn't exist
-        if(!$journey) {
+        if (!$journey) {
             return redirect()->back()
-            ->with('error', 'Trajet introuvable');
+                ->with('error', 'Trajet introuvable');
         }
         // If is the driver
-        if($journey['driver'] == session('user_id')) {
+        if ($journey['driver'] == session('user_id')) {
             return redirect()->back()
-            ->with('error', 'Vous ne pouvez pas réserver votre propre trajet !');
+                ->with('error', 'Vous ne pouvez pas réserver votre propre trajet !');
         }
         // If already reserved
         $exist = $bookingModel
             ->where('id_journey_drive', $journeyID)
             ->where('id_user', session('user_id'))
             ->first();
-        if($exist) {
+        if ($exist) {
             return redirect()->back()
                 ->with('error', 'Vous avez déjà une réservation sur ce trajet !');
         }
@@ -122,21 +118,30 @@ class BookingController extends BaseController
             ->get()->getRow()->seat_taken;
 
         $availableSeat = $journey['number_of_place'] - $seatPicked;
-        if($availableSeat < 1) {
+        if ($availableSeat < 1) {
             return redirect()->back()
                 ->with('error', 'Trajet complet');
         }
         $seatTaken = 1;
         //
-        $bookingModel->insert([
-            'booking_date'      => date('Y-m-d'),
-            'seat_taken'        => $seatTaken,
-            'id_user'           => session('user_id'),
-            'id_journey_drive'  => $journeyID,
-            'is_validated'      => false,
-            'is_driver'         => false,
+        $validator = new BookingValidator();
+        $data = [
+            'booking_date'     => date('Y-m-d'),
+            'seat_taken'       => $seatTaken,
+            'id_user'          => session('user_id'),
+            'id_journey_drive' => $journeyID,
+        ];
 
-        ]);
+        if (!$validator->validate($data)) {
+            return redirect()->back()
+                ->with('error', implode(' ', $validator->getErrors()));
+        }
+
+        $bookingModel->insert(array_merge($data, [
+            'is_validated' => false,
+            'is_driver'    => false,
+        ]));
+
 
         return redirect()->to('mes-reservations')
             ->with('success', 'Réservation réussie');
@@ -148,7 +153,7 @@ class BookingController extends BaseController
     {
         $bookingModel = new BookingModel();
         $booking = $bookingModel->find($id_booking);
-        if(! $booking || $booking['id_user'] != session('user_id')) {
+        if (! $booking || $booking['id_user'] != session('user_id')) {
             return redirect()->to('mes-reservations')
                 ->with('error', 'Réservation introuvable');
         }
@@ -165,13 +170,13 @@ class BookingController extends BaseController
         $bookingModel = new BookingModel();
         $journeyModel = new JourneyDriveModel();
         $booking = $bookingModel->find($id_booking);
-        if(!$booking) {
+        if (!$booking) {
             return redirect()->to('mes-reservations')
                 ->with('error', 'Réservation introuvable');
         }
 
         $journey = $journeyModel->find($booking['id_journey_drive']);
-        if(!$journey || $journey['driver'] != session('user_id')) {
+        if (!$journey || $journey['driver'] != session('user_id')) {
             return redirect()->to('mes-reservations')
                 ->with('error', 'Action non autorisée');
         }
@@ -186,13 +191,13 @@ class BookingController extends BaseController
         $bookingModel = new BookingModel();
         $journeyModel = new JourneyDriveModel();
         $booking = $bookingModel->find($id_booking);
-        if(!$booking) {
+        if (!$booking) {
             return redirect()->to('mes-reservations')
                 ->with('error', 'Réservation introuvable');
         }
 
         $journey = $journeyModel->find($booking['id_journey_drive']);
-        if(!$journey || $journey['driver'] != session('user_id')) {
+        if (!$journey || $journey['driver'] != session('user_id')) {
             return redirect()->to('mes-reservations')
                 ->with('error', 'Action non autorisée');
         }

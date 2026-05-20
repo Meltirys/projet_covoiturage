@@ -1,21 +1,9 @@
-// ===== Start/End
-document.querySelectorAll(".address-input").forEach((input) => {
-  initializeAddressInput(input, (feature, inputElement) => {
-    const coords = feature.geometry.coordinates;
-    const properties = feature.properties;
-    const container = inputElement.parentElement;
-
-    container.querySelector('input[name$="_lat"]').value = coords[1];
-    container.querySelector('input[name$="_lon"]').value = coords[0];
-    container.querySelector('input[name$="_city"]').value =
-      properties.city || "";
-    container.querySelector('input[name$="_postcode"]').value =
-      properties.postcode || "";
-  });
-});
-
-// ===== Stops
-function handleStopSelection(feature, inputElement) {
+/**
+ * Fills the hidden fields with the matching data
+ * @param {*} feature Data from geocoding API
+ * @param {*} inputElement User input element
+ */
+function fillAddressFields(feature, inputElement) {
   const coords = feature.geometry.coordinates;
   const properties = feature.properties;
   const container = inputElement.parentElement;
@@ -26,6 +14,19 @@ function handleStopSelection(feature, inputElement) {
     properties.city || "";
   container.querySelector('input[name$="[postcode]"]').value =
     properties.postcode || "";
+}
+// ===== Start/End
+document.querySelectorAll(".address-input").forEach((input) => {
+  initializeAddressInput(input, fillAddressFields);
+});
+// ===== Stops
+/**
+ * Applies fillAddressFields and handles callback of createStop function if needed
+ * @param {*} feature
+ * @param {*} inputElement User input element
+ */
+function handleStopSelection(feature, inputElement) {
+  fillAddressFields(feature, inputElement);
 
   if (
     container === stopsContainer.lastElementChild &&

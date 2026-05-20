@@ -193,11 +193,12 @@
 
             <!-- Boutons -->
             <section class="flex flex-col md:flex-row-reverse gap-3 pb-6">
-                <?= form_open('user/delete') ?>
-                <button type="submit" class="w-full border border-[rgba(224,83,83,0.3)] text-[#E05353] rounded-xl py-3 text-sm hover:bg-red-50 transition-colors duration-200">
-                    Supprimer mon compte
-                </button>
-                <?= form_close() ?>
+                <form action="<?= site_url('user/delete') ?>" method="post" class="w-full">
+                    <?= csrf_field() ?>
+                    <button type="submit" class="w-full border border-[rgba(224,83,83,0.3)] text-[#E05353] rounded-xl py-3 text-sm hover:bg-red-50 transition-colors duration-200">
+                        Supprimer mon compte
+                    </button>
+                </form>
                 <a href="/logout" class="w-full border border-[rgba(37,63,114,0.25)] text-[#253F72] rounded-xl py-3 text-sm hover:bg-[#D6E0F0] transition-colors duration-200 text-center block">
                     Se déconnecter
                 </a>

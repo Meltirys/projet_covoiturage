@@ -41,7 +41,7 @@ class JourneyDriveValidator extends BaseValidator
                 'less_than_equal_to' => 'La latitude doit être inférieure ou égale à 90.',
             ],
         ];
-        $longRules = [
+        $lonRules = [
             'rules' =>  'required|greater_than_equal_to[-180]|less_than_equal_to[180]',
             'errors' => [
                 'required' => 'La longitude est obligatoire.',
@@ -58,17 +58,54 @@ class JourneyDriveValidator extends BaseValidator
         ];
 
         return [
-            'id_car'        => [
+            // ===== START
+
+            'start.label' => [
+                'rules' => 'required|min_length[2]|max_length[100]',
+                'errors' => [
+                    'required' => 'L\'adresse de départ est obligatoire',
+                    'min_length' => 'L\'adresse de départ doit faire plus de 2 caractères',
+                    'max_length' => 'L\'adresse de départ doit faire moins de 100 caractères',
+                ]
+            ],
+            'start.city' => $cityRules,
+            'start.postcode' => $postcodeRules,
+            'start.lat' => $latRules,
+            'start.lon' => $lonRules,
+
+            // ===== END
+
+            'end.label' => [
+                'rules' => 'required|min_length[2]|max_length[100]',
+                'errors' => [
+                    'required' => 'L\'adresse d\'arrivée est obligatoire',
+                    'min_length' => 'L\'adresse d\'arrivée doit faire plus de 2 caractères',
+                    'max_length' => 'L\'adresse d\'arrivée doit faire moins de 100 caractères',
+                ]
+            ],
+            'end.city' => $cityRules,
+            'end.postcode' => $postcodeRules,
+            'end.lat' => $latRules,
+            'end.lon' => $lonRules,
+
+            // ===== STOPS
+
+            'stops' => [
+                'rules' => 'permit_empty|validStops',
+                'errors' => [
+                    'validStops' => 'Un ou plusieurs arrêts sont invalides',
+                ]
+            ],
+
+            // ===== OTHER
+
+            'id_car' => [
                 'rules' => 'required|is_natural_no_zero',
                 'errors' => [
                     'required' => 'Le choix du véhicule est obligatoire',
                     'is_natural_no_zero' => 'Veuillez choisir un véhicule valide',
                 ]
             ],
-            'start_city' => $cityRules,
-            'start_city_postcode' => $postcodeRules,
-            'end_city' => $cityRules,
-            'end_city_postcode' => $postcodeRules,
             'seats'      => [
                 'rules' => 'required|min_length[1]|max_length[2]',
                 'errors' => [
@@ -79,33 +116,6 @@ class JourneyDriveValidator extends BaseValidator
             ],
             'start-time' => $datetimeRules,
             'end-time'   => $datetimeRules,
-            'start'      => [
-                'rules' => 'required|min_length[2]|max_length[100]',
-                'errors' => [
-                    'required' => 'L\'adresse de départ est obligatoire',
-                    'min_length' => 'L\'adresse de départ doit faire plus de 2 caractères',
-                    'max_length' => 'L\'adresse de départ doit faire moins de 100 caractères',
-                ]
-            ],
-            'start_lat' => $latRules,
-            'start_long' => $longRules,
-            'end'        => [
-                'rules' => 'required|min_length[2]|max_length[100]',
-                'errors' => [
-                    'required' => 'L\'adresse d\'arrivée est obligatoire',
-                    'min_length' => 'L\'adresse d\'arrivée doit faire plus de 2 caractères',
-                    'max_length' => 'L\'adresse d\'arrivée doit faire moins de 100 caractères',
-                ]
-            ],
-            'end_lat' => $latRules,
-            'end_long' => $longRules,
-            'stops' => [
-                'rules' => 'required|validStops',
-                'errors' => [
-                    'required' => 'Les arrêts sont obligatoires',
-                    'validStops' => 'Un ou plusieurs arrêts sont invalides',
-                ]
-            ]
         ];
     }
 }
