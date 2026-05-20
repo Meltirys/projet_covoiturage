@@ -1,5 +1,6 @@
-<?= view('commons/header') ?>
+<?= $this->extend('layouts/main') ?>
 
+<?= $this->section('content') ?>
 <main class="bg-lightgrey min-h-screen px-5 py-8 font-poppins">
 
     <?php if (!session('logged_in')) : ?>
@@ -179,7 +180,9 @@
     <?php endif; ?>
 
 </main>
+<?= $this->endSection() ?>
 
+<?= $this->section('scripts') ?>
 <script>
     const btns = document.querySelectorAll('.auth-menu-btn');
     const panels = document.querySelectorAll('.auth-form-panel');
@@ -198,3 +201,4 @@
         });
     });
 </script>
+<?= $this->endSection() ?>

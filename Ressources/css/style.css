@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @source "../../app/Views/**/*.php";
 
+
 /* poppins-200 */
 @font-face {
   font-display: swap;

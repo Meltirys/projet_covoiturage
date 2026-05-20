@@ -23,7 +23,7 @@
                 </ul>
             </nav>
         <?php else: ?>
-            <p class="px-5 text-xs font-poppins text-bluegrey">Tu n'es pas connecté : pour profiter des fonctionnalités de PennRide, connecte-toi ou créé un compte.</p>
+            <p class="flex-1 px-6 text-xs font-poppins text-bluegrey">Tu n'es pas connecté : pour profiter des fonctionnalités de PennRide, connecte-toi ou créé un compte.</p>
         <?php endif; ?>
     </header>
 
