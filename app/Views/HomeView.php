@@ -89,8 +89,12 @@
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Genre</label>
-                        <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="gender" value="<?= set_value('gender') ?>" required>
-                        <?php if ($errors['gender'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['gender'] ?></span><?php endif ?>
+                        <select class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" name="gender" value="<?= set_value('gender') ?>" required>
+                            <option value="" disabled selected>Sélectionner</option>
+                            <option value="female">Féminin</option>
+                            <option value="male">Masculin</option>
+                            <option value="blank">Non communiqué</option>
+                        </select>
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">E-mail</label>
@@ -149,7 +153,7 @@
             </div>
             <?= form_close() ?>
         </div>
-        
+
         <!-- FIN INSCRIPTION -->
 
         <!-- FORMULAIRE CONTACT -->
@@ -167,7 +171,7 @@
         <!-- FIN CONTACT -->
 
 
-    <!-- Connected User -->
+        <!-- Connected User -->
     <?php else: ?>
         <p>Bonjour <?= session()->user_name ?></p>
         <a href="/myprofil">Mon profil</a>
