@@ -2,21 +2,21 @@
 
 <div>
     <label for="start">Départ&nbsp;:</label><br>
-    <input class="address-input" type="text" name="start" id="start"
+    <input class="address-input" type="text" name="start_label" id="start"
         value="<?= set_value('start') ?>"
         placeholder="Entrez votre départ" required>
     <?php if (isset($errors['start'])) echo ("<br><span class='error'>" . $errors['start'] . "</span>"); ?>
     <div class="address-results"></div>
 
     <input type="hidden" name="start_lat">
-    <input type="hidden" name="start_long">
+    <input type="hidden" name="start_lon">
     <input type="hidden" name="start_city">
-    <input type="hidden" name="start_city_postcode">
+    <input type="hidden" name="start_postcode">
 </div>
 
 <div>
     <label for="end">Arrivée&nbsp;:</label><br>
-    <input class="address-input" type="text" name="end" id="end"
+    <input class="address-input" type="text" name="end_label" id="end"
         value="<?= set_value('end') ?>"
         placeholder="Entrez votre destination" required>
     <?php if (isset($errors["end"])) echo ("<br><span class='error'>" . $errors["end"] . "</span>"); ?>
@@ -25,7 +25,7 @@
     <input type="hidden" name="end_lat">
     <input type="hidden" name="end_long">
     <input type="hidden" name="end_city">
-    <input type="hidden" name="end_city_postcode">
+    <input type="hidden" name="end_postcode">
 </div>
 
 <label for="start-time">Heure départ&nbsp;:</label><br>

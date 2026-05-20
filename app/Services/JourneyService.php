@@ -55,27 +55,27 @@ class JourneyService
             // 2. Cities
             $startCityId = $cityModel->getOrCreate(
                 $input['start_city'],
-                $input['start_city_postcode']
+                $input['start_postcode']
             );
 
             $endCityId = $cityModel->getOrCreate(
                 $input['end_city'],
-                $input['end_city_postcode']
+                $input['end_postcode']
             );
 
             // 3. Locations
             $startLocationId = $locationModel->getOrCreate(
-                $input['start'],
+                $input['start_label'],
                 $startCityId,
                 $input['start_lat'] ?? null,
-                $input['start_long'] ?? null
+                $input['start_lon'] ?? null
             );
 
             $endLocationId = $locationModel->getOrCreate(
-                $input['end'],
+                $input['end_label'],
                 $endCityId,
                 $input['end_lat'] ?? null,
-                $input['end_long'] ?? null
+                $input['end_lon'] ?? null
             );
 
             // 4. Journey
@@ -100,15 +100,15 @@ class JourneyService
             foreach ($stops as $index => $stop) {
 
                 $cityId = $cityModel->getOrCreate(
-                    $stop['city_name'],
-                    $stop['city_postcode']
+                    $stop['city'],
+                    $stop['postcode']
                 );
 
                 $locationId = $locationModel->getOrCreate(
-                    $stop['address'],
+                    $stop['label'],
                     $cityId,
-                    $stop['latitude'],
-                    $stop['longitude']
+                    $stop['lat'],
+                    $stop['lon']
                 );
 
                 $ok = $stageModel->save([
