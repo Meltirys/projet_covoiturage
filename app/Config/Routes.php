@@ -7,7 +7,7 @@ use App\Controllers\Backoffice\UserValidationController;
 use App\Controllers\Journey\DriveController;
 
 use App\Controllers\Journey\RequestController;
-
+use App\Controllers\ProfilController;
 
 /**
  * @var RouteCollection $routes
@@ -32,6 +32,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 
     //Profil
     $routes->get('myprofil', 'ProfilController::index');
+    $routes->get('profil/show/(:num)', [ProfilController::class, 'show']);
 
     //Car
     $routes->post('car/add', 'CarController::add');
