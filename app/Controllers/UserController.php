@@ -84,7 +84,7 @@ class UserController extends BaseController
         ];
 
         $locationModel = model('LocationModel');
-        $cityId = $cityModel->getOrCreate($location['address']);*/
+        $locationId = $locationModel->getOrCreate($location['address']);*/
 
 
 

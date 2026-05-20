@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             'birth_date'      => ['type' => 'DATE', 'null' => false],
             'gender'          => ['type' => 'VARCHAR', 'null' => false, 'constraint' => 50],
             'avatar_filename' => ['type' => 'VARCHAR', 'constraint' => 255],
+            'is_validated'    => ['type' => 'BOOLEAN', 'null' => true, 'default' => null],
             'id_user_permission' => [
                 'type'      => 'INT',
                 'unsigned'  => true,

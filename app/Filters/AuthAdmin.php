@@ -26,7 +26,7 @@ class AuthAdmin implements FilterInterface
     public function before(RequestInterface $request, $arguments = null)
     {
         // Check if user is not admin and redirect to a path if not
-        if (session()->get('user_role') !== 2) {
+        if (session()->get('user_role') != 2) {
             return redirect()->to('/');
         }
     }

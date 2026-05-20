@@ -12,7 +12,7 @@ class UserModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['first_name', 'last_name', 'email', 'password', 'mobile', 'birth_date', 'gender', 'avatar_filename', 'id_user_permission'];
+    protected $allowedFields    = ['first_name', 'last_name', 'email', 'password', 'mobile', 'birth_date', 'gender', 'avatar_filename', 'id_user_permission', 'is_validated'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -72,6 +72,17 @@ class UserModel extends Model
         if (!$user) return null;
 
         return $user['first_name'] . " " . $user['last_name'];
+    }
+
+    public function getNonValidatedUsers() : ?array{
+
+        $nonValideted = $this->select('id_user, first_name, last_name, email')
+                ->where('is_validated IS NULL')
+                ->findAll();
+        
+        if(!$nonValideted) return null;
+
+        return $nonValideted;
     }
 
 }

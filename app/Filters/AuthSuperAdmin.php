@@ -26,7 +26,7 @@ class AuthSuperAdmin implements FilterInterface
     public function before(RequestInterface $request, $arguments = null)
     {
         // Check if user is not super-admin and redirect to a path if not
-        if (session()->get('user_role') !== 3) {
+        if (session()->get('user_role') != 3) {
             return redirect()->to('/');
         }
     }
