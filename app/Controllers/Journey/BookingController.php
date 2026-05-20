@@ -5,6 +5,7 @@ namespace App\Controllers\Journey;
 use App\Controllers\BaseController;
 use App\Models\BookingModel;
 use App\Models\JourneyDriveModel;
+use App\Models\UserModel;
 
 class BookingController extends BaseController
 {
@@ -13,6 +14,7 @@ class BookingController extends BaseController
     {
         $bookingModel = new BookingModel();
         $journeyModel = new JourneyDriveModel();
+        $userModel    = new UserModel();
         $today = date('Y-m-d');
 
         // Partie passager
@@ -23,6 +25,8 @@ class BookingController extends BaseController
         foreach($allBookings as $booking) {
             $journey = $journeyModel->find($booking['id_journey_drive']);
             $booking['journey'] = $journey;
+            $driver = $userModel->find($journey['driver']);
+            $booking['driver_name'] = $driver['first_name'] . ' ' . substr($driver['last_name'], 0, 1) . '.';
 
             if($journey['departure'] < $today) {
                 $pastJourney[] = $booking;
