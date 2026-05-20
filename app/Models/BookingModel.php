@@ -31,25 +31,8 @@ class BookingModel extends Model
     protected $deletedField  = 'deletion_date';
 
     // Validation
-    protected $validationRules      = [
-        'booking_date'      => 'required|valid_date',
-        'seat_taken'        => 'required|integer|greater_than[0]',
-        'is_validated'      => 'permit_empty',
-        'is_driver'         => 'permit_empty',
-        'id_user'           => 'required|integer|greater_than[0]',
-        'id_journey_drive'  => 'required|integer|greater_than[0]',
-    ];
-    protected $validationMessages   = [
-        'seat_taken'        => [
-            'greater_than' => 'Plus de place disponible'
-        ],
-        'id_user'           => [
-            'required'     => 'Utilisateur non authentifié'
-        ],
-        'id_journey_drive'  => [
-            'required'     => 'Trajet inconnu'
-        ],
-    ];
+    protected $validationRules      = [];
+    protected $validationMessages   = [];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
