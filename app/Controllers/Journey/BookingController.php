@@ -89,7 +89,7 @@ class BookingController extends BaseController
         $journeyModel = new JourneyDriveModel();
         $journey = $journeyModel->find($id_journey_drive);
         if (!$journey) {
-            return redirect()->to('trajet')
+            return redirect()->to('/')
                 ->with('error', 'Trajet introuvable');
         }
         return view('booking/BookingView', ['journey' => $journey]);
@@ -152,14 +152,13 @@ class BookingController extends BaseController
             'deletion_date' => null,
         ]));
 
+        // Sending the mail to the driver
 
-        //Preparing the mail
         $mailService = service('MailService');
-        $userModel = model('UserModel');
-        $passenger = $userModel->find(session()->user_id);
-        $driver = $userModel->find($journey['driver']);
+        $userModel   = model('UserModel');
+        $passenger   = $userModel->find(session()->user_id);
+        $driver      = $userModel->find($journey['driver']);
 
-        //Gathering the infos for the mail
         $mailService->sendBookingRequest($driver['email'], [
             'driver_first_name'    => $driver['first_name'],
             'journey_date'         => $journey['departure'],
@@ -192,7 +191,7 @@ class BookingController extends BaseController
             ->with('success', 'Réservation annulée');
     }
 
-    // Acceptation d'une réservation de la part d'un conducteur
+    // Accepting a reservation from a passenger to a driver
 
     public function accept($id_booking)
     {
@@ -215,6 +214,8 @@ class BookingController extends BaseController
             ->with('success', 'Demande acceptée !');
     }
 
+    // Refusing a reservation from a passenger to a driver
+
     public function refuse($id_booking)
     {
         $bookingModel = new BookingModel();
@@ -234,5 +235,31 @@ class BookingController extends BaseController
         $bookingModel->delete($id_booking);
         return redirect()->to('mes-reservations')
             ->with('success', 'Réservation refusée');
+    }
+
+    // Canceling a trip from a driver
+
+    public function cancelJourney($id_journey_drive)
+    {
+        $journeyModel = new JourneyDriveModel();
+        $bookingModel = new BookingModel();
+
+        $journey = $journeyModel->find($id_journey_drive);
+        if (!$journey || $journey['driver'] != session('user_id')) {
+            return redirect()->to('mes-reservations')
+                ->with('error', 'Trajet introuvable ou action non autorisée');
+        }
+
+        // Cancel all related reservations
+        $bookingModel
+            ->where('id_journey_drive', $id_journey_drive)
+            ->set(['deletion_date' => date('Y-m-d')])
+            ->update();
+
+        // Cancel the trip
+        $journeyModel->update($id_journey_drive, ['deletion_date' => date('Y-m-d')]);
+
+        return redirect()->to('mes-reservations')
+            ->with('success', 'Trajet annulé');
     }
 }

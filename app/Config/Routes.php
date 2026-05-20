@@ -66,6 +66,7 @@ $routes->get('mes-reservations',             'Journey\BookingController::index')
 $routes->post('reservation/annuler/(:num)',  'Journey\BookingController::cancel/$1');
 $routes->post('reservation/accepter/(:num)', 'Journey\BookingController::accept/$1');
 $routes->post('reservation/refuser/(:num)',  'Journey\BookingController::refuse/$1');
+$routes->post('reservation/trajet/annuler/(:num)', 'Journey\BookingController::cancelJourney/$1');
 
 
 $routes->group('', ['filter' => 'authadmin'], function ($routes) {
