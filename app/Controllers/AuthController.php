@@ -5,11 +5,8 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\UserModel;
-use App\Validators\RegistrationValidator;
-use App\Services\MailService;
-use Exception;
 
-use function PHPUnit\Framework\throwException;
+use Exception;
 
 class AuthController extends BaseController
 {

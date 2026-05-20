@@ -22,7 +22,7 @@ $routes->get('/', 'PagesController::home');
 $routes->group('', ['filter' => 'guest'], function ($routes) {
     $routes->get('authentification', 'PagesController::login');
     $routes->post('authentification', 'AuthController::authenticate');
-    $routes->post('signup', 'AuthController::saveUser');
+    $routes->post('signup', 'UserController::saveUser');
 });
 
 $routes->group('', ['filter' => 'auth'], function ($routes) {
@@ -66,8 +66,8 @@ $routes->post('reservation/refuser/(:num)',  'Journey\BookingController::refuse/
 
 
 $routes->group('', ['filter' => 'admin'], function ($routes) {
-    $routes->get('userValidation', [BackOfficeController::class, 'validateUser']);
+    $routes->get('userValidation', [BackOfficeController::class, 'userValidation']);
     $routes->post('userValidation/accept/(:num)', [BackOfficeController::class, 'acceptUser']);
-    $routes->post('userValidation/accept/(:num)', [BackOfficeController::class, 'acceptUser']);
+    $routes->post('userValidation/refuse/(:num)', [BackOfficeController::class, 'refuseUser']);
 
 });
