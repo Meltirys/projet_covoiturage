@@ -73,6 +73,7 @@ class UserController extends BaseController
         $cityModel = model('CityModel');
         $cityId = $cityModel->getOrCreate($city['name'], $city['postcode']);
 
+        /* To uncomment and finish later
         // --- Saving in the location table ---
         //getting the information of the latitude and longitude
 
@@ -83,7 +84,7 @@ class UserController extends BaseController
         ];
 
         $locationModel = model('LocationModel');
-        $cityId = $cityModel->getOrCreate($location['address']);
+        $cityId = $cityModel->getOrCreate($location['address']);*/
 
 
 
