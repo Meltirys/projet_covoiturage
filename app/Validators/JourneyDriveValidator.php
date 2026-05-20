@@ -114,8 +114,8 @@ class JourneyDriveValidator extends BaseValidator
                     'max_length' => 'Le nombre de places choisi est trop grand',
                 ]
             ],
-            'start-time' => $datetimeRules,
-            'end-time'   => $datetimeRules,
+            'start-datetime' => $datetimeRules,
+            'end-datetime'   => $datetimeRules,
             'options'   => [
                 'rules' => 'permit_empty',
                 'errors' => [],

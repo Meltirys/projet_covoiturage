@@ -81,8 +81,8 @@ class JourneyService
             // 4. Journey
             $journeyData = [
                 'number_of_place'   => (int) $input['seats'],
-                'departure'         => $input['start-time'],
-                'estimated_arrival' => $input['end-time'],
+                'departure'         => $input['start-datetime'],
+                'estimated_arrival' => $input['end-datetime'],
                 'id_car'            => $input['car'],
                 'start'             => $startLocationId,
                 'end'               => $endLocationId,
