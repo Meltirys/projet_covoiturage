@@ -28,6 +28,8 @@ document.querySelectorAll(".address-input").forEach((input) => {
 function handleStopSelection(feature, inputElement) {
   fillAddressFields(feature, inputElement);
 
+  const container = inputElement.parentElement;
+
   if (
     container === stopsContainer.lastElementChild &&
     container.querySelector('input[name$="[lat]"]').value !== ""
@@ -51,29 +53,27 @@ let stopIndex = document.querySelectorAll(".stop").length;
 function createStop() {
   const stop = document.createElement("div");
 
-  stop.classList.add("stop", "address-field");
+  stop.className = "stop address-field flex flex-col gap-1";
 
-  stop.innerHTML = `
-    <input 
-        class="stop-input" 
-        type="text" 
-        name="stops[${stopIndex}][label]"
-        placeholder="Entrer un arrêt"
-    >
-    
-    <input type="hidden" name="stops[${stopIndex}][lat]">
-    <input type="hidden" name="stops[${stopIndex}][lon]">
-    <input type="hidden" name="stops[${stopIndex}][city]">
-    <input type="hidden" name="stops[${stopIndex}][postcode]">
-    
-    <div class="results"></div>
-    <button type="button" class="remove-stop">Retirer</button>
-    `;
-
+  stop.innerHTML = `  
+                <input 
+                    type="text" 
+                    name="stops[${stopIndex}][label]"
+                    class="stop-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]"
+                    placeholder="Entrer un arrêt">
+                <input type="hidden" name="stops[${stopIndex}][lat]">
+                <input type="hidden" name="stops[${stopIndex}][lon]">
+                <input type="hidden" name="stops[${stopIndex}][city]">
+                <input type="hidden" name="stops[${stopIndex}][postcode]">
+                <div class="results"></div>
+                    <button type="button" class="remove-stop text-xs text-[rgba(37,63,114,0.5)] underline text-right bg-transparent border-none cursor-pointer">
+                        Retirer
+                    </button>
+            `;
   stopsContainer.appendChild(stop);
 
   initializeAddressInput(
-    stop.querySelector(".address-input"),
+    stop.querySelector(".stop-input"),
     handleStopSelection,
   );
 
