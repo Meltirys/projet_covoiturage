@@ -1,4 +1,6 @@
-<?= view('commons/header') ?>
+<?= $this->extend('layouts/main') ?>
+
+<?= $this->section('content') ?>
 
 <main class="w-full max-w-5xl mx-auto px-4 py-6 md:px-8 md:py-10 font-poppins">
 
@@ -11,3 +13,10 @@
     </div>
 
 </main>
+
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
+<script src="/js/geocoding.js"></script>
+<script src="/js/journey-create.js"></script>
+<?= $this->endSection() ?>
