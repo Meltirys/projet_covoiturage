@@ -37,6 +37,6 @@ class BackOfficeController extends BaseController
             return redirect()->back()->with('user_validation_error', "Une erreur est survenue lors du refus de l'utilisateur, veuillez réessayer.");
         }
         return redirect()->back()
-            ->with('user_validation_success', $dbUser->getUserName($idUser) . " a bien été refusé.");
+            ->with('user_validation_success', "Le refus de " . $dbUser->getUserName($idUser) . " a bien été pris en compte.");
     }
 }
