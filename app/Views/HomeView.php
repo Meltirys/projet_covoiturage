@@ -93,7 +93,7 @@
                             <option value="" disabled selected>Sélectionner</option>
                             <option value="female">Féminin</option>
                             <option value="male">Masculin</option>
-                            <option value="blank">Non communiqué</option>
+                            <option value="none">Non communiqué</option>
                         </select>
                     </div>
                     <div class="flex flex-col gap-1">
