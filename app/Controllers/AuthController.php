@@ -46,17 +46,30 @@ class AuthController extends BaseController
                 ->with('auth_error', 'Identifiants invalides');
         }
 
-        // If all checks succeed, sets the user information in the session
-        session()->set([
-            'user_id' => $user['id_user'],
-            'user_email' => $user['email'],
-            'user_role' => $user['id_user_permission'],
-            'user_first_name' => $user['first_name'],
-            'user_last_name' => $user['last_name'],
-            'logged_in' => true,
-        ]);
+        //Now that we know it's a know user, we have to check if he has access to the website
+        $validationStatus = $userModel->getValidationStatusForUser($user['id_user']);
 
-        return redirect()->to('/'); // return to index
+        if ($validationStatus) {
+            // If all checks succeed, sets the user information in the session
+            session()->set([
+                'user_id' => $user['id_user'],
+                'user_email' => $user['email'],
+                'user_role' => $user['id_user_permission'],
+                'user_first_name' => $user['first_name'],
+                'user_last_name' => $user['last_name'],
+                'logged_in' => true,
+            ]);
+
+            return redirect()->to('/'); // return to index
+        } else if (is_null($validationStatus)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('auth_error', "Votre profil n'a pas encore été validé, un administrateur s'en occupe au plus vite.");
+        } else {
+            return redirect()->back()
+                ->withInput()
+                ->with('auth_error', "Vous n'êtes pas autorisé à accéder à ce service.");
+        }
     }
 
     /**
@@ -77,5 +90,4 @@ class AuthController extends BaseController
 
         return view('auth/register_form');
     }
-
 }

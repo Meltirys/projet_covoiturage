@@ -74,15 +74,34 @@ class UserModel extends Model
         return $user['first_name'] . " " . $user['last_name'];
     }
 
-    public function getNonValidatedUsers() : ?array{
+    /**
+     * @return array|null Returns all the user whom the validation state is not decided yet.
+     */
+    public function getNonValidatedUsers(): ?array
+    {
 
         $nonValideted = $this->select('id_user, first_name, last_name, email')
-                ->where('is_validated IS NULL')
-                ->findAll();
-        
-        if(!$nonValideted) return null;
+            ->where('is_validated IS NULL')
+            ->findAll();
+
+        if (!$nonValideted) return null;
 
         return $nonValideted;
     }
 
+    /**
+     * @param int $idUser The user we want to know the status
+     * 
+     * @return bool|null Can be true or false, but also can be null if the status of the user has not been decided by the admin
+     */
+    public function getValidationStatusForUser(int $idUser): ?bool
+    {
+        $validationStatus = $this->select('is_validated')
+            ->find($idUser);
+
+        
+        return $validationStatus['is_validated'] === null
+            ? null
+            : (bool) $validationStatus['is_validated'];
+    }
 }

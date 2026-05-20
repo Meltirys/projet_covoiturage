@@ -49,6 +49,30 @@ class UserSeeder extends Seeder
                 'id_user_permission' => 2,
                 'is_validated' => true
             ],
+            [
+                'id_user'            => 3,
+                'first_name'         => 'Refused',
+                'last_name'          => 'User',
+                'password'           => password_hash('password', PASSWORD_DEFAULT),
+                'email'              => 'refused@user.fr',
+                'mobile'             => '',
+                'birth_date'         => '1948-06-21',
+                'gender'             => 'male',
+                'id_user_permission' => 1,
+                'is_validated' => false
+            ],
+            [
+                'id_user'            => 4,
+                'first_name'         => 'Waiting',
+                'last_name'          => 'User',
+                'password'           => password_hash('password', PASSWORD_DEFAULT),
+                'email'              => 'waiting@user.fr',
+                'mobile'             => '',
+                'birth_date'         => '1948-06-21',
+                'gender'             => 'male',
+                'id_user_permission' => 1,
+                'is_validated'       => null
+            ],
         ];
 
         $car = [

@@ -3,7 +3,7 @@
 use CodeIgniter\Router\RouteCollection;
 use App\Controllers\CarController;
 use App\Controllers\UserController;
-use App\Controllers\BackOfficeController;
+use App\Controllers\Backoffice\UserValidationController;
 use App\Controllers\Journey\DriveController;
 
 use App\Controllers\Journey\RequestController;
@@ -68,7 +68,7 @@ $routes->post('reservation/refuser/(:num)',  'Journey\BookingController::refuse/
 
 
 $routes->group('', ['filter' => 'authadmin'], function ($routes) {
-    $routes->get('userValidation', [BackOfficeController::class, 'validateUser']);
-    $routes->post('userValidation/accept/(:num)', [BackOfficeController::class, 'acceptUser']);
-    $routes->post('userValidation/refuse/(:num)', [BackOfficeController::class, 'refuseUser']);
+    $routes->get('userValidation', [UserValidationController::class, 'validateUser']);
+    $routes->post('userValidation/accept/(:num)', [UserValidationController::class, 'acceptUser']);
+    $routes->post('userValidation/refuse/(:num)', [UserValidationController::class, 'refuseUser']);
 });
