@@ -66,14 +66,15 @@ class DriveController extends BaseController
     {
         helper('form');
 
-        /* Needed inputs
-         * id_car, start_city, start_city_postcode, end_city, end_city_postcode,
-         * start, start_lat, start_long,
-         * end, end_lat, end_long,
-         * number_of_place, departure, estimated_arrival
-         * stops[city_name, city_postcode, address, latitude, longitude]
+        /* Inputs :
+         * start = ['label', 'city', 'postcode', 'lat', 'lon']
+         * end = [...]
+         * stops = [0 = [...], 1 = [...],]
+         * id_car, number_of_place, departure['date', 'time'], estimated_arrival['date', 'time']
          * 
-         * options?
+         * TODO :
+         * - Check geocoding validity of address inputs
+         * - Options ?
          */
 
         $data = $this->request->getPost();
