@@ -116,11 +116,17 @@ class BookingController extends BaseController
                 ->with('error', 'Vous avez déjà une réservation sur ce trajet !');
         }
         // If there still available seat
-        $seatTaken = (int) ($this->request->getPost('seat_taken') ?? 1);
-        if($seatTaken < 1 || $seatTaken > $journey['number_of_place']) {
+        $seatPicked = (int) $bookingModel
+            ->selectSum('seat_taken')
+            ->where('id_journey_drive', $journeyID)
+            ->get()->getRow()->seat_taken;
+
+        $availableSeat = $journey['number_of_place'] - $seatPicked;
+        if($availableSeat < 1) {
             return redirect()->back()
-                ->with('error', 'Plus aucune place de disponible');
+                ->with('error', 'Trajet complet');
         }
+        $seatTaken = 1;
         //
         $bookingModel->insert([
             'booking_date'      => date('Y-m-d'),
