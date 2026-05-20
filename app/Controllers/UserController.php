@@ -71,6 +71,16 @@ class UserController extends BaseController
         $cityModel = model('CityModel');
         $cityId = $cityModel->getOrCreate($city['name'], $city['postcode']);
 
+        // --- Saving in the location table ---
+        //Retrieving the location informations
+        $location = [
+            'address' => $this->request->getPost('address')
+        ];
+
+        $locationModel = model('LocationModel');
+        $cityId = $cityModel->getOrCreate($location['address']);
+
+
 
 
         /* Mail: To uncomment in production
@@ -157,7 +167,7 @@ class UserController extends BaseController
 
         //Checking if an error happens when saving the new password
         if (!$userModel->update(session()->get('user_id'), [
-            'password' => $password['password']
+            'password' => password_hash($password['password'], PASSWORD_DEFAULT)
         ])) {
             return redirect()->to('profil/changePassword')
                 ->with('password_error', 'Une erreur est survenue lors de la modification, veuillez réessayer');

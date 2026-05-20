@@ -182,7 +182,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="flex justify-between items-center bg-white border border-[rgba(37,63,114,0.25)] rounded-xl px-4 py-3 hover:bg-[#D6E0F0] transition-colors duration-150">
+                        <a href="user/changePassword" class="flex justify-between items-center bg-white border border-[rgba(37,63,114,0.25)] rounded-xl px-4 py-3 hover:bg-[#D6E0F0] transition-colors duration-150">
                             <p class="text-sm font-poppins text-[#253F72]">Mot de passe</p>
                             <span class="text-[#9AA5B4]">›</span>
                         </a>
@@ -192,9 +192,11 @@
 
             <!-- Boutons -->
             <section class="flex flex-col md:flex-row-reverse gap-3 pb-6">
-                <button class="w-full border border-[rgba(224,83,83,0.3)] text-[#E05353] rounded-xl py-3 text-sm hover:bg-red-50 transition-colors duration-200">
+                <?= form_open('user/delete') ?>
+                <button type="submit" class="w-full border border-[rgba(224,83,83,0.3)] text-[#E05353] rounded-xl py-3 text-sm hover:bg-red-50 transition-colors duration-200">
                     Supprimer mon compte
                 </button>
+                <?= form_close() ?>
                 <a href="/logout" class="w-full border border-[rgba(37,63,114,0.25)] text-[#253F72] rounded-xl py-3 text-sm hover:bg-[#D6E0F0] transition-colors duration-200 text-center block">
                     Se déconnecter
                 </a>

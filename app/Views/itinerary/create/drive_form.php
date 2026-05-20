@@ -58,9 +58,9 @@
 <select name="car" id="car" value="<?= set_value('car') ?>" required>
     <option value="">--Choisissez le véhicule--</option>
     <?php // Ajoute au dropdown la ou les voitures de l'utilisateur
-    if (isset($user['cars'])) {
-        foreach ($user['cars'] as $car) { ?>
-            <option value="<?= $car['label'] ?>"><?= $car['label'] ?></option>
+    if (isset($cars)) {
+        foreach ($cars as $car) { ?>
+            <option value="<?= $car['id_car'] ?>"><?= $car['brand'] ?> - <?= $car['model'] ?></option>
     <?php }
     } ?>
 </select>

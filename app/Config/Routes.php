@@ -39,7 +39,6 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     //User
     $routes->get('user/modify', [UserController::class, 'modify']);
     $routes->get('user/changePassword', [UserController::class, 'showPasswordChange']);
-    $routes->post('user/updatePassword', [UserController::class, 'updatePassword']);
     $routes->post('user/update', [UserController::class, 'update']);
     $routes->post('user/updatePassword', [UserController::class, 'updatePassword']);
     $routes->post('user/delete', [UserController::class, 'delete']);
