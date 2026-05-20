@@ -24,7 +24,7 @@ function initializeAddressInput(input, onSelect = null) {
  * @param {function} onSelect Callback function
  */
 async function searchAddress(inputElement, onSelect = null) {
-  const query = inputElement.value;
+  const query = inputElement.value.trim();
   const container = inputElement.parentElement;
   const resultsBox = container.querySelector(".results");
 
@@ -40,6 +40,10 @@ async function searchAddress(inputElement, onSelect = null) {
 
     const data = await response.json();
     resultsBox.innerHTML = "";
+
+    if (!data.features || !Array.isArray(data.features)) {
+      return;
+    }
 
     data.features.forEach((feature) => {
       const option = document.createElement("div");
