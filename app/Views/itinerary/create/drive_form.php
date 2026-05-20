@@ -13,7 +13,7 @@
         <?php if (isset($errors['start'])): ?>
             <span class="text-xs text-red-500"><?= $errors['start'] ?></span>
         <?php endif ?>
-        <div class="address-results"></div>
+        <div class="results"></div>
         <input type="hidden" name="start[lat]">
         <input type="hidden" name="start[lon]">
         <input type="hidden" name="start[city]">
@@ -30,7 +30,7 @@
         <?php if (isset($errors['end'])): ?>
             <span class="text-xs text-red-500"><?= $errors['end'] ?></span>
         <?php endif ?>
-        <div class="address-results"></div>
+        <div class="results"></div>
         <input type="hidden" name="end[lat]">
         <input type="hidden" name="end[lon]">
         <input type="hidden" name="end[city]">
@@ -74,16 +74,36 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
 
     <div class="flex flex-col gap-1">
-        <label for="start-time" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Heure de départ</label>
-        <input type="datetime-local" name="start-time" id="start-time"
-            value="<?= set_value('start') ?>"
+        <label for="start-date" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Date de départ</label>
+        <input type="date" name="start-date" id="start-date"
+            value="<?= set_value('start-date') ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]" required>
     </div>
 
     <div class="flex flex-col gap-1">
+        <label for="start-time" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Heure de départ</label>
+        <input type="time" name="start-time" id="start-time"
+            value="<?= set_value('start-time') ?>"
+            class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]" required>
+    </div>
+
+
+
+
+    <div class="flex flex-col gap-1">
+        <label for="end-date" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Date d'arrivée</label>
+        <input type="date" name="end-date" id="end-date"
+            value="<?= set_value('end-date') ?>"
+            class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]" required>
+        <?php if (isset($errors['time'])): ?>
+            <span class="text-xs text-red-500"><?= $errors['time'] ?></span>
+        <?php endif ?>
+    </div>
+
+    <div class="flex flex-col gap-1">
         <label for="end-time" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Heure d'arrivée</label>
-        <input type="datetime-local" name="end-time" id="end-time"
-            value="<?= set_value('end') ?>"
+        <input type="time" name="end-time" id="end-time"
+            value="<?= set_value('end-time') ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]" required>
         <?php if (isset($errors['time'])): ?>
             <span class="text-xs text-red-500"><?= $errors['time'] ?></span>
@@ -102,7 +122,7 @@
             <option value="">-- Choisissez le véhicule --</option>
             <?php if (isset($cars)): ?>
                 <?php foreach ($cars as $car): ?>
-                    <option value="<?= $car['id_car'] ?>"><?= $car['brand'] ?> - <?= $car['model'] ?></option>
+                    <option value="<?= $car['id_car'] ?>"><?= $car['label'] ?></option>
                 <?php endforeach ?>
             <?php endif ?>
         </select>
