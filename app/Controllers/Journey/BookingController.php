@@ -290,6 +290,8 @@ class BookingController extends BaseController
         $infos['start_address'] = $locationModel->getFormattedAddress($journey['start']);
         $infos['end_address'] = $locationModel->getFormattedAddress($journey['end']);
         return $infos;
+
+    }
     // Canceling a trip from a driver
 
     public function cancelJourney($id_journey_drive)
