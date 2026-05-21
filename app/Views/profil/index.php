@@ -55,7 +55,7 @@
                     <div class="grid grid-cols-1 gap-2 mb-3">
                         <?php if ($cars): ?>
                             <?php foreach ($cars as $car): ?>
-                                <div class="flex justify-between items-center bg-white border border-[rgba(37,63,114,0.25)] rounded-xl px-4 py-3">
+                                <article class="flex justify-between items-center bg-white border border-[rgba(37,63,114,0.25)] rounded-xl px-4 py-3">
                                     <div>
                                         <p class="text-sm font-poppins text-bluegrey">
                                             <?= esc($car['brand']) ?> <?= esc($car['model']) ?>
@@ -70,7 +70,7 @@
                                         <button type="submit" class="text-xs text-[#E05353] border border-[rgba(224,83,83,0.3)] rounded-full px-3 py-1 hover:bg-red-50 transition-colors duration-150">Supprimer</button>
                                         <?= form_close() ?>
                                     </div>
-                                </div>
+                                </article>
                             <?php endforeach ?>
                         <?php else: ?>
                             <p class="text-sm text-[#9AA5B4] text-center py-3">Aucune voiture ajoutée pour le moment</p>
