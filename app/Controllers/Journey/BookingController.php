@@ -10,7 +10,18 @@ use App\Validators\BookingValidator;
 
 class BookingController extends BaseController
 {
-    // Show user reservations when connected (à intégrer dans le profil)
+    /**
+     * Handle journey bookings between passengers and drivers.
+     * 
+     *  Build the 6 below boards and send them to MyBookingView ;
+     * $upcomingConfirmed - Passenger validated upcoming bookings, (booking + journey[] + driver_name)
+     * $upconmingPending - Passenger pending upcoming bookings, (booking + journey[] + driver_name)
+     * $past Journey - Passenger past bookings, (booking + journey[] + driver_name)
+     * $driveUpcoming - Driver upcoming proposed Journey, (journey + place_restantes)
+     * $drivePast - Driver past proposed Journey, (journey)
+     * $pendingRequest - Pending booking request on driver's journey, (booking + journey[])
+     * 
+     */
     public function index()
     {
         $bookingModel = new BookingModel();
@@ -82,6 +93,7 @@ class BookingController extends BaseController
         return view('booking/MyBookingsView', $data);
     }
 
+    // Display BookingView with journey details with id_journey_drive
     public function show($id_journey_drive)
     {
         helper('form');
@@ -95,6 +107,10 @@ class BookingController extends BaseController
         return view('booking/BookingView', ['journey' => $journey]);
     }
 
+    /**
+     * Validate and insert a booking with conditions for : 
+     * journey exist, is not the driver, there no duplicate and still available seats
+     */
     public function save()
     {
         $journeyModel = new JourneyDriveModel();
@@ -120,7 +136,8 @@ class BookingController extends BaseController
             return redirect()->back()
                 ->with('error', 'Vous avez déjà une réservation sur ce trajet !');
         }
-        // If there still available seat
+
+        //  Cancelled bookings (soft deleted) are automatically excluded.
         $seatPicked = (int) $bookingModel
             ->selectSum('seat_taken')
             ->where('id_journey_drive', $journeyID)
@@ -175,7 +192,7 @@ class BookingController extends BaseController
             ->with('success', 'Réservation réussie');
     }
 
-    // Annulation d'une réservation d'un utilisateur
+    // Cancel the booking to the passenger with id_booking
 
     public function cancel($id_booking)
     {
@@ -187,11 +204,12 @@ class BookingController extends BaseController
         }
 
         $bookingModel->delete($id_booking);
-        return redirect()->to('mes-reservations')
+        return redirect()->back()
             ->with('success', 'Réservation annulée');
+
     }
 
-    // Accepting a reservation from a passenger to a driver
+    // Set the 'is_validated' to true. Only to the journey driver with id_booking
 
     public function accept($id_booking)
     {
@@ -210,11 +228,11 @@ class BookingController extends BaseController
         }
 
         $bookingModel->update($id_booking, ['is_validated' => true]);
-        return redirect()->to('mes-reservations')
-            ->with('success', 'Demande acceptée !');
+            return redirect()->back()
+                ->with('success', 'Demande acceptée !');;
     }
 
-    // Refusing a reservation from a passenger to a driver
+    // Delete the pending booking. Only to the journey driver with id_booking
 
     public function refuse($id_booking)
     {
@@ -233,8 +251,9 @@ class BookingController extends BaseController
         }
 
         $bookingModel->delete($id_booking);
-        return redirect()->to('mes-reservations')
-            ->with('success', 'Réservation refusée');
+            return redirect()->back()
+                ->with('success', 'Réservation refusée');
+
     }
 
     // Canceling a trip from a driver
@@ -250,7 +269,7 @@ class BookingController extends BaseController
                 ->with('error', 'Trajet introuvable ou action non autorisée');
         }
 
-        // Cancel all related reservations
+        // Cancel the journey and all related reservations
         $bookingModel
             ->where('id_journey_drive', $id_journey_drive)
             ->set(['deletion_date' => date('Y-m-d')])
