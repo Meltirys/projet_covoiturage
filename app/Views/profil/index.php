@@ -1,11 +1,21 @@
-<?= view('commons/header') ?>
+<?= $this->extend('layouts/main') ?>
 
+<?= $this->section('content') ?>
 <main class="w-full max-w-5xl mx-auto px-4 py-6 md:px-8 md:py-10 font-poppins">
 
     <!-- En-tête -->
     <header class="flex justify-between items-center mb-4">
         <h2 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Mon profil</h2>
-        <p>{button}</p>
+        <div class="flex items-center gap-2">
+            <button id="mode-toggle"
+                onclick="toggleMode()"
+                class="relative w-14 h-8 bg-[#253F72] rounded-full transition-colors duration-500 flex items-center px-1">
+                <span id="toggle-thumb"
+                    class="absolute pb-1 left-1 w-6 h-6 bg-white rounded-full transition-all duration-500 flex items-center justify-center text-sm">
+                    🚗
+                </span>
+            </button>
+        </div>
     </header>
 
     <!-- Nom -->
@@ -207,7 +217,9 @@
     </div>
 
 </main>
+<?= $this->endSection() ?>
 
+<?= $this->section('scripts') ?>
 <script>
     function showForm(id) {
         document.querySelector('#' + id).style.display = 'flex'
@@ -216,4 +228,27 @@
     function hideForm(id) {
         document.querySelector('#' + id).style.display = 'none'
     }
+
+    function toggleMode() {
+        const driver = document.getElementById('driver');
+        const passenger = document.getElementById('passenger');
+        const thumb = document.getElementById('toggle-thumb');
+
+        const isDriver = driver.style.display !== 'none';
+
+        if (isDriver) {
+            driver.style.display = 'none';
+            passenger.style.display = 'block';
+            thumb.style.left = '1.75rem';
+            thumb.textContent = '🚶';
+        } else {
+            driver.style.display = 'block';
+            passenger.style.display = 'none';
+            thumb.style.left = '0.25rem';
+            thumb.textContent = '🚗';
+        }
+    }
+
+    document.getElementById('passenger').style.display = 'none';
 </script>
+<?= $this->endSection() ?>

@@ -16,7 +16,7 @@
         <?php if (session('logged_in')): ?>
             <nav>
                 <ul class="flex gap-4">
-                    <li><a class="text-xs font-poppins text-bluegrey" href="<?= site_url('trajet') ?>">Trajet</a></li>
+                    <li><a class="text-xs font-poppins text-bluegrey" href="<?= site_url('trajet') ?>">Trajets</a></li>
                     <li><a class="text-xs font-poppins text-bluegrey" href="/nouveau-trajet">Nouveau trajet</a></li>
                     <li><a class="text-xs font-poppins text-bluegrey" href="#">Contact</a></li>
                     <li><a class="text-xs font-poppins text-bluegrey" href="/myprofil">Mon profil</a></li>
