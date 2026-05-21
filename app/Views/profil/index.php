@@ -5,7 +5,7 @@
 
     <!-- En-tête -->
     <header class="flex justify-between items-center mb-4">
-        <h2 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Mon profil</h2>
+        <h2 class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Mon profil</h2>
         <div class="flex items-center gap-2">
             <button id="mode-toggle"
                 onclick="toggleMode()"
@@ -35,7 +35,7 @@
 
                 <!-- Stats conducteur -->
                 <div class="mb-6">
-                    <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes statistiques</h3>
+                    <h3 class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes statistiques</h3>
                     <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
                         <li class="flex justify-between items-center bg-white border border-[rgba(37,63,114,0.25)] rounded-xl px-4 py-3">
                             <span class="text-sm text-[#253F72]">Trajets proposés</span>
@@ -50,7 +50,7 @@
 
                 <!-- Véhicules -->
                 <div class="mb-6">
-                    <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes véhicules</h3>
+                    <h3 class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes véhicules</h3>
 
                     <div class="grid grid-cols-1 gap-2 mb-3">
                         <?php if ($cars): ?>
@@ -134,7 +134,7 @@
 
                 <!-- Trajets conducteur -->
                 <div class="mb-6">
-                    <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes trajets proposés</h3>
+                    <h3 class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes trajets proposés</h3>
                     <h4 class="text-xs font-poppins text-[#9AA5B4] mb-2">À venir</h4>
                     <ul class="flex flex-col gap-2">
                         <!-- boucle trajets à venir -->
@@ -148,7 +148,7 @@
                 <!-- Demandes en attente -->
                 <?php if (isset($validationList)): ?>
                     <div class="mb-6">
-                        <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Demandes en attente de validation</h3>
+                        <h3 class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Demandes en attente de validation</h3>
                         <ul class="flex flex-col gap-2">
                             <!-- boucle validations -->
                         </ul>
@@ -161,7 +161,7 @@
             <section id="passenger" class="mb-6">
 
                 <div class="mb-6">
-                    <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes statistiques</h3>
+                    <h3 class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes statistiques</h3>
                     <ul class="flex flex-col gap-2">
                         <li class="flex justify-between items-center bg-white border border-[rgba(37,63,114,0.25)] rounded-xl px-4 py-3">
                             <span class="text-sm text-[#253F72]">Trajets effectués</span>
@@ -171,7 +171,7 @@
                 </div>
 
                 <div class="mb-6">
-                    <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes trajets</h3>
+                    <h3 class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes trajets</h3>
                     <!-- boucle trajets passager -->
                 </div>
 
@@ -179,7 +179,7 @@
 
             <!-- Paramètres -->
             <section id="parameters" class="mb-6">
-                <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Paramètres</h3>
+                <h3 class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Paramètres</h3>
                 <h4 class="text-xs font-poppins text-[#9AA5B4] mb-2">Compte</h4>
                 <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
                     <li>

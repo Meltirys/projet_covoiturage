@@ -5,7 +5,7 @@
 
     <!-- Départ -->
     <div class="flex flex-col gap-1">
-        <label for="start" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Départ</label>
+        <label for="start" class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Départ</label>
         <input class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]"
             type="text" name="start_label" id="start"
             value="<?= set_value('start') ?>"
@@ -22,7 +22,7 @@
 
     <!-- Arrivée -->
     <div class="flex flex-col gap-1">
-        <label for="end" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Arrivée</label>
+        <label for="end" class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Arrivée</label>
         <input class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]"
             type="text" name="end_label" id="end"
             value="<?= set_value('end') ?>"
@@ -43,14 +43,14 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
 
     <div class="flex flex-col gap-1">
-        <label for="start-time" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Date et heure de départ</label>
+        <label for="start-time" class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Date et heure de départ</label>
         <input type="datetime-local" name="start-time" id="start-time"
             value="<?= set_value('start-time') ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]" required>
     </div>
 
     <div class="flex flex-col gap-1">
-        <label for="end-time" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Date et heure d'arrivée</label>
+        <label for="end-time" class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Date et heure d'arrivée</label>
         <input type="datetime-local" name="end-time" id="end-time"
             value="<?= set_value('end-time') ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]" required>
@@ -63,7 +63,7 @@
 
 <!-- Filtres -->
 <div class="flex flex-col gap-1">
-    <label for="filter" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Filtres</label>
+    <label for="filter" class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Filtres</label>
     <input type="text" name="filter" id="filter"
         value="<?= set_value('filter') ?>"
         placeholder="Entrez votre filtre"
