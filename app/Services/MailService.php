@@ -97,4 +97,17 @@ class MailService
         $body = view('emails/BookingRefused', $data);
         return $this->send($to, 'Votre réservation a été refusée', $body);
     }
+
+    /**
+     * Send a message that a booking request has been accepted
+     * @param string $to The email address that the message will be sent to
+     * @param array $data The informations needed for the mail
+     * 
+     * @return bool True if the mail is sent, false otherwise.
+     */
+    public function sendBookingAccepted(string $to, array $data): bool
+    {
+        $body = view('emails/BookingAccepted', $data);
+        return $this->send($to, 'Votre réservation a été acceptée !', $body);
+    }
 }
