@@ -73,7 +73,7 @@ class BookingController extends BaseController
 
             $requests = $bookingModel
                 ->where('id_journey_drive', $journey['id_journey_drive'])
-                ->where('is_validated', false)
+                ->whereNULL('is_validated')
                 ->where('is_driver', false)
                 ->findAll();
             foreach ($requests as $r) {
@@ -163,7 +163,7 @@ class BookingController extends BaseController
         }
 
         $idBooking = $bookingModel->insert(array_merge($data, [
-            'is_validated'  => false,
+            'is_validated'  => null,
             'is_driver'     => false,
             'deletion_date' => null,
         ]));
@@ -199,10 +199,9 @@ class BookingController extends BaseController
                 ->with('error', 'Réservation introuvable');
         }
 
-        $bookingModel->delete($id_booking);
+        $bookingModel->update($id_booking, ['is_validated' => false]);
         return redirect()->back()
             ->with('success', 'Réservation annulée');
-
     }
 
     // Set the 'is_validated' to true. Only to the journey driver with id_booking
@@ -341,8 +340,9 @@ class BookingController extends BaseController
         // Cancel the journey and all related reservations
         $bookingModel
             ->where('id_journey_drive', $id_journey_drive)
-            ->set(['deletion_date' => date('Y-m-d')])
+            ->set(['is_validated' => false])
             ->update();
+
 
         // Cancel the trip
         $journeyModel->update($id_journey_drive, ['deletion_date' => date('Y-m-d')]);
