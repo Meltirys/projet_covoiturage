@@ -1,4 +1,8 @@
-<?= view('commons/header') ?>
+<?= $this->extend('layouts/main') ?>
+
+<?= $this->section('content') ?>
+
+<?php helper('french') ?>
 
 <main>
     <h1>Réserver le trajet</h1>
@@ -6,13 +10,13 @@
     <?php if (session()->getFlashdata('error')): ?>
         <p class="error"><?= session()->getFlashdata('error') ?></p>
     <?php endif; ?>
-    
-    <section class="x" id="journey-details">
+
+    <section id="journey-details">
         <p>Trajet #<?= esc($journey['id_journey_drive']) ?></p>
         <p>Places disponibles : <?= esc($journey['number_of_place']) ?></p>
-        <p>Départ : <?= esc($journey['departure']) ?></p>
+        <p>Départ : <?= format_date_fr($journey['departure'])  // Exemple d'écriture avec le helper?></p> 
         <p>Arrivée : <?= esc($journey['estimated_arrival']) ?></p>
-        <?php //Villes de départ et d'arriver ?>
+        <?php // Villes de départ et d'arrivée — à afficher quand Track sera défini ?>
     </section>
 
     <?= form_open('reservation') ?>
@@ -22,4 +26,5 @@
     <?= form_close() ?>
 </main>
 
-<?= view('commons/footer') ?>
+<?= $this->endSection() ?>
+
