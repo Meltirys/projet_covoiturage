@@ -72,4 +72,15 @@ class LocationModel extends Model
             'id_city' => $cityID
         ]);
     }
+
+    public function getFormattedAddress(int $idLocation) : ?string{
+        $formattedAddress = $this->select("CONCAT(Location.address,', ', City.postcode, ' ', City.name) AS completeAddress")
+            ->join('City', 'Location.id_city = City.id_city')
+            ->where($this->primaryKey, $idLocation)
+            ->first();
+
+        if(!$formattedAddress) return null;
+
+        return $formattedAddress['completeAddress'];
+    }
 }
