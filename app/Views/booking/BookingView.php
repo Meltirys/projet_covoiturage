@@ -4,7 +4,7 @@
 
 <?php helper('french') ?>
 
-<main>
+<main class="bg-lightgrey min-h-screen px-5 py-8 font-poppins">
     <h1>Réserver le trajet</h1>
 
     <?php if (session()->getFlashdata('error')): ?>

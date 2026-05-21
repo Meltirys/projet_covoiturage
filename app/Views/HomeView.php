@@ -177,9 +177,15 @@
 
         <!-- Connected User -->
     <?php else: ?>
-        <p>Bonjour <?= session()->user_name ?></p>
+        <p>Bonjour, <?= session('user_first_name') ?> <?= session('user_last_name') ?></p>
         <a href="/myprofil">Mon profil</a>
         <a href="/logout">Se déconnecter</a>
+
+        <?php if (session('user_role') == 2): ?>
+            <a href="/backoffice" class="block w-full bg-[#253F72] hover:bg-[#1a2f55] text-white text-center py-3 rounded-xl text-sm font-poppins transition-colors duration-200 mt-4">
+                Accéder au dashboard admin
+            </a>
+        <?php endif; ?>
     <?php endif; ?>
 
 </main>
