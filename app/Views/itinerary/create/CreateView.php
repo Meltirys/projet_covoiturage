@@ -19,4 +19,25 @@
 <?= $this->section('scripts') ?>
 <script src="/js/geocoding.js"></script>
 <script src="/js/journey-create.js"></script>
+<script>
+    // Attribue les options de places
+    const cars = <?= json_encode($cars) ?>;
+
+    const carSelect = document.getElementById("car");
+    const seatSelect = document.getElementById("seats");
+
+    carSelect.addEventListener("change", () => {
+        const car = cars.find(c => c.id_car == carSelect.value); // match l'id des voitures dans cars à l'id sélectionné dans le dropdown
+
+        seatSelect.innerHTML = '<option value="">-- Choisissez le nombre de places disponibles --</option>';
+        if (!car) return;
+
+        for (let i = 1; i <= car.seats; i++) {
+            const opt = document.createElement("option");
+            opt.value = i;
+            opt.textContent = `${i}`;
+            seatSelect.appendChild(opt);
+        }
+    });
+</script>
 <?= $this->endSection() ?>

@@ -1,11 +1,21 @@
-<?= view('commons/header') ?>
+<?= $this->extend('layouts/main') ?>
 
+<?= $this->section('content') ?>
 <main class="w-full max-w-5xl mx-auto px-4 py-6 md:px-8 md:py-10 font-poppins">
 
     <!-- En-tête -->
     <header class="flex justify-between items-center mb-4">
-        <h2 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Mon profil</h2>
-        <p>{button}</p>
+        <h2 class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Mon profil</h2>
+        <div class="flex items-center gap-2">
+            <button id="mode-toggle"
+                onclick="toggleMode()"
+                class="relative w-14 h-8 bg-[#253F72] rounded-full transition-colors duration-500 flex items-center px-1">
+                <span id="toggle-thumb"
+                    class="absolute pb-1 left-1 w-6 h-6 bg-white rounded-full transition-all duration-500 flex items-center justify-center text-sm">
+                    🚗
+                </span>
+            </button>
+        </div>
     </header>
 
     <!-- Nom -->
@@ -25,7 +35,7 @@
 
                 <!-- Stats conducteur -->
                 <div class="mb-6">
-                    <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes statistiques</h3>
+                    <h3 class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes statistiques</h3>
                     <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
                         <li class="flex justify-between items-center bg-white border border-[rgba(37,63,114,0.25)] rounded-xl px-4 py-3">
                             <span class="text-sm text-[#253F72]">Trajets proposés</span>
@@ -40,7 +50,7 @@
 
                 <!-- Véhicules -->
                 <div class="mb-6">
-                    <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes véhicules</h3>
+                    <h3 class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes véhicules</h3>
 
                     <div class="grid grid-cols-1 gap-2 mb-3">
                         <?php if ($cars): ?>
@@ -124,7 +134,7 @@
 
                 <!-- Trajets conducteur -->
                 <div class="mb-6">
-                    <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes trajets proposés</h3>
+                    <h3 class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes trajets proposés</h3>
                     <h4 class="text-xs font-poppins text-[#9AA5B4] mb-2">À venir</h4>
                     <ul class="flex flex-col gap-2">
                         <!-- boucle trajets à venir -->
@@ -138,7 +148,7 @@
                 <!-- Demandes en attente -->
                 <?php if (isset($validationList)): ?>
                     <div class="mb-6">
-                        <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Demandes en attente de validation</h3>
+                        <h3 class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Demandes en attente de validation</h3>
                         <ul class="flex flex-col gap-2">
                             <!-- boucle validations -->
                         </ul>
@@ -151,7 +161,7 @@
             <section id="passenger" class="mb-6">
 
                 <div class="mb-6">
-                    <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes statistiques</h3>
+                    <h3 class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes statistiques</h3>
                     <ul class="flex flex-col gap-2">
                         <li class="flex justify-between items-center bg-white border border-[rgba(37,63,114,0.25)] rounded-xl px-4 py-3">
                             <span class="text-sm text-[#253F72]">Trajets effectués</span>
@@ -161,7 +171,7 @@
                 </div>
 
                 <div class="mb-6">
-                    <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes trajets</h3>
+                    <h3 class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Mes trajets</h3>
                     <!-- boucle trajets passager -->
                 </div>
 
@@ -169,7 +179,7 @@
 
             <!-- Paramètres -->
             <section id="parameters" class="mb-6">
-                <h3 class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Paramètres</h3>
+                <h3 class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase mb-2">Paramètres</h3>
                 <h4 class="text-xs font-poppins text-[#9AA5B4] mb-2">Compte</h4>
                 <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
                     <li>
@@ -207,7 +217,9 @@
     </div>
 
 </main>
+<?= $this->endSection() ?>
 
+<?= $this->section('scripts') ?>
 <script>
     function showForm(id) {
         document.querySelector('#' + id).style.display = 'flex'
@@ -216,4 +228,27 @@
     function hideForm(id) {
         document.querySelector('#' + id).style.display = 'none'
     }
+
+    function toggleMode() {
+        const driver = document.getElementById('driver');
+        const passenger = document.getElementById('passenger');
+        const thumb = document.getElementById('toggle-thumb');
+
+        const isDriver = driver.style.display !== 'none';
+
+        if (isDriver) {
+            driver.style.display = 'none';
+            passenger.style.display = 'block';
+            thumb.style.left = '1.75rem';
+            thumb.textContent = '🚶';
+        } else {
+            driver.style.display = 'block';
+            passenger.style.display = 'none';
+            thumb.style.left = '0.25rem';
+            thumb.textContent = '🚗';
+        }
+    }
+
+    document.getElementById('passenger').style.display = 'none';
 </script>
+<?= $this->endSection() ?>

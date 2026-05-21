@@ -88,7 +88,7 @@ class BookingController extends BaseController
         $journeyModel = new JourneyDriveModel();
         $journey = $journeyModel->find($id_journey_drive);
         if (!$journey) {
-            return redirect()->to('trajet')
+            return redirect()->to('/')
                 ->with('error', 'Trajet introuvable');
         }
         return view('booking/BookingView', ['journey' => $journey]);
@@ -187,7 +187,7 @@ class BookingController extends BaseController
             ->with('success', 'Réservation annulée');
     }
 
-    // Acceptation d'une réservation de la part d'un conducteur
+    // Accepting a reservation from a passenger to a driver
 
     public function accept($id_booking)
     {
@@ -209,6 +209,8 @@ class BookingController extends BaseController
         return redirect()->to('mes-reservations')
             ->with('success', 'Demande acceptée !');
     }
+
+    // Refusing a reservation from a passenger to a driver
 
     public function refuse($id_booking)
     {
@@ -288,5 +290,29 @@ class BookingController extends BaseController
         $infos['start_address'] = $locationModel->getFormattedAddress($journey['start']);
         $infos['end_address'] = $locationModel->getFormattedAddress($journey['end']);
         return $infos;
+    // Canceling a trip from a driver
+
+    public function cancelJourney($id_journey_drive)
+    {
+        $journeyModel = new JourneyDriveModel();
+        $bookingModel = new BookingModel();
+
+        $journey = $journeyModel->find($id_journey_drive);
+        if (!$journey || $journey['driver'] != session('user_id')) {
+            return redirect()->to('mes-reservations')
+                ->with('error', 'Trajet introuvable ou action non autorisée');
+        }
+
+        // Cancel all related reservations
+        $bookingModel
+            ->where('id_journey_drive', $id_journey_drive)
+            ->set(['deletion_date' => date('Y-m-d')])
+            ->update();
+
+        // Cancel the trip
+        $journeyModel->update($id_journey_drive, ['deletion_date' => date('Y-m-d')]);
+
+        return redirect()->to('mes-reservations')
+            ->with('success', 'Trajet annulé');
     }
 }

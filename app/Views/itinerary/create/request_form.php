@@ -5,7 +5,7 @@
 
     <!-- Départ -->
     <div class="flex flex-col gap-1">
-        <label for="start" class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Départ</label>
+        <label for="start" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Départ</label>
         <input class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]"
             type="text" name="start[label]" id="start"
             value="<?= set_value('start[label]') ?>"
@@ -13,7 +13,7 @@
         <?php if (isset($errors['start'])): ?>
             <span class="text-xs text-red-500"><?= $errors['start'] ?></span>
         <?php endif ?>
-        <div class="results"></div>
+        <div class="address-results"></div>
         <input type="hidden" name="start[lat]">
         <input type="hidden" name="start[lon]">
         <input type="hidden" name="start[city]">
@@ -22,7 +22,7 @@
 
     <!-- Arrivée -->
     <div class="flex flex-col gap-1">
-        <label for="end" class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Arrivée</label>
+        <label for="end" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Arrivée</label>
         <input class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]"
             type="text" name="end[label]" id="end"
             value="<?= set_value('end[label]') ?>"
@@ -30,7 +30,7 @@
         <?php if (isset($errors['end'])): ?>
             <span class="text-xs text-red-500"><?= $errors['end'] ?></span>
         <?php endif ?>
-        <div class="results"></div>
+        <div class="address-results"></div>
         <input type="hidden" name="end[lat]">
         <input type="hidden" name="end[lon]">
         <input type="hidden" name="end[city]">
@@ -41,7 +41,7 @@
 
 <!-- Arrêts -->
 <div class="flex flex-col gap-1">
-    <label for="stop" class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">
+    <label for="stop" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">
         Arrêts <span class="normal-case font-normal tracking-normal text-[#9AA5B4]">(optionnels)</span>
     </label>
     <div id="stops-container" class="flex flex-col gap-2">
@@ -74,14 +74,14 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
 
     <div class="flex flex-col gap-1">
-        <label for="start-date" class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Date de départ</label>
+        <label for="start-date" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Date de départ</label>
         <input type="date" name="start-date" id="start-date"
             value="<?= set_value('start-date') ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]" required>
     </div>
 
     <div class="flex flex-col gap-1">
-        <label for="start-time" class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Heure de départ</label>
+        <label for="start-time" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Heure de départ</label>
         <input type="time" name="start-time" id="start-time"
             value="<?= set_value('start-time') ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]" required>
@@ -91,7 +91,7 @@
 
 
     <div class="flex flex-col gap-1">
-        <label for="end-date" class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Date d'arrivée</label>
+        <label for="end-date" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Date d'arrivée</label>
         <input type="date" name="end-date" id="end-date"
             value="<?= set_value('end-date') ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]" required>
@@ -101,7 +101,7 @@
     </div>
 
     <div class="flex flex-col gap-1">
-        <label for="end-time" class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Heure d'arrivée</label>
+        <label for="end-time" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Heure d'arrivée</label>
         <input type="time" name="end-time" id="end-time"
             value="<?= set_value('end-time') ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]" required>
@@ -116,13 +116,13 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
 
     <div class="flex flex-col gap-1">
-        <label for="car" class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Véhicule</label>
+        <label for="car" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Véhicule</label>
         <select name="car" id="car" required
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72] bg-white">
             <option value="">-- Choisissez le véhicule --</option>
             <?php if (isset($cars)): ?>
                 <?php foreach ($cars as $car): ?>
-                    <option value="<?= $car['id_car'] ?>"><?= $car['label'] ?></option>
+                    <option value="<?= $car['id_car'] ?>"><?= $car['brand'] ?> - <?= $car['model'] ?></option>
                 <?php endforeach ?>
             <?php endif ?>
         </select>
@@ -132,7 +132,7 @@
     </div>
 
     <div class="flex flex-col gap-1">
-        <label for="seats" class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Nombre de places</label>
+        <label for="seats" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Nombre de places</label>
         <select name="seats" id="seats" required
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72] bg-white">
         </select>
@@ -145,7 +145,7 @@
 
 <!-- Options -->
 <div class="flex flex-col gap-1">
-    <label for="options" class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Options</label>
+    <label for="options" class="text-[10px] font-poppins tracking-[0.15em] text-[#253F72] uppercase">Options</label>
     <input type="text" name="options" id="options"
         value="<?= set_value('options') ?>"
         placeholder="Entrez vos options"

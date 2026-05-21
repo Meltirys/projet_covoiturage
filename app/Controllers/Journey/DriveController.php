@@ -8,6 +8,7 @@ use CodeIgniter\Exceptions\PageNotFoundException;
 use App\Models\JourneyDriveModel;
 use App\Models\CarModel;
 use App\Validators\JourneyDriveValidator;
+use DateTime;
 use PDOException;
 
 class DriveController extends BaseController
@@ -49,10 +50,15 @@ class DriveController extends BaseController
     public function create()
     {
         $carModel = model(CarModel::class);
+        $cars = $carModel->getCarsByUser(session('user_id'));
 
         $data = [
             'type' => 'drive',
-            'cars' => $carModel->getCarsByUser(session('user_id'))
+            'cars' => array_map(fn($c) => [
+                'id_car' => $c['id_car'],
+                'label' => $c['brand'] . ' - ' . $c['model'],
+                'seats' => $c['number_of_seat'],
+            ], $cars)
         ];
 
         helper('form');
@@ -78,6 +84,14 @@ class DriveController extends BaseController
          */
 
         $data = $this->request->getPost();
+
+        $data['start-datetime'] = (new DateTime(
+            $data['start-date'] . ' ' . $data['start-time']
+        ))->format('Y-m-d H:i:s');
+
+        $data['end-datetime'] = (new DateTime(
+            $data['end-date'] . ' ' . $data['end-time']
+        ))->format('Y-m-d H:i:s');
 
         // Validation
         $validator = new JourneyDriveValidator;
