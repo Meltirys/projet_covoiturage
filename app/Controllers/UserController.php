@@ -99,7 +99,7 @@ class UserController extends BaseController
         }*/
 
         return redirect()->to('/')
-            ->with('success', 'Compte créé avec succès');
+            ->with('success', 'Compte créé avec succès !');
     }
 
     /**
