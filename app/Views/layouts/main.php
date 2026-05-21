@@ -22,6 +22,9 @@
                     <li><a class="text-xs font-poppins text-bluegrey" href="/nouveau-trajet">Nouveau trajet</a></li>
                     <li><a class="text-xs font-poppins text-bluegrey" href="#">Contact</a></li>
                     <li><a class="text-xs font-poppins text-bluegrey" href="/myprofil">Mon profil</a></li>
+                    <?php if (session('user_role') == 2): ?>
+                        <li><a class="text-xs font-poppins text-white bg-[#253F72] px-3 py-1 rounded-full" href="/backoffice">Dashboard</a></li>
+                    <?php endif; ?>
                 </ul>
             </nav>
         <?php else: ?>
