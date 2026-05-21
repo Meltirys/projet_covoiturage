@@ -233,6 +233,7 @@
         const driver = document.getElementById('driver');
         const passenger = document.getElementById('passenger');
         const thumb = document.getElementById('toggle-thumb');
+        const btn = document.getElementById('mode-toggle');
 
         const isDriver = driver.style.display !== 'none';
 
@@ -241,11 +242,13 @@
             passenger.style.display = 'block';
             thumb.style.left = '1.75rem';
             thumb.textContent = '🚶';
+            btn.style.backgroundColor = '#b0c7d9';
         } else {
             driver.style.display = 'block';
             passenger.style.display = 'none';
             thumb.style.left = '0.25rem';
             thumb.textContent = '🚗';
+            btn.style.backgroundColor = '#253F72'
         }
     }
 
