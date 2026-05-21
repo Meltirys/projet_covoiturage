@@ -104,4 +104,18 @@ class UserModel extends Model
             ? null
             : (bool) $validationStatus['is_validated'];
     }
+
+    /**
+     * Search in the database all the user that matches the given query
+     * @param string $query The user we search for
+     * 
+     * @return array An array that contains all the users that matches with the query. If no user matches, returns an empty array
+     */
+    public function searchForUserByName(string $query) : array{
+        $userList = $this->select("CONCAT(first_name, ' ', last_name) as name, email, id_user")
+                        ->like("CONCAT(first_name, ' ', last_name)", $query)
+                        ->findAll();
+
+        return $userList;
+    }
 }

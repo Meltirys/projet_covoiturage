@@ -1,5 +1,8 @@
 <?php
 
+use App\Controllers\Backoffice\SearchController;
+use App\Controllers\Backoffice\UserManagementController;
+use App\Controllers\Backoffice\UserSuppressionController;
 use CodeIgniter\Router\RouteCollection;
 use App\Controllers\CarController;
 use App\Controllers\UserController;
@@ -8,6 +11,7 @@ use App\Controllers\Journey\DriveController;
 
 use App\Controllers\Journey\RequestController;
 use App\Controllers\ProfilController;
+use App\Services\AjaxRequests;
 
 /**
  * @var RouteCollection $routes
@@ -74,4 +78,9 @@ $routes->group('', ['filter' => 'authadmin'], function ($routes) {
     $routes->get('userValidation', [UserValidationController::class, 'validateUser']);
     $routes->post('userValidation/accept/(:num)', [UserValidationController::class, 'acceptUser']);
     $routes->post('userValidation/refuse/(:num)', [UserValidationController::class, 'refuseUser']);
+
+    $routes->get('userSuppression', [UserSuppressionController::class, 'index']);
+    $routes->post('user/delete/(:num)', [UserController::class, 'delete']);
+
+    $routes->get('searchUser/(:alpha)', [SearchController::class, 'searchUser']);
 });

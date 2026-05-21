@@ -104,29 +104,46 @@ class UserController extends BaseController
 
     /**
      * Delete the user from the data base. Access route is /user/delete
+     * @param int $idUser Optionnal : The id of the user to delete. If no id is provided, delete the connected user.
+     * 
      */
-    public function delete()
+    public function delete(int $idUser = -1)
     {
-        $idUser = session()->user_id;
+        if ($idUser === -1) {
+            $idUser = session()->user_id;
+        } 
 
         //We delete the car of the user
         $carModel = new CarModel();
         $carModel->where('id_user', $idUser)->delete();
 
         $userModel = new UserModel();
+        $userName = $userModel->getUserName($idUser);
 
         if (! $userModel->delete($idUser)) {
             $errors = $userModel->errors();
 
-            return redirect()->to('/myprofil')
-                ->with('errors', $errors)
-                ->withInput()
-                ->with('user_error', 'Une erreur est survenue lors de la suppression du compte');
+            //Checking if the user that delete the account is the connected user, if so we disconnect him
+            if ($idUser == session()->user_id) {
+                return redirect()->to('/myprofil')
+                    ->with('errors', $errors)
+                    ->withInput()
+                    ->with('user_error', 'Une erreur est survenue lors de la suppression du compte'); //Return to the user profil with the error
+            } else { //This means the account has been deleted by the admin
+                return redirect()->to('/userSuppression')
+                    ->with('error', "Une erreur est survenue lors de la suppression du compte");
+            }
         }
 
-        //Logging the user out
-        $authController = new AuthController();
-        $authController->logout();
+        //Checking if the user that delete the account is the connected user, if so we disconnect him
+        if ($idUser == session()->user_id) {
+            //Logging the user out
+            $authController = new AuthController();
+            $authController->logout();
+        } else { //This means the account has been deleted by the admin
+            return redirect()->to('/userSuppression')
+                ->with('success', "L'utilisateur " . $userName . " à bien été supprimé");
+        }
     }
 
     public function modify()
