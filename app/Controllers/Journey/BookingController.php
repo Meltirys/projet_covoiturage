@@ -206,6 +206,21 @@ class BookingController extends BaseController
         }
 
         $bookingModel->update($id_booking, ['is_validated' => true]);
+
+        //Preparing the mail service
+        $mailService = new MailService();
+
+        //Retrieving the infos needed for the mail
+        $infos = $this->gatherMailInfos($id_booking, $booking['id_user']);
+
+        //Send the mail to the passenger that it's application has been refused
+        $mailService->sendBookingAccepted($infos['passenger_email'], [
+            'passenger_name'       => $infos['passenger_name'],
+            'journey_date'         => $infos['departure'],
+            'journey_departure'    => $infos['start_address'],
+            'journey_arrival'      => $infos['end_address'],
+            'driver_name'          => $infos['driver_name'],
+        ]);
         return redirect()->to('mes-reservations')
             ->with('success', 'Demande acceptée !');
     }
@@ -233,6 +248,7 @@ class BookingController extends BaseController
         //Preparing the mail service
         $mailService = new MailService();
 
+        /* Mail: To uncomment when the refuse method is updated
         //Retrieving the infos needed for the mail
         $infos = $this->gatherMailInfos($id_booking, $booking['id_user']);
 
@@ -243,7 +259,7 @@ class BookingController extends BaseController
             'journey_departure'    => $infos['start_address'],
             'journey_arrival'      => $infos['end_address'],
             'driver_name'          => $infos['driver_name'],
-        ]);
+        ]);*/
 
         return redirect()->to('mes-reservations')
             ->with('success', 'Réservation refusée');
@@ -290,7 +306,6 @@ class BookingController extends BaseController
         $infos['start_address'] = $locationModel->getFormattedAddress($journey['start']);
         $infos['end_address'] = $locationModel->getFormattedAddress($journey['end']);
         return $infos;
-
     }
     // Canceling a trip from a driver
 
