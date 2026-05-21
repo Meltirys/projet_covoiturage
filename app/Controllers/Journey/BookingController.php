@@ -7,6 +7,7 @@ use App\Models\BookingModel;
 use App\Models\JourneyDriveModel;
 use App\Models\UserModel;
 use App\Validators\BookingValidator;
+use App\Services\MailService;
 
 class BookingController extends BaseController
 {
@@ -79,8 +80,6 @@ class BookingController extends BaseController
                 $pendingRequests[] = array_merge($r, ['journey' => $journey]);
             }
         }
-
-
 
         $data = [
             'upcomingConfirmed' => $upcomingConfirmed,
@@ -163,29 +162,26 @@ class BookingController extends BaseController
                 ->with('error', implode(' ', $validator->getErrors()));
         }
 
-        $bookingModel->insert(array_merge($data, [
+        $idBooking = $bookingModel->insert(array_merge($data, [
             'is_validated'  => false,
             'is_driver'     => false,
             'deletion_date' => null,
         ]));
 
-        // Sending the mail to the driver
+        //Preparing the mail
+        $mailService = new MailService();
+        $infos = $this->gatherMailInfos($idBooking);
 
-        $mailService = service('MailService');
-        $userModel   = model('UserModel');
-        $passenger   = $userModel->find(session()->user_id);
-        $driver      = $userModel->find($journey['driver']);
-
-        $mailService->sendBookingRequest($driver['email'], [
-            'driver_first_name'    => $driver['first_name'],
-            'journey_date'         => $journey['departure'],
-            'journey_departure'    => $journey['start'],
-            'journey_arrival'      => $journey['end'],
+        //Gathering the infos for the mail
+        $mailService->sendBookingRequest($infos['driver_email'], [
+            'driver_name'          => $infos['driver_name'],
+            'journey_date'         => $infos['departure'],
+            'journey_departure'    => $infos['start_address'],
+            'journey_arrival'      => $infos['end_address'],
             'journey_seats'        => $availableSeat,
-            'passenger_first_name' => $passenger['first_name'],
-            'passenger_last_name'  => $passenger['last_name'],
-            'passenger_email'      => $passenger['email'],
-            'passenger_mobile'     => $passenger['mobile'],
+            'passenger_name'       => $infos['passenger_name'],
+            'passenger_email'      => $infos['passenger_email'],
+            'passenger_mobile'     => $infos['passenger_mobile'],
         ]);
 
         return redirect()->to('mes-reservations')
@@ -251,11 +247,69 @@ class BookingController extends BaseController
         }
 
         $bookingModel->delete($id_booking);
-            return redirect()->back()
-                ->with('success', 'Réservation refusée');
 
+        //Preparing the mail service
+        $mailService = new MailService();
+
+        //Retrieving the infos needed for the mail
+        $infos = $this->gatherMailInfos($id_booking, $booking['id_user']);
+
+        //Send the mail to the passenger that it's application has been refused
+        $mailService->sendBookingRefused($infos['passenger_email'], [
+            'passenger_name'       => $infos['passenger_name'],
+            'journey_date'         => $infos['departure'],
+            'journey_departure'    => $infos['start_address'],
+            'journey_arrival'      => $infos['end_address'],
+            'driver_name'          => $infos['driver_name'],
+        ]);
+
+        return redirect()->to('mes-reservations')
+            ->with('success', 'Réservation refusée');
     }
 
+    /**
+     * @param int $idBooking The booking id we want to prepare the mail for
+     * @param int $idPassenger Optionnal, if not set, it took the id of the connected user
+     * 
+     * @return array A list of infos that are needed for the mail, see the code for the full list
+     */
+    private function gatherMailInfos(int $idBooking, int $idPassenger = -1): array
+    {
+        //We check if an id has been provided, if not we set the id to the connected user
+        if ($idPassenger === -1) {
+            $idPassenger = session()->user_id;
+        }
+
+        //Model declaration
+        $bookingModel = model('BookingModel');
+        $userModel = model('UserModel');
+        $journeyModel = model('JourneyDriveModel');
+        $locationModel = model('LocationModel');
+
+        //Gathering all informations
+        $booking = $bookingModel->find($idBooking);
+        $journey = $journeyModel->find($booking['id_journey_drive']);
+
+        $passenger = $userModel->find($idPassenger);
+        $driver = $userModel->find($journey['driver']);
+
+
+
+        //Prepare the infos in an array
+        $infos['passenger_name'] = $passenger['first_name'] . " " . $passenger['last_name'];
+        $infos['passenger_email'] = $passenger['email'];
+        $infos['passenger_mobile'] = $passenger['mobile'];
+
+        $infos['driver_name'] = $driver['first_name'] . " " . $driver['last_name'];
+        $infos['driver_email'] = $driver['email'];
+        $infos['driver_mobile'] = $driver['mobile'];
+
+        $infos['departure'] = $journey['departure'];
+        $infos['start_address'] = $locationModel->getFormattedAddress($journey['start']);
+        $infos['end_address'] = $locationModel->getFormattedAddress($journey['end']);
+        return $infos;
+
+    }
     // Canceling a trip from a driver
 
     public function cancelJourney($id_journey_drive)

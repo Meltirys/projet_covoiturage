@@ -57,6 +57,7 @@ class MailService
     }
 
     /**
+     * Send a welcome message to a user.
      * @param string $to The email address that the message will be sent to
      * @param string $first_name The first name of the user the mail will be sent
      * 
@@ -71,9 +72,29 @@ class MailService
         return $this->send($to, 'Bienvenue sur notre application !', $body);
     }
 
+    /**
+     * Send a message that a booking request has been made
+     * @param string $to The email address that the message will be sent to
+     * @param array $data The informations needed for the mail
+     * 
+     * @return bool True if the mail is sent, false otherwise.
+     */
     public function sendBookingRequest(string $to, array $data): bool
     {
-        $body = view('emails/booking_request', $data);
+        $body = view('emails/BookingRequest', $data);
         return $this->send($to, 'Nouvelle demande de réservation', $body);
+    }
+
+    /**
+     * Send a message that a booking request has been refused
+     * @param string $to The email address that the message will be sent to
+     * @param array $data The informations needed for the mail
+     * 
+     * @return bool True if the mail is sent, false otherwise.
+     */
+    public function sendBookingRefused(string $to, array $data): bool
+    {
+        $body = view('emails/BookingRefused', $data);
+        return $this->send($to, 'Votre réservation a été refusée', $body);
     }
 }
