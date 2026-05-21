@@ -39,19 +39,37 @@
 
 </div>
 
-<!-- Date et heure départ / Date et heure arrivée -->
+<!-- Date départ / Heure départ -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
 
     <div class="flex flex-col gap-1">
-        <label for="start-time" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Date et heure de départ</label>
-        <input type="datetime-local" name="start-time" id="start-time"
-            value="<?= set_value('start-time') ?>"
+        <label for="start-date" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Date de départ</label>
+        <input type="date" name="start-date" id="start-date"
+            value="<?= set_value('start-date') ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
     </div>
 
     <div class="flex flex-col gap-1">
-        <label for="end-time" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Date et heure d'arrivée</label>
-        <input type="datetime-local" name="end-time" id="end-time"
+        <label for="start-time" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Heure de départ</label>
+        <input type="time" name="start-time" id="start-time"
+            value="<?= set_value('start-time') ?>"
+            class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
+    </div>
+
+<!-- Date arrivée / Heure arrivée -->
+    <div class="flex flex-col gap-1">
+        <label for="end-date" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Date d'arrivée</label>
+        <input type="date" name="end-date" id="end-date"
+            value="<?= set_value('end-date') ?>"
+            class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
+        <?php if (isset($errors['time'])): ?>
+            <span class="text-xs text-red-500"><?= $errors['time'] ?></span>
+        <?php endif ?>
+    </div>
+
+    <div class="flex flex-col gap-1">
+        <label for="end-time" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Heure d'arrivée</label>
+        <input type="time" name="end-time" id="end-time"
             value="<?= set_value('end-time') ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
         <?php if (isset($errors['time'])): ?>
