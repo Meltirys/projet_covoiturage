@@ -5,8 +5,8 @@
 
     <!-- Départ -->
     <div class="flex flex-col gap-1">
-        <label for="start" class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Départ</label>
-        <input class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]"
+        <label for="start" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Départ</label>
+        <input class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey"
             type="text" name="start_label" id="start"
             value="<?= set_value('start') ?>"
             placeholder="Entrez votre départ" required>
@@ -22,8 +22,8 @@
 
     <!-- Arrivée -->
     <div class="flex flex-col gap-1">
-        <label for="end" class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Arrivée</label>
-        <input class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]"
+        <label for="end" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Arrivée</label>
+        <input class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey"
             type="text" name="end_label" id="end"
             value="<?= set_value('end') ?>"
             placeholder="Entrez votre destination" required>
@@ -43,17 +43,17 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
 
     <div class="flex flex-col gap-1">
-        <label for="start-time" class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Date et heure de départ</label>
+        <label for="start-time" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Date et heure de départ</label>
         <input type="datetime-local" name="start-time" id="start-time"
             value="<?= set_value('start-time') ?>"
-            class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]" required>
+            class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
     </div>
 
     <div class="flex flex-col gap-1">
-        <label for="end-time" class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Date et heure d'arrivée</label>
+        <label for="end-time" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Date et heure d'arrivée</label>
         <input type="datetime-local" name="end-time" id="end-time"
             value="<?= set_value('end-time') ?>"
-            class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]" required>
+            class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
         <?php if (isset($errors['time'])): ?>
             <span class="text-xs text-red-500"><?= $errors['time'] ?></span>
         <?php endif ?>
@@ -63,11 +63,11 @@
 
 <!-- Filtres -->
 <div class="flex flex-col gap-1">
-    <label for="filter" class="text-xs font-poppins tracking-[0.15em] text-[#253F72] uppercase">Filtres</label>
+    <label for="filter" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Filtres</label>
     <input type="text" name="filter" id="filter"
         value="<?= set_value('filter') ?>"
         placeholder="Entrez votre filtre"
-        class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]" required>
+        class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
     <?php if (isset($errors['filter'])): ?>
         <span class="text-xs text-red-500"><?= $errors['filter'] ?></span>
     <?php endif ?>
@@ -75,7 +75,7 @@
 
 <!-- Bouton -->
 <div class="flex justify-center mt-2">
-    <button type="submit" class="border border-[#253F72] text-[#253F72] bg-white text-sm font-poppins px-6 py-2 rounded-full hover:bg-[#253F72] hover:!text-white transition-all duration-200">
+    <button type="submit" class="border border-bluegrey text-bluegrey bg-white text-sm font-poppins px-6 py-2 rounded-full hover:bg-bluegrey hover:!text-white transition-all duration-200">
         Rechercher →
     </button>
 </div>
