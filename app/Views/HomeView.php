@@ -22,6 +22,8 @@
             </p>
         </section>
 
+
+
         <!-- ONGLETS -->
         <div class="flex gap-6 mb-5 border-b border-babyblue">
             <button class="auth-menu-btn text-xs font-medium text-bluegrey border-b-2 border-bluegrey pb-2 -mb-px transition-all" data-tab="tab-login">
@@ -37,6 +39,12 @@
 
         <!-- FORMULAIRE CONNEXION -->
         <div id="tab-login" class="auth-form-panel">
+            <?php if (session()->getFlashdata('success')): ?>
+                <p class="text-xs text-green-600 mb-3"><?= session()->getFlashdata('success') ?></p>
+            <?php endif ?>
+            <?php if (session()->getFlashdata('singup_error')): ?>
+                <p class="text-xs text-red-500 mb-3"><?= session()->getFlashdata('signup_error') ?></p>
+            <?php endif ?>
             <?php if (!empty($message) && ($activeTab ?? 'login') === 'login'): ?>
                 <div class="text-xs text-red-500 mb-3"><?= $message ?></div>
             <?php endif; ?>
@@ -67,12 +75,7 @@
 
         <!-- FORMULAIRE INSCRIPTION -->
         <div id="tab-inscription" class="auth-form-panel hidden">
-            <?php if (session()->getFlashdata('signup_success')): ?>
-                <p class="text-xs text-green-600 mb-3"><?= session()->getFlashdata('signup_success') ?></p>
-            <?php endif ?>
-            <?php if (session()->getFlashdata('singup_error')): ?>
-                <p class="text-xs text-red-500 mb-3"><?= session()->getFlashdata('singup_error') ?></p>
-            <?php endif ?>
+
 
             <?= form_open('/signup') ?>
             <div>
@@ -187,18 +190,28 @@
     const btns = document.querySelectorAll('.auth-menu-btn');
     const panels = document.querySelectorAll('.auth-form-panel');
 
-    btns.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-            panels.forEach(p => p.classList.add('hidden'));
-            document.getElementById(btn.dataset.tab).classList.remove('hidden');
+    function showTab(tabId) {
+        panels.forEach(p => p.classList.add('hidden'));
+        document.getElementById(tabId).classList.remove('hidden');
 
-            btns.forEach(b => {
-                b.classList.remove('text-bluegrey', 'border-bluegrey');
-                b.classList.add('text-grey', 'border-transparent');
-            });
-            btn.classList.remove('text-grey', 'border-transparent');
-            btn.classList.add('text-bluegrey', 'border-bluegrey');
+        btns.forEach(b => {
+            b.classList.remove('text-bluegrey', 'border-bluegrey');
+            b.classList.add('text-grey', 'border-transparent');
         });
+
+        const activeBtn = document.querySelector(`[data-tab="${tabId}"]`);
+        activeBtn.classList.remove('text-grey', 'border-transparent');
+        activeBtn.classList.add('text-bluegrey', 'border-bluegrey');
+    }
+
+    btns.forEach(btn => {
+        btn.addEventListener('click', () => showTab(btn.dataset.tab));
     });
+
+    <?php if (session()->getFlashdata('singup_error') || !empty($errors)): ?>
+        showTab('tab-inscription');
+    <?php else: ?>
+        showTab('tab-login');
+    <?php endif; ?>
 </script>
 <?= $this->endSection() ?>
