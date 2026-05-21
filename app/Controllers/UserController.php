@@ -61,7 +61,7 @@ class UserController extends BaseController
             return redirect()->to('/')
                 ->with('errors', $errors)
                 ->withInput()
-                ->with('singup_error', 'Votre compte n\'a pas pu être créé');
+                ->with('signup_error', 'Votre compte n\'a pas pu être créé');
         }
 
         // --- Saving in the city table ---
@@ -99,7 +99,7 @@ class UserController extends BaseController
         }*/
 
         return redirect()->to('/')
-            ->with('singup_success', 'Compte créé avec succès');
+            ->with('success', 'Compte créé avec succès !');
     }
 
     /**
