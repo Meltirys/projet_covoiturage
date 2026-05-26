@@ -15,8 +15,8 @@ class CreateLocationTable extends Migration
                 'auto_increment'    => true,
             ],
             'address'       => ['type' => 'VARCHAR', 'constraint' => 100],
-            'latitude'      => ['type' => 'DECIMAL', 'constraint' => '10,8', 'null' => false],
-            'longitude'     => ['type' => 'DECIMAL', 'constraint' => '11,8', 'null' => false],
+            'latitude'      => ['type' => 'DECIMAL', 'constraint' => '10,8'],
+            'longitude'     => ['type' => 'DECIMAL', 'constraint' => '11,8'],
             'id_city'       => ['type' => 'INT', 'unsigned' => true, 'null' => false],
         ]);
         $this->forge->addPrimaryKey('id_location');
