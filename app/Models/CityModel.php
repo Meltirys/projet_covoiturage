@@ -62,7 +62,7 @@ class CityModel extends Model
         }
 
         return $this->insert([
-            'city_name' => $cityName,
+            'name' => $cityName,
             'postcode' => $postCode
         ]);
     }
