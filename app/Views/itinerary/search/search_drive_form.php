@@ -39,7 +39,7 @@
 
 </div>
 
-<!-- Date départ / Heure départ -->
+<!-- Date départ -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
 
     <div class="flex flex-col gap-1">
@@ -49,10 +49,17 @@
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
     </div>
 
+</div>
+<!--  -->
+
+<!-- Passagers -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
+
     <div class="flex flex-col gap-1">
-        <label for="start-time" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Heure de départ</label>
-        <input type="time" name="start-time" id="start-time"
-            value="<?= set_value('start-time') ?>"
+        <label for="passengers" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Passagers</label>
+        <input type="number" name="passengers" id="passengers"
+            placeholder="1"
+            value="<?= set_value('passengers') ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
     </div>
 
@@ -60,14 +67,12 @@
 <!--  -->
 
 
-
-
 <!-- Filtres -->
 <div class="flex flex-col gap-1">
-    <label for="filter" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Filtres</label>
+    <label for="filter" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Filtres (optionnel)</label>
     <input type="text" name="filter" id="filter"
         value="<?= set_value('filter') ?>"
-        placeholder="Entrez votre filtre"
+        placeholder="Entrez vos filtres"
         class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
     <?php if (isset($errors['filter'])): ?>
         <span class="text-xs text-red-500"><?= $errors['filter'] ?></span>
