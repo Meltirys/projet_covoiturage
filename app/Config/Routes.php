@@ -95,4 +95,6 @@ $routes->group('', ['filter' => 'authsuper'], function ($routes) {
     $routes->get('userRole', [UserRoleController::class, 'index']);
     $routes->get('searchUserWP/(:alpha)', [SearchController::class, 'searchUserWithPerm']);
     $routes->get('getAllPermissions', [UserRoleController::class, 'getAllPermissions']);
+
+    $routes->post('user/updateRole/(:num)', [UserRoleController::class, 'updateUserRole']);
 });

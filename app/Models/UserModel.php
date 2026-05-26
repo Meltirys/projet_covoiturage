@@ -129,4 +129,8 @@ class UserModel extends Model
 
         return $userList;
     }
+
+    public function updateUserRole(int $idUser, int $newRole): bool {
+        return $this->update($idUser, ['id_user_permission' => $newRole]);
+    }
 }

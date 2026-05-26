@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/main') ?>
 
 <?= $this->section('content') ?>
-<h1>Bannir un utilisateur</h1>
+<h1>Modifier le rôle d'un utilisateur</h1>
 <?php if (session()->getFlashdata('success')): ?>
     <p class="text-xs text-green-600 mb-3"><?= session()->getFlashdata('success') ?></p>
 <?php endif ?>
@@ -24,6 +24,7 @@
 <script>
     //The select template that contains all the roles
     let userRoleSelect = document.createElement('select')
+    userRoleSelect.name = "newRole"
 
     //Creating the select form of the role. We will clone him for each instance of user created.
     document.addEventListener('DOMContentLoaded', () => {
@@ -87,14 +88,14 @@
                 let userMail = document.createElement('p')
                 let suppressionForm = document.createElement('form')
                 let csrfToken = document.createElement('input')
-                let select = userRoleSelect.cloneNode()
+                let select = userRoleSelect.cloneNode(true)
 
                 let suppressionButton = document.createElement('button')
 
                 //Filling up the content
                 userName.textContent = element['name']
                 userMail.textContent = element['email']
-                select.selectedIndex = element['level']
+                select.value = element['level']
                 suppressionButton.textContent = "Modifier le rôle"
 
                 //Setting up the form
