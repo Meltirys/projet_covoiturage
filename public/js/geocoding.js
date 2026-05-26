@@ -47,6 +47,9 @@ async function searchAddress(inputElement, onSelect = null) {
 
     data.features.forEach((feature) => {
       const option = document.createElement("div");
+
+      option.className = ""; // Ajouter classes CSS
+
       option.textContent = feature.properties.label;
 
       option.addEventListener("click", () => {
