@@ -6,7 +6,7 @@ use App\Controllers\BaseController;
 
 class UserValidationController extends BaseController
 {
-    public function validateUser()
+    public function index()
     {
         helper('form');
         $dbUser = model('UserModel');

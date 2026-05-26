@@ -50,6 +50,18 @@ class UserSeeder extends Seeder
                 'is_validated' => true
             ],
             [
+                'id_user'            => 5,
+                'first_name'         => 'SupAdd',
+                'last_name'          => 'Mine',
+                'password'           => password_hash('password', PASSWORD_DEFAULT),
+                'email'              => 'supadd.mine@admin.fr',
+                'mobile'             => '',
+                'birth_date'         => '1948-06-21',
+                'gender'             => 'male',
+                'id_user_permission' => 3,
+                'is_validated' => true
+            ],
+            [
                 'id_user'            => 3,
                 'first_name'         => 'Refused',
                 'last_name'          => 'User',

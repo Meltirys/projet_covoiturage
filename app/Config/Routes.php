@@ -7,6 +7,8 @@ use CodeIgniter\Router\RouteCollection;
 use App\Controllers\CarController;
 use App\Controllers\UserController;
 use App\Controllers\Backoffice\UserValidationController;
+use App\Controllers\Backoffice\UserBanController;
+use App\Controllers\Backoffice\UserRoleController;
 use App\Controllers\Journey\DriveController;
 
 use App\Controllers\Journey\RequestController;
@@ -73,14 +75,22 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 });
 
 
-
+//Admin part
 $routes->group('', ['filter' => 'authadmin'], function ($routes) {
-    $routes->get('userValidation', [UserValidationController::class, 'validateUser']);
+    $routes->get('userValidation', [UserValidationController::class, 'index']);
     $routes->post('userValidation/accept/(:num)', [UserValidationController::class, 'acceptUser']);
     $routes->post('userValidation/refuse/(:num)', [UserValidationController::class, 'refuseUser']);
 
     $routes->get('userSuppression', [UserSuppressionController::class, 'index']);
     $routes->post('user/delete/(:num)', [UserController::class, 'delete']);
+    $routes->get('banUser', [UserBanController::class, 'index']);
+    $routes->post('user/ban/(:num)', [UserController::class, 'ban']);
 
     $routes->get('searchUser/(:alpha)', [SearchController::class, 'searchUser']);
+});
+
+$routes->group('', ['filter' => 'authsuper'], function ($routes) {
+    $routes->get('userRole', [UserRoleController::class, 'index']);
+    $routes->get('searchUserWP/(:alpha)', [SearchController::class, 'searchUserWithPerm']);
+    $routes->get('getAllPermissions', [UserRoleController::class, 'getAllPermissions']);
 });

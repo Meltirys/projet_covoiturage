@@ -111,7 +111,7 @@ class UserController extends BaseController
     {
         if ($idUser === -1) {
             $idUser = session()->user_id;
-        } 
+        }
 
         //We delete the car of the user
         $carModel = new CarModel();
@@ -199,5 +199,26 @@ class UserController extends BaseController
         //If no errors
         return redirect()->to('profil/changePassword')
             ->with('password_success', 'Mot de passe modifié avec succès.');
+    }
+
+    /**
+     * Ban the given user. Access route is /user/ban/{idUser}
+     * @param int $idUser The id of the user we want to ban
+     */
+    public function ban(int $idUser)
+    {
+        $userModel = model('UserModel');
+
+        //Checking if an error happens when banning the user
+        if (!$userModel->update(session()->get('user_id'), [
+            'is_validated' => false
+        ])) {
+            return redirect()->to('banUser')
+                ->with('error', 'Une erreur est survenue lors du banissement de l\'utilisateur, veuillez réessayer');
+        }
+
+        //If no errors
+        return redirect()->to('banUser')
+            ->with('success', "L'utilisateur " . $userModel->getUserName($idUser) . " a été bannis avec succès");
     }
 }

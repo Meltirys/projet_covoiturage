@@ -1,7 +1,7 @@
 <?= $this->extend('layouts/main') ?>
 
 <?= $this->section('content') ?>
-<h1>Supprimer un utilisateur</h1>
+<h1>Bannir un utilisateur</h1>
 <?php if (session()->getFlashdata('success')): ?>
     <p class="text-xs text-green-600 mb-3"><?= session()->getFlashdata('success') ?></p>
 <?php endif ?>
@@ -69,13 +69,13 @@
             //Filling up the content
             userName.textContent = element['name']
             userMail.textContent = element['email']
-            suppressionButton.textContent = "Supprimer"
+            suppressionButton.textContent = "Bannir"
 
             //Setting up the form
             suppressionForm.appendChild(csrfToken)
             suppressionForm.appendChild(suppressionButton)
             suppressionForm.method = "POST"
-            suppressionForm.action = "user/delete/" + element['id_user']
+            suppressionForm.action = "user/ban/" + element['id_user']
             suppressionButton.type = "submit"
             //CSRF token
             csrfToken.type = "hidden"
