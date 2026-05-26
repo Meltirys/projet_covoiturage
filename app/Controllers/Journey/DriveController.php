@@ -8,6 +8,7 @@ use CodeIgniter\Exceptions\PageNotFoundException;
 use App\Models\JourneyDriveModel;
 use App\Models\CarModel;
 use App\Validators\JourneyDriveValidator;
+use App\Validators\JourneyRequestValidator;
 use DateTime;
 use PDOException;
 
@@ -45,27 +46,6 @@ class DriveController extends BaseController
     }
 
     /**
-     * Displays the creation page for a new itinerary
-     */
-    public function create()
-    {
-        $carModel = model(CarModel::class);
-        $cars = $carModel->getCarsByUser(session('user_id'));
-
-        $data = [
-            'type' => 'drive',
-            'cars' => array_map(fn($c) => [
-                'id_car' => $c['id_car'],
-                'label' => $c['brand'] . ' - ' . $c['model'],
-                'seats' => $c['number_of_seat'],
-            ], $cars)
-        ];
-
-        helper('form');
-        return view('itinerary/create/CreateView', $data);
-    }
-
-    /**
      * Saves an itinerary
      */
     public function save()
@@ -76,7 +56,8 @@ class DriveController extends BaseController
          * start = ['label', 'city', 'postcode', 'lat', 'lon']
          * end = [...]
          * stops = [0 = [...], 1 = [...],]
-         * id_car, number_of_place, departure['date', 'time'], estimated_arrival['date', 'time']
+         * id_car, number_of_place
+         * departure['date', 'time'], estimated_arrival['date', 'time']
          * 
          * TODO :
          * - Check geocoding validity of address inputs
@@ -94,7 +75,7 @@ class DriveController extends BaseController
         ))->format('Y-m-d H:i:s');
 
         // Validation
-        $validator = new JourneyDriveValidator;
+        $validator = new JourneyRequestValidator;
 
         if (! $validator->validate($data)) {
             return redirect()->back()

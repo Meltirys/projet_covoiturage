@@ -1,4 +1,4 @@
-<?= form_open('itinerary/create', ['class' => 'flex flex-col gap-4']) ?>
+<?= form_open('drive/save', ['class' => 'flex flex-col gap-4']) ?>
 
 <!-- Départ / Arrivée -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 items-start">
@@ -38,6 +38,7 @@
     </div>
 
 </div>
+<!--  -->
 
 <!-- Arrêts -->
 <div class="flex flex-col gap-1">
@@ -69,6 +70,7 @@
         <span class="text-xs text-red-500"><?= $errors['stops'] ?></span>
     <?php endif ?>
 </div>
+<!--  -->
 
 <!-- Date départ / Heure départ -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
@@ -87,7 +89,7 @@
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
     </div>
 
-<!-- Date arrivée / Heure arrivée -->
+    <!-- Date arrivée / Heure arrivée -->
     <div class="flex flex-col gap-1">
         <label for="end-date" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Date d'arrivée</label>
         <input type="date" name="end-date" id="end-date"
@@ -109,6 +111,7 @@
     </div>
 
 </div>
+<!--  -->
 
 <!-- Véhicule / Places -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
@@ -140,6 +143,7 @@
     </div>
 
 </div>
+<!--  -->
 
 <!-- Options -->
 <div class="flex flex-col gap-1">
@@ -152,12 +156,14 @@
         <span class="text-xs text-red-500"><?= $errors['options'] ?></span>
     <?php endif ?>
 </div>
+<!--  -->
 
-<!-- Bouton -->
+<!-- Confirmation -->
 <div class="flex justify-center mt-2">
     <button type="submit" class="border border-bluegrey text-bluegrey bg-white text-sm font-poppins px-6 py-2 rounded-full hover:bg-bluegrey hover:!text-white transition-all duration-200">
         Créer le trajet →
     </button>
 </div>
+<!--  -->
 
 <?= form_close() ?>

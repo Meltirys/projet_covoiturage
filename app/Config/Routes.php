@@ -52,17 +52,19 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->post('user/updatePassword', [UserController::class, 'updatePassword']);
     $routes->post('user/delete', [UserController::class, 'delete']);
 
-    // Itinéraire (conducteur)
-    $routes->get('drive/search', 'Journey\DriveController::search');
-    $routes->get('drive/show', 'Journey\DriveController::show');
-    $routes->get('drive/create', 'Journey\DriveController::create');
-    $routes->post('drive/save', 'Journey\DriveController::save');
 
-    // Itinéraire (requête)
-    $routes->get('request/search', 'Journey\RequestController::search');
-    $routes->get('request/show', 'Journey\RequestController::show');
-    $routes->get('request/create', 'Journey\RequestController::create');
-    $routes->post('request/save', 'Journey\RequestController::save');
+    // Création de trajets
+    $routes->get('nouveau-trajet', 'PagesController::createJourney');
+    $routes->post('drive/save', 'Journey\DriveController::save'); // conduite
+    $routes->post('request/save', 'Journey\RequestController::save'); // requête
+
+    // Recherche de trajets
+    $routes->get('drive/search', 'Journey\DriveController::search'); // conduite
+    $routes->get('request/search', 'Journey\RequestController::search'); // requête
+
+    // Affichage de trajet individuel
+    $routes->get('drive/show', 'Journey\DriveController::show'); // conduite
+    $routes->get('request/show', 'Journey\RequestController::show'); // requête
 
     // Réservation
     $routes->get('reservation/(:num)',           'Journey\BookingController::show/$1');

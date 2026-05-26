@@ -66,8 +66,10 @@ class RequestController extends BaseController
     {
         helper('form');
 
-        /* Needed inputs
-         * todo
+        /* Inputs
+         * start = ['label', 'city', 'postcode', 'lat', 'lon']
+         * end = [...]
+         * departure['date', 'time'], estimated_arrival['date', 'time']
          * 
          * options?
          */
