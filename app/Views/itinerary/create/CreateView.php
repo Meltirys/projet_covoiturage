@@ -23,7 +23,7 @@
 
 <?= $this->section('scripts') ?>
 <script src="/js/geocoding.js"></script>
-<script src="/js/journey-create.js"></script>
+<script src="/js/address-fields.js"></script>
 <script>
     // Création des nombres de places possibles
     const cars = <?= json_encode($cars ?? []) ?>;

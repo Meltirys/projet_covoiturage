@@ -18,4 +18,5 @@
 <?= $this->endSection() ?>
 <?= $this->section('scripts') ?>
 <script src="/js/geocoding.js"></script>
+<script src="/js/address-fields.js"></script>
 <?= $this->endSection() ?>
