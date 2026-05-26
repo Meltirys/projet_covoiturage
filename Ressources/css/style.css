@@ -1,7 +1,9 @@
 @import "tailwindcss";
 @source "../../app/Views/**/*.php";
+@source "./public/**/*.js";
 
-
+/* Safelist pour les classes générées dynamiquement en JS */
+@source inline("{bg-red-500,hover:bg-red-600,text-white,text-sm,font-medium,px-4,py-1.5,rounded-lg,transition-colors,cursor-pointer,flex,items-center,justify-between,bg-white,border,border-gray-200,shadow-sm,flex-col,font-semibold,text-gray-800,text-gray-500}");
 /* poppins-200 */
 @font-face {
   font-display: swap;
@@ -158,5 +160,10 @@
   }
   .card {
     @apply bg-white rounded-xl shadow p-4 mb-3;
+  }
+
+  .btn-danger {
+    @apply bg-[#ef4444] hover:bg-[#dc2626] text-white text-sm font-medium px-4 py-1.5 rounded-lg transition-colors cursor-pointer;
+    border: none;
   }
 }
