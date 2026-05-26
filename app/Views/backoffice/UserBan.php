@@ -1,21 +1,28 @@
 <?= $this->extend('layouts/main') ?>
 
 <?= $this->section('content') ?>
-<h1>Bannir un utilisateur</h1>
-<?php if (session()->getFlashdata('success')): ?>
-    <p class="text-xs text-green-600 mb-3"><?= session()->getFlashdata('success') ?></p>
-<?php endif ?>
-<?php if (session()->getFlashdata('error')): ?>
-    <p class="text-xs text-red-500 mb-3"><?= session()->getFlashdata('error') ?></p>
-<?php endif ?>
-<div>
-    <label for="searchUser">Rechercher un utilisateur</label>
-    <input type="text" id="searchUser" placeholder="Entrez le nom de l'utilisateur recherché">
-</div>
+<main class="w-full max-w-5xl mx-auto px-4 py-6 md:px-8 md:py-10 font-poppins">
 
-<div id="researchResults">
+    <header class="flex justify-between items-center mb-6">
+        <h2 class="text-xs tracking-[0.15em] text-bluegrey uppercase">Bannir un utilisateur</h2>
+    </header>
 
-</div>
+    <?php if (session()->getFlashdata('success')): ?>
+        <p class="text-xs text-green-600 border border-green-200 rounded px-3 py-2 mb-4"><?= session()->getFlashdata('success') ?></p>
+    <?php endif ?>
+    <?php if (session()->getFlashdata('error')): ?>
+        <p class="text-xs text-red-500 border border-red-200 rounded px-3 py-2 mb-4"><?= session()->getFlashdata('error') ?></p>
+    <?php endif ?>
+
+    <div class="mb-6">
+        <label for="searchUser" class="block text-sm text-gray-700 mb-1">Rechercher un utilisateur</label>
+        <input type="text" id="searchUser" placeholder="Entrez le nom de l'utilisateur recherché"
+            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-babyblue focus:border-transparent">
+    </div>
+
+    <div id="researchResults" class="space-y-3"></div>
+
+</main>
 
 <?= $this->endSection() ?>
 
@@ -83,7 +90,11 @@
             csrfToken.value = document.querySelector('meta[name="csrf-token"]').content
 
             //Adding the styles
-
+            userDiv.className = "flex items-center justify-between bg-white border border-gray-200 rounded-lg px-4 py-3 shadow-sm"
+            userInfos.className = "flex flex-col"
+            userName.className = "text-sm font-semibold text-gray-800"
+            userMail.className = "text-xs text-gray-500"
+            suppressionButton.className = "btn-danger"
 
             //Building everything together
             userInfos.appendChild(userName)

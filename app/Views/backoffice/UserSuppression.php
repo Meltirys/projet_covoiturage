@@ -91,12 +91,12 @@
             csrfToken.value = document.querySelector('meta[name="csrf-token"]').content
 
             //Adding the styles
-            userDiv.className = "flex items-center justify-between bg-white border-gray-200 rounded-lg px-4 py-3 shadow-sm"
+            userDiv.className = "flex items-center justify-between bg-white border border-babyblue rounded-lg px-4 py-3 shadow-sm"
             userInfos.className = "flex flex-col"
-            userName.className = "text-sm font-semibold text-gray-800"
-            userMail.className = "text-xs text-gray-500"
+            userName.className = "text-sm font-semibold text-bluegrey"
+            userMail.className = "text-xs text-grey"
             suppressionButton.className = "btn-danger"
-            
+
             //Building everything together
             userInfos.appendChild(userName)
             userInfos.appendChild(userMail)

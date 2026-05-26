@@ -2,123 +2,151 @@
 
 <?= $this->section('content') ?>
 
+<?php helper('french') ?>
+<main class="w-full max-w-5xl mx-auto px-4 py-6 md:px-8 md:py-10 font-poppins">
 
-<main>
-    <h1>Mes réservations</h1>
+    <header class="flex justify-between items-center mb-6">
+        <h2 class="text-xs tracking-[0.15em] text-bluegrey uppercase">Mes réservations</h2>
+    </header>
 
     <?php if (session()->getFlashdata('success')): ?>
-        <p class="success"><?= session()->getFlashdata('success') ?></p>
+        <p class="text-xs text-green-600 border border-green-200 rounded px-3 py-2 mb-4"><?= session()->getFlashdata('success') ?></p>
     <?php endif; ?>
     <?php if (session()->getFlashdata('error')): ?>
-        <p class="error"><?= session()->getFlashdata('error') ?></p>
+        <p class="text-xs text-red-500 border border-red-200 rounded px-3 py-2 mb-4"><?= session()->getFlashdata('error') ?></p>
     <?php endif; ?>
 
-    <section id="passager">
-        <h2>Mes trajets réservés</h2>
+    <!-- Section passager -->
+    <section id="passager" class="mb-8">
+        <h3 class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase mb-4">Mes trajets réservés</h3>
 
-        <h3>À venir</h3>
-        <?php if (empty($upcomingConfirmed)): ?>
-            <p>Aucun trajet confirmé</p>
-        <?php else: ?>
-            <?php foreach ($upcomingConfirmed as $booking): ?>
-                <div>
-                    <?php // Ville départ → arrivée - à afficher quand Track sera fini ?>
-                    <p>Départ : <?= esc($booking['journey']['departure']) ?></p>
-                    <p>Conducteur : <?= esc($booking['driver_name']) ?></p>
-                    <p>Statut : Confirmé</p>
-                    <form action="<?= site_url('reservation/annuler/' . $booking['id_booking']) ?>" method="post">
-                        <?= csrf_field() ?>
-                        <button type="submit">Annuler</button>
-                    </form>
-                </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
+        <h4 class="text-xs font-poppins text-grey mb-2">À venir</h4>
+        <ul class="flex flex-col gap-2 mb-4">
+            <?php if (empty($upcomingConfirmed)): ?>
+                <p class="text-sm text-grey">Aucun trajet confirmé.</p>
+            <?php else: ?>
+                <?php foreach ($upcomingConfirmed as $booking): ?>
+                    <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
+                        <div>
+                            <p class="text-sm font-poppins text-bluegrey"><?= esc($booking['journey']['departure']) ?></p>
+                            <p class="text-xs text-grey"><?= esc($booking['driver_name']) ?></p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs text-white bg-green-500 rounded-full px-3 py-0.5">Confirmé</span>
+                            <form action="<?= site_url('reservation/annuler/' . $booking['id_booking']) ?>" method="post">
+                                <?= csrf_field() ?>
+                                <button type="submit" class="text-xs text-red-500 border border-red-200 rounded-full px-3 py-1 hover:bg-red-50 transition-colors duration-150">Annuler</button>
+                            </form>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </ul>
 
-        <h3>En attente</h3>
-        <?php if (empty($upcomingPending)): ?>
-            <p>Aucune demande en attente.</p>
-        <?php else: ?>
-            <?php foreach ($upcomingPending as $booking): ?>
-                <div>
-                    <?php // Ville départ → arrivée - à afficher quand Track sera fini ?>
-                    <p>Départ : <?= esc($booking['journey']['departure']) ?></p>
-                    <p>Conducteur : <?= esc($booking['driver_name']) ?></p>
-                    <p>Statut : En attente de validation</p>
-                    <form action="<?= site_url('reservation/annuler/' . $booking['id_booking']) ?>" method="post">
-                        <?= csrf_field() ?>
-                        <button type="submit">Annuler</button>
-                    </form>
-                </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
+        <h4 class="text-xs font-poppins text-grey mb-2">En attente</h4>
+        <ul class="flex flex-col gap-2 mb-4">
+            <?php if (empty($upcomingPending)): ?>
+                <p class="text-sm text-grey">Aucune demande en attente.</p>
+            <?php else: ?>
+                <?php foreach ($upcomingPending as $booking): ?>
+                    <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
+                        <div>
+                            <p class="text-sm font-poppins text-bluegrey"><?= esc($booking['journey']['departure']) ?></p>
+                            <p class="text-xs text-grey"><?= esc($booking['driver_name']) ?></p>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="text-xs text-white bg-orange-400 rounded-full px-3 py-0.5">En attente</span>
+                            <form action="<?= site_url('reservation/annuler/' . $booking['id_booking']) ?>" method="post">
+                                <?= csrf_field() ?>
+                                <button type="submit" class="text-xs text-red-500 border border-red-200 rounded-full px-3 py-1 hover:bg-red-50 transition-colors duration-150">Annuler</button>
+                            </form>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </ul>
 
-        <h3>Passés</h3>
-        <?php if (empty($pastJourney)): ?>
-            <p>Aucun trajet passé.</p>
-        <?php else: ?>
-            <?php foreach ($pastJourney as $booking): ?>
-                <div>
-                    <?php // Ville départ → arrivée - à afficher quand Track sera fini ?>
-                    <p>Départ : <?= esc($booking['journey']['departure']) ?></p>
-                    <p>Conducteur : <?= esc($booking['driver_name']) ?></p>
-                    <p>Statut : <?= $booking['is_validated'] ? 'Effectué' : 'Refusé' ?></p>
-                </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
+        <h4 class="text-xs font-poppins text-grey mb-2">Passés</h4>
+        <ul class="flex flex-col gap-2">
+            <?php if (empty($pastJourney)): ?>
+                <p class="text-sm text-grey">Aucun trajet passé.</p>
+            <?php else: ?>
+                <?php foreach ($pastJourney as $booking): ?>
+                    <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
+                        <div>
+                            <p class="text-sm font-poppins text-bluegrey"><?= esc($booking['journey']['departure']) ?></p>
+                            <p class="text-xs text-grey"><?= esc($booking['driver_name']) ?></p>
+                        </div>
+                        <span class="text-xs text-grey bg-lightblue rounded-full px-3 py-0.5">
+                            <?= $booking['is_validated'] ? 'Effectué' : 'Refusé' ?>
+                        </span>
+                    </li>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </ul>
     </section>
 
-    <section id="conducteur">
-        <h2>Mes trajets proposés</h2>
+    <!-- Section conducteur -->
+    <section id="conducteur" class="mb-8">
+        <h3 class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase mb-4">Mes trajets proposés</h3>
 
-        <h3>À venir</h3>
-        <?php if (empty($driveUpcoming)): ?>
-            <p>Aucun trajet à venir.</p>
-        <?php else: ?>
-            <?php foreach ($driveUpcoming as $journey): ?>
-                <div>
-                    <?php // Ville départ → arrivée - à afficher quand Track sera fini ?>
-                    <p>Départ : <?= esc($journey['departure']) ?></p>
-                    <p>Places : <?= esc($journey['places_restantes']) ?>/<?= esc($journey['number_of_place']) ?></p>
+        <h4 class="text-xs font-poppins text-grey mb-2">À venir</h4>
+        <ul class="flex flex-col gap-2 mb-4">
+            <?php if (empty($driveUpcoming)): ?>
+                <p class="text-sm text-grey">Aucun trajet à venir.</p>
+            <?php else: ?>
+                <?php foreach ($driveUpcoming as $journey): ?>
+                    <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
+                        <p class="text-sm font-poppins text-bluegrey"><?= esc($journey['departure']) ?></p>
+                        <span class="text-xs text-bluegrey bg-lightblue rounded-full px-3 py-0.5">
+                            <?= esc($journey['places_restantes']) ?>/<?= esc($journey['number_of_place']) ?>
+                        </span>
+                    </li>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </ul>
 
-                </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
+        <h4 class="text-xs font-poppins text-grey mb-2">Passés</h4>
+        <ul class="flex flex-col gap-2 mb-6">
+            <?php if (empty($drivePast)): ?>
+                <p class="text-sm text-grey">Aucun trajet passé.</p>
+            <?php else: ?>
+                <?php foreach ($drivePast as $journey): ?>
+                    <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
+                        <p class="text-sm font-poppins text-bluegrey"><?= esc($journey['departure']) ?></p>
+                        <span class="text-xs text-grey bg-lightblue rounded-full px-3 py-0.5">Effectué</span>
+                    </li>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </ul>
 
-        <h3>Passés</h3>
-        <?php if (empty($drivePast)): ?>
-            <p>Aucun trajet passé.</p>
-        <?php else: ?>
-            <?php foreach ($drivePast as $journey): ?>
-                <div>
-                    <?php // Ville départ → arrivée - à afficher quand Track sera fini ?>
-                    <p>Départ : <?= esc($journey['departure']) ?></p>
-                </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
-
-        <h3>Demandes en attente de validation</h3>
-        <?php if (empty($pendingRequests)): ?>
-            <p>Aucune demande en attente.</p>
-        <?php else: ?>
-            <?php foreach ($pendingRequests as $request): ?>
-                <div>
-                    <p>Passager #<?= esc($request['id_user']) ?></p>
-                    <?php // Ville départ → arrivée - à afficher quand Track sera fini ?>
-                    <p>Départ : <?= esc($request['journey']['departure']) ?></p>
-                    <form action="<?= site_url('reservation/accepter/' . $request['id_booking']) ?>" method="post">
-                        <?= csrf_field() ?>
-                        <button type="submit">Accepter</button>
-                    </form>
-                    <form action="<?= site_url('reservation/refuser/' . $request['id_booking']) ?>" method="post">
-                        <?= csrf_field() ?>
-                        <button type="submit">Refuser</button>
-                    </form>
-                </div>
-            <?php endforeach; ?>
-        <?php endif; ?>
+        <h3 class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase mb-4">Demandes en attente de validation</h3>
+        <ul class="flex flex-col gap-2">
+            <?php if (empty($pendingRequests)): ?>
+                <p class="text-sm text-grey">Aucune demande en attente.</p>
+            <?php else: ?>
+                <?php foreach ($pendingRequests as $request): ?>
+                    <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
+                        <div>
+                            <p class="text-sm font-poppins text-bluegrey">Passager #<?= esc($request['id_user']) ?></p>
+                            <p class="text-xs text-grey"><?= esc($request['journey']['departure']) ?></p>
+                        </div>
+                        <div class="flex gap-2">
+                            <form action="<?= site_url('reservation/accepter/' . $request['id_booking']) ?>" method="post">
+                                <?= csrf_field() ?>
+                                <button type="submit" class="text-xs text-bluegrey border border-babyblue rounded-full px-3 py-1 hover:bg-lightblue transition-colors duration-150">✓</button>
+                            </form>
+                            <form action="<?= site_url('reservation/refuser/' . $request['id_booking']) ?>" method="post">
+                                <?= csrf_field() ?>
+                                <button type="submit" class="text-xs text-red-500 border border-red-200 rounded-full px-3 py-1 hover:bg-red-50 transition-colors duration-150">✗</button>
+                            </form>
+                        </div>
+                    </li>
+                <?php endforeach; ?>
+            <?php endif; ?>
+        </ul>
     </section>
+
 </main>
 
 <?= $this->endSection() ?>
-
-
