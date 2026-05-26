@@ -61,6 +61,7 @@ class BookingController extends BaseController
                 ->selectSum('seat_taken')
                 ->where('id_journey_drive', $journey['id_journey_drive'])
                 ->where('is_validated', true)
+                ->where('deletion_date IS NULL')
                 ->get()->getRow()->seat_taken;
 
             $journey['places_restantes'] = $journey['number_of_place'] - $placesOccupees;
@@ -73,7 +74,7 @@ class BookingController extends BaseController
 
             $requests = $bookingModel
                 ->where('id_journey_drive', $journey['id_journey_drive'])
-                ->whereNULL('is_validated')
+                ->where('is_validated', false)
                 ->where('is_driver', false)
                 ->findAll();
             foreach ($requests as $r) {
@@ -140,6 +141,7 @@ class BookingController extends BaseController
         $seatPicked = (int) $bookingModel
             ->selectSum('seat_taken')
             ->where('id_journey_drive', $journeyID)
+            ->where('deletion_date IS NULL')
             ->get()->getRow()->seat_taken;
 
         $availableSeat = $journey['number_of_place'] - $seatPicked;
@@ -163,7 +165,7 @@ class BookingController extends BaseController
         }
 
         $idBooking = $bookingModel->insert(array_merge($data, [
-            'is_validated'  => null,
+            'is_validated'  => false,
             'is_driver'     => false,
             'deletion_date' => null,
         ]));
@@ -199,7 +201,7 @@ class BookingController extends BaseController
                 ->with('error', 'Réservation introuvable');
         }
 
-        $bookingModel->update($id_booking, ['is_validated' => false]);
+        $bookingModel->delete($id_booking);
         return redirect()->back()
             ->with('success', 'Réservation annulée');
     }
@@ -260,14 +262,13 @@ class BookingController extends BaseController
                 ->with('error', 'Action non autorisée');
         }
 
+        //Must be called before delete() because soft delete make booking unfindable with find()
+        $infos = $this->gatherMailInfos($id_booking, $booking['id_user']);
+
         $bookingModel->delete($id_booking);
 
         //Preparing the mail service
         $mailService = new MailService();
-
-        /* Mail: To uncomment when the refuse method is updated
-        //Retrieving the infos needed for the mail
-        $infos = $this->gatherMailInfos($id_booking, $booking['id_user']);
 
         //Send the mail to the passenger that it's application has been refused
         $mailService->sendBookingRefused($infos['passenger_email'], [
@@ -276,7 +277,7 @@ class BookingController extends BaseController
             'journey_departure'    => $infos['start_address'],
             'journey_arrival'      => $infos['end_address'],
             'driver_name'          => $infos['driver_name'],
-        ]);*/
+        ]);
 
         return redirect()->to('mes-reservations')
             ->with('success', 'Réservation refusée');
@@ -340,7 +341,7 @@ class BookingController extends BaseController
         // Cancel the journey and all related reservations
         $bookingModel
             ->where('id_journey_drive', $id_journey_drive)
-            ->set(['is_validated' => false])
+            ->set(['deletion_date' => date('Y-m-d')])
             ->update();
 
 

@@ -1,4 +1,7 @@
-<?= view('commons/header') ?>
+<?= $this->extend('layouts/main') ?>
+
+<?= $this->section('content') ?>
+
 
 <main>
     <h1>Mes réservations</h1>
@@ -116,5 +119,6 @@
     </section>
 </main>
 
-<?= view('commons/footer') ?>
+<?= $this->endSection() ?>
+
 
