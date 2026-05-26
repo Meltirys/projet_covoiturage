@@ -41,11 +41,11 @@
                     <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
                         <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
                             <span class="text-sm text-bluegrey">Trajets proposés</span>
-                            <span class="text-xs font-poppins text-bluegrey bg-lightblue rounded-full px-3 py-0.5">0</span>
+                            <span class="nav-d bg-lightblue rounded-full px-3 py-0.5">0</span>
                         </li>
                         <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
                             <span class="text-sm text-bluegrey">Passagers transportés</span>
-                            <span class="text-xs font-poppins text-bluegrey bg-lightblue rounded-full px-3 py-0.5">0</span>
+                            <span class="nav-d bg-lightblue rounded-full px-3 py-0.5">0</span>
                         </li>
                     </ul>
                 </div>
@@ -59,7 +59,7 @@
                             <?php foreach ($cars as $car): ?>
                                 <div class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
                                     <div>
-                                        <p class="text-sm font-poppins text-bluegrey">
+                                        <p class="nav-m">
                                             <?= esc($car['brand']) ?> <?= esc($car['model']) ?>
                                         </p>
                                         <p class="text-xs text-grey">
@@ -148,9 +148,9 @@
                                     <div>
                                         <?php // Villes — à décommenter quand Track sera défini 
                                         ?>
-                                        <p class="text-sm font-poppins text-bluegrey"><?= format_date_fr($journey['departure']) ?></p>
+                                        <p class="nav-m"><?= format_date_fr($journey['departure']) ?></p>
                                     </div>
-                                    <span class="text-xs font-poppins text-bluegrey bg-lightblue rounded-full px-3 py-0.5"><?= esc($journey['places_restantes']) ?>/<?= esc($journey['number_of_place']) ?></span>
+                                    <span class="nav-d bg-lightblue rounded-full px-3 py-0.5"><?= esc($journey['places_restantes']) ?>/<?= esc($journey['number_of_place']) ?></span>
                                 </li>
                             <?php endforeach; ?>
                         <?php endif; ?>
@@ -163,7 +163,7 @@
                                     <div>
                                         <?php // Villes — à décommenter quand Track sera défini 
                                         ?>
-                                        <p class="text-sm font-poppins text-bluegrey"><?= format_date_fr($journey['departure']) ?></p>
+                                        <p class="nav-m"><?= format_date_fr($journey['departure']) ?></p>
                                     </div>
                                     <span class="text-xs font-poppins text-grey bg-lightblue rounded-full px-3 py-0.5">Effectué</span>
                                 </li>
@@ -186,7 +186,7 @@
                                         <div>
                                             <?php // Villes — à décommenter quand Track sera défini 
                                             ?>
-                                            <p class="text-sm font-poppins text-bluegrey"><?= esc($request['passenger_name']) ?></p>
+                                            <p class="nav-m"><?= esc($request['passenger_name']) ?></p>
                                             <p class="text-xs text-grey"><?= esc($request['journey']['departure']) ?></p>
                                         </div>
                                         <div class="flex gap-2">
@@ -217,7 +217,7 @@
                     <ul class="flex flex-col gap-2">
                         <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
                             <span class="text-sm text-bluegrey">Trajets effectués</span>
-                            <span class="text-xs font-poppins text-bluegrey bg-lightblue rounded-full px-3 py-0.5">0</span>
+                            <span class="nav-d bg-lightblue rounded-full px-3 py-0.5">0</span>
                         </li>
                     </ul>
                 </div>
@@ -235,7 +235,7 @@
                                     <div>
                                         <?php // Villes — à décommenter quand Track sera défini 
                                         ?>
-                                        <p class="text-sm font-poppins text-bluegrey"><?= format_date_fr($booking['journey']['departure']) ?></p>
+                                        <p class="nav-m"><?= format_date_fr($booking['journey']['departure']) ?></p>
                                         <p class="text-xs text-grey"><?= esc($booking['driver_name']) ?></p>
                                     </div>
                                     <span class="text-xs font-poppins text-white bg-green-500 rounded-full px-3 py-0.5">Confirmé</span>
@@ -258,7 +258,7 @@
                                     <div>
                                         <?php // Villes — à décommenter quand Track sera défini 
                                         ?>
-                                        <p class="text-sm font-poppins text-bluegrey"><?= format_date_fr($booking['journey']['departure']) ?></p>
+                                        <p class="nav-m"><?= format_date_fr($booking['journey']['departure']) ?></p>
                                         <p class="text-xs text-grey"><?= esc($booking['driver_name']) ?></p>
                                     </div>
                                     <span class="text-xs font-poppins text-white bg-orange-400 rounded-full px-3 py-0.5">En attente</span>
@@ -281,7 +281,7 @@
                                     <div>
                                         <?php // Villes — à décommenter quand Track sera défini 
                                         ?>
-                                        <p class="text-sm font-poppins text-bluegrey"><?= format_date_fr($booking['journey']['departure']) ?></p>
+                                        <p class="nav-m"><?= format_date_fr($booking['journey']['departure']) ?></p>
                                         <p class="text-xs text-grey"><?= esc($booking['driver_name']) ?></p>
                                     </div>
                                     <span class="text-xs font-poppins text-grey bg-lightblue rounded-full px-3 py-0.5"><?= $booking['is_validated'] ? 'Effectué' : 'Refusé' ?></span>
@@ -302,7 +302,7 @@
                     <li>
                         <a href="user/modify" class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3 hover:bg-lightblue transition-colors duration-150">
                             <div>
-                                <p class="text-sm font-poppins text-bluegrey">Informations personnelles</p>
+                                <p class="nav-m">Informations personnelles</p>
                                 <p class="text-xs text-grey">Nom, email, photo...</p>
                             </div>
                             <span class="text-grey">›</span>
@@ -310,7 +310,7 @@
                     </li>
                     <li>
                         <a href="user/changePassword" class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3 hover:bg-lightblue transition-colors duration-150">
-                            <p class="text-sm font-poppins text-bluegrey">Mot de passe</p>
+                            <p class="nav-m">Mot de passe</p>
                             <span class="text-grey">›</span>
                         </a>
                     </li>

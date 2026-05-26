@@ -5,24 +5,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="/img/logo.png">
+    <meta name="csrf-token" content="<?= csrf_hash() ?>">
+    <meta name="csrf-name" content="<?= csrf_token() ?>">
     <link rel="stylesheet" href="/css/style.css">
     <title>PennRide</title>
 </head>
 
 <body>
-    <header class="header flex items-center justify-around py-4 px-5 bg-lightgrey">
-        <img src="/img/logo.png" alt="PennRide" class="w-12 h-12 rounded-xl">
 
+    <header class="header flex items-center py-4 px-5 bg-lightgrey">
+        <img src="/img/logo.png" alt="PennRide" class="w-12 h-12 rounded-xl">
         <?php if (session('logged_in')): ?>
-            <nav>
-                <ul class="flex gap-4">
-                    <li><a class="text-xs font-poppins text-bluegrey" href="<?= site_url('trajet') ?>">Trajet</a></li>
-                    <li><a class="text-xs font-poppins text-bluegrey" href="/nouveau-trajet">Nouveau trajet</a></li>
-                    <li><a class="text-xs font-poppins text-bluegrey" href="#">Contact</a></li>
-                    <li><a class="text-xs font-poppins text-bluegrey" href="/myprofil">Mon profil</a></li>
-                </ul>
+            <nav class="hidden md:flex gap-4 items-center">
+                <a class="text-xs font-poppins text-bluegrey" href="<?= site_url('trajet') ?>">Trajets</a>
+                <a class="text-xs font-poppins text-bluegrey" href="/nouveau-trajet">Nouveau trajet</a>
+                <a class="text-xs font-poppins text-bluegrey" href="#">Contact</a>
+                <a class="text-xs font-poppins text-bluegrey" href="/myprofil">Mon profil</a>
+                <?php if (session('user_role') == 2): ?>
+                    <a class="text-xs font-poppins text-white bg-bluegrey px-3 py-1 rounded-full" href="/backoffice">Dashboard</a>
+                <?php endif; ?>
             </nav>
+            <button class="md:hidden flex flex-col gap-1.5 p-2" onclick="toggleMobileMenu()">
+                <span class="block w-6 h-0.5 bg-bluegrey"></span>
+                <span class="block w-6 h-0.5 bg-bluegrey"></span>
+                <span class="block w-6 h-0.5 bg-bluegrey"></span>
+            </button>
         <?php else: ?>
-            <p class="text-xs font-poppins text-bluegrey">Tu n'es pas connecté : pour profiter des fonctionnalités de PennRide, connecte-toi ou créé un compte.</p>
+            <p class="flex-1 px-6 text-xs font-poppins text-bluegrey hidden md:block">Tu n'es pas connecté : pour profiter des fonctionnalités de PennRide, connecte-toi ou créé un compte.</p>
+            <div class="flex gap-2">
+                <a href="/login" class="text-xs font-poppins text-bluegrey border border-babyblue rounded-full px-3 py-1">Connexion</a>
+                <a href="/register" class="text-xs font-poppins text-white bg-bluegrey rounded-full px-3 py-1">Inscription</a>
+            </div>
         <?php endif; ?>
     </header>
+
+    <div id="mobileMenu" class="m-menu">
+        <?php if (session('logged_in')): ?>
+            <a class="text-sm font-poppins text-bluegrey" href="<?= site_url('trajet') ?>" onclick="toggleMobileMenu()">Trajets</a>
+            <a class="text-sm font-poppins text-bluegrey" href="/nouveau-trajet" onclick="toggleMobileMenu()">Nouveau trajet</a>
+            <a class="text-sm font-poppins text-bluegrey" href="#" onclick="toggleMobileMenu()">Contact</a>
+            <a class="text-sm font-poppins text-bluegrey" href="/myprofil" onclick="toggleMobileMenu()">Mon profil</a>
+            <?php if (session('user_role') == 2): ?>
+                <a class="text-sm font-poppins text-white bg-bluegrey px-3 py-1 rounded-full w-fit" href="/backoffice" onclick="toggleMobileMenu()">Dashboard</a>
+            <?php endif; ?>
+            <a class="text-sm font-poppins text-grey" href="/logout">Déconnexion</a>
+        <?php else: ?>
+            <a class="text-sm font-poppins text-bluegrey" href="/login" onclick="toggleMobileMenu()">Connexion</a>
+            <a class="text-sm font-poppins text-bluegrey" href="/register" onclick="toggleMobileMenu()">Inscription</a>
+        <?php endif; ?>
+    </div>
+
+    <script>
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('open')
+        }
+    </script>

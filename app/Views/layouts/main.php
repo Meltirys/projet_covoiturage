@@ -16,10 +16,10 @@
         <?php if (session('logged_in')): ?>
             <!-- Nav desktop -->
             <nav class="hidden md:flex justify-end items-center gap-6">
-                <a class="text-xs font-poppins text-bluegrey" href="<?= site_url('trajet') ?>">Trajets</a>
-                <a class="text-xs font-poppins text-bluegrey" href="/nouveau-trajet">Nouveau trajet</a>
-                <a class="text-xs font-poppins text-bluegrey" href="#">Contact</a>
-                <a class="text-xs font-poppins text-bluegrey" href="/myprofil">Mon profil</a>
+                <a class="nav-d" href="<?= site_url('trajet') ?>">Trajets</a>
+                <a class="nav-d" href="/nouveau-trajet">Nouveau trajet</a>
+                <a class="nav-d" href="#">Contact</a>
+                <a class="nav-d" href="/myprofil">Mon profil</a>
                 <?php if (session('user_role') == 2): ?>
                     <a class="text-xs font-poppins text-white bg-bluegrey px-3 py-1 rounded-full" href="/backoffice">Dashboard</a>
                 <?php endif; ?>
@@ -42,17 +42,17 @@
     <!-- Menu mobile -->
     <div id="mobileMenu" class="m-menu">
         <?php if (session('logged_in')): ?>
-            <a class="text-sm font-poppins text-bluegrey" href="<?= site_url('trajet') ?>" onclick="toggleMobileMenu()">Trajets</a>
-            <a class="text-sm font-poppins text-bluegrey" href="/nouveau-trajet" onclick="toggleMobileMenu()">Nouveau trajet</a>
-            <a class="text-sm font-poppins text-bluegrey" href="#" onclick="toggleMobileMenu()">Contact</a>
-            <a class="text-sm font-poppins text-bluegrey" href="/myprofil" onclick="toggleMobileMenu()">Mon profil</a>
+            <a class="nav-m" href="<?= site_url('trajet') ?>" onclick="toggleMobileMenu()">Trajets</a>
+            <a class="nav-m" href="/nouveau-trajet" onclick="toggleMobileMenu()">Nouveau trajet</a>
+            <a class="nav-m" href="#" onclick="toggleMobileMenu()">Contact</a>
+            <a class="nav-m" href="/myprofil" onclick="toggleMobileMenu()">Mon profil</a>
             <?php if (session('user_role') == 2): ?>
                 <a class="text-sm font-poppins text-white bg-bluegrey px-3 py-1 rounded-full w-fit" href="/backoffice" onclick="toggleMobileMenu()">Dashboard</a>
             <?php endif; ?>
             <a class="text-sm font-poppins text-grey" href="/logout">Déconnexion</a>
         <?php else: ?>
-            <a class="text-sm font-poppins text-bluegrey" href="/login" onclick="toggleMobileMenu()">Connexion</a>
-            <a class="text-sm font-poppins text-bluegrey" href="/register" onclick="toggleMobileMenu()">Inscription</a>
+            <a class="nav-m" href="/login" onclick="toggleMobileMenu()">Connexion</a>
+            <a class="nav-m" href="/register" onclick="toggleMobileMenu()">Inscription</a>
         <?php endif; ?>
     </div>
 
