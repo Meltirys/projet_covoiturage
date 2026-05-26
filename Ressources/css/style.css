@@ -166,4 +166,28 @@
     @apply bg-[#ef4444] hover:bg-[#dc2626] text-white text-sm font-medium px-4 py-1.5 rounded-lg transition-colors cursor-pointer;
     border: none;
   }
+
+  .m-menu {
+    display: none;
+    flex-direction: column;
+    align-items: flex-end;
+    background-color: var(--color-lightgrey);
+    padding: 1rem 1.25rem;
+    gap: 1rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  }
+
+  .m-menu.open {
+    display: flex;
+  }
+
+  .header {
+    justify-content: space-around;
+  }
+
+  @media (max-width: 768px) {
+    .header {
+      justify-content: space-between;
+    }
+  }
 }
