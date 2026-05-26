@@ -78,6 +78,8 @@ class BookingController extends BaseController
                 ->where('is_driver', false)
                 ->findAll();
             foreach ($requests as $r) {
+                $passenger = $userModel->find($r['id_user']);
+                $r['passanger_name'] = $passenger['first_name'] . ' ' . substr($passenger['last_name'],0, 1) . '.';
                 $pendingRequests[] = array_merge($r, ['journey' => $journey]);
             }
         }
@@ -293,7 +295,7 @@ class BookingController extends BaseController
     {
         //We check if an id has been provided, if not we set the id to the connected user
         if ($idPassenger === -1) {
-            $idPassenger = session()->user_id;
+            $idPassenger = session('user_id');
         }
 
         //Model declaration

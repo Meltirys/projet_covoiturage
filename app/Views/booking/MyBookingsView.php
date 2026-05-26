@@ -128,7 +128,7 @@
                 <?php foreach ($pendingRequests as $request): ?>
                     <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
                         <div>
-                            <p class="text-sm font-poppins text-bluegrey">Passager #<?= esc($request['id_user']) ?></p>
+                            <p class="text-sm font-poppins text-bluegrey"><?= esc($request['passenger_name']) ?></p>
                             <p class="text-xs text-grey"><?= esc($request['journey']['departure']) ?></p>
                         </div>
                         <div class="flex gap-2">
