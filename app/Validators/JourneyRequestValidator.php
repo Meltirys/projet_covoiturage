@@ -91,6 +91,20 @@ class JourneyRequestValidator extends BaseValidator
 
             'start-datetime' => $datetimeRules,
             'end-datetime'   => $datetimeRules,
+            'range-start' => [
+                'rules' => 'required|regex_match[/^([01]\d|2[0-3]):([0-5]\d)$/]',
+                'errors' => [
+                    'required' => 'L\'heure de début de disponibilité est obligatoire',
+                    'regex_match' => 'L\'heure doit être dans le format HH:MM',
+                ]
+            ],
+            'range-end' => [
+                'rules' => 'required|regex_match[/^([01]\d|2[0-3]):([0-5]\d)$/]',
+                'errors' => [
+                    'required' => 'L\'heure de fin de disponibilité est obligatoire',
+                    'regex_match' => 'L\'heure doit être dans le format HH:MM',
+                ]
+            ],
             'options'   => [
                 'rules' => 'permit_empty',
                 'errors' => [],

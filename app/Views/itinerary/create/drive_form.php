@@ -88,7 +88,8 @@
             value="<?= set_value('start-time') ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
     </div>
-
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
     <!-- Date arrivée / Heure arrivée -->
     <div class="flex flex-col gap-1">
         <label for="end-date" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Date d'arrivée</label>

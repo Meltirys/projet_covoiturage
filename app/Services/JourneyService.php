@@ -184,10 +184,10 @@ class JourneyService
 
             // 3. Journey
             $journeyData = [
-                'description' => "",
-                // 'departure'         => $input['start-datetime'],
-                // 'estimated_arrival' => $input['end-datetime'],
-                'range_of_time' => "",
+                'description'       => $input['description'],
+                'departure'         => $input['start-datetime'],
+                'estimated_arrival' => $input['end-datetime'],
+                'range_of_time'     => $input['range-of-time'],
                 'start'             => $startLocationId,
                 'end'               => $endLocationId,
             ];

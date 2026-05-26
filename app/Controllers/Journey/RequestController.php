@@ -8,6 +8,7 @@ use CodeIgniter\Exceptions\PageNotFoundException;
 use App\Models\JourneyRequestModel;
 use App\Models\CarModel;
 use App\Validators\JourneyRequestValidator;
+use DateTime;
 use PDOException;
 
 class RequestController extends BaseController
@@ -70,11 +71,21 @@ class RequestController extends BaseController
          * start = ['label', 'city', 'postcode', 'lat', 'lon']
          * end = [...]
          * departure['date', 'time'], estimated_arrival['date', 'time']
+         * range-start, range-end
          * 
          * options?
          */
 
         $data = $this->request->getPost();
+
+        $data['start-datetime'] = (new DateTime(
+            $data['start-date'] . ' ' . $data['start-time']
+        ))->format('Y-m-d H:i:s');
+
+        $data['end-datetime'] = (new DateTime(
+            $data['end-date'] . ' ' . $data['end-time']
+        ))->format('Y-m-d H:i:s');
+
 
         // Validation
         $validator = new JourneyRequestValidator;
@@ -84,6 +95,8 @@ class RequestController extends BaseController
                 ->with('errors', $validator->getErrors())
                 ->withInput();
         }
+
+        $data['range-of-time'] = $data['range-start'] . ' - ' . $data['range-end'];
 
         // Logic
         try {
