@@ -10,7 +10,7 @@
     </header>
 
     <div class="bg-white border border-[rgba(37,63,114,0.25)] rounded-xl p-5">
-        <?= view('itinerary/search/drive_form') ?>
+        <?= view('itinerary/search/search_drive_form') ?>
     </div>
 
 </main>
