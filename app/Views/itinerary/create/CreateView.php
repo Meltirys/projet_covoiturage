@@ -11,11 +11,11 @@
 
     <!-- Mon idée est de faire deux onglets sur la même page qui afficheront les deux différents formulaires -->
     <div class="bg-white border border-[rgba(37,63,114,0.25)] rounded-xl p-5">
-        <?= view('itinerary/create/drive_form') ?>
+        <?= view('itinerary/create/create_drive_form') ?>
     </div>
 
     <div class="bg-white border border-[rgba(37,63,114,0.25)] rounded-xl p-5">
-        <?= view('itinerary/create/request_form') ?>
+        <?= view('itinerary/create/create_request_form') ?>
     </div>
 </main>
 

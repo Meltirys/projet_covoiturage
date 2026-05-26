@@ -8,6 +8,9 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class PagesController extends BaseController
 {
+    /**
+     * Home page
+     */
     public function home()
     {
         helper('form');
@@ -15,6 +18,9 @@ class PagesController extends BaseController
         return view('HomeView');
     }
 
+    /**
+     * Journey creation page
+     */
     public function createJourney()
     {
         helper('form');
@@ -34,8 +40,13 @@ class PagesController extends BaseController
         return view('itinerary/create/CreateView', $data);
     }
 
+    /**
+     * Itinerary search page
+     */
     public function searchJourney()
     {
+        helper('form');
+
         return view('itinerary/search/SearchView');
     }
 }

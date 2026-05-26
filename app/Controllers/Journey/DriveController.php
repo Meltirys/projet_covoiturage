@@ -15,17 +15,6 @@ use PDOException;
 class DriveController extends BaseController
 {
     /**
-     * Displays the search page listing itineraries
-     */
-    public function search()
-    {
-        $data = ['type' => 'drive'];
-
-        helper('form');
-        return view('itinerary/search/SearchView', $data);
-    }
-
-    /**
      * Displays the page for a specific trip
      * 
      * parameter : itinerary id

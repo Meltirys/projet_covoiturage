@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <header class="header flex items-center justify-around pt-5 px-5 bg-lightgrey">
+    <header class="header flex items-center justify-around py-4 px-5 bg-lightgrey">
         <img src="/img/logo.png" alt="PennRide" class="w-12 h-12 rounded-xl">
 
         <?php if (session('logged_in')): ?>
