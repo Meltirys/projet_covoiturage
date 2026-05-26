@@ -20,7 +20,31 @@ class CustomRules
     }
 
     /**
-     * Verifies if the datetime value is realistic
+     * Validates a date in Y-m-d format
+     * @param string $value The date
+     * @return bool
+     */
+    public function validateDate(string $value): bool
+    {
+        $dt = \DateTime::createFromFormat('Y-m-d', $value);
+
+        return $dt && $dt->format('Y-m-d') === $value;
+    }
+
+    /**
+     * Validates a time in H:i format (24h)
+     * @param string $value The time
+     * @return bool
+     */
+    public function validateTime(string $value): bool
+    {
+        $dt = \DateTime::createFromFormat('H:i', $value);
+
+        return $dt && $dt->format('H:i') === $value;
+    }
+
+    /**
+     * Validates a datetime value in Y-m-d H:i:s format
      * @param string $value The datetime
      * @return bool
      */
@@ -104,7 +128,5 @@ class CustomRules
         return password_verify($old_password, $userInfo['password']);
     }
 
-    public function isValidAddress(string $address) : bool {
-        
-    }
+    public function isValidAddress(string $address): bool {}
 }

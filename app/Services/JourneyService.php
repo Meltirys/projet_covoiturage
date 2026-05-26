@@ -8,6 +8,7 @@ use App\Models\LocationModel;
 use App\Models\JourneyDriveModel;
 use App\Models\StagesModel;
 use CodeIgniter\Database\BaseConnection;
+use DateTime;
 
 class JourneyService
 {
@@ -20,11 +21,8 @@ class JourneyService
 
     /**
      * Attempts to create every element of the driver's journey
-     * 
      * @param array $input The user's inputs
-     * 
      * @param int $userId The user's ID
-     * 
      * @return int The JourneyDrive ID
      */
     public function createJourneyDrive(array $input, int $userId): int
@@ -34,6 +32,14 @@ class JourneyService
         $locationModel  = model(LocationModel::class);
         $journeyModel   = model(JourneyDriveModel::class);
         $stageModel     = model(StagesModel::class);
+
+        $input['start-datetime'] = (new DateTime(
+            $input['start-date'] . ' ' . $input['start-time']
+        ))->format('Y-m-d H:i:s');
+
+        $input['end-datetime'] = (new DateTime(
+            $input['end-date'] . ' ' . $input['end-time']
+        ))->format('Y-m-d H:i:s');
 
         $this->db->transBegin();
 
@@ -137,12 +143,29 @@ class JourneyService
     }
 
     /**
+     * 
+     */
+    public function updateJourneyDrive() {}
+
+    /**
+     * 
+     */
+    public function deleteJourneyDrive() {}
+
+    /**
+     * 
+     */
+    public function searchJourneyDrive()
+    {
+        // convert date to datetime range
+        $startDay = $data['date'] . '00:00:00';
+        // $endDay = $data['date'] avancer d'1 jour . '00:00:00';
+    }
+
+    /**
      * Attempts to create every element of the requester's journey
-     * 
      * @param array $input The user's inputs
-     * 
      * @param int $userId The user's ID
-     * 
      * @return int The JourneyRequest ID
      */
     public function createJourneyRequest(array $input, int $userId): int
@@ -211,4 +234,19 @@ class JourneyService
             throw $e;
         }
     }
+
+    /**
+     * 
+     */
+    public function updateJourneyRequest() {}
+
+    /**
+     * 
+     */
+    public function deleteJourneyRequest() {}
+
+    /**
+     * 
+     */
+    public function searchJourneyRequest() {}
 }

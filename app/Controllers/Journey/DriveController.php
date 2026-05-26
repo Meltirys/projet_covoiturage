@@ -9,11 +9,63 @@ use App\Models\JourneyDriveModel;
 use App\Models\CarModel;
 use App\Validators\JourneyDriveValidator;
 use App\Validators\JourneyRequestValidator;
-use DateTime;
 use PDOException;
 
 class DriveController extends BaseController
 {
+    /**
+     * Searches for matching itineraries
+     */
+    public function search()
+    {
+        /* Inputs :
+         * start = ['label', 'city', 'postcode', 'lat', 'lon']
+         * end = [...]
+         * date
+         * passengers (default 1)
+         * (optional) filters
+         */
+
+        $data = $this->request->getPost();
+
+        // Validation
+        $validator = new SearchJourneyDriveValidator;
+
+        if (! $validator->validate($data)) {
+            return redirect()->back()
+                ->with('errors', $validator->getErrors())
+                ->withInput();
+        }
+
+
+
+        // Logic
+        try {
+            $journeyService = service('journeyService');
+
+            // === Ajouter options quand possible !
+            $journeyId = $journeyService->createJourneyDrive(
+                $data,
+                session()->get('user_id')
+            );
+
+            return redirect()->to('/')
+                ->with('status', 'Itinéraire créé avec succès');
+        } catch (\DomainException $e) {
+            // user error (e.g. chosen more seats than available in car)
+            return redirect()->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
+        } catch (\Throwable $e) {
+            // system error
+            log_message('error', $e->getMessage());
+
+            return redirect()->back()
+                ->with('error', 'Une erreur s\'est produite')
+                ->withInput();
+        }
+    }
+
     /**
      * Displays the page for a specific trip
      * 
@@ -55,14 +107,6 @@ class DriveController extends BaseController
 
         $data = $this->request->getPost();
 
-        $data['start-datetime'] = (new DateTime(
-            $data['start-date'] . ' ' . $data['start-time']
-        ))->format('Y-m-d H:i:s');
-
-        $data['end-datetime'] = (new DateTime(
-            $data['end-date'] . ' ' . $data['end-time']
-        ))->format('Y-m-d H:i:s');
-
         // Validation
         $validator = new JourneyRequestValidator;
 
@@ -71,8 +115,6 @@ class DriveController extends BaseController
                 ->with('errors', $validator->getErrors())
                 ->withInput();
         }
-
-
 
         // Logic
         try {
