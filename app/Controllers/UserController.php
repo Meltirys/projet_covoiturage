@@ -137,9 +137,20 @@ class UserController extends BaseController
     {
         helper('form');
 
-        $dbUser = model('UserModel');
-        $data['user'] = $dbUser->find(session()->user_id);
-        return view('profil/modify', $data);
+        $userModel = model('UserModel');
+        $cityModel = model('CityModel');
+        $locationModel = model('LocationModel');
+
+        $user = $userModel->find(session()->user_id);// Retrieving the user infos
+        
+        $address = $locationModel->find($user['id_location']); // Retrieving the address
+        $user['address'] = $address['address'];
+
+        $city = $cityModel->find($address['id_city']); //Retrieving the city infos
+        $user['city'] = $city['name'];
+        $user['postcode'] = $city['postcode'];
+
+        return view('profil/modify', $user);
     }
 
     /*
