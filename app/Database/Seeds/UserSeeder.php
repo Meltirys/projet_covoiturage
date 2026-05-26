@@ -15,8 +15,19 @@ class UserSeeder extends Seeder
         $this->db->table('Car')->truncate();
         $this->db->table('Users')->truncate();
         $this->db->table('UserPermission')->truncate();
+        $this->db->table('Location')->truncate();
+        $this->db->table('City')->truncate();
 
         $this->db->query('SET FOREIGN_KEY_CHECKS = 1'); //Reactivating the foreign keys
+
+        $this->db->table('City')->insert(['name' => 'Vannes', 'postcode' => '56000']);
+        $cityId = $this->db->insertID();
+        $this->db->table('Location')->insert([
+            'address'   => 'GRETA de Vannes',
+            'latitude'  => 47.64829,
+            'longitude' => -2.77503,
+            'id_city'   => $cityId,
+        ]);
 
         $this->db->table('UserPermission')->insertBatch([
             ['id_user_permission' => 1, 'user_permission_label' => 'user'],
