@@ -12,6 +12,7 @@ use App\Models\CityModel;
 use App\Services\LocationService;
 use App\Validators\RegistrationValidator;
 use App\Services\MailService;
+use PhpParser\Node\Expr\AssignOp\Mod;
 
 class UserController extends BaseController
 {
@@ -133,24 +134,77 @@ class UserController extends BaseController
         }
     }
 
+    /**
+     * Preloads the informations of the user and displays it. Access route is /user/modify
+     */
     public function modify()
     {
         helper('form');
 
-        $userModel = model('UserModel');
-        $cityModel = model('CityModel');
-        $locationModel = model('LocationModel');
+        $data['user'] = $this->loadUserInfos();
 
-        $user = $userModel->find(session()->user_id);// Retrieving the user infos
-        
-        $address = $locationModel->find($user['id_location']); // Retrieving the address
-        $user['address'] = $address['address'];
+        return view('profil/modify', $data);
+    }
 
-        $city = $cityModel->find($address['id_city']); //Retrieving the city infos
-        $user['city'] = $city['name'];
-        $user['postcode'] = $city['postcode'];
+    public function update()
+    {
+        helper('form');
 
-        return view('profil/modify', $user);
+        $post = $this->request->getPost();
+        //Calling the specific validator
+        $validator = new RegistrationValidator();
+
+        //If an error is detected, return to the form with the errors described
+        if (!$validator->validate($post)) {
+            $user = $this->loadUserInfos();
+            return view('profil/modify',[
+                'user' => $user,
+                'errors' => $validator->getErrors()
+            ]);
+
+        }
+        // --- Saving the location --- 
+        $location = [
+            'address' => $this->request->getPost('address'),
+            'postcode' => $this->request->getPost('postcode'),
+            'city' => $this->request->getPost('city'),
+        ];
+        $locationService = new LocationService();
+
+        $idLocation = $locationService->getOrCreate($location['address'], $location['city'], $location['postcode']);
+
+        // --- Saving in the user table ---
+        //Retrieving the information for the user table
+        $user = [
+            'first_name'   => $this->request->getPost('first_name'),
+            'last_name'    => $this->request->getPost('last_name'),
+            'email'        => $this->request->getPost('email-signup'),
+            'password'     => $this->request->getPost('password'),
+            'password_conf' => $this->request->getPost('password_conf'),
+            'mobile'       => $this->request->getPost('mobile'),
+            'birth_date'   => $this->request->getPost('birth_date'),
+            'gender'       => $this->request->getPost('gender'),
+            'id_location'  => $idLocation
+        ];
+
+        $userModel = model(UserModel::class);
+
+        /* 
+         * Tries to save a new user. 
+         * If there were errors, returns to view with them in the following format :
+         * [ 'field1' => 'error message', 'field2' => 'error message', ]
+         */
+        if (! $userModel->update(session()->user_id, $user)) {
+            $errors = $userModel->errors();
+
+            return redirect()->to('/user/modify')
+                ->with('errors', $errors)
+                ->withInput()
+                ->with('error', 'Une erreur est survenue lors de la sauvegarde de vos informations');
+        }
+
+        return redirect()->to('/user/modify')
+            ->with('success', 'Vos informations personnelles ont bien été modifiées');
     }
 
     /*
@@ -197,5 +251,23 @@ class UserController extends BaseController
         //If no errors
         return redirect()->to('profil/changePassword')
             ->with('password_success', 'Mot de passe modifié avec succès.');
+    }
+
+    private function loadUserInfos(): array
+    {
+        $userModel = model('UserModel');
+        $cityModel = model('CityModel');
+        $locationModel = model('LocationModel');
+
+        $user = $userModel->find(session()->user_id); // Retrieving the user infos
+
+        $address = $locationModel->find($user['id_location']); // Retrieving the address
+        $user['address'] = $address['address'];
+
+        $city = $cityModel->find($address['id_city']); //Retrieving the city infos
+        $user['city'] = $city['name'];
+        $user['postcode'] = $city['postcode'];
+
+        return $user;
     }
 }

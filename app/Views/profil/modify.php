@@ -5,6 +5,13 @@
          <h2 class="text-xs tracking-widest text-bluegrey uppercase">Informations personnelles</h2>
      </header>
 
+     <?php if (session()->getFlashdata('success')): ?>
+         <p class="text-xs text-green-600 border border-green-200 rounded px-3 py-2 mb-4"><?= session()->getFlashdata('success') ?></p>
+     <?php endif ?>
+     <?php if (session()->getFlashdata('error')): ?>
+         <p class="text-xs text-red-500 border border-red-200 rounded px-3 py-2 mb-4"><?= session()->getFlashdata('error') ?></p>
+     <?php endif ?>
+
      <?= form_open('/user/update') ?>
 
 
@@ -12,54 +19,54 @@
 
          <div class="flex flex-col gap-1">
              <label class="text-xs tracking-widest text-bluegrey uppercase">Nom</label>
-             <input class="w-full rounded-xl border border-babyblue px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-babyblue" type="text" name="last_name" value="<?= old('last_name', $last_name) ?>" required>
+             <input class="w-full rounded-xl border border-babyblue px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-babyblue" type="text" name="last_name" value="<?= old('last_name', $user['last_name']) ?>" required>
              <?php if ($errors['last_name'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['last_name'] ?></span><?php endif ?>
          </div>
          <div class="flex flex-col gap-1">
              <label class="text-xs tracking-widest text-bluegrey uppercase">Prénom</label>
-             <input class="w-full rounded-xl border border-babyblue px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-babyblue" type="text" name="first_name" value="<?= old('first_name', $first_name) ?>" required>
+             <input class="w-full rounded-xl border border-babyblue px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-babyblue" type="text" name="first_name" value="<?= old('first_name', $user['first_name']) ?>" required>
              <?php if ($errors['first_name'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['first_name'] ?></span><?php endif ?>
          </div>
          <div class="flex flex-col gap-1">
              <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Genre</label>
-             <select class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" name="gender" value="<?= old('gender', $gender) ?>" required>
+             <select class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" name="gender" required>
                  <option value="" disabled selected>Sélectionner</option>
-                 <option value="female" <?= old('gender', $gender) === 'female' ? 'selected' : '' ?>>Féminin</option>
-                 <option value="male" <?= old('gender', $gender) === 'male' ? 'selected' : '' ?>>Masculin</option>
-                 <option value="none" <?= old('gender', $gender) === 'none' ? 'selected' : '' ?>>Non communiqué</option>
+                 <option value="female" <?= old('gender', $user['gender']) === 'female' ? 'selected' : '' ?>>Féminin</option>
+                 <option value="male" <?= old('gender', $user['gender']) === 'male' ? 'selected' : '' ?>>Masculin</option>
+                 <option value="none" <?= old('gender', $user['gender']) === 'none' ? 'selected' : '' ?>>Non communiqué</option>
              </select>
          </div>
          <div class="flex flex-col gap-1">
              <label class="text-xs tracking-widest text-bluegrey uppercase">E-mail</label>
-             <input class="w-full rounded-xl border border-babyblue px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-babyblue" type="email" name="email-signup" value="<?= old('email', $email)  ?>" required>
+             <input class="w-full rounded-xl border border-babyblue px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-babyblue" type="email" name="email" value="<?= old('email', $user['email'])  ?>" required>
              <?php if ($errors['email'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['email'] ?></span><?php endif ?>
          </div>
          <div class="flex flex-col gap-1">
              <label class="text-xs tracking-widest text-bluegrey uppercase">Adresse</label>
-             <input class="w-full rounded-xl border border-babyblue px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-babyblue" type="text" name="address" value="<?= old('address', $address) ?>" required>
+             <input class="w-full rounded-xl border border-babyblue px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-babyblue" type="text" name="address" value="<?= old('address', $user['address']) ?>" required>
              <?php if ($errors['address'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['address'] ?></span><?php endif ?>
          </div>
          <div class="grid grid-cols-2 gap-3">
              <div class="flex flex-col gap-1">
                  <label class="text-xs tracking-widest text-bluegrey uppercase">Code postal</label>
-                 <input class="w-full rounded-xl border border-babyblue px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-babyblue" type="text" name="postcode" value="<?= old('postcode', $postcode) ?>">
+                 <input class="w-full rounded-xl border border-babyblue px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-babyblue" type="text" name="postcode" value="<?= old('postcode', $user['postcode']) ?>">
                  <?php if ($errors['postcode'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['postcode'] ?></span><?php endif ?>
              </div>
              <div class="flex flex-col gap-1">
                  <label class="text-xs tracking-widest text-bluegrey uppercase">Ville</label>
-                 <input class="w-full rounded-xl border border-babyblue px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-babyblue" type="text" name="city" value="<?= old('city', $city) ?>" required>
+                 <input class="w-full rounded-xl border border-babyblue px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-babyblue" type="text" name="city" value="<?= old('city', $user['city']) ?>" required>
                  <?php if ($errors['city'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['city'] ?></span><?php endif ?>
              </div>
          </div>
          <div class="grid grid-cols-2 gap-3">
              <div class="flex flex-col gap-1">
                  <label class="text-xs tracking-widest text-bluegrey uppercase">Téléphone</label>
-                 <input class="w-full rounded-xl border border-babyblue px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-babyblue" type="tel" id="mobile" name="mobile" value="<?= old('mobile', $mobile)  ?>" oninput="formatPhone(this)">
+                 <input class="w-full rounded-xl border border-babyblue px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-babyblue" type="tel" id="mobile" name="mobile" value="<?= old('mobile', $user['mobile'])  ?>" oninput="formatPhone(this)">
                  <?php if ($errors['mobile'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['mobile'] ?></span><?php endif ?>
              </div>
              <div class="flex flex-col gap-1">
                  <label class="text-xs tracking-widest text-bluegrey uppercase">Date de naissance</label>
-                 <input class="w-full rounded-xl border border-babyblue px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-babyblue" type="date" name="birth_date" value="<?= old('birth_date', $birth_date) ?>" required>
+                 <input class="w-full rounded-xl border border-babyblue px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-babyblue" type="date" name="birth_date" value="<?= old('birth_date', $user['birth_date']) ?>" required>
                  <?php if ($errors['birth_date'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['birth_date'] ?></span><?php endif ?>
              </div>
          </div>
