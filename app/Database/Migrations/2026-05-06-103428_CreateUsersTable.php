@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             'mobile'          => ['type' => 'VARCHAR', 'constraint' => 50, 'null' => true],
             'birth_date'      => ['type' => 'DATE', 'null' => false],
             'gender'          => ['type' => 'VARCHAR', 'null' => false, 'constraint' => 50],
-            'avatar_filename' => ['type' => 'VARCHAR', 'constraint' => 255, 'null' =>true, 'default' => 'null'],
+            'avatar_filename' => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true, 'default' => 'null'],
             'is_validated'    => ['type' => 'BOOLEAN', 'null' => true, 'default' => null],
             'id_user_permission' => [
                 'type'      => 'INT',
@@ -30,9 +30,12 @@ class CreateUsersTable extends Migration
                 'null'      => false,
                 'default' => 1,
             ],
+            'id_location' => ['type' => 'INT', 'unsigned' => true, 'null' => false]
         ]);
         $this->forge->addPrimaryKey('id_user');
         $this->forge->addForeignKey('id_user_permission', 'UserPermission', 'id_user_permission', 'RESTRICT', 'NO ACTION');
+        $this->forge->addForeignKey('id_location', 'Location', 'id_location', 'RESTRICT', 'NO ACTION');
+
         $this->forge->createTable('Users');
     }
 

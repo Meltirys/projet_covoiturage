@@ -35,7 +35,8 @@ class UserSeeder extends Seeder
                 'birth_date'         => '1948-06-21',
                 'gender'             => 'male',
                 'id_user_permission' => 1,
-                'is_validated' => true
+                'is_validated' => true,
+                'id_location' => 1
             ],
             [
                 'id_user'            => 2,
@@ -47,7 +48,8 @@ class UserSeeder extends Seeder
                 'birth_date'         => '1948-06-21',
                 'gender'             => 'male',
                 'id_user_permission' => 2,
-                'is_validated' => true
+                'is_validated' => true,
+                'id_location' => 1
             ],
             [
                 'id_user'            => 5,
@@ -59,7 +61,8 @@ class UserSeeder extends Seeder
                 'birth_date'         => '1948-06-21',
                 'gender'             => 'male',
                 'id_user_permission' => 3,
-                'is_validated' => true
+                'is_validated' => true,
+                'id_location' => 1
             ],
             [
                 'id_user'            => 3,
@@ -71,7 +74,8 @@ class UserSeeder extends Seeder
                 'birth_date'         => '1948-06-21',
                 'gender'             => 'male',
                 'id_user_permission' => 1,
-                'is_validated' => false
+                'is_validated' => false,
+                'id_location' => 1
             ],
             [
                 'id_user'            => 4,
@@ -83,7 +87,8 @@ class UserSeeder extends Seeder
                 'birth_date'         => '1948-06-21',
                 'gender'             => 'male',
                 'id_user_permission' => 1,
-                'is_validated'       => null
+                'is_validated'       => null,
+                'id_location' => 1
             ],
         ];
 

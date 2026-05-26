@@ -86,11 +86,12 @@ $routes->group('', ['filter' => 'authadmin'], function ($routes) {
     $routes->get('userSuppression', [UserSuppressionController::class, 'index']);
     $routes->post('user/delete/(:num)', [UserController::class, 'delete']);
     $routes->get('banUser', [UserBanController::class, 'index']);
-    $routes->post('user/ban/(:num)', [UserController::class, 'ban']);
+    $routes->post('user/ban/(:num)', [UserBanController::class, 'ban']);
 
     $routes->get('searchUser/(:alpha)', [SearchController::class, 'searchUser']);
 });
 
+//Super-admin part
 $routes->group('', ['filter' => 'authsuper'], function ($routes) {
     $routes->get('userRole', [UserRoleController::class, 'index']);
     $routes->get('searchUserWP/(:alpha)', [SearchController::class, 'searchUserWithPerm']);

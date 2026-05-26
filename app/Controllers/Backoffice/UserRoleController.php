@@ -3,7 +3,9 @@
 namespace App\Controllers\Backoffice;
 
 use App\Controllers\BaseController;
+use App\Validators\ChangeRoleValidator;
 use PhpParser\Node\Expr\AssignOp\Mod;
+
 
 class UserRoleController extends BaseController
 {
@@ -12,27 +14,42 @@ class UserRoleController extends BaseController
         return view('backoffice/UserRole.php');
     }
 
+    /**
+     * @return \CodeIgniter\HTTP\ResponseInterface A json format of the available roles in the app
+     */
     public function getAllPermissions(): \CodeIgniter\HTTP\ResponseInterface
     {
         $userPermissionModel = model('UserPermissionModel');
-        $results   = $userPermissionModel->getAllAvailablesRoles();
+        $results   = $userPermissionModel->getAvailablesRoles();
 
         return $this->response->setJSON($results);
     }
 
+    /**
+     * Modifies the role of a given user. Access route is /user/updateRole/{idUser}
+     * @param int $idUser The id of the user we want to modify
+     */
     public function updateUserRole(int $idUser)
     {
         $userModel = model('UserModel');
 
         $post = $this->request->getPost();
+        $post['id_user'] = $idUser;
 
-        if (!$userModel->updateUserRole($idUser, $post['newRole'])) {
+        $validator = new ChangeRoleValidator();
 
+        if (!$validator->validate($post)) {
+            return redirect()->to('/userRole')
+                ->with('error', $validator->getError('id_user'));
+        }
+
+
+        if (!$userModel->updateUserRole($idUser, $post['new_role'])) {
             return redirect()->back()
-                ->with('error', "Une erreur est survenue lors du changemenr de rôle de l'utilisateur, veuillez réessayer.");
+                ->with('error', "Une erreur est survenue lors du changement de rôle de l'utilisateur, veuillez réessayer.");
         }
 
         return redirect()->back()
-            ->with('success',"Le role de " . $userModel->getUserName($idUser) . " a bien été modifié.");;
+            ->with('success', "Le role de " . $userModel->getUserName($idUser) . " a bien été modifié.");;
     }
 }

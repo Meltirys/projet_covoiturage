@@ -24,7 +24,7 @@
 <script>
     //The select template that contains all the roles
     let userRoleSelect = document.createElement('select')
-    userRoleSelect.name = "newRole"
+    userRoleSelect.name = "new_role"
 
     //Creating the select form of the role. We will clone him for each instance of user created.
     document.addEventListener('DOMContentLoaded', () => {

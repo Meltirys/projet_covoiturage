@@ -103,4 +103,8 @@ class CustomRules
 
         return password_verify($old_password, $userInfo['password']);
     }
+
+    public function isValidAddress(string $address) : bool {
+        
+    }
 }

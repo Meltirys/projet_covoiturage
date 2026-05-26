@@ -9,6 +9,7 @@ use CodeIgniter\Controller;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Validators\ChangePasswordValidator;
 use App\Models\CityModel;
+use App\Services\LocationService;
 use App\Validators\RegistrationValidator;
 use App\Services\MailService;
 
@@ -35,6 +36,16 @@ class UserController extends BaseController
                 'errors' => $validator->getErrors()
             ]);
         }
+        // --- Saving the location --- 
+        $location = [
+            'address' => $this->request->getPost('address'),
+            'postcode' => $this->request->getPost('postcode'),
+            'city' => $this->request->getPost('city'),
+        ];
+        $locationService = new LocationService();
+
+        $idLocation = $locationService->getOrCreate($location['address'], $location['city'], $location['postcode']);
+
         // --- Saving in the user table ---
         //Retrieving the information for the user table
         $user = [
@@ -43,9 +54,10 @@ class UserController extends BaseController
             'email'        => $this->request->getPost('email-signup'),
             'password'     => $this->request->getPost('password'),
             'password_conf' => $this->request->getPost('password_conf'),
-            'mobile'       => $this->request->getPost('phone'),
+            'mobile'       => $this->request->getPost('mobile'),
             'birth_date'   => $this->request->getPost('birth_date'),
             'gender'       => $this->request->getPost('gender'),
+            'id_location'  => $idLocation
         ];
 
         $userModel = model(UserModel::class);
@@ -63,31 +75,6 @@ class UserController extends BaseController
                 ->withInput()
                 ->with('signup_error', 'Votre compte n\'a pas pu être créé');
         }
-
-        // --- Saving in the city table ---
-        //Retrieving the city informations
-        $city = [
-            'postcode' => $this->request->getPost('postcode'),
-            'name' => $this->request->getPost('city')
-        ];
-        $cityModel = model('CityModel');
-        $cityId = $cityModel->getOrCreate($city['name'], $city['postcode']);
-
-        /* To uncomment and finish later
-        // --- Saving in the location table ---
-        //getting the information of the latitude and longitude
-
-
-        //Retrieving the location informations
-        $location = [
-            'address' => $this->request->getPost('address')
-        ];
-
-        $locationModel = model('LocationModel');
-        $locationId = $locationModel->getOrCreate($location['address']);*/
-
-
-
 
         /* Mail: To uncomment in production
         //Creating MailService object to be able to send the mail
@@ -199,26 +186,5 @@ class UserController extends BaseController
         //If no errors
         return redirect()->to('profil/changePassword')
             ->with('password_success', 'Mot de passe modifié avec succès.');
-    }
-
-    /**
-     * Ban the given user. Access route is /user/ban/{idUser}
-     * @param int $idUser The id of the user we want to ban
-     */
-    public function ban(int $idUser)
-    {
-        $userModel = model('UserModel');
-
-        //Checking if an error happens when banning the user
-        if (!$userModel->update(session()->get('user_id'), [
-            'is_validated' => false
-        ])) {
-            return redirect()->to('banUser')
-                ->with('error', 'Une erreur est survenue lors du banissement de l\'utilisateur, veuillez réessayer');
-        }
-
-        //If no errors
-        return redirect()->to('banUser')
-            ->with('success', "L'utilisateur " . $userModel->getUserName($idUser) . " a été bannis avec succès");
     }
 }

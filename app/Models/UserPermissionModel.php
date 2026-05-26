@@ -44,9 +44,13 @@ class UserPermissionModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function getAllAvailablesRoles() : array{
+    /**
+     * @return array The availables roles, except for the super-admin
+     */
+    public function getAvailablesRoles() : array{
         $roles = $this->distinct()
                     ->select("id_user_permission AS level, user_permission_label as label")
+                    ->where("user_permission_label != 'super-admin'")
                     ->findAll();
 
         return $roles;
