@@ -14,7 +14,7 @@
         if ($startError): ?>
             <span class="text-xs text-red-500"><?= esc($startError) ?></span>
         <?php endif ?>
-        <div class="address-results"></div>
+        <div class="results"></div>
         <input type="hidden" name="start[lat]">
         <input type="hidden" name="start[lon]">
         <input type="hidden" name="start[city]">
@@ -32,7 +32,7 @@
         if ($endError): ?>
             <span class="text-xs text-red-500"><?= esc($endError) ?></span>
         <?php endif ?>
-        <div class="address-results"></div>
+        <div class="results"></div>
         <input type="hidden" name="end[lat]">
         <input type="hidden" name="end[lon]">
         <input type="hidden" name="end[city]">
