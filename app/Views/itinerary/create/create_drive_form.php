@@ -10,8 +10,9 @@
             type="text" name="start[label]" id="start"
             value="<?= set_value('start[label]') ?>"
             placeholder="Entrez le point de départ" required>
-        <?php if (isset($errors['start'])): ?>
-            <span class="text-xs text-red-500"><?= $errors['start'] ?></span>
+        <?php $startError = $errors['start.label'] ?? $errors['start.lat'] ?? $errors['start.lon'] ?? $errors['start.city'] ?? $errors['start.postcode'] ?? null;
+        if ($startError): ?>
+            <span class="text-xs text-red-500"><?= esc($startError) ?></span>
         <?php endif ?>
         <div class="results"></div>
         <input type="hidden" name="start[lat]">
@@ -27,8 +28,9 @@
             type="text" name="end[label]" id="end"
             value="<?= set_value('end[label]') ?>"
             placeholder="Entrez votre destination" required>
-        <?php if (isset($errors['end'])): ?>
-            <span class="text-xs text-red-500"><?= $errors['end'] ?></span>
+        <?php $endError = $errors['end.label'] ?? $errors['end.lat'] ?? $errors['end.lon'] ?? $errors['end.city'] ?? $errors['end.postcode'] ?? null;
+        if ($endError): ?>
+            <span class="text-xs text-red-500"><?= esc($endError) ?></span>
         <?php endif ?>
         <div class="results"></div>
         <input type="hidden" name="end[lat]">
@@ -63,12 +65,13 @@
                         Retirer
                     </button>
                 <?php endif; ?>
+                <?php $stopError = $errors["stops.$index.label"] ?? $errors["stops.$index.lat"] ?? $errors["stops.$index.lon"] ?? $errors["stops.$index.city"] ?? $errors["stops.$index.postcode"] ?? null;
+                if ($stopError): ?>
+                    <span class="text-xs text-red-500"><?= esc($stopError) ?></span>
+                <?php endif ?>
             </div>
         <?php endforeach; ?>
     </div>
-    <?php if (isset($errors['stops'])): ?>
-        <span class="text-xs text-red-500"><?= $errors['stops'] ?></span>
-    <?php endif ?>
 </div>
 <!--  -->
 
@@ -80,6 +83,9 @@
         <input type="date" name="start-date" id="start-date"
             value="<?= set_value('start-date') ?>"
             class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
+        <?php if (isset($errors['start-date'])): ?>
+            <span class="text-xs text-red-500"><?= esc($errors['start-date']) ?></span>
+        <?php endif ?>
     </div>
 
     <div class="flex flex-col gap-1">
@@ -87,6 +93,9 @@
         <input type="time" name="start-time" id="start-time"
             value="<?= set_value('start-time') ?>"
             class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
+        <?php if (isset($errors['start-time'])): ?>
+            <span class="text-xs text-red-500"><?= esc($errors['start-time']) ?></span>
+        <?php endif ?>
     </div>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
@@ -96,8 +105,8 @@
         <input type="date" name="end-date" id="end-date"
             value="<?= set_value('end-date') ?>"
             class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
-        <?php if (isset($errors['time'])): ?>
-            <span class="text-xs text-red-500"><?= $errors['time'] ?></span>
+        <?php if (isset($errors['end-date'])): ?>
+            <span class="text-xs text-red-500"><?= esc($errors['end-date']) ?></span>
         <?php endif ?>
     </div>
 
@@ -106,8 +115,8 @@
         <input type="time" name="end-time" id="end-time"
             value="<?= set_value('end-time') ?>"
             class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
-        <?php if (isset($errors['time'])): ?>
-            <span class="text-xs text-red-500"><?= $errors['time'] ?></span>
+        <?php if (isset($errors['end-time'])): ?>
+            <span class="text-xs text-red-500"><?= esc($errors['end-time']) ?></span>
         <?php endif ?>
     </div>
 
@@ -124,12 +133,12 @@
             <option value="">-- Choisissez le véhicule --</option>
             <?php if (isset($cars)): ?>
                 <?php foreach ($cars as $car): ?>
-                    <option value="<?= $car['id_car'] ?>"><?= $car['label'] ?></option>
+                    <option value="<?= $car['id_car'] ?>"><?= esc($car['label']) ?></option>
                 <?php endforeach ?>
             <?php endif ?>
         </select>
         <?php if (isset($errors['car'])): ?>
-            <span class="text-xs text-red-500"><?= $errors['car'] ?></span>
+            <span class="text-xs text-red-500"><?= esc($errors['car']) ?></span>
         <?php endif ?>
     </div>
 
@@ -139,7 +148,7 @@
             class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey bg-white">
         </select>
         <?php if (isset($errors['seats'])): ?>
-            <span class="text-xs text-red-500"><?= $errors['seats'] ?></span>
+            <span class="text-xs text-red-500"><?= esc($errors['seats']) ?></span>
         <?php endif ?>
     </div>
 
@@ -154,7 +163,7 @@
         placeholder="Entrez vos options"
         class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey">
     <?php if (isset($errors['options'])): ?>
-        <span class="text-xs text-red-500"><?= $errors['options'] ?></span>
+        <span class="text-xs text-red-500"><?= esc($errors['options']) ?></span>
     <?php endif ?>
 </div>
 <!--  -->
