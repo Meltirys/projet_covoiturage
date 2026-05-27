@@ -29,7 +29,6 @@ class PagesController extends BaseController
         $cars = $carModel->getCarsByUser(session('user_id')) ?? [];
 
         $data = [
-            'type' => 'drive',
             'cars' => array_map(fn($c) => [
                 'id_car' => $c['id_car'],
                 'label' => $c['brand'] . ' - ' . $c['model'],

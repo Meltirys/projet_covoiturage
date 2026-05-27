@@ -7,8 +7,8 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use App\Models\JourneyDriveModel;
 use App\Models\CarModel;
-use App\Validators\JourneyDriveValidator;
-use App\Validators\JourneyRequestValidator;
+use App\Validators\CreateJourneyDriveValidator;
+use App\Validators\SearchJourneyDriveValidator;
 use PDOException;
 
 class DriveController extends BaseController
@@ -108,7 +108,7 @@ class DriveController extends BaseController
         $data = $this->request->getPost();
 
         // Validation
-        $validator = new JourneyRequestValidator;
+        $validator = new CreateJourneyDriveValidator;
 
         if (! $validator->validate($data)) {
             return redirect()->back()

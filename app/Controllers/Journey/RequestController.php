@@ -7,7 +7,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use App\Models\JourneyRequestModel;
 use App\Models\CarModel;
-use App\Validators\JourneyRequestValidator;
+use App\Validators\CreateJourneyRequestValidator;
 use DateTime;
 use PDOException;
 
@@ -18,12 +18,8 @@ class RequestController extends BaseController
      */
     public function search()
     {
-        $data = ['type' => 'request'];
-
         helper('form');
-        return view('commons/header')
-            . view('itinerary/search/SearchView', $data)
-            . view('commons/footer');
+        return view('itinerary/search/SearchView');
     }
 
     /**
@@ -41,9 +37,7 @@ class RequestController extends BaseController
             throw new PageNotFoundException('Cannot find the news item: ' . $slug);
         }
 
-        return view('templates/header', $data)
-            . view('news/view', $data)
-            . view('templates/footer');
+        return view('news/view', $data);
     }
 
     /**
@@ -51,12 +45,8 @@ class RequestController extends BaseController
      */
     public function create()
     {
-        $data = ['type' => 'request'];
-
         helper('form');
-        return view('commons/header')
-            . view('itinerary/create/CreateView', $data)
-            . view('commons/footer');
+        return view('itinerary/create/CreateView');
     }
 
 
@@ -88,7 +78,7 @@ class RequestController extends BaseController
 
 
         // Validation
-        $validator = new JourneyRequestValidator;
+        $validator = new CreateJourneyRequestValidator;
 
         if (! $validator->validate($data)) {
             return redirect()->back()
