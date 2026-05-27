@@ -1,7 +1,9 @@
 @import "tailwindcss";
 @source "../../app/Views/**/*.php";
+@source "./public/**/*.js";
 
-
+/* Safelist pour les classes générées dynamiquement en JS */
+@source inline("{bg-red-500,hover:bg-red-600,text-white,text-sm,font-medium,px-4,py-1.5,rounded-lg,transition-colors,cursor-pointer,flex,items-center,justify-between,bg-white,border,border-gray-200,shadow-sm,flex-col,font-semibold,text-gray-800,text-gray-500}");
 /* poppins-200 */
 @font-face {
   font-display: swap;
@@ -147,7 +149,13 @@
     @apply border border-grey rounded-full px-4 py-1 text-sm whitespace-nowrap;
   }
   .btn-primary {
-    @apply bg-[#253F72] hover:bg-[#1a2f55] text-white px-6 py-3 rounded-lg transition-colors duration-200;
+    @apply bg-bluegrey hover:bg-[#1a2f55] text-white px-6 py-3 rounded-lg transition-colors duration-200;
+  }
+  .nav-d {
+    @apply text-xs font-poppins text-bluegrey;
+  }
+  .nav-m {
+    @apply text-sm font-poppins text-bluegrey
   }
   .section-title {
     font-family: "Poppins", sans-serif;
@@ -159,5 +167,34 @@
   }
   .card {
     @apply bg-white rounded-xl shadow p-4 mb-3;
+  }
+
+  .btn-danger {
+    @apply bg-[#ef4444] hover:bg-[#dc2626] text-white text-sm font-medium px-4 py-1.5 rounded-lg transition-colors cursor-pointer;
+    border: none;
+  }
+
+  .m-menu {
+    display: none;
+    flex-direction: column;
+    align-items: flex-end;
+    background-color: var(--color-lightgrey);
+    padding: 1rem 1.25rem;
+    gap: 1rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  }
+
+  .m-menu.open {
+    display: flex;
+  }
+
+  .header {
+    justify-content: space-around;
+  }
+
+  @media (max-width: 768px) {
+    .header {
+      justify-content: space-between;
+    }
   }
 }

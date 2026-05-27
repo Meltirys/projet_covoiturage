@@ -94,12 +94,14 @@
                     <div class="flex flex-col gap-1">
                         <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Genre</label>
                         <select class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" name="gender" value="<?= set_value('gender') ?>" required>
-                            <option value="" disabled selected>Sélectionner</option>
-                            <option value="female">Féminin</option>
-                            <option value="male">Masculin</option>
-                            <option value="none">Non communiqué</option>
+                            <option value="" disabled <?= old('gender', null) ?? 'selected' ?>>Sélectionner</option>
+                            <option value="female" <?= old('gender') === 'female' ? 'selected' : '' ?>>Féminin</option>
+                            <option value="male" <?= old('gender') === 'male' ? 'selected' : '' ?>>Masculin</option>
+                            <option value="none" <?= old('gender') === 'none' ? 'selected' : '' ?>>Non communiqué</option>
                         </select>
+                        <?php if ($errors['gender'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['gender'] ?></span><?php endif ?>
                     </div>
+
                     <div class="flex flex-col gap-1">
                         <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">E-mail</label>
                         <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="email" name="email-signup" value="<?= set_value('email-signup') ?>" required>

@@ -1,13 +1,19 @@
 <?php
 
+use App\Controllers\Backoffice\SearchController;
+use App\Controllers\Backoffice\UserManagementController;
+use App\Controllers\Backoffice\UserSuppressionController;
 use CodeIgniter\Router\RouteCollection;
 use App\Controllers\CarController;
 use App\Controllers\UserController;
 use App\Controllers\Backoffice\UserValidationController;
+use App\Controllers\Backoffice\UserBanController;
+use App\Controllers\Backoffice\UserRoleController;
 use App\Controllers\Journey\DriveController;
 
 use App\Controllers\Journey\RequestController;
 use App\Controllers\ProfilController;
+use App\Services\AjaxRequests;
 
 /**
  * @var RouteCollection $routes
@@ -46,17 +52,20 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->post('user/updatePassword', [UserController::class, 'updatePassword']);
     $routes->post('user/delete', [UserController::class, 'delete']);
 
-    // Itinéraire (conducteur)
-    $routes->get('drive/search', 'Journey\DriveController::search');
-    $routes->get('drive/show', 'Journey\DriveController::show');
-    $routes->get('drive/create', 'Journey\DriveController::create');
-    $routes->post('drive/save', 'Journey\DriveController::save');
 
-    // Itinéraire (requête)
-    $routes->get('request/search', 'Journey\RequestController::search');
-    $routes->get('request/show', 'Journey\RequestController::show');
-    $routes->get('request/create', 'Journey\RequestController::create');
-    $routes->post('request/save', 'Journey\RequestController::save');
+    // Création de trajets
+    $routes->get('nouveau-trajet', 'PagesController::createJourney');
+    $routes->post('drive/save', 'Journey\DriveController::save'); // conduite
+    $routes->post('request/save', 'Journey\RequestController::save'); // requête
+
+    // Recherche de trajets
+    $routes->get('trajet', 'PagesController::searchJourney');
+    $routes->get('drive/search', 'Journey\DriveController::search'); // conduite
+    $routes->get('request/search', 'Journey\RequestController::search'); // requête
+
+    // Affichage de trajet individuel
+    $routes->get('drive/show', 'Journey\DriveController::show'); // conduite
+    $routes->get('request/show', 'Journey\RequestController::show'); // requête
 
     // Réservation
     $routes->get('reservation/(:num)',           'Journey\BookingController::show/$1');
@@ -69,9 +78,25 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 });
 
 
-
+//Admin part
 $routes->group('', ['filter' => 'authadmin'], function ($routes) {
-    $routes->get('userValidation', [UserValidationController::class, 'validateUser']);
+    $routes->get('userValidation', [UserValidationController::class, 'index']);
     $routes->post('userValidation/accept/(:num)', [UserValidationController::class, 'acceptUser']);
     $routes->post('userValidation/refuse/(:num)', [UserValidationController::class, 'refuseUser']);
+
+    $routes->get('userSuppression', [UserSuppressionController::class, 'index']);
+    $routes->post('user/delete/(:num)', [UserController::class, 'delete']);
+    $routes->get('banUser', [UserBanController::class, 'index']);
+    $routes->post('user/ban/(:num)', [UserBanController::class, 'ban']);
+
+    $routes->get('searchUser/(:alpha)', [SearchController::class, 'searchUser']);
+});
+
+//Super-admin part
+$routes->group('', ['filter' => 'authsuper'], function ($routes) {
+    $routes->get('userRole', [UserRoleController::class, 'index']);
+    $routes->get('searchUserWP/(:alpha)', [SearchController::class, 'searchUserWithPerm']);
+    $routes->get('getAllPermissions', [UserRoleController::class, 'getAllPermissions']);
+
+    $routes->post('user/updateRole/(:num)', [UserRoleController::class, 'updateUserRole']);
 });

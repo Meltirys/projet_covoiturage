@@ -57,7 +57,7 @@ class LocationModel extends Model
      * 
      * @return int The location ID
      */
-    public function getOrCreate(string $address, int $cityID, float $latitude, float $longitude): int
+    public function getOrCreate(string $address, int $cityID, ?float $latitude, ?float $longitude): int
     {
         $location = $this->where(['address' => $address, 'id_city' => $cityID])->first();
 

@@ -18,6 +18,9 @@ class CreateRequestTable extends Migration
             'request_date'       => ['type' => 'DATE'],
             'id_journey_request' => ['type' => 'INT', 'unsigned' => true, 'null' => false],
             'id_user'            => ['type' => 'INT', 'unsigned' => true, 'null' => false],
+            'id_journey_drive'   => ['type' => 'INT', 'unsigned' => true, 'null' => false],
+            'is_validated'       => ['type' => 'BOOLEAN', 'null' => true, 'default'],
+            'deletion_date'      => ['type' => 'DATE', 'null' => true]
         ]);
         $this->forge->addPrimaryKey('id_request');
         $this->forge->addForeignKey('id_journey_request', 'JourneyRequest', 'id_journey_request', 'CASCADE', 'NO ACTION');

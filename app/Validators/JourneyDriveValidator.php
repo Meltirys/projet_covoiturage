@@ -49,11 +49,18 @@ class JourneyDriveValidator extends BaseValidator
                 'less_than_equal_to' => 'La longitude doit être inférieure ou égale à 180.',
             ]
         ];
-        $datetimeRules = [
-            'rules' => 'required|validateDatetime',
+        $dateRules = [
+            'rules' => 'required|validateDate',
             'errors' => [
-                'required' => 'La date et heure sont obligatoires.',
-                'validateDatetime' => 'La date et heure sont invalides.',
+                'required' => 'La date est obligatoire.',
+                'validateDate' => 'La date est invalide.',
+            ]
+        ];
+        $timeRules = [
+            'rules' => 'required|validateTime',
+            'errors' => [
+                'required' => 'Le temps est obligatoire.',
+                'validateTime' => 'Le temps est invalide.',
             ]
         ];
 
@@ -114,8 +121,10 @@ class JourneyDriveValidator extends BaseValidator
                     'max_length' => 'Le nombre de places choisi est trop grand',
                 ]
             ],
-            'start-datetime' => $datetimeRules,
-            'end-datetime'   => $datetimeRules,
+            'start-date' => $dateRules,
+            'start-time' => $timeRules,
+            'end-date' => $dateRules,
+            'end-time' => $timeRules,
             'options'   => [
                 'rules' => 'permit_empty',
                 'errors' => [],

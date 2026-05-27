@@ -12,7 +12,7 @@ class UserModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['first_name', 'last_name', 'email', 'password', 'mobile', 'birth_date', 'gender', 'avatar_filename', 'id_user_permission', 'is_validated'];
+    protected $allowedFields    = ['first_name', 'last_name', 'email', 'password', 'mobile', 'birth_date', 'gender', 'avatar_filename', 'id_user_permission', 'is_validated', 'id_location'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -99,9 +99,38 @@ class UserModel extends Model
         $validationStatus = $this->select('is_validated')
             ->find($idUser);
 
-        
+
         return $validationStatus['is_validated'] === null
             ? null
             : (bool) $validationStatus['is_validated'];
+    }
+
+    /**
+     * Search in the database all the user that matches the given query. It only returns the allowed user and the user that have less permissions than the requierer.
+     * @param string $query The user we search for
+     * @param int $userLevel The user permission of the requierer. 
+     * @param bool $getPermissions Optionnal, false by default. When setted to true, also return the permission leel of the user.
+     * 
+     * @return array An array that contains all the users that matches with the query. If no user matches, returns an empty array
+     */
+    public function searchForUserByName(string $query, int $userLevel, bool $getPermissions = false): array
+    {
+        //preparing the select beforehand because we it doesn't work inside the select.
+        $select = "CONCAT(first_name, ' ', last_name) as name, email, id_user";
+
+        if ($getPermissions) {
+            $select .= ", id_user_permission as level";
+        }
+
+        $userList = $this->select($select)
+            ->like("CONCAT(first_name, ' ', last_name)", $query)
+            ->where("is_validated != 0 AND id_user_permission < " . $userLevel)
+            ->findAll();
+
+        return $userList;
+    }
+
+    public function updateUserRole(int $idUser, int $newRole): bool {
+        return $this->update($idUser, ['id_user_permission' => $newRole]);
     }
 }

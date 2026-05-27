@@ -1,4 +1,4 @@
-<?= form_open('itinerary/create', ['class' => 'flex flex-col gap-4']) ?>
+<?= form_open('drive/save', ['class' => 'flex flex-col gap-4']) ?>
 
 <!-- Départ / Arrivée -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 items-start">
@@ -6,7 +6,7 @@
     <!-- Départ -->
     <div class="flex flex-col gap-1">
         <label for="start" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Départ</label>
-        <input class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey"
+        <input class="address-input border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey"
             type="text" name="start[label]" id="start"
             value="<?= set_value('start[label]') ?>"
             placeholder="Entrez le point de départ" required>
@@ -23,7 +23,7 @@
     <!-- Arrivée -->
     <div class="flex flex-col gap-1">
         <label for="end" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Arrivée</label>
-        <input class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey"
+        <input class="address-input border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey"
             type="text" name="end[label]" id="end"
             value="<?= set_value('end[label]') ?>"
             placeholder="Entrez votre destination" required>
@@ -38,6 +38,7 @@
     </div>
 
 </div>
+<!--  -->
 
 <!-- Arrêts -->
 <div class="flex flex-col gap-1">
@@ -49,7 +50,7 @@
         <?php foreach ($stops as $index => $stop): ?>
             <div class="stop address-field flex flex-col gap-1">
                 <input type="text" name="stops[<?= $index ?>][label]"
-                    class="stop-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey"
+                    class="stop-input border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey"
                     value="<?= esc($stop['label'] ?? '') ?>"
                     placeholder="Entrer un arrêt">
                 <input type="hidden" name="stops[<?= $index ?>][lat]" value="<?= esc($stop['lat'] ?? '') ?>">
@@ -69,6 +70,7 @@
         <span class="text-xs text-red-500"><?= $errors['stops'] ?></span>
     <?php endif ?>
 </div>
+<!--  -->
 
 <!-- Date départ / Heure départ -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
@@ -77,22 +79,23 @@
         <label for="start-date" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Date de départ</label>
         <input type="date" name="start-date" id="start-date"
             value="<?= set_value('start-date') ?>"
-            class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
+            class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
     </div>
 
     <div class="flex flex-col gap-1">
         <label for="start-time" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Heure de départ</label>
         <input type="time" name="start-time" id="start-time"
             value="<?= set_value('start-time') ?>"
-            class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
+            class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
     </div>
-
-<!-- Date arrivée / Heure arrivée -->
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
+    <!-- Date arrivée / Heure arrivée -->
     <div class="flex flex-col gap-1">
         <label for="end-date" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Date d'arrivée</label>
         <input type="date" name="end-date" id="end-date"
             value="<?= set_value('end-date') ?>"
-            class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
+            class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
         <?php if (isset($errors['time'])): ?>
             <span class="text-xs text-red-500"><?= $errors['time'] ?></span>
         <?php endif ?>
@@ -102,13 +105,14 @@
         <label for="end-time" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Heure d'arrivée</label>
         <input type="time" name="end-time" id="end-time"
             value="<?= set_value('end-time') ?>"
-            class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
+            class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
         <?php if (isset($errors['time'])): ?>
             <span class="text-xs text-red-500"><?= $errors['time'] ?></span>
         <?php endif ?>
     </div>
 
 </div>
+<!--  -->
 
 <!-- Véhicule / Places -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
@@ -116,7 +120,7 @@
     <div class="flex flex-col gap-1">
         <label for="car" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Véhicule</label>
         <select name="car" id="car" required
-            class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey bg-white">
+            class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey bg-white">
             <option value="">-- Choisissez le véhicule --</option>
             <?php if (isset($cars)): ?>
                 <?php foreach ($cars as $car): ?>
@@ -132,7 +136,7 @@
     <div class="flex flex-col gap-1">
         <label for="seats" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Nombre de places</label>
         <select name="seats" id="seats" required
-            class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey bg-white">
+            class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey bg-white">
         </select>
         <?php if (isset($errors['seats'])): ?>
             <span class="text-xs text-red-500"><?= $errors['seats'] ?></span>
@@ -140,6 +144,7 @@
     </div>
 
 </div>
+<!--  -->
 
 <!-- Options -->
 <div class="flex flex-col gap-1">
@@ -147,17 +152,19 @@
     <input type="text" name="options" id="options"
         value="<?= set_value('options') ?>"
         placeholder="Entrez vos options"
-        class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey">
+        class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey">
     <?php if (isset($errors['options'])): ?>
         <span class="text-xs text-red-500"><?= $errors['options'] ?></span>
     <?php endif ?>
 </div>
+<!--  -->
 
-<!-- Bouton -->
+<!-- Confirmation -->
 <div class="flex justify-center mt-2">
     <button type="submit" class="border border-bluegrey text-bluegrey bg-white text-sm font-poppins px-6 py-2 rounded-full hover:bg-bluegrey hover:!text-white transition-all duration-200">
         Créer le trajet →
     </button>
 </div>
+<!--  -->
 
 <?= form_close() ?>

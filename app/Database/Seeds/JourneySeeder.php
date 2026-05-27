@@ -8,21 +8,14 @@ class JourneySeeder extends Seeder
 {
     public function run()
     {
-        // 1. Villes
-        $this->db->table('City')->insert(['name' => 'Vannes', 'postcode' => '56000']);
-        $vannesId = $this->db->insertID();
 
+        // 1. Récupère la ville et la location créées par UserSeeder
+        $startId = $this->db->table('Location')
+            ->where('address', 'GRETA de Vannes')->get()->getRow()->id_location;
+
+        // 2. Création et insertion de Auray
         $this->db->table('City')->insert(['name' => 'Auray', 'postcode' => '56400']);
         $aurayId = $this->db->insertID();
-
-        // 2. Locations
-        $this->db->table('Location')->insert([
-            'address'   => 'GRETA de Vannes',
-            'latitude'  => 47.64829,
-            'longitude' => -2.77503,
-            'id_city'   => $vannesId,
-        ]);
-        $startId = $this->db->insertID();
 
         $this->db->table('Location')->insert([
             'address'   => 'Gare SNCF Auray',
@@ -53,4 +46,3 @@ class JourneySeeder extends Seeder
         ]);
     }
 }
-

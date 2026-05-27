@@ -4,15 +4,15 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class CityModel extends Model
+class UserPermissionModel extends Model
 {
-    protected $table            = 'City';
-    protected $primaryKey       = 'id_city';
+    protected $table            = 'UserPermission';
+    protected $primaryKey       = 'id_user_permission';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['name', 'postcode'];
+    protected $allowedFields    = ['id_user_permission', 'user_permission_label'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -45,25 +45,14 @@ class CityModel extends Model
     protected $afterDelete    = [];
 
     /**
-     * Gets the ID of the provided city. If it doesn't exist, insert as new city
-     * 
-     * @param string $cityName The name of the city
-     *
-     * @param string $postCode The city's postcode
-     * 
-     * @return int The city's ID
+     * @return array The availables roles, except for the super-admin
      */
-    public function getOrCreate(string $cityName, string $postCode): int
-    {
-        $city = $this->where(['name' => $cityName, 'postcode' => $postCode])->first();
+    public function getAvailablesRoles() : array{
+        $roles = $this->distinct()
+                    ->select("id_user_permission AS level, user_permission_label as label")
+                    ->where("user_permission_label != 'super-admin'")
+                    ->findAll();
 
-        if ($city) {
-            return $city['id_city'];
-        }
-
-        return $this->insert([
-            'name' => $cityName,
-            'postcode' => $postCode
-        ]);
+        return $roles;
     }
 }
