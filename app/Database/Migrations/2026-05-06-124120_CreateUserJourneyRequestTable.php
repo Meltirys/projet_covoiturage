@@ -19,11 +19,13 @@ class CreateUserJourneyRequestTable extends Migration
             'start'              => ['type' => 'INT', 'unsigned' => true, 'null' => false],
             'end'                => ['type' => 'INT', 'unsigned' => true, 'null' => false],
             'deletion_date'      => ['type' => 'DATE', 'null' => true],
+            'id_user'            => ['type' => 'INT', 'unsigned' => true, 'null' => false, 'auto_increment' => true]
 
         ]);
         $this->forge->addPrimaryKey('id_journey_request');
         $this->forge->addForeignKey('start', 'Location', 'id_location', 'RESTRICT', 'NO ACTION');
         $this->forge->addForeignKey('end', 'Location', 'id_location', 'RESTRICT', 'NO ACTION');
+        $this->forge->addForeignKey('id_user', 'Users', 'id_user', 'RESTRICT', 'NO ACTION');
         $this->forge->createTable('JourneyRequest');
     }
 
