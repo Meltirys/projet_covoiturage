@@ -133,7 +133,7 @@
             <option value="">-- Choisissez le véhicule --</option>
             <?php if (isset($cars)): ?>
                 <?php foreach ($cars as $car): ?>
-                    <option value="<?= $car['id_car'] ?>"><?= esc($car['label']) ?></option>
+                    <option value="<?= $car['id_car'] ?>" <?= set_select('car', $car['id_car']) ?>><?= esc($car['label']) ?></option>
                 <?php endforeach ?>
             <?php endif ?>
         </select>

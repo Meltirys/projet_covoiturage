@@ -92,6 +92,7 @@ class JourneyService
                 'id_car'            => $input['car'],
                 'start'             => $startLocationId,
                 'end'               => $endLocationId,
+                'driver'            => session('user_id'),
             ];
 
             $journeyId = $journeyModel->insert($journeyData, true);
@@ -167,11 +168,11 @@ class JourneyService
     /**
      * 
      */
-    public function searchJourneyDrive()
+    public function searchJourneyDrive(array $input)
     {
         // convert date to datetime range
-        $startDay = $data['date'] . '00:00:00';
-        // $endDay = $data['date'] avancer d'1 jour . '00:00:00';
+        $startDay = $input['date'] . '00:00:00';
+        // $endDay = $input['date'] avancer d'1 jour . '00:00:00';
     }
 
     /**
