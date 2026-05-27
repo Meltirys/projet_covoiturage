@@ -13,7 +13,7 @@ use App\Services\LocationService;
 use App\Validators\RegistrationValidator;
 use App\Services\MailService;
 use App\Validators\UpdateUserInfos;
-use PhpParser\Node\Expr\AssignOp\Mod;
+use App\Validators\BanUserValidator;
 
 class UserController extends BaseController
 {
@@ -118,8 +118,9 @@ class UserController extends BaseController
                     ->withInput()
                     ->with('user_error', 'Une erreur est survenue lors de la suppression du compte'); //Return to the user profil with the error
             } else { //This means the account has been deleted by the admin
-                return redirect()->to('/userSuppression')
-                    ->with('error', "Une erreur est survenue lors de la suppression du compte");
+                return redirect()->to('/backoffice')
+                    ->with('suppression_error', "Une erreur est survenue lors de la suppression du compte")
+                    ->with('show_suppression', true);
             }
         }
 
@@ -129,10 +130,10 @@ class UserController extends BaseController
             //Logging the user out
             $authController = new AuthController();
             $authController->logout();
-
         } else { //This means the account has been deleted by the admin
-            return redirect()->to('/userSuppression')
-                ->with('success', "L'utilisateur " . $userName . " à bien été supprimé");
+            return redirect()->to('/backoffice')
+                ->with('suppression_success', "L'utilisateur " . $userName . " à bien été supprimé")
+                ->with('show_suppression', true);
         }
     }
 
@@ -150,8 +151,7 @@ class UserController extends BaseController
         //If an error is detected, return to the form with the errors described
         if (!$validator->validate($post)) {
             return redirect()->to('/profil/modify')
-                    ->with('user_update_error', $validator->getErrors());
-
+                ->with('user_update_error', $validator->getErrors());
         }
 
         // --- Saving the location --- 
@@ -215,7 +215,7 @@ class UserController extends BaseController
 
         if (!$validator->validate($password)) {
             return redirect()->to('profil/changePassword')
-                    ->with('password_change_error', $validator->getErrors()); // Returns to the url including the errors
+                ->with('password_change_error', $validator->getErrors()); // Returns to the url including the errors
         }
 
         $userModel = new UserModel();
@@ -233,5 +233,35 @@ class UserController extends BaseController
             ->with('password_success', 'Mot de passe modifié avec succès.');
     }
 
+    /**
+     * Ban the given user. Access route is /user/ban/{idUser}
+     * @param int $idUser The id of the user we want to ban
+     */
+    public function ban(int $idUser)
+    {
+        $userModel = model('UserModel');
 
+        $datas['id_user'] = $idUser; //Preparing the datas for the validator
+        $validator = new BanUserValidator();
+
+        if (!$validator->validate($datas)) {
+            return redirect()->to('/backoffice')
+                ->with('ban_error', $validator->getError('id_user'))
+                ->with('show_ban', true);
+        }
+
+        //Checking if an error happens when banning the user
+        if (!$userModel->update($idUser, [
+            'is_validated' => 0
+        ])) {
+            return redirect()->to('/backoffice')
+                ->with('ban_error', 'Une erreur est survenue lors du banissement de l\'utilisateur, veuillez réessayer')
+                ->with('show_ban', true);
+        }
+
+        //If no errors
+        return redirect()->to('/backoffice')
+            ->with('ban_success', "L'utilisateur " . $userModel->getUserName($idUser) . " a été bannis avec succès")
+            ->with('show_ban', true);
+    }
 }

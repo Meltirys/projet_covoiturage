@@ -1,5 +1,3 @@
-<?= view('commons/header') ?>
-
 <main class="w-full max-w-5xl mx-auto px-4 py-6 md:px-8 md:py-10 font-poppins">
 
     <header class="flex justify-between items-center mb-6">

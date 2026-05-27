@@ -39,17 +39,20 @@ class UserRoleController extends BaseController
         $validator = new ChangeRoleValidator();
 
         if (!$validator->validate($post)) {
-            return redirect()->to('/userRole')
-                ->with('error', $validator->getError('id_user'));
+            return redirect()->to('/backoffice')
+                ->with('role_error', $validator->getError('id_user'))
+                ->with('show_role', true);
         }
 
 
         if (!$userModel->updateUserRole($idUser, $post['new_role'])) {
-            return redirect()->back()
-                ->with('error', "Une erreur est survenue lors du changement de rôle de l'utilisateur, veuillez réessayer.");
+            return redirect()->to('/backoffice')
+                ->with('role_error', "Une erreur est survenue lors du changement de rôle de l'utilisateur, veuillez réessayer.")
+                ->with('show_role', true);
         }
 
-        return redirect()->back()
-            ->with('success', "Le role de " . $userModel->getUserName($idUser) . " a bien été modifié.");;
+        return redirect()->to('/backoffice')
+            ->with('role_success', "Le role de " . $userModel->getUserName($idUser) . " a bien été modifié.")
+            ->with('show_role', true);
     }
 }

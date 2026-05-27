@@ -1,34 +1,33 @@
-let searchInput = document.querySelector("#searchUser")
+let searchInputBan = document.querySelector("#searchUserBan")
 
 //Creating the listener on text input
-searchInput.addEventListener("input", () => {
+searchInputBan.addEventListener("input", () => {
     //Only fetches when there are more than two characters entered
-    if (searchInput.value.length > 2) {
-        fetch('/searchUser/' + searchInput.value)
+    if (searchInputBan.value.length > 2) {
+        fetch('/searchUser/' + searchInputBan.value)
             .then((r) => {
                 if (r.ok) {
                     return r.json()
                 }
             })
             .then(datas => {
-                console.log(datas)
                 //Displays the results of the fetch
-                populateResearchResults(datas)
+                populateResearchResultsBan(datas)
             })
             .catch(e => console.log(e))
     }
 })
 
-function populateResearchResults(datas) {
+function populateResearchResultsBan(datas) {
 
-    let researchResult = document.querySelector("#researchResults")
+    let researchResult = document.querySelector("#researchResultsBan")
     researchResult.replaceChildren() //Emptying the current results
-
-    console.log(datas);
 
     if (datas.length === 0) {
         let p = document.createElement('p') //Creation of the element
         p.textContent = "Aucune utilisateur ne correspond à votre recherche" //Adding the text
+        p.className = "text-sm text-gray-500 italic"
+        researchResult.appendChild(p)
         return //Stopping the function
     }
 

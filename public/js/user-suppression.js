@@ -1,30 +1,27 @@
-let searchInput = document.querySelector("#searchUser")
+let searchInputSuppression = document.querySelector("#searchInputSuppression")
 
 //Creating the listener on text input
-searchInput.addEventListener("input", () => {
+searchInputSuppression.addEventListener("input", () => {
     //Only fetches when there are more than two characters entered
-    if (searchInput.value.length > 2) {
-        fetch('/searchUser/' + searchInput.value)
+    if (searchInputSuppression.value.length > 2) {
+        fetch('/searchUser/' + searchInputSuppression.value)
             .then((r) => {
                 if (r.ok) {
                     return r.json()
                 }
             })
             .then(datas => {
-                console.log(datas)
                 //Displays the results of the fetch
-                populateResearchResults(datas)
+                populateResearchResultsSuppression(datas)
             })
             .catch(e => console.log(e))
     }
 })
 
-function populateResearchResults(datas) {
+function populateResearchResultsSuppression(datas) {
 
-    let researchResult = document.querySelector("#researchResults")
+    let researchResult = document.querySelector("#researchResultsSuppression")
     researchResult.replaceChildren() //Emptying the current results
-
-    console.log(datas);
 
     if (datas.length === 0) {
         let p = document.createElement('p') //Creation of the element
