@@ -159,8 +159,7 @@ class UserController extends BaseController
 
         //If an error is detected, return to the form with the errors described
         if (!$validator->validate($post)) {
-            var_dump($validator->getErrors());
-            $user = $this->loadUserInfos();
+            $user = $this->loadUserInfos(); //Load the user infos to display it in the view
             return view('profil/modify',[
                 'user' => $user,
                 'errors' => $validator->getErrors()
