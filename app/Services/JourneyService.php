@@ -102,8 +102,20 @@ class JourneyService
 
             // 5. Stages (optional)
             $stops = $input['stops'] ?? [];
+            $order = 1;
 
-            foreach ($stops as $index => $stop) {
+            foreach ($stops as $stop) {
+
+                // Skip stop if empty
+                $isEmpty =
+                    empty($stop['label']) &&
+                    empty($stop['lat']) &&
+                    empty($stop['lon']) &&
+                    empty($stop['city']) &&
+                    empty($stop['postcode']);
+                if ($isEmpty) {
+                    continue;
+                }
 
                 $cityId = $cityModel->getOrCreate(
                     $stop['city'],
@@ -120,7 +132,7 @@ class JourneyService
                 $ok = $stageModel->save([
                     'id_journey_drive' => $journeyId,
                     'id_location'      => $locationId,
-                    'order'            => $index + 1,
+                    'order'            => $order++,
                 ]);
 
                 if (! $ok) {
