@@ -129,6 +129,7 @@
   --color-babyblue: oklch(0.8181 0.0356 241.55);
   --color-lightgrey: oklch(0.9821 0 0);
   --color-lightblue: oklch(0.9687 0.0051 247.88);
+  --color-reddish: oklch(0.4921 0.296 28.91);
   --font-poppins: "Poppins", sans-serif;
   --font-pfd: "Playfair Display", serif;
 }
