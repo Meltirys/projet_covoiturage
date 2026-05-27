@@ -125,25 +125,15 @@ class UserController extends BaseController
 
         //Checking if the user that delete the account is the connected user, if so we disconnect him
         if ($idUser == session()->user_id) {
+
             //Logging the user out
             $authController = new AuthController();
             $authController->logout();
+
         } else { //This means the account has been deleted by the admin
             return redirect()->to('/userSuppression')
                 ->with('success', "L'utilisateur " . $userName . " à bien été supprimé");
         }
-    }
-
-    /**
-     * Preloads the informations of the user and displays it. Access route is /user/modify
-     */
-    public function modify()
-    {
-        helper('form');
-
-        $data['user'] = $this->loadUserInfos();
-
-        return view('profil/modify', $data);
     }
 
     public function update()
@@ -159,11 +149,8 @@ class UserController extends BaseController
 
         //If an error is detected, return to the form with the errors described
         if (!$validator->validate($post)) {
-            $user = $this->loadUserInfos(); //Load the user infos to display it in the view
-            return view('profil/modify',[
-                'user' => $user,
-                'errors' => $validator->getErrors()
-            ]);
+            return redirect()->to('/profil/modify')
+                    ->with('user_update_error', $validator->getErrors());
 
         }
 
@@ -199,25 +186,17 @@ class UserController extends BaseController
         if (! $userModel->update(session()->user_id, $user)) {
             $errors = $userModel->errors();
 
-            return redirect()->to('/user/modify')
+            return redirect()->to('/profil/modify')
                 ->with('errors', $errors)
                 ->withInput()
                 ->with('error', 'Une erreur est survenue lors de la sauvegarde de vos informations');
         }
 
-        return redirect()->to('/user/modify')
+        return redirect()->to('/profil/modify')
             ->with('success', 'Vos informations personnelles ont bien été modifiées');
     }
 
-    /*
-    * Shows the page where the password can be changed. Access route is /user/changePassword
-    */
-    public function showPasswordChange()
-    {
-        helper('form');
 
-        return view('profil/changePassword');
-    }
 
     /**
      * Update the password of the connected user. Access route is /user/updatePassword
@@ -235,9 +214,8 @@ class UserController extends BaseController
         $validator = new ChangePasswordValidator();
 
         if (!$validator->validate($password)) {
-            return view('profil/changePassword', [
-                'errors' => $validator->getErrors()
-            ]);
+            return redirect()->to('profil/changePassword')
+                    ->with('password_change_error', $validator->getErrors()); // Returns to the url including the errors
         }
 
         $userModel = new UserModel();
@@ -255,21 +233,5 @@ class UserController extends BaseController
             ->with('password_success', 'Mot de passe modifié avec succès.');
     }
 
-    private function loadUserInfos(): array
-    {
-        $userModel = model('UserModel');
-        $cityModel = model('CityModel');
-        $locationModel = model('LocationModel');
 
-        $user = $userModel->find(session()->user_id); // Retrieving the user infos
-
-        $address = $locationModel->find($user['id_location']); // Retrieving the address
-        $user['address'] = $address['address'];
-
-        $city = $cityModel->find($address['id_city']); //Retrieving the city infos
-        $user['city'] = $city['name'];
-        $user['postcode'] = $city['postcode'];
-
-        return $user;
-    }
 }

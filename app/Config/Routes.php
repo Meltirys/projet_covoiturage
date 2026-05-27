@@ -45,9 +45,11 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->post('car/delete/(:num)', [CarController::class, 'delete']);
     $routes->post('car/modify/(:num)', [CarController::class, 'modify']);
 
-    //User
-    $routes->get('user/modify', [UserController::class, 'modify']);
-    $routes->get('user/changePassword', [UserController::class, 'showPasswordChange']);
+    //Profil
+    $routes->get('profil/modify', [ProfilController::class, 'modify']);
+    $routes->get('profil/changePassword', [ProfilController::class, 'showPasswordChange']);
+
+    //User form routes
     $routes->post('user/update', [UserController::class, 'update']);
     $routes->post('user/updatePassword', [UserController::class, 'updatePassword']);
     $routes->post('user/delete', [UserController::class, 'delete']);
