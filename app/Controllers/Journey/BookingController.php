@@ -79,7 +79,7 @@ class BookingController extends BaseController
                 ->findAll();
             foreach ($requests as $r) {
                 $passenger = $userModel->find($r['id_user']);
-                $r['passanger_name'] = $passenger['first_name'] . ' ' . substr($passenger['last_name'],0, 1) . '.';
+                $r['passenger_name'] = $passenger['first_name'] . ' ' . substr($passenger['last_name'],0, 1) . '.';
                 $pendingRequests[] = array_merge($r, ['journey' => $journey]);
             }
         }
