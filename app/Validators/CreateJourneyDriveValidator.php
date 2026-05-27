@@ -4,7 +4,7 @@ namespace App\Validators;
 
 use App\Validation\CustomRules;
 
-class JourneyRequestValidator extends BaseValidator
+class CreateJourneyDriveValidator extends BaseValidator
 {
     /**
      * List all the rules that needs to be followed in order to be valid
@@ -49,11 +49,18 @@ class JourneyRequestValidator extends BaseValidator
                 'less_than_equal_to' => 'La longitude doit être inférieure ou égale à 180.',
             ]
         ];
-        $datetimeRules = [
-            'rules' => 'required|validateDatetime',
+        $dateRules = [
+            'rules' => 'required|validateDate',
             'errors' => [
-                'required' => 'La date et heure sont obligatoires.',
-                'validateDatetime' => 'La date et heure sont invalides.',
+                'required' => 'La date est obligatoire.',
+                'validateDate' => 'La date est invalide.',
+            ]
+        ];
+        $timeRules = [
+            'rules' => 'required|validateTime',
+            'errors' => [
+                'required' => 'Le temps est obligatoire.',
+                'validateTime' => 'Le temps est invalide.',
             ]
         ];
 
@@ -87,24 +94,37 @@ class JourneyRequestValidator extends BaseValidator
             'end.postcode' => $postcodeRules,
             'end.lat' => $latRules,
             'end.lon' => $lonRules,
+
+            // ===== STOPS
+
+            'stops' => [
+                'rules' => 'permit_empty|validStops',
+                'errors' => [
+                    'validStops' => 'Un ou plusieurs arrêts sont invalides',
+                ]
+            ],
+
             // ===== OTHER
 
-            'start-datetime' => $datetimeRules,
-            'end-datetime'   => $datetimeRules,
-            'range-start' => [
-                'rules' => 'required|regex_match[/^([01]\d|2[0-3]):([0-5]\d)$/]',
+            'id_car' => [
+                'rules' => 'required|is_natural_no_zero',
                 'errors' => [
-                    'required' => 'L\'heure de début de disponibilité est obligatoire',
-                    'regex_match' => 'L\'heure doit être dans le format HH:MM',
+                    'required' => 'Le choix du véhicule est obligatoire',
+                    'is_natural_no_zero' => 'Veuillez choisir un véhicule valide',
                 ]
             ],
-            'range-end' => [
-                'rules' => 'required|regex_match[/^([01]\d|2[0-3]):([0-5]\d)$/]',
+            'seats'      => [
+                'rules' => 'required|min_length[1]|max_length[2]',
                 'errors' => [
-                    'required' => 'L\'heure de fin de disponibilité est obligatoire',
-                    'regex_match' => 'L\'heure doit être dans le format HH:MM',
+                    'required' => 'Le nombre de places disponsibles est obligatoire',
+                    'min_length' => 'Le nombre de places choisi ne doit pas être inférieur à 1',
+                    'max_length' => 'Le nombre de places choisi est trop grand',
                 ]
             ],
+            'start-date' => $dateRules,
+            'start-time' => $timeRules,
+            'end-date' => $dateRules,
+            'end-time' => $timeRules,
             'options'   => [
                 'rules' => 'permit_empty',
                 'errors' => [],
