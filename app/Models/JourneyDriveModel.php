@@ -12,7 +12,7 @@ class JourneyDriveModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['number_of_place', 'departure', 'estimated_arrival', 'id_track', 'start', 'end', 'id_car'];
+    protected $allowedFields    = ['number_of_place', 'departure', 'estimated_arrival', 'id_track', 'start', 'end', 'id_car', 'driver'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
