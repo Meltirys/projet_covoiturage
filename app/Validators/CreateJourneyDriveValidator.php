@@ -106,7 +106,7 @@ class CreateJourneyDriveValidator extends BaseValidator
 
             // ===== OTHER
 
-            'id_car' => [
+            'car' => [
                 'rules' => 'required|is_natural_no_zero',
                 'errors' => [
                     'required' => 'Le choix du véhicule est obligatoire',
