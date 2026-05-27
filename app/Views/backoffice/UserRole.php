@@ -1,26 +1,19 @@
-<?= $this->extend('layouts/main') ?>
+<main class="w-full max-w-5xl mx-auto px-4 py-6 md:px-8 md:py-10 font-poppins">
+    <header class="flex justify-between items-center mb-6">
+        <h2 class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Modifier le rôle d'un utilisateur</h2>
+    </header>
+    <?php if (session()->getFlashdata('success')): ?>
+        <p class="text-xs text-green-600 border border-green-200 rounded px-3 py-2 mb-4"><?= session()->getFlashdata('role_success') ?></p>
+    <?php endif ?>
+    <?php if (session()->getFlashdata('error')): ?>
+        <p class="text-xs text-red-500 border border-red-200 rounded px-3 py-2 mb-4"><?= session()->getFlashdata('role_error') ?></p>
+    <?php endif ?>
+    <div class="mb-6">
+        <label for="searchUser" class="block text-sm font-poppins text-gray-700 mb-1">Rechercher un utilisateur</label>
+        <input type="text" id="searchUserRole" placeholder="Entrez le nom de l'utilisateur recherché" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-babyblue focus:border-transparent">
+    </div>
 
-<?= $this->section('content') ?>
-<h1>Modifier le rôle d'un utilisateur</h1>
-<?php if (session()->getFlashdata('success')): ?>
-    <p class="text-xs text-green-600 mb-3"><?= session()->getFlashdata('success') ?></p>
-<?php endif ?>
-<?php if (session()->getFlashdata('error')): ?>
-    <p class="text-xs text-red-500 mb-3"><?= session()->getFlashdata('error') ?></p>
-<?php endif ?>
-<div>
-    <label for="searchUser">Rechercher un utilisateur</label>
-    <input type="text" id="searchUser" placeholder="Entrez le nom de l'utilisateur recherché">
-</div>
+    <div id="researchResultsRole" class="space-y-3">
 
-<div id="researchResults">
-
-</div>
-
-<?= $this->endSection() ?>
-
-<?= $this->section('scripts') ?>
-
-<script src="<?= base_url('js/user-role.js') ?>"></script>
-
-<?= $this->endSection() ?>
+    </div>
+</main>

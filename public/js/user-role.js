@@ -17,13 +17,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     userRoleSelect.add(new Option(elem['label'], elem['level']))
                 })
 
-                let searchInput = document.querySelector("#searchUser")
+                let searchInputRole = document.querySelector("#searchUserRole")
 
                 //Creating the listener on text input
-                searchInput.addEventListener("input", () => {
+                searchInputRole.addEventListener("input", () => {
                     //Only fetches when there are more than two characters entered
-                    if (searchInput.value.length > 2) {
-                        fetch('/searchUserWP/' + searchInput.value)
+                    if (searchInputRole.value.length > 2) {
+                        fetch('/searchUserWP/' + searchInputRole.value)
                             .then((r) => {
                                 if (r.ok) {
                                     return r.json()
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             .then(datas => {
                                 console.log(datas)
                                 //Displays the results of the fetch
-                                populateResearchResults(datas)
+                                populateResearchResultsRole(datas)
                             })
                             .catch(e => console.log(e))
                     }
@@ -43,9 +43,9 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(e => console.log(e))
 
 
-    function populateResearchResults(datas) {
+    function populateResearchResultsRole(datas) {
 
-        let researchResult = document.querySelector("#researchResults")
+        let researchResult = document.querySelector("#researchResultsRole")
         researchResult.replaceChildren() //Emptying the current results
 
         console.log(datas);

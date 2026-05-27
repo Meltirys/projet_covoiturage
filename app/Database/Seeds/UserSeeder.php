@@ -89,6 +89,19 @@ class UserSeeder extends Seeder
                 'id_location' => 1
             ],
             [
+                'id_user'            => 6,
+                'first_name'         => 'Accepted',
+                'last_name'          => 'User',
+                'password'           => password_hash('password', PASSWORD_DEFAULT),
+                'email'              => 'accepted@user.fr',
+                'mobile'             => '',
+                'birth_date'         => '1948-06-21',
+                'gender'             => 'male',
+                'id_user_permission' => 1,
+                'is_validated' => true,
+                'id_location' => 1
+            ],
+            [
                 'id_user'            => 4,
                 'first_name'         => 'Waiting',
                 'last_name'          => 'User',
