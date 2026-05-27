@@ -12,6 +12,7 @@ use App\Models\CityModel;
 use App\Services\LocationService;
 use App\Validators\RegistrationValidator;
 use App\Services\MailService;
+use App\Validators\UpdateUserInfos;
 use PhpParser\Node\Expr\AssignOp\Mod;
 
 class UserController extends BaseController
@@ -54,7 +55,6 @@ class UserController extends BaseController
             'last_name'    => $this->request->getPost('last_name'),
             'email'        => $this->request->getPost('email-signup'),
             'password'     => $this->request->getPost('password'),
-            'password_conf' => $this->request->getPost('password_conf'),
             'mobile'       => $this->request->getPost('mobile'),
             'birth_date'   => $this->request->getPost('birth_date'),
             'gender'       => $this->request->getPost('gender'),
@@ -151,18 +151,22 @@ class UserController extends BaseController
         helper('form');
 
         $post = $this->request->getPost();
+
+        $post['id_user'] = session()->user_id; //Have to add this line so the validator ignores the line of the current user when checking for the mail.
+
         //Calling the specific validator
-        $validator = new RegistrationValidator();
+        $validator = new UpdateUserInfos();
 
         //If an error is detected, return to the form with the errors described
         if (!$validator->validate($post)) {
-            $user = $this->loadUserInfos();
+            $user = $this->loadUserInfos(); //Load the user infos to display it in the view
             return view('profil/modify',[
                 'user' => $user,
                 'errors' => $validator->getErrors()
             ]);
 
         }
+
         // --- Saving the location --- 
         $location = [
             'address' => $this->request->getPost('address'),
@@ -178,9 +182,7 @@ class UserController extends BaseController
         $user = [
             'first_name'   => $this->request->getPost('first_name'),
             'last_name'    => $this->request->getPost('last_name'),
-            'email'        => $this->request->getPost('email-signup'),
-            'password'     => $this->request->getPost('password'),
-            'password_conf' => $this->request->getPost('password_conf'),
+            'email'        => $this->request->getPost('email'),
             'mobile'       => $this->request->getPost('mobile'),
             'birth_date'   => $this->request->getPost('birth_date'),
             'gender'       => $this->request->getPost('gender'),
