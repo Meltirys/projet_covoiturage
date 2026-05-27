@@ -6,6 +6,7 @@ use App\Models\CarModel;
 use App\Models\CityModel;
 use App\Models\LocationModel;
 use App\Models\JourneyDriveModel;
+use App\Models\JourneyRequestModel;
 use App\Models\StagesModel;
 use CodeIgniter\Database\BaseConnection;
 use DateTime;
@@ -186,7 +187,7 @@ class JourneyService
         $carModel       = model(CarModel::class);
         $cityModel      = model(CityModel::class);
         $locationModel  = model(LocationModel::class);
-        $journeyModel   = model(JourneyDriveModel::class);
+        $journeyModel   = model(JourneyRequestModel::class);
         $stageModel     = model(StagesModel::class);
 
         $this->db->transBegin();
@@ -219,6 +220,8 @@ class JourneyService
             );
 
             // 3. Journey
+            $input['range-of-time'] = $input['range-start'] . ' - ' . $input['range-end'];
+
             $journeyData = [
                 'description'       => $input['description'],
                 'departure'         => $input['start-datetime'],
