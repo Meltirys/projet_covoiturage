@@ -60,7 +60,6 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('nouveau-trajet', 'PagesController::createJourney');
     $routes->post('drive/save', 'Journey\DriveController::save'); // conduite
     $routes->post('request/save', 'Journey\RequestJourneyController::save'); // requête
-    $routes->get('request/create', 'Journey\RequestJourneyController::create');
     $routes->get('request/list', 'Journey\RequestJourneyController::index');
 
     // Recherche de trajets

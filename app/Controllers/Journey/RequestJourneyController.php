@@ -12,13 +12,7 @@ class RequestJourneyController extends BaseController
     {
         $requestModel = new JourneyRequestModel();
         $allRequest = $requestModel->findAll();
-        return view('i');
-    }
-
-    
-    public function create()
-    {
-        return view('itinerary/create/create_request_form');
+        return view('itinerary/create/RequestListView', ['requests' => $allRequest]);
     }
 
     public function save()
@@ -30,15 +24,17 @@ class RequestJourneyController extends BaseController
             $post['start']['label'],
             $post['start']['city'],
             $post['start']['postcode'],
-            $post['start']['lat'] ?? null,
-            $post['start']['lon'] ?? null,
+            $post['start']['lat'] ? (float) $post['start']['lat'] : null,
+            $post['start']['lon'] ? (float) $post['start']['lon'] : null,
+
         );
         $endLocationId = $locationService->getOrCreate(
             $post['end']['label'],
             $post['end']['city'],
             $post['end']['postcode'],
-            $post['end']['lat'] ?? null,
-            $post['end']['lon'] ?? null,
+            $post['end']['lat'] ? (float) $post['end']['lat'] : null,
+            $post['end']['lon'] ? (float) $post['end']['lon'] : null,
+
         );
         $requestModel = new JourneyRequestModel();
         $requestModel->insert([
@@ -48,8 +44,7 @@ class RequestJourneyController extends BaseController
             'end'           => $endLocationId,
             'id_user'       => session('user_id'),
         ]);
-        return redirect()->to('journey-request/')
+        return redirect()->to('request/list')
             ->with('success', 'Votre annonce a été publiée');
-
     }
 }

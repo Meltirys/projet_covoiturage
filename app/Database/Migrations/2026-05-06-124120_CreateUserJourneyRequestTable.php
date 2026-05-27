@@ -19,7 +19,7 @@ class CreateUserJourneyRequestTable extends Migration
             'start'              => ['type' => 'INT', 'unsigned' => true, 'null' => false],
             'end'                => ['type' => 'INT', 'unsigned' => true, 'null' => false],
             'deletion_date'      => ['type' => 'DATE', 'null' => true],
-            'id_user'            => ['type' => 'INT', 'unsigned' => true, 'null' => false, 'auto_increment' => true]
+            'id_user'            => ['type' => 'INT', 'unsigned' => true, 'null' => false],
 
         ]);
         $this->forge->addPrimaryKey('id_journey_request');
