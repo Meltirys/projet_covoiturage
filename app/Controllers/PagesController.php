@@ -4,7 +4,6 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\CarModel;
-use CodeIgniter\HTTP\ResponseInterface;
 
 class PagesController extends BaseController
 {
@@ -26,7 +25,10 @@ class PagesController extends BaseController
         helper('form');
 
         $carModel = model(CarModel::class);
-        $cars = $carModel->getCarsByUser(session('user_id')) ?? [];
+
+        $userId = session()->get('user_id');
+
+        $cars = $carModel->getCarsByUser($userId);
 
         $data = [
             'cars' => array_map(fn($c) => [

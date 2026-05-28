@@ -66,7 +66,7 @@ class RequestController extends BaseController
          * options?
          */
 
-        $data = $this->request->getPost();
+        $data = $this->request->getPost('request');
 
         $data['start-datetime'] = (new DateTime(
             $data['start-date'] . ' ' . $data['start-time']
@@ -81,12 +81,16 @@ class RequestController extends BaseController
         $validator = new CreateJourneyRequestValidator;
 
         if (! $validator->validate($data)) {
+            log_message('debug', 'Validation failed. Errors: ' . json_encode($validator->getErrors()));
             return redirect()->back()
-                ->with('errors', $validator->getErrors())
+                ->with('request_errors', $validator->getErrors())
+                ->with('failed_form', 'request')
                 ->withInput();
         }
 
-        $data['range-of-time'] = $data['range-start'] . ' - ' . $data['range-end'];
+        log_message('debug', 'Validation passed. Creating journey...');
+
+
 
         // Logic
         try {
@@ -98,17 +102,20 @@ class RequestController extends BaseController
                 session()->get('user_id')
             );
 
+            log_message('debug', 'Journey created successfully. ID: ' . $journeyId);
             return redirect()->to('/')
                 ->with('status', 'Itinéraire créé avec succès');
         } catch (\DomainException $e) {
             // user error (e.g. chosen more seats than available in car)
+            log_message('debug', 'Domain error: ' . $e->getMessage());
             return redirect()->back()
                 ->with('error', $e->getMessage())
                 ->withInput();
         } catch (\Throwable $e) {
             // system error
-            log_message('error', $e->getMessage());
-
+            log_message('error', 'Error in save(): ' . $e->getMessage());
+            log_message('error', 'Stack: ' . $e->getTraceAsString());
+            var_dump($data);
             return redirect()->back()
                 ->with('error', 'Une erreur s\'est produite')
                 ->withInput();

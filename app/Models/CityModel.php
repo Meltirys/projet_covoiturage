@@ -46,11 +46,8 @@ class CityModel extends Model
 
     /**
      * Gets the ID of the provided city. If it doesn't exist, insert as new city
-     * 
      * @param string $cityName The name of the city
-     *
      * @param string $postCode The city's postcode
-     * 
      * @return int The city's ID
      */
     public function getOrCreate(string $cityName, string $postCode): int

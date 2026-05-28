@@ -10,9 +10,9 @@ class JourneyRequestModel extends Model
     protected $primaryKey       = 'id_journey_request';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
-    protected $useSoftDeletes   = false;
+    protected $useSoftDeletes   = true;
     protected $protectFields    = true;
-    protected $allowedFields    = ['description', 'range_of_time', 'start', 'end'];
+    protected $allowedFields    = ['description', 'range_of_time', 'start', 'end', 'id_user'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -25,7 +25,7 @@ class JourneyRequestModel extends Model
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
-    protected $deletedField  = 'deleted_at';
+    protected $deletedField  = 'deletion_date';
 
     // Validation
     protected $validationRules      = [];

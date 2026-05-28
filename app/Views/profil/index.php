@@ -86,7 +86,7 @@
                         <p class="text-xs text-red-500 mb-3"><?= session()->getFlashdata('car_not_added') ?></p>
                     <?php endif ?>
 
-                    <button onclick="showForm('add-car-form')" class="text-xs text-grey underline block text-right w-full mb-3">
+                    <button onclick="showForm('add-car-form')" class="text-xs text-grey underline block text-right w-full mb-3 cursor-pointer">
                         + ajouter un véhicule
                     </button>
 

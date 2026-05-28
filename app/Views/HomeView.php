@@ -46,7 +46,7 @@
                 <p class="text-xs text-red-500 mb-3"><?= session()->getFlashdata('signup_error') ?></p>
             <?php endif ?>
             <?php if (!empty($message) && ($activeTab ?? 'login') === 'login'): ?>
-                <div class="text-xs text-red-500 mb-3"><?= $message ?></div>
+                <div class="text-xs text-red-500 mb-3"><?= esc($message) ?></div>
             <?php endif; ?>
 
             <?= form_open("/authentification") ?>
@@ -84,12 +84,12 @@
                     <div class="flex flex-col gap-1">
                         <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Nom</label>
                         <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="last_name" value="<?= set_value('last_name') ?>" required>
-                        <?php if ($errors['last_name'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['last_name'] ?></span><?php endif ?>
+                        <?php if ($errors['last_name'] ?? null): ?><span class="text-xs text-red-500"><?= esc($errors['last_name']) ?></span><?php endif ?>
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Prénom</label>
                         <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="first_name" value="<?= set_value('first_name') ?>" required>
-                        <?php if ($errors['first_name'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['first_name'] ?></span><?php endif ?>
+                        <?php if ($errors['first_name'] ?? null): ?><span class="text-xs text-red-500"><?= esc($errors['first_name']) ?></span><?php endif ?>
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Genre</label>
@@ -99,42 +99,42 @@
                             <option value="male" <?= old('gender') === 'male' ? 'selected' : '' ?>>Masculin</option>
                             <option value="none" <?= old('gender') === 'none' ? 'selected' : '' ?>>Non communiqué</option>
                         </select>
-                        <?php if ($errors['gender'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['gender'] ?></span><?php endif ?>
+                        <?php if ($errors['gender'] ?? null): ?><span class="text-xs text-red-500"><?= esc($errors['gender']) ?></span><?php endif ?>
                     </div>
 
                     <div class="flex flex-col gap-1">
                         <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">E-mail</label>
                         <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="email" name="email-signup" value="<?= set_value('email-signup') ?>" required>
-                        <?php if ($errors['email'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['email'] ?></span><?php endif ?>
+                        <?php if ($errors['email'] ?? null): ?><span class="text-xs text-red-500"><?= esc($errors['email']) ?></span><?php endif ?>
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Adresse</label>
                         <input class="address-input w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="address" value="<?= set_value('address') ?>" required>
-                        <?php if ($errors['address'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['address'] ?></span><?php endif ?>
+                        <?php if ($errors['address'] ?? null): ?><span class="text-xs text-red-500"><?= esc($errors['address']) ?></span><?php endif ?>
                         <div class="results"></div>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div class="flex flex-col gap-1">
                             <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Code postal</label>
                             <input id="postcode-input" class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="postcode" value="<?= set_value('postcode') ?>">
-                            <?php if ($errors['postcode'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['postcode'] ?></span><?php endif ?>
+                            <?php if ($errors['postcode'] ?? null): ?><span class="text-xs text-red-500"><?= esc($errors['postcode']) ?></span><?php endif ?>
                         </div>
                         <div class="flex flex-col gap-1">
                             <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Ville</label>
                             <input id="city-input" class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="city" value="<?= set_value('city') ?>" required>
-                            <?php if ($errors['city'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['city'] ?></span><?php endif ?>
+                            <?php if ($errors['city'] ?? null): ?><span class="text-xs text-red-500"><?= esc($errors['city']) ?></span><?php endif ?>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div class="flex flex-col gap-1">
                             <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Téléphone</label>
                             <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="tel" name="mobile" value="<?= set_value('mobile') ?>">
-                            <?php if ($errors['mobile'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['mobile'] ?></span><?php endif ?>
+                            <?php if ($errors['mobile'] ?? null): ?><span class="text-xs text-red-500"><?= esc($errors['mobile']) ?></span><?php endif ?>
                         </div>
                         <div class="flex flex-col gap-1">
                             <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Date de naissance</label>
                             <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="date" name="birth_date" value="<?= set_value('birth_date') ?>" required>
-                            <?php if ($errors['birth_date'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['birth_date'] ?></span><?php endif ?>
+                            <?php if ($errors['birth_date'] ?? null): ?><span class="text-xs text-red-500"><?= esc($errors['birth_date']) ?></span><?php endif ?>
                         </div>
                     </div>
                     <div class="flex flex-col gap-1">
@@ -143,12 +143,12 @@
                             <span class="normal-case font-light tracking-normal text-grey"> (8 caractères min., 1 majuscule, 1 chiffre et un caractère spécial)</span>
                         </label>
                         <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="password" name="password" required>
-                        <?php if ($errors['password'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['password'] ?></span><?php endif ?>
+                        <?php if ($errors['password'] ?? null): ?><span class="text-xs text-red-500"><?= esc($errors['password']) ?></span><?php endif ?>
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Confirmation du mot de passe</label>
                         <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="password" name="password_conf" required>
-                        <?php if ($errors['password_conf'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['password_conf'] ?></span><?php endif ?>
+                        <?php if ($errors['password_conf'] ?? null): ?><span class="text-xs text-red-500"><?= esc($errors['password_conf']) ?></span><?php endif ?>
                     </div>
 
                 </div>
