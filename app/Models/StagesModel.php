@@ -6,7 +6,7 @@ use CodeIgniter\Model;
 
 class StagesModel extends Model
 {
-    protected $table            = 'stages';
+    protected $table            = 'Stages';
     protected $primaryKey       = 'id_journey_drive'; // arbitrary, there is no primary ID
     protected $useAutoIncrement = false;
     protected $returnType       = 'array';
