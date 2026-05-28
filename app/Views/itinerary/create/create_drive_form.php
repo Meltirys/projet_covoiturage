@@ -7,14 +7,15 @@
     <div class="flex flex-col gap-1">
         <label for="drive-start" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Départ</label>
         <input class="address-input border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey"
-            type="text" name="drive[start][label]" id="drive-start"
-            value="<?= esc(old('drive.start.label')) ?>"
+            type="text" name="drive[start][address]" id="drive-start"
+            value="<?= esc(old('drive.start.address')) ?>"
             placeholder="Entrez le point de départ" required>
-        <?php $startError = $errors['start.label'] ?? $errors['start.lat'] ?? $errors['start.lon'] ?? $errors['start.city'] ?? $errors['start.postcode'] ?? null;
+        <?php $startError = $errors['start.address'] ?? $errors['start.label'] ?? $errors['start.lat'] ?? $errors['start.lon'] ?? $errors['start.city'] ?? $errors['start.postcode'] ?? null;
         if ($startError): ?>
             <span class="text-xs text-red-500"><?= esc($startError) ?></span>
         <?php endif ?>
         <div class="results"></div>
+        <input type="hidden" name="drive[start][label]" value="<?= esc(old('drive.start.label')) ?>">
         <input type="hidden" name="drive[start][lat]" value="<?= esc(old('drive.start.lat')) ?>">
         <input type="hidden" name="drive[start][lon]" value="<?= esc(old('drive.start.lon')) ?>">
         <input type="hidden" name="drive[start][city]" value="<?= esc(old('drive.start.city')) ?>">
@@ -25,14 +26,15 @@
     <div class="flex flex-col gap-1">
         <label for="drive-end" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Arrivée</label>
         <input class="address-input border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey"
-            type="text" name="drive[end][label]" id="drive-end"
-            value="<?= esc(old('drive.end.label')) ?>"
+            type="text" name="drive[end][address]" id="drive-end"
+            value="<?= esc(old('drive.end.address')) ?>"
             placeholder="Entrez votre destination" required>
-        <?php $endError = $errors['end.label'] ?? $errors['end.lat'] ?? $errors['end.lon'] ?? $errors['end.city'] ?? $errors['end.postcode'] ?? null;
+        <?php $endError = $errors['end.address'] ?? $errors['end.label'] ?? $errors['end.lat'] ?? $errors['end.lon'] ?? $errors['end.city'] ?? $errors['end.postcode'] ?? null;
         if ($endError): ?>
             <span class="text-xs text-red-500"><?= esc($endError) ?></span>
         <?php endif ?>
         <div class="results"></div>
+        <input type="hidden" name="drive[end][label]" value="<?= esc(old('drive.end.label')) ?>">
         <input type="hidden" name="drive[end][lat]" value="<?= esc(old('drive.end.lat')) ?>">
         <input type="hidden" name="drive[end][lon]" value="<?= esc(old('drive.end.lon')) ?>">
         <input type="hidden" name="drive[end][city]" value="<?= esc(old('drive.end.city')) ?>">
@@ -51,10 +53,11 @@
         <?php $stops = old('drive.stops') ?? [[]]; ?>
         <?php foreach ($stops as $index => $stop): ?>
             <div class="stop address-field flex flex-col gap-1">
-                <input type="text" name="drive[stops][<?= $index ?>][label]"
+                <input type="text" name="drive[stops][<?= $index ?>][address]"
                     class="stop-input border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey"
-                    value="<?= esc($stop['label'] ?? '') ?>"
+                    value="<?= esc($stop['address'] ?? '') ?>"
                     placeholder="Entrer un arrêt">
+                <input type="hidden" name="drive[stops][<?= $index ?>][label]" value="<?= esc($stop['label'] ?? '') ?>">
                 <input type="hidden" name="drive[stops][<?= $index ?>][lat]" value="<?= esc($stop['lat'] ?? '') ?>">
                 <input type="hidden" name="drive[stops][<?= $index ?>][lon]" value="<?= esc($stop['lon'] ?? '') ?>">
                 <input type="hidden" name="drive[stops][<?= $index ?>][city]" value="<?= esc($stop['city'] ?? '') ?>">
@@ -65,7 +68,7 @@
                         Retirer
                     </button>
                 <?php endif; ?>
-                <?php $stopError = $errors["stops.$index.label"] ?? $errors["stops.$index.lat"] ?? $errors["stops.$index.lon"] ?? $errors["stops.$index.city"] ?? $errors["stops.$index.postcode"] ?? null;
+                <?php $stopError = $errors["stops.$index.address"] ?? $errors["stops.$index.label"] ?? $errors["stops.$index.lat"] ?? $errors["stops.$index.lon"] ?? $errors["stops.$index.city"] ?? $errors["stops.$index.postcode"] ?? null;
                 if ($stopError): ?>
                     <span class="text-xs text-red-500"><?= esc($stopError) ?></span>
                 <?php endif ?>
