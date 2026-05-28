@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\BookingModel;
 use App\Models\CarModel;
 use App\Models\JourneyDriveModel;
 use App\Models\JourneyRequestModel;
@@ -154,12 +155,53 @@ class JourneyService
 
     /**
      * 
+     * @param array $input The user's inputs
+     * @return array $journeys The matching journeys
      */
-    public function searchJourneyDrive(array $input)
+    public function searchJourneyDrive(array $input): array
     {
+        $locationService = service('locationService');
+        $journeyDriveModel = model(JourneyDriveModel::class);
+        $stageModel = model(StagesModel::class);
+        $bookingsModel = model(BookingModel::class);
+
+        // searchJourneyDrive()
+        // ├── resolve departure location
+        // ├── resolve arrival location
+        // ├── retrieve candidate journeys
+        // ├── filter by date
+        // ├── filter by seats
+        // ├── sort
+        // └── return results
+
+        // 1. cities + location
+        $departureLocation = $locationService->findLocationByAddress($input['start.address'], $input['start.city'], $input['start.postcode']);
+        $arrivalLocation = $locationService->findLocationByAddress($input['end.address'], $input['end.city'], $input['end.postcode']);
+
+        if (empty($departureLocation) || empty($arrivalLocation)) {
+            return [];
+        }
+        // 2. date 
+        // Intervale de temps pour l'horaire/date de début des trajets qui seront affichés
         // convert date to datetime range
-        $startDay = $input['date'] . '00:00:00';
-        // $endDay = $input['date'] avancer d'1 jour . '00:00:00';
+        $startDay = $input['date'] . '00:00:00'; // début
+        $endDay = date('Y-m-d H:i:s', strtotime($startDay . ' +1 day')); // fin
+
+        // 3. Journeys
+        $journeys = $journeyDriveModel
+            ->where('start', $departureLocation['id_location'])
+            ->where('end', $arrivalLocation['id_location'])
+            ->where('departure >=', $startDay)
+            ->where('departure <', $endDay)
+            ->findAll();
+
+        // 4. Filter seat availability
+        $journeys = $this->filterAvailableSeats(
+            $journeys,
+            $input['free-seats']
+        );
+
+        return $journeys;
     }
 
     /**
@@ -241,4 +283,9 @@ class JourneyService
      * 
      */
     public function searchJourneyRequest() {}
+
+    /**
+     * 
+     */
+    public function filterAvailableSeats(array $journeys, string $input) {}
 }
