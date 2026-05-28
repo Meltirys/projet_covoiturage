@@ -50,13 +50,13 @@ class RequestController extends BaseController
     }
 
     /**
-     *  Display the list of all journey request
+     *  Display the list of all journey
      */
     public function index()
     {
         $requestModel = new JourneyRequestModel();
         $allRequest = $requestModel->findAll();
-        return view('itinerary/create/RequestListView', ['requests' => $allRequest]);
+        return view('itinerary/show/RequestListView', ['requests' => $allRequest]);
     }
 
     /**
