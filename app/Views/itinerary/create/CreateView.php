@@ -61,6 +61,10 @@ $error  = session()->getFlashdata('error');
                 }
             });
         }
+        // Repopulate old seat selection
+        if (String(i) === oldSeatValue) {
+            opt.selected = true;
+        }
     });
 </script>
 <?= $this->endSection() ?>
