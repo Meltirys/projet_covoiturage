@@ -19,7 +19,7 @@ class CreateJourneyDriveTable extends Migration
             'departure'          => ['type' => 'DATETIME', 'null' => false],
             'estimated_arrival'  => ['type' => 'DATETIME', 'null' => false],
             'deletion_date'      => ['type' => 'DATE', 'null' => true],
-            'id_track'           => ['type' => 'INT', 'null' => false, 'unsigned' => true],
+            'id_track'           => ['type' => 'INT', 'null' => true, 'unsigned' => true],
             'start'              => ['type' => 'INT', 'null' => false, 'unsigned' => true],
             'end'                => ['type' => 'INT', 'null' => false, 'unsigned' => true],
             'id_car'             => ['type' => 'INT', 'null' => false, 'unsigned' => true],
