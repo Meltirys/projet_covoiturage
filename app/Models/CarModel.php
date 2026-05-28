@@ -57,7 +57,7 @@ class CarModel extends Model
             ->where('id_user', $userID)
             ->findAll();
 
-        if (empty($cars)) return null;
+        if (empty($cars)) return [];
 
         return $cars;
     }
