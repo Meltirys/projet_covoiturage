@@ -46,16 +46,11 @@ class LocationModel extends Model
 
     /**
      * Gets the ID of the provided location. If it doesn't exist, insert as new location
-     * 
      * @param string $address
-     *
      * @param int $cityID The ID of the city
-     * 
      * @param float $latitude
-     * 
      * @param float $longitude
-     * 
-     * @return int The location ID
+     * @return int The location's primary row ID
      */
     public function getOrCreate(string $address, int $cityID, ?float $latitude, ?float $longitude): int
     {
@@ -73,13 +68,19 @@ class LocationModel extends Model
         ]);
     }
 
-    public function getFormattedAddress(int $idLocation) : ?string{
+    /**
+     * 
+     * @param int $idLocation
+     * @return ?string
+     */
+    public function getFormattedAddress(int $idLocation): ?string
+    {
         $formattedAddress = $this->select("CONCAT(Location.address,', ', City.postcode, ' ', City.name) AS completeAddress")
             ->join('City', 'Location.id_city = City.id_city')
             ->where($this->primaryKey, $idLocation)
             ->first();
 
-        if(!$formattedAddress) return null;
+        if (!$formattedAddress) return null;
 
         return $formattedAddress['completeAddress'];
     }
