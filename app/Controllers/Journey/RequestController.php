@@ -66,7 +66,7 @@ class RequestController extends BaseController
          * options?
          */
 
-        $data = $this->request->getPost();
+        $data = $this->request->getPost('request');
 
         $data['start-datetime'] = (new DateTime(
             $data['start-date'] . ' ' . $data['start-time']
@@ -83,7 +83,8 @@ class RequestController extends BaseController
         if (! $validator->validate($data)) {
             log_message('debug', 'Validation failed. Errors: ' . json_encode($validator->getErrors()));
             return redirect()->back()
-                ->with('errors', $validator->getErrors())
+                ->with('request_errors', $validator->getErrors())
+                ->with('failed_form', 'request')
                 ->withInput();
         }
 

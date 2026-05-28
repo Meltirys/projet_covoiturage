@@ -1,7 +1,8 @@
 <?php
 $status = session()->getFlashdata('status');
+$driveErrors = session()->getFlashdata('drive_errors') ?? [];
+$requestErrors = session()->getFlashdata('request_errors') ?? [];
 $error  = session()->getFlashdata('error');
-$errors = session()->getFlashdata('errors') ?? [];
 ?>
 
 <?= $this->extend('layouts/main') ?>
@@ -24,11 +25,11 @@ $errors = session()->getFlashdata('errors') ?? [];
 
     <!-- Mon idée est de faire deux onglets sur la même page qui afficheront les deux différents formulaires -->
     <div class="bg-white border border-[rgba(37,63,114,0.25)] rounded-xl p-5">
-        <?= view('itinerary/create/create_drive_form', ['errors' => $errors, 'cars' => $cars ?? []]) ?>
+        <?= view('itinerary/create/create_drive_form', ['errors' => $driveErrors, 'cars' => $cars ?? []]) ?>
     </div>
 
     <div class="bg-white border border-[rgba(37,63,114,0.25)] rounded-xl p-5">
-        <?= view('itinerary/create/create_request_form', ['errors' => $errors]) ?>
+        <?= view('itinerary/create/create_request_form', ['errors' => $requestErrors]) ?>
     </div>
 </main>
 
@@ -41,8 +42,9 @@ $errors = session()->getFlashdata('errors') ?? [];
     document.addEventListener('DOMContentLoaded', () => {
         // Création des nombres de places possibles
         const cars = <?= json_encode($cars ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
-        const carSelect = document.getElementById("car");
-        const seatSelect = document.getElementById("seats");
+        const carSelect = document.getElementById("drive-car");
+        const seatSelect = document.getElementById("drive-seats");
+        const oldSeatValue = "<?= old('drive.seats') ?>";
 
         if (carSelect && seatSelect && Array.isArray(cars) && cars.length > 0) {
             carSelect.addEventListener("change", () => {

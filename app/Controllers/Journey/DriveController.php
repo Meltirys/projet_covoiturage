@@ -105,7 +105,7 @@ class DriveController extends BaseController
          * - Options ?
          */
 
-        $data = $this->request->getPost();
+        $data = $this->request->getPost('drive');
 
         // Validation
         $validator = new CreateJourneyDriveValidator;
@@ -113,7 +113,8 @@ class DriveController extends BaseController
         if (! $validator->validate($data)) {
             log_message('debug', 'Validation failed. Errors: ' . json_encode($validator->getErrors()));
             return redirect()->back()
-                ->with('errors', $validator->getErrors())
+                ->with('drive_errors', $validator->getErrors())
+                ->with('failed_form', 'drive')
                 ->withInput();
         }
 
