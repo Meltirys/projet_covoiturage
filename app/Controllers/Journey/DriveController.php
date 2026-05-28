@@ -44,7 +44,7 @@ class DriveController extends BaseController
             $journeyService = service('journeyService');
 
             // === Ajouter options quand possible !
-            $journeyId = $journeyService->createJourneyDrive(
+            $journeyId = $journeyService->searchJourneyDrive(
                 $data,
                 session()->get('user_id')
             );
