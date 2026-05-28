@@ -23,7 +23,7 @@ class DriveController extends BaseController
          * start = ['label', 'city', 'postcode', 'lat', 'lon']
          * end = [...]
          * date
-         * passengers (default 1)
+         * free-seats (default 1)
          * (optional) filters
          */
 
@@ -38,20 +38,14 @@ class DriveController extends BaseController
                 ->withInput();
         }
 
-
-
         // Logic
         try {
             $journeyService = service('journeyService');
 
             // === Ajouter options quand possible !
-            $journeyId = $journeyService->createJourneyDrive(
-                $data,
-                session()->get('user_id')
-            );
+            $data['journeys'] = $journeyService->searchJourneyDrive($data);
 
-            return redirect()->to('/')
-                ->with('status', 'Itinéraire créé avec succès');
+            return redirect()->to('trajet');
         } catch (\DomainException $e) {
             // user error (e.g. chosen more seats than available in car)
             return redirect()->back()

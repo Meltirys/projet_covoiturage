@@ -321,7 +321,7 @@
             <section class="flex flex-col md:flex-row-reverse gap-3 pb-6">
                 <form action="user/delete" method="post" class="w-full">
                     <?= csrf_field() ?>
-                    <button type="submit" class="w-full border border-red-200 text-red-500 rounded-xl py-3 text-sm hover:bg-red-50 transition-colors duration-200">
+                    <button type="submit" class="w-full border border-reddish text-reddish rounded-xl py-3 text-sm hover:bg-red-50 transition-colors duration-200">
                         Supprimer mon compte
                     </button>
                 </form>
