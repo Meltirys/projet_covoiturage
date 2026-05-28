@@ -51,7 +51,7 @@ class CarModel extends Model
      * 
      * @return array The user's saved cars
      */
-    public function getCarsByUser(int $userID)
+    public function getCarsByUser(int $userID): array
     {
         $cars = $this->select()
             ->where('id_user', $userID)
