@@ -17,6 +17,40 @@ class LocationService
     }
 
     /**
+     * Finds location ID matching given data
+     * @param string $address
+     * @param string $city
+     * @param string $postcode
+     * @return array $locationData Location data if found, otherwise empty array
+     */
+    public function findLocationByAddress(
+        string $address,
+        string $city,
+        string $postcode,
+    ): array {
+        // 1. Retrieve the city
+        $cityData = $this->cityModel
+            ->where([
+                'city'     => $city,
+                'postcode' => $postcode
+            ])->first();
+
+        if (! $cityData) {
+            return [];
+        }
+
+        // 3. Retrieve the location
+        $locationData = $this->locationModel
+            ->where([
+                'address'   => $address,
+                'id_city'   => $cityData['id_city']
+            ])
+            ->first();
+
+        return $locationData;
+    }
+
+    /**
      * Retrieves or creates a complete location from address data.
      * Can be called with or without coordinates.
      * @param string $address
@@ -37,7 +71,7 @@ class LocationService
         $cityData = $this->cityModel->getOrCreate($city, $postcode);
 
         // 2. If no coordinates provided, fetch them via the API
-        if (!$latitude || !$longitude) {
+        if ($latitude === null || $longitude === null) {
             $coords    = $this->getCoordinates($address, $city, $postcode);
             $latitude  = $coords['latitude'];
             $longitude = $coords['longitude'];
