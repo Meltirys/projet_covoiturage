@@ -59,8 +59,8 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     // Création de trajets
     $routes->get('nouveau-trajet', 'PagesController::createJourney');
     $routes->post('drive/save', 'Journey\DriveController::save'); // conduite
-    $routes->post('request/save', 'Journey\RequestJourneyController::save'); // requête
-    $routes->get('request/list', 'Journey\RequestJourneyController::index');
+    $routes->post('request/save', 'Journey\RequestController::save'); // requête
+    $routes->get('request/list', 'Journey\RequestController::index');
 
     // Recherche de trajets
     $routes->get('trajet', 'PagesController::searchJourney');

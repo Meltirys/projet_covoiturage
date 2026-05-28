@@ -49,6 +49,15 @@ class RequestController extends BaseController
         return view('itinerary/create/CreateView');
     }
 
+    /**
+     *  Display the list of all journey request
+     */
+    public function index()
+    {
+        $requestModel = new JourneyRequestModel();
+        $allRequest = $requestModel->findAll();
+        return view('itinerary/create/RequestListView', ['requests' => $allRequest]);
+    }
 
     /**
      * Saves an itinerary
