@@ -13,6 +13,7 @@ use PDOException;
 
 class DriveController extends BaseController
 {
+
     /**
      * Searches for matching itineraries
      */
@@ -44,7 +45,7 @@ class DriveController extends BaseController
             $journeyService = service('journeyService');
 
             // === Ajouter options quand possible !
-            $journeyId = $journeyService->searchJourneyDrive(
+            $journeyId = $journeyService->createJourneyDrive(
                 $data,
                 session()->get('user_id')
             );
@@ -73,17 +74,30 @@ class DriveController extends BaseController
      */
     public function show(?string $slug = null)
     {
-        $model = model(JourneyDriveModel::class);
+        helper('form');
+        helper('french_helper');
 
-        $data['itinerary'] = $model->getItinerary($slug);
+        $journeyModel = model(JourneyDriveModel::class);
+        $userModel = model('UserModel');
+        $carModel = model('CarModel');
 
-        if ($data['itinerary'] === null) {
+        $data['journey'] = $journeyModel->getAllJourneyInfos($slug); //Retrieving the information of the journey
+
+        //Checking if the journey exist. If there are no driver, do not display the page.
+        if (!$data['journey'] || !$data['journey']['driver']) {
             throw new PageNotFoundException('Cannot find the news item: ' . $slug);
         }
 
-        return view('templates/header', $data)
-            . view('news/view', $data)
-            . view('templates/footer');
+        //Reformation the dates
+        $data['journey']['departure'] = format_date_fr($data['journey']['departure']);
+        $data['journey']['estimated_arrival'] = format_date_fr($data['journey']['estimated_arrival']);
+
+
+        $data['driver_name'] = $userModel->getUserName($data['journey']['driver']);; // Retrieving the driver name
+        $data['car'] = $carModel->find($data['journey']['id_car']); //Retrieving the car information
+
+
+        return view('/itinerary/show/DriverJourneyView', $data);
     }
 
     /**
