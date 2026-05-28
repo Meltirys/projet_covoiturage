@@ -41,11 +41,11 @@
                     <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
                         <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
                             <span class="text-sm text-bluegrey">Trajets proposés</span>
-                            <span class="nav-d bg-lightblue rounded-full px-3 py-0.5">0</span>
+                            <span class="nav-d bg-lightblue rounded-full px-3 py-0.5"><?= $driverJourneyDone ?></span>
                         </li>
                         <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
                             <span class="text-sm text-bluegrey">Passagers transportés</span>
-                            <span class="nav-d bg-lightblue rounded-full px-3 py-0.5">0</span>
+                            <span class="nav-d bg-lightblue rounded-full px-3 py-0.5"><?= $passengerTaken ?></span>
                         </li>
                     </ul>
                 </div>
@@ -217,7 +217,7 @@
                     <ul class="flex flex-col gap-2">
                         <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
                             <span class="text-sm text-bluegrey">Trajets effectués</span>
-                            <span class="nav-d bg-lightblue rounded-full px-3 py-0.5">0</span>
+                            <span class="nav-d bg-lightblue rounded-full px-3 py-0.5"><?= $passengerJourneyDone ?></span>
                         </li>
                     </ul>
                 </div>

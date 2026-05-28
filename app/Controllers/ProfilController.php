@@ -28,6 +28,7 @@ class ProfilController extends BaseController
         $upcomingConfirmed = [];
         $upcomingPending   = [];
         $pastJourney       = [];
+        $passengerJourneyDone =0;
         foreach ($allBookings as $booking) {
             $journey = $journeyModel->find($booking['id_journey_drive']);
             $booking['journey']     = $journey;
@@ -35,6 +36,8 @@ class ProfilController extends BaseController
             $booking['driver_name'] = $driver['first_name'] . ' ' . substr($driver['last_name'], 0, 1) . '.';
             if ($journey['departure'] < $today) {
                 $pastJourney[] = $booking;
+                if($booking['is_validated']) $passengerJourneyDone++; //Updating the stats
+
             } elseif ($booking['is_validated']) {
                 $upcomingConfirmed[] = $booking;
             } else {
@@ -47,6 +50,8 @@ class ProfilController extends BaseController
         $driveUpcoming   = [];
         $drivePast       = [];
         $pendingRequests = [];
+        $driverJourneyDone = 0;
+        $passengerTaken = 0;
         foreach ($myJourneys as $journey) {
             $placesOccupees = (int) $bookingModel
                 ->selectSum('seat_taken')
@@ -57,6 +62,8 @@ class ProfilController extends BaseController
             $journey['places_restantes'] = $journey['number_of_place'] - $placesOccupees;
             if ($journey['departure'] < $today) {
                 $drivePast[] = $journey;
+                $driverJourneyDone++;
+                $passengerTaken += $placesOccupees;
             } else {
                 $driveUpcoming[] = $journey;
             }
@@ -81,6 +88,9 @@ class ProfilController extends BaseController
             'driveUpcoming'     => $driveUpcoming,
             'drivePast'         => $drivePast,
             'pendingRequests'   => $pendingRequests,
+            'passengerJourneyDone' => $passengerJourneyDone,
+            'driverJourneyDone' => $driverJourneyDone,
+            'passengerTaken' => $passengerTaken
         ]);
     }
 

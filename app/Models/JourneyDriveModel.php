@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use Override;
 
 class JourneyDriveModel extends Model
 {
@@ -43,4 +44,5 @@ class JourneyDriveModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
 }
