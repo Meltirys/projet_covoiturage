@@ -245,6 +245,7 @@ class JourneyService
                 'departure'         => $input['start-datetime'],
                 'estimated_arrival' => $input['end-datetime'],
                 'range_of_time'     => $input['range-of-time'],
+                'id_user'           => $userId,
                 'start'             => $startLocationId,
                 'end'               => $endLocationId,
             ];
