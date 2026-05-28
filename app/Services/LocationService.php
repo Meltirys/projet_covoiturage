@@ -12,13 +12,19 @@ class LocationService
 
     public function __construct()
     {
-        $this->cityModel     = new CityModel();
-        $this->locationModel = new LocationModel();
+        $this->cityModel     = model(CityModel::class);
+        $this->locationModel = model(LocationModel::class);
     }
 
     /**
      * Retrieves or creates a complete location from address data.
      * Can be called with or without coordinates.
+     * @param string $address
+     * @param string $city
+     * @param string $postcode 
+     * @param ?float $latitude 
+     * @param ?float $longitude 
+     * @return int The location's primary row ID
      */
     public function getOrCreate(
         string $address,
@@ -49,6 +55,10 @@ class LocationService
     /**
      * Fetches coordinates from the French government geocoding API
      * Returns null values if the address cannot be found
+     * @param string $address
+     * @param string $city
+     * @param string $postcode
+     * @return array Array containing latitude and longitude, both null of address not found
      */
     private function getCoordinates(string $address, string $city, string $postcode): array
     {
