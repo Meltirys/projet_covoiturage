@@ -46,4 +46,13 @@ class BookingModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getPastJourney(int $idUser, bool $accepted = true)
+    {
+        return $this->join('JourneyDrive', 'JourneyDrive.id_journey_drive = Booking.id_journey_drive')
+            ->where('Booking.id_user', $idUser)
+            ->where('is_validated', $accepted)
+            ->where('JourneyDrive.estimated_arrival <', date('Y-m-d H:i:s'))
+            ->countAllResults();
+    }
 }

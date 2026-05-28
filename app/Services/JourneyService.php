@@ -117,13 +117,13 @@ class JourneyService
                     $stop['lon']
                 );
 
-                $ok = $stageModel->save([
+                $ok = $stageModel->insert([
                     'id_journey_drive' => $journeyId,
                     'id_location'      => $locationId,
                     'order'            => $order++,
                 ]);
 
-                if (! $ok) {
+                if ($ok === false) {
                     throw new \RuntimeException('Erreur lors de la création des étapes');
                 }
             }

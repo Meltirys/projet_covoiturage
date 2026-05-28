@@ -8,17 +8,17 @@
         <label for="drive-start" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Départ</label>
         <input class="address-input border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey"
             type="text" name="drive[start][label]" id="drive-start"
-            value="<?= old('drive.start.label') ?>"
+            value="<?= esc(old('drive.start.label')) ?>"
             placeholder="Entrez le point de départ" required>
         <?php $startError = $errors['start.label'] ?? $errors['start.lat'] ?? $errors['start.lon'] ?? $errors['start.city'] ?? $errors['start.postcode'] ?? null;
         if ($startError): ?>
             <span class="text-xs text-red-500"><?= esc($startError) ?></span>
         <?php endif ?>
         <div class="results"></div>
-        <input type="hidden" name="drive[start][lat]" value="<?= old('drive.start.lat') ?>">
-        <input type="hidden" name="drive[start][lon]" value="<?= old('drive.start.lon') ?>">
-        <input type="hidden" name="drive[start][city]" value="<?= old('drive.start.city') ?>">
-        <input type="hidden" name="drive[start][postcode]" value="<?= old('drive.start.postcode') ?>">
+        <input type="hidden" name="drive[start][lat]" value="<?= esc(old('drive.start.lat')) ?>">
+        <input type="hidden" name="drive[start][lon]" value="<?= esc(old('drive.start.lon')) ?>">
+        <input type="hidden" name="drive[start][city]" value="<?= esc(old('drive.start.city')) ?>">
+        <input type="hidden" name="drive[start][postcode]" value="<?= esc(old('drive.start.postcode')) ?>">
     </div>
 
     <!-- Arrivée -->
@@ -26,17 +26,17 @@
         <label for="drive-end" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Arrivée</label>
         <input class="address-input border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey"
             type="text" name="drive[end][label]" id="drive-end"
-            value="<?= old('drive.end.label') ?>"
+            value="<?= esc(old('drive.end.label')) ?>"
             placeholder="Entrez votre destination" required>
         <?php $endError = $errors['end.label'] ?? $errors['end.lat'] ?? $errors['end.lon'] ?? $errors['end.city'] ?? $errors['end.postcode'] ?? null;
         if ($endError): ?>
             <span class="text-xs text-red-500"><?= esc($endError) ?></span>
         <?php endif ?>
         <div class="results"></div>
-        <input type="hidden" name="drive[end][lat]" value="<?= old('drive.end.lat') ?>">
-        <input type="hidden" name="drive[end][lon]" value="<?= old('drive.end.lon') ?>">
-        <input type="hidden" name="drive[end][city]" value="<?= old('drive.end.city') ?>">
-        <input type="hidden" name="drive[end][postcode]" value="<?= old('drive.end.postcode') ?>">
+        <input type="hidden" name="drive[end][lat]" value="<?= esc(old('drive.end.lat')) ?>">
+        <input type="hidden" name="drive[end][lon]" value="<?= esc(old('drive.end.lon')) ?>">
+        <input type="hidden" name="drive[end][city]" value="<?= esc(old('drive.end.city')) ?>">
+        <input type="hidden" name="drive[end][postcode]" value="<?= esc(old('drive.end.postcode')) ?>">
     </div>
 
 </div>
@@ -81,7 +81,7 @@
     <div class="flex flex-col gap-1">
         <label for="drive-start-date" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Date de départ</label>
         <input type="date" name="drive[start-date]" id="drive-start-date"
-            value="<?= old('drive.start-date') ?>"
+            value="<?= esc(old('drive.start-date')) ?>"
             class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
         <?php if (isset($errors['start-date'])): ?>
             <span class="text-xs text-red-500"><?= esc($errors['start-date']) ?></span>
@@ -91,7 +91,7 @@
     <div class="flex flex-col gap-1">
         <label for="drive-start-time" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Heure de départ</label>
         <input type="time" name="drive[start-time]" id="drive-start-time"
-            value="<?= old('drive.start-time') ?>"
+            value="<?= esc(old('drive.start-time')) ?>"
             class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
         <?php if (isset($errors['start-time'])): ?>
             <span class="text-xs text-red-500"><?= esc($errors['start-time']) ?></span>
@@ -103,7 +103,7 @@
     <div class="flex flex-col gap-1">
         <label for="drive-end-date" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Date d'arrivée</label>
         <input type="date" name="drive[end-date]" id="drive-end-date"
-            value="<?= old('drive.end-date') ?>"
+            value="<?= esc(old('drive.end-date')) ?>"
             class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
         <?php if (isset($errors['end-date'])): ?>
             <span class="text-xs text-red-500"><?= esc($errors['end-date']) ?></span>
@@ -113,7 +113,7 @@
     <div class="flex flex-col gap-1">
         <label for="drive-end-time" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Heure d'arrivée</label>
         <input type="time" name="drive[end-time]" id="drive-end-time"
-            value="<?= old('drive.end-time') ?>"
+            value="<?= esc(old('drive.end-time')) ?>"
             class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
         <?php if (isset($errors['end-time'])): ?>
             <span class="text-xs text-red-500"><?= esc($errors['end-time']) ?></span>
@@ -159,7 +159,7 @@
 <div class="flex flex-col gap-1">
     <label for="drive-options" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Options</label>
     <input type="text" name="drive[options]" id="drive-options"
-        value="<?= old('drive.options') ?>"
+        value="<?= esc(old('drive.options')) ?>"
         placeholder="Entrez vos options"
         class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey">
     <?php if (isset($errors['options'])): ?>

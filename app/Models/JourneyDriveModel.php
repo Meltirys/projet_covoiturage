@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use Override;
 
 class JourneyDriveModel extends Model
 {
@@ -12,6 +13,7 @@ class JourneyDriveModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
+    // Add id_track later, and remove nullability of id_track in db
     protected $allowedFields    = ['number_of_place', 'departure', 'estimated_arrival', 'id_track', 'start', 'end', 'id_car', 'driver'];
 
     protected bool $allowEmptyInserts = false;
@@ -43,4 +45,5 @@ class JourneyDriveModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
 }

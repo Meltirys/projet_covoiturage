@@ -60,13 +60,13 @@ if (stops.length !== 0) {
     stop.innerHTML = `  
                 <input 
                     type="text" 
-                    name="stops[${stopIndex}][label]"
+                    name="drive[stops][${stopIndex}][label]"
                     class="stop-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]"
                     placeholder="Entrer un arrêt">
-                <input type="hidden" name="stops[${stopIndex}][lat]">
-                <input type="hidden" name="stops[${stopIndex}][lon]">
-                <input type="hidden" name="stops[${stopIndex}][city]">
-                <input type="hidden" name="stops[${stopIndex}][postcode]">
+                <input type="hidden" name="drive[stops][${stopIndex}][lat]">
+                <input type="hidden" name="drive[stops][${stopIndex}][lon]">
+                <input type="hidden" name="drive[stops][${stopIndex}][city]">
+                <input type="hidden" name="drive[stops][${stopIndex}][postcode]">
                 <div class="results"></div>
                     <button type="button" class="remove-stop text-xs text-[rgba(37,63,114,0.5)] underline text-right bg-transparent border-none cursor-pointer">
                         Retirer
