@@ -286,7 +286,15 @@ class JourneyService
     public function searchJourneyRequest() {}
 
     /**
-     * 
+     * Function to filter through journeys which don't have enough seats available
+     * @param array $journeys Journeys matching in location and date
+     * @param string $input Amount of available seats requested
+     * @return array $newJourneys The filtered journeys with enough free seats
      */
-    public function filterAvailableSeats(array $journeys, string $input) {}
+    public function filterAvailableSeats(array $journeys, string $input): array
+    {
+        $newJourneys = [];
+
+        return $newJourneys;
+    }
 }
