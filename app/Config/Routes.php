@@ -68,8 +68,8 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('request/search', 'Journey\RequestController::search'); // requête
 
     // Affichage de trajet individuel
-    $routes->get('drive/show', 'Journey\DriveController::show'); // conduite
-    $routes->get('request/show', 'Journey\RequestController::show'); // requête
+    $routes->get('conduite/(:num)', 'Journey\DriveController::show'); // conduite
+    $routes->get('requete/(:num)', 'Journey\RequestController::show'); // requête
 
     // Réservation
     $routes->get('reservation/(:num)',           'Journey\BookingController::show/$1');
