@@ -109,18 +109,19 @@
                     </div>
                     <div class="flex flex-col gap-1">
                         <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Adresse</label>
-                        <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="address" value="<?= set_value('address') ?>" required>
+                        <input class="address-input w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="address" value="<?= set_value('address') ?>" required>
                         <?php if ($errors['address'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['address'] ?></span><?php endif ?>
+                        <div class="results"></div>
                     </div>
                     <div class="grid grid-cols-2 gap-3">
                         <div class="flex flex-col gap-1">
                             <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Code postal</label>
-                            <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="postcode" value="<?= set_value('postcode') ?>">
+                            <input id="postcode-input" class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="postcode" value="<?= set_value('postcode') ?>">
                             <?php if ($errors['postcode'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['postcode'] ?></span><?php endif ?>
                         </div>
                         <div class="flex flex-col gap-1">
                             <label class="text-xs font-medium tracking-widest text-bluegrey uppercase">Ville</label>
-                            <input class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="city" value="<?= set_value('city') ?>" required>
+                            <input id="city-input" class="w-full rounded-xl border border-bluegrey px-3 py-2 text-xs text-bluegrey focus:outline-none" type="text" name="city" value="<?= set_value('city') ?>" required>
                             <?php if ($errors['city'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['city'] ?></span><?php endif ?>
                         </div>
                     </div>
@@ -195,6 +196,8 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
+<script src="/js/geocoding.js"></script>
+<script src="/js/profile-address.js"></script>
 <script>
     const btns = document.querySelectorAll('.auth-menu-btn');
     const panels = document.querySelectorAll('.auth-form-panel');

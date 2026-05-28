@@ -1,7 +1,4 @@
-<?= $this->extend('layouts/main') ?>
-
-<?= $this->section('content') ?>
-<main class="w-full max-w-5xl mx-auto px-4 py-6 md:px-8 md:py-10 bg-lightgrey font-poppins">
+<main class="w-full max-w-5xl mx-auto px-4 py-6 md:px-8 md:py-10 font-poppins">
 
     <header class="flex justify-between items-center mb-6">
         <h2 class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Validation des utilisateurs</h2>
@@ -38,7 +35,3 @@
     <?php endif ?>
 
 </main>
-<?= $this->endSection() ?>
-
-<?= $this->section('scripts') ?>
-<?= $this->endSection() ?>

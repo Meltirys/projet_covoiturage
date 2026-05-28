@@ -1,5 +1,16 @@
-const addressInput = document.querySelector("#my-address");
+/**
+ * Fills additional fields with the matching data
+ * @param {*} feature Data from geocoding API
+ * @param {*} inputElement User input element
+ */
+function fillAddressFields(feature, inputElement) {
+  const properties = feature.properties;
 
-initializeAddressInput(addressInput, (feature) => {
-  console.log(feature);
+  inputElement.value = properties.name || "";
+  document.getElementById("city-input").value = properties.city || "";
+  document.getElementById("postcode-input").value = properties.postcode || "";
+}
+
+document.querySelectorAll(".address-input").forEach((input) => {
+  initializeAddressInput(input, fillAddressFields);
 });

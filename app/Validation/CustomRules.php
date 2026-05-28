@@ -63,36 +63,48 @@ class CustomRules
     public function validStops(array $value): bool
     {
         if (empty($value)) {
-            return false;
+            return true;
         }
 
-        // address
-        if (empty($stop['label']) || strlen($stop['label']) < 2 || strlen($stop['label']) > 100) {
-            return false;
-        }
-
-        // latitude
-        if (
-            ! isset($stop['lat']) ||
-            ! is_numeric($stop['lat']) ||
-            $stop['lat'] < -90 ||
-            $stop['lat'] > 90
-        ) {
-            return false;
-        }
-
-        // longitude
-        if (
-            ! isset($stop['lon']) ||
-            ! is_numeric($stop['lon']) ||
-            $stop['lon'] < -180 ||
-            $stop['lon'] > 180
-        ) {
-            return false;
-        }
-
-        // city name
         foreach ($value as $stop) {
+
+            // If all the fields in this stop are empty, skip validation for this stop
+            $isEmpty =
+                empty($stop['label']) &&
+                empty($stop['lat']) &&
+                empty($stop['lon']) &&
+                empty($stop['city']) &&
+                empty($stop['postcode']);
+            if ($isEmpty) {
+                continue;
+            }
+
+            // label
+            if (empty($stop['label']) || strlen($stop['label']) < 2 || strlen($stop['label']) > 100) {
+                return false;
+            }
+
+            // latitude
+            if (
+                ! isset($stop['lat']) ||
+                ! is_numeric($stop['lat']) ||
+                $stop['lat'] < -90 ||
+                $stop['lat'] > 90
+            ) {
+                return false;
+            }
+
+            // longitude
+            if (
+                ! isset($stop['lon']) ||
+                ! is_numeric($stop['lon']) ||
+                $stop['lon'] < -180 ||
+                $stop['lon'] > 180
+            ) {
+                return false;
+            }
+
+            // city
             if (
                 empty($stop['city']) ||
                 strlen($stop['city']) < 2 ||
@@ -100,14 +112,14 @@ class CustomRules
             ) {
                 return false;
             }
-        }
 
-        // postcode
-        if (
-            empty($stop['postcode']) ||
-            ! preg_match('/^[A-Za-z0-9 ]{1,10}$/', $stop['postcode'])
-        ) {
-            return false;
+            // postcode
+            if (
+                empty($stop['postcode']) ||
+                ! preg_match('/^[A-Za-z0-9 ]{1,10}$/', $stop['postcode'])
+            ) {
+                return false;
+            }
         }
 
         return true;

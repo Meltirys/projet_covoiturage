@@ -14,7 +14,7 @@
 <body>
 
     <header class="header flex items-center py-4 px-5 bg-lightgrey">
-        <img src="/img/logo.png" alt="PennRide" class="w-12 h-12 rounded-xl">
+        <a href="/"><img src="/img/logo.png" alt="PennRide" class="w-12 h-12 rounded-xl"></a>
         <?php if (session('logged_in')): ?>
             <!-- Nav desktop -->
             <nav class="hidden md:flex justify-end items-center gap-6">

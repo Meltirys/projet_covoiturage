@@ -20,42 +20,44 @@ document.querySelectorAll(".address-input").forEach((input) => {
   initializeAddressInput(input, fillAddressFields);
 });
 // ===== Stops
-/**
- * Applies fillAddressFields and handles callback of createStop function if needed
- * @param {*} feature
- * @param {*} inputElement User input element
- */
-function handleStopSelection(feature, inputElement) {
-  fillAddressFields(feature, inputElement);
+const stops = document.querySelectorAll(".stop-input");
+if (stops.length !== 0) {
+  stops.forEach((input) => {
+    initializeAddressInput(input, handleStopSelection);
+  });
 
-  const container = inputElement.parentElement;
+  /**
+   * Applies fillAddressFields and handles callback of createStop function if needed
+   * @param {*} feature
+   * @param {*} inputElement User input element
+   */
+  function handleStopSelection(feature, inputElement) {
+    fillAddressFields(feature, inputElement);
 
-  if (
-    container === stopsContainer.lastElementChild &&
-    container.querySelector('input[name$="[lat]"]').value !== ""
-  ) {
-    createStop();
+    const container = inputElement.parentElement;
+
+    if (
+      container === stopsContainer.lastElementChild &&
+      container.querySelector('input[name$="[lat]"]').value !== ""
+    ) {
+      createStop();
+    }
   }
-}
 
-document.querySelectorAll(".stop-input").forEach((input) => {
-  initializeAddressInput(input, handleStopSelection);
-});
+  // Initializing optional stops
 
-// Initializing optional stops
+  const stopsContainer = document.getElementById("stops-container");
+  let stopIndex = stops.length;
 
-const stopsContainer = document.getElementById("stops-container");
-let stopIndex = document.querySelectorAll(".stop").length;
+  /**
+   * Creates input fields for new stops
+   */
+  function createStop() {
+    const stop = document.createElement("div");
 
-/**
- * Creates input fields for new stops
- */
-function createStop() {
-  const stop = document.createElement("div");
+    stop.className = "stop address-field flex flex-col gap-1";
 
-  stop.className = "stop address-field flex flex-col gap-1";
-
-  stop.innerHTML = `  
+    stop.innerHTML = `  
                 <input 
                     type="text" 
                     name="stops[${stopIndex}][label]"
@@ -70,21 +72,22 @@ function createStop() {
                         Retirer
                     </button>
             `;
-  stopsContainer.appendChild(stop);
+    stopsContainer.appendChild(stop);
 
-  initializeAddressInput(
-    stop.querySelector(".stop-input"),
-    handleStopSelection,
-  );
+    initializeAddressInput(
+      stop.querySelector(".stop-input"),
+      handleStopSelection,
+    );
 
-  stopIndex++;
-}
-
-/*
- * Adds a remove button
- */
-stopsContainer.addEventListener("click", (e) => {
-  if (e.target.classList.contains("remove-stop")) {
-    e.target.closest(".stop").remove();
+    stopIndex++;
   }
-});
+
+  /*
+   * Adds a remove button
+   */
+  stopsContainer.addEventListener("click", (e) => {
+    if (e.target.classList.contains("remove-stop")) {
+      e.target.closest(".stop").remove();
+    }
+  });
+}

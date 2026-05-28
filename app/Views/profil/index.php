@@ -300,7 +300,7 @@
                 <h4 class="text-xs font-poppins text-grey mb-2">Compte</h4>
                 <ul class="grid grid-cols-1 md:grid-cols-2 gap-2">
                     <li>
-                        <a href="user/modify" class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3 hover:bg-lightblue transition-colors duration-150">
+                        <a href="profil/modify" class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3 hover:bg-lightblue transition-colors duration-150">
                             <div>
                                 <p class="nav-m">Informations personnelles</p>
                                 <p class="text-xs text-grey">Nom, email, photo...</p>
@@ -309,7 +309,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="user/changePassword" class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3 hover:bg-lightblue transition-colors duration-150">
+                        <a href="profil/changePassword" class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3 hover:bg-lightblue transition-colors duration-150">
                             <p class="nav-m">Mot de passe</p>
                             <span class="text-grey">›</span>
                         </a>
@@ -319,7 +319,7 @@
 
             <!-- Boutons -->
             <section class="flex flex-col md:flex-row-reverse gap-3 pb-6">
-                <form action="<?= site_url('user/delete') ?>" method="post" class="w-full">
+                <form action="user/delete" method="post" class="w-full">
                     <?= csrf_field() ?>
                     <button type="submit" class="w-full border border-reddish text-reddish rounded-xl py-3 text-sm hover:bg-red-50 transition-colors duration-200">
                         Supprimer mon compte

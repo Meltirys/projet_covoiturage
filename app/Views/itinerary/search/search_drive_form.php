@@ -10,8 +10,9 @@
             type="text" name="start[label]" id="start"
             value="<?= set_value('start[label]') ?>"
             placeholder="Entrez votre départ" required>
-        <?php if (isset($errors['start'])): ?>
-            <span class="text-xs text-red-500"><?= $errors['start'] ?></span>
+        <?php $startError = $errors['start.label'] ?? $errors['start.lat'] ?? $errors['start.lon'] ?? $errors['start.city'] ?? $errors['start.postcode'] ?? null;
+        if ($startError): ?>
+            <span class="text-xs text-red-500"><?= esc($startError) ?></span>
         <?php endif ?>
         <div class="results"></div>
         <input type="hidden" name="start[lat]">
@@ -27,8 +28,9 @@
             type="text" name="end[label]" id="end"
             value="<?= set_value('end[label]') ?>"
             placeholder="Entrez votre destination" required>
-        <?php if (isset($errors['end'])): ?>
-            <span class="text-xs text-red-500"><?= $errors['end'] ?></span>
+        <?php $endError = $errors['end.label'] ?? $errors['end.lat'] ?? $errors['end.lon'] ?? $errors['end.city'] ?? $errors['end.postcode'] ?? null;
+        if ($endError): ?>
+            <span class="text-xs text-red-500"><?= esc($endError) ?></span>
         <?php endif ?>
         <div class="results"></div>
         <input type="hidden" name="end[lat]">
@@ -47,6 +49,9 @@
         <input type="date" name="start-date" id="start-date"
             value="<?= set_value('start-date') ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
+        <?php if (isset($errors['start-date'])): ?>
+            <span class="text-xs text-red-500"><?= esc($errors['start-date']) ?></span>
+        <?php endif ?>
     </div>
 
 </div>
@@ -60,7 +65,10 @@
         <input type="number" name="passengers" id="passengers"
             placeholder="1"
             value="<?= set_value('passengers') ?>"
-            class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
+            class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey">
+        <?php if (isset($errors['passengers'])): ?>
+            <span class="text-xs text-red-500"><?= esc($errors['passengers']) ?></span>
+        <?php endif ?>
     </div>
 
 </div>
@@ -73,9 +81,9 @@
     <input type="text" name="filter" id="filter"
         value="<?= set_value('filter') ?>"
         placeholder="Entrez vos filtres"
-        class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
+        class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey">
     <?php if (isset($errors['filter'])): ?>
-        <span class="text-xs text-red-500"><?= $errors['filter'] ?></span>
+        <span class="text-xs text-red-500"><?= esc($errors['filter']) ?></span>
     <?php endif ?>
 </div>
 <!--  -->

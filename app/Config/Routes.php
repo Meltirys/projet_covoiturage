@@ -1,5 +1,6 @@
 <?php
 
+use App\Controllers\Backoffice\DashboardController;
 use App\Controllers\Backoffice\SearchController;
 use App\Controllers\Backoffice\UserManagementController;
 use App\Controllers\Backoffice\UserSuppressionController;
@@ -45,9 +46,11 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->post('car/delete/(:num)', [CarController::class, 'delete']);
     $routes->post('car/modify/(:num)', [CarController::class, 'modify']);
 
-    //User
-    $routes->get('user/modify', [UserController::class, 'modify']);
-    $routes->get('user/changePassword', [UserController::class, 'showPasswordChange']);
+    //Profil
+    $routes->get('profil/modify', [ProfilController::class, 'modify']);
+    $routes->get('profil/changePassword', [ProfilController::class, 'showPasswordChange']);
+
+    //User form routes
     $routes->post('user/update', [UserController::class, 'update']);
     $routes->post('user/updatePassword', [UserController::class, 'updatePassword']);
     $routes->post('user/delete', [UserController::class, 'delete']);
@@ -80,14 +83,14 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 
 //Admin part
 $routes->group('', ['filter' => 'authadmin'], function ($routes) {
-    $routes->get('userValidation', [UserValidationController::class, 'index']);
-    $routes->post('userValidation/accept/(:num)', [UserValidationController::class, 'acceptUser']);
-    $routes->post('userValidation/refuse/(:num)', [UserValidationController::class, 'refuseUser']);
 
-    $routes->get('userSuppression', [UserSuppressionController::class, 'index']);
-    $routes->post('user/delete/(:num)', [UserController::class, 'delete']);
-    $routes->get('banUser', [UserBanController::class, 'index']);
-    $routes->post('user/ban/(:num)', [UserBanController::class, 'ban']);
+    $routes->get('backoffice', [DashboardController::class, 'index']); //Show dashboard
+
+    $routes->post('userValidation/accept/(:num)', [UserValidationController::class, 'acceptUser']); //Accept an user
+    $routes->post('userValidation/refuse/(:num)', [UserValidationController::class, 'refuseUser']); //Refuse an user
+
+    $routes->post('user/delete/(:num)', [UserController::class, 'delete']); //Deleting an user
+    $routes->post('user/ban/(:num)', [UserController::class, 'ban']); //Banning an user
 
     $routes->get('searchUser/(:alpha)', [SearchController::class, 'searchUser']);
 });

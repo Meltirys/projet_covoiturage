@@ -7,10 +7,6 @@ use App\Validators\BanUserValidator;
 
 class UserBanController extends BaseController
 {
-    public function index()
-    {
-        return view('backoffice/UserBan');
-    }
 
     /**
      * Ban the given user. Access route is /user/ban/{idUser}
@@ -24,20 +20,20 @@ class UserBanController extends BaseController
         $validator = new BanUserValidator();
 
         if (!$validator->validate($datas)) {
-            return redirect()->to('banUser')
-                ->with('error', $validator->getError('id_user'));
+            return redirect()->to('/backoffice')
+                ->with('ban_error', $validator->getError('id_user'));
         }
 
         //Checking if an error happens when banning the user
-        if (!$userModel->update(session()->get('user_id'), [
-            'is_validated' => false
+        if (!$userModel->update($idUser, [
+            'is_validated' => 0
         ])) {
-            return redirect()->to('banUser')
-                ->with('error', 'Une erreur est survenue lors du banissement de l\'utilisateur, veuillez réessayer');
+            return redirect()->to('/backoffice')
+                ->with('ban_error', 'Une erreur est survenue lors du banissement de l\'utilisateur, veuillez réessayer');
         }
 
         //If no errors
-        return redirect()->to('banUser')
-            ->with('success', "L'utilisateur " . $userModel->getUserName($idUser) . " a été bannis avec succès");
+        return redirect()->to('/backoffice')
+            ->with('ban_success', "L'utilisateur " . $userModel->getUserName($idUser) . " a été bannis avec succès");
     }
 }
