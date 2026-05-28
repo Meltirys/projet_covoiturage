@@ -3,8 +3,6 @@
 namespace App\Services;
 
 use App\Models\CarModel;
-use App\Models\CityModel;
-use App\Models\LocationModel;
 use App\Models\JourneyDriveModel;
 use App\Models\JourneyRequestModel;
 use App\Models\StagesModel;
@@ -29,8 +27,7 @@ class JourneyService
     public function createJourneyDrive(array $input, int $userId): int
     {
         $carModel       = model(CarModel::class);
-        $cityModel      = model(CityModel::class);
-        $locationModel  = model(LocationModel::class);
+        $locationService = service('locationService');
         $journeyModel   = model(JourneyDriveModel::class);
         $stageModel     = model(StagesModel::class);
 
@@ -59,33 +56,26 @@ class JourneyService
                 throw new \DomainException('Pas assez de places dans cette voiture');
             }
 
-            // 2. Cities
-            $startCityId = $cityModel->getOrCreate(
+            // 2. Cities + Locations
+            $startLocationId = $locationService->getOrCreate(
+                $input['start']['label'],
                 $input['start']['city'],
                 $input['start']['postcode'],
-            );
-
-            $endCityId = $cityModel->getOrCreate(
-                $input['end']['city'],
-                $input['end']['postcode'],
-            );
-
-            // 3. Locations
-            $startLocationId = $locationModel->getOrCreate(
-                $input['start']['label'],
-                $startCityId,
                 $input['start']['lat'] ?? null,
                 $input['start']['lon'] ?? null
             );
 
-            $endLocationId = $locationModel->getOrCreate(
+            $endLocationId = $locationService->getOrCreate(
                 $input['end']['label'],
-                $endCityId,
+                $input['end']['city'],
+                $input['end']['postcode'],
                 $input['end']['lat'] ?? null,
                 $input['end']['lon'] ?? null
             );
 
-            // 4. Journey
+            // 3. Journey
+            $userId = session()->get('user_id');
+
             $journeyData = [
                 'number_of_place'   => (int) $input['seats'],
                 'departure'         => $input['start-datetime'],
@@ -93,7 +83,7 @@ class JourneyService
                 'id_car'            => $input['car'],
                 'start'             => $startLocationId,
                 'end'               => $endLocationId,
-                'driver'            => session('user_id'),
+                'driver'            => $userId,
             ];
 
             $journeyId = $journeyModel->insert($journeyData, true);
@@ -102,7 +92,7 @@ class JourneyService
                 throw new \RuntimeException('Impossible de créer le trajet');
             }
 
-            // 5. Stages (optional)
+            // 4. Stages (optional)
             $stops = $input['stops'] ?? [];
             $order = 1;
 
@@ -119,14 +109,10 @@ class JourneyService
                     continue;
                 }
 
-                $cityId = $cityModel->getOrCreate(
-                    $stop['city'],
-                    $stop['postcode']
-                );
-
-                $locationId = $locationModel->getOrCreate(
+                $locationId = $locationService->getOrCreate(
                     $stop['label'],
-                    $cityId,
+                    $stop['city'],
+                    $stop['postcode'],
                     $stop['lat'],
                     $stop['lon']
                 );
@@ -142,7 +128,7 @@ class JourneyService
                 }
             }
 
-            // 6. Transaction safety
+            // 5. Transaction safety
             if ($this->db->transStatus() === false) {
                 throw new \RuntimeException('Transaction échouée');
             }
@@ -185,41 +171,31 @@ class JourneyService
     public function createJourneyRequest(array $input, int $userId): int
     {
         $carModel       = model(CarModel::class);
-        $cityModel      = model(CityModel::class);
-        $locationModel  = model(LocationModel::class);
+        $locationService = service('locationService');
         $journeyModel   = model(JourneyRequestModel::class);
         $stageModel     = model(StagesModel::class);
 
         $this->db->transBegin();
 
         try {
-            // 1. Cities
-            $startCityId = $cityModel->getOrCreate(
+            // 1. Cities + Locations
+            $startLocationId = $locationService->getOrCreate(
+                $input['start']['label'],
                 $input['start']['city'],
                 $input['start']['postcode'],
-            );
-
-            $endCityId = $cityModel->getOrCreate(
-                $input['end']['city'],
-                $input['end']['postcode'],
-            );
-
-            // 2. Locations
-            $startLocationId = $locationModel->getOrCreate(
-                $input['start']['label'],
-                $startCityId,
                 $input['start']['lat'] ?? null,
                 $input['start']['lon'] ?? null
             );
 
-            $endLocationId = $locationModel->getOrCreate(
+            $endLocationId = $locationService->getOrCreate(
                 $input['end']['label'],
-                $endCityId,
+                $input['end']['city'],
+                $input['end']['postcode'],
                 $input['end']['lat'] ?? null,
                 $input['end']['lon'] ?? null
             );
 
-            // 3. Journey
+            // 2. Journey
             $input['range-of-time'] = $input['range-start'] . ' - ' . $input['range-end'];
 
             $journeyData = [
@@ -237,7 +213,7 @@ class JourneyService
                 throw new \RuntimeException('Impossible de créer le trajet');
             }
 
-            // 4. Transaction safety
+            // 3. Transaction safety
             if ($this->db->transStatus() === false) {
                 throw new \RuntimeException('Transaction échouée');
             }
