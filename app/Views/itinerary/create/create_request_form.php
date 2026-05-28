@@ -5,7 +5,7 @@
 
     <!-- Départ -->
     <div class="flex flex-col gap-1">
-        <label for="start" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Départ</label>
+        <label for="request-start" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Départ</label>
         <input class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey"
             type="text" name="request[start][label]" id="request-start"
             value="<?= esc(old('request[start][label]')) ?>"
@@ -23,7 +23,7 @@
 
     <!-- Arrivée -->
     <div class="flex flex-col gap-1">
-        <label for="end" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Arrivée</label>
+        <label for="request-end" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Arrivée</label>
         <input class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey"
             type="text" name="request[end][label]" id="request-end"
             value="<?= esc(old('request[end][label]')) ?>"
@@ -46,7 +46,7 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
 
     <div class="flex flex-col gap-1">
-        <label for="start-date" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Date de départ</label>
+        <label for="request-start-date" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Date de départ</label>
         <input type="date" name="request[start-date]" id="request-start-date"
             value="<?= esc(old('request[start-date]')) ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
@@ -56,7 +56,7 @@
     </div>
 
     <div class="flex flex-col gap-1">
-        <label for="start-time" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Heure de départ</label>
+        <label for="request-start-time" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Heure de départ</label>
         <input type="time" name="request[start-time]" id="request-start-time"
             value="<?= esc(old('request[start-time]')) ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
@@ -69,7 +69,7 @@
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
     <div class="flex flex-col gap-1">
-        <label for="end-date" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Date d'arrivée</label>
+        <label for="request-end-date" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Date d'arrivée</label>
         <input type="date" name="request[end-date]" id="request-end-date"
             value="<?= esc(old('request[end-date]')) ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
@@ -79,7 +79,7 @@
     </div>
 
     <div class="flex flex-col gap-1">
-        <label for="end-time" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Heure d'arrivée</label>
+        <label for="request-end-time" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Heure d'arrivée</label>
         <input type="time" name="request[end-time]" id="request-end-time"
             value="<?= esc(old('request[end-time]')) ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
@@ -95,7 +95,7 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
 
     <div class="flex flex-col gap-1">
-        <label for="range-start" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Début de disponibilité</label>
+        <label for="request-range-start" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Début de disponibilité</label>
         <input type="time" name="request[range-start]" id="request-range-start"
             value="<?= esc(old('request[range-start]')) ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
@@ -105,7 +105,7 @@
     </div>
 
     <div class="flex flex-col gap-1">
-        <label for="range-end" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Fin de disponibilité</label>
+        <label for="request-range-end" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Fin de disponibilité</label>
         <input type="time" name="request[range-end]" id="request-range-end"
             value="<?= esc(old('request[range-end]')) ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
@@ -118,7 +118,7 @@
 
 <!-- Description -->
 <div class="flex flex-col gap-1">
-    <label for="description" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Description</label>
+    <label for="request-description" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Description</label>
     <textarea name="request[description]" id="request-description"
         placeholder="Entrez une description"
         class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey"><?= esc(old('request[description]')) ?></textarea>
@@ -130,7 +130,7 @@
 
 <!-- Options -->
 <div class="flex flex-col gap-1">
-    <label for="options" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Options</label>
+    <label for="request-options" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Options</label>
     <input type="text" name="request[options]" id="request-options"
         value="<?= esc(old('request[options]')) ?>"
         placeholder="Entrez vos options"
