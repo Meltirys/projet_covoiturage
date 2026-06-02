@@ -130,6 +130,24 @@ class JourneyService
             }
 
             // 5. Generating the track
+            $trackService = service('TrackService');
+            $start = [$input['start']['lon'], $input['start']['lat']];
+            $end = [$input['end']['lon'], $input['end']['lat']];
+
+            //Checking if there are stops in the journey
+            if ($stops) {
+                $trackStop = array_map(function ($row) {
+                    return [
+                        $row['lon'],
+                        $row['lat']
+                    ];
+                }, $stops); //Rebuilbing each stops into a new array
+
+                $trackService->saveTrack($start, $end, $trackStop); //Creating the track in the database
+            } else {
+                $trackService->saveTrack($start, $end); //Creating the track in the database
+            }
+
 
             // 6. Transaction safety
             if ($this->db->transStatus() === false) {
