@@ -15,7 +15,7 @@ class UpdateUserInfos extends BaseValidator
     {
         return [
             'id_user' => [
-                'rules'  => 'required|integer', //This rule is needed in order for the validor to work
+                'rules'  => 'required|integer', //This rule is needed in order for the validator to work
             ],
             'first_name' => [
                 'rules'  => 'required|min_length[3]|max_length[50]|regex_match[/^[\p{L}\s\-]+$/u]',

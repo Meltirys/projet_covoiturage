@@ -15,6 +15,7 @@ use App\Controllers\Journey\DriveController;
 use App\Controllers\Journey\RequestController;
 use App\Controllers\ProfilController;
 use App\Controllers\Debug;
+use App\Controllers\ReportController;
 use App\Services\AjaxRequests;
 
 /**
@@ -84,6 +85,10 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->post('reservation/accepter/(:num)', 'Journey\BookingController::accept/$1');
     $routes->post('reservation/refuser/(:num)',  'Journey\BookingController::refuse/$1');
     $routes->post('reservation/trajet/annuler/(:num)', 'Journey\BookingController::cancelJourney/$1');
+
+    //Report
+    $routes->get('report', [ReportController::class, 'showReportView']);
+    $routes->post('user/report/(:num)', [ReportController::class, 'report']);
 });
 
 

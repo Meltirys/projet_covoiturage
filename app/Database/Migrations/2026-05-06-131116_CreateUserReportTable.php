@@ -3,6 +3,7 @@
 namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
+use CodeIgniter\Database\RawSql;
 
 class CreateUserReportTable extends Migration
 {
@@ -14,7 +15,7 @@ class CreateUserReportTable extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'date'        => ['type' => 'DATE', 'null' => false],
+            'date'        => ['type' => 'DATE', 'null' => false, 'default' => new RawSql('CURRENT_TIMESTAMP')],
             'comment'     => ['type' => 'TEXT'],
             'is_resolved' => ['type' => 'BOOLEAN', 'null' => false, 'default' => false],
             'reporter'    => ['type' => 'INT', 'null' => false, 'unsigned' => true],
