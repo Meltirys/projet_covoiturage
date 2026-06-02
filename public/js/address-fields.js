@@ -8,6 +8,9 @@ function fillAddressFields(feature, inputElement) {
   const properties = feature.properties;
   const container = inputElement.parentElement;
 
+  inputElement.value = feature.properties.label;
+  container.querySelector('input[name$="[label]"]').value =
+    properties.name || "";
   container.querySelector('input[name$="[lat]"]').value = coords[1];
   container.querySelector('input[name$="[lon]"]').value = coords[0];
   container.querySelector('input[name$="[city]"]').value =
@@ -60,9 +63,10 @@ if (stops.length !== 0) {
     stop.innerHTML = `  
                 <input 
                     type="text" 
-                    name="drive[stops][${stopIndex}][label]"
+                    name="drive[stops][${stopIndex}][address]"
                     class="stop-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]"
                     placeholder="Entrer un arrêt">
+                <input type="hidden" name="drive[stops][${stopIndex}][label]">
                 <input type="hidden" name="drive[stops][${stopIndex}][lat]">
                 <input type="hidden" name="drive[stops][${stopIndex}][lon]">
                 <input type="hidden" name="drive[stops][${stopIndex}][city]">

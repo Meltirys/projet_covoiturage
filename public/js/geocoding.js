@@ -53,7 +53,6 @@ async function searchAddress(inputElement, onSelect = null) {
       option.textContent = feature.properties.label;
 
       option.addEventListener("click", () => {
-        inputElement.value = feature.properties.label;
         resultsBox.innerHTML = "";
 
         if (onSelect) {

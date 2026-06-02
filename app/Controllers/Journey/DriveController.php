@@ -113,7 +113,7 @@ class DriveController extends BaseController
         helper('form');
 
         /* Inputs :
-         * start = ['label', 'city', 'postcode', 'lat', 'lon']
+         * start = ['address, 'label', 'city', 'postcode', 'lat', 'lon']
          * end = [...]
          * stops = [0 = [...], 1 = [...],]
          * id_car, number_of_place

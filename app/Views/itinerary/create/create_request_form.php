@@ -7,14 +7,15 @@
     <div class="flex flex-col gap-1">
         <label for="request-start" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Départ</label>
         <input class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey"
-            type="text" name="request[start][label]" id="request-start"
-            value="<?= esc(old('request[start][label]')) ?>"
+            type="text" name="request[start][address]" id="request-start"
+            value="<?= esc(old('request[start][address]')) ?>"
             placeholder="Entrez le point de départ" required>
-        <?php $startError = $errors['start.label'] ?? $errors['start.lat'] ?? $errors['start.lon'] ?? $errors['start.city'] ?? $errors['start.postcode'] ?? null;
+        <?php $startError = $errors['start.address'] ?? $errors['start.label'] ?? $errors['start.lat'] ?? $errors['start.lon'] ?? $errors['start.city'] ?? $errors['start.postcode'] ?? null;
         if ($startError): ?>
             <span class="text-xs text-red-500"><?= esc($startError) ?></span>
         <?php endif ?>
         <div class="results"></div>
+        <input type="hidden" name="request[start][label]" value="<?= esc(old('request[start][label]')) ?>">
         <input type="hidden" name="request[start][lat]" value="<?= esc(old('request[start][lat]')) ?>">
         <input type="hidden" name="request[start][lon]" value="<?= esc(old('request[start][lon]')) ?>">
         <input type="hidden" name="request[start][city]" value="<?= esc(old('request[start][city]')) ?>">
@@ -25,14 +26,15 @@
     <div class="flex flex-col gap-1">
         <label for="request-end" class="text-[10px] font-poppins tracking-[0.15em] text-bluegrey uppercase">Arrivée</label>
         <input class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey"
-            type="text" name="request[end][label]" id="request-end"
-            value="<?= esc(old('request[end][label]')) ?>"
+            type="text" name="request[end][address]" id="request-end"
+            value="<?= esc(old('request[end][address]')) ?>"
             placeholder="Entrez votre destination" required>
-        <?php $endError = $errors['end.label'] ?? $errors['end.lat'] ?? $errors['end.lon'] ?? $errors['end.city'] ?? $errors['end.postcode'] ?? null;
+        <?php $endError = $errors['end.address'] ?? $errors['end.label'] ?? $errors['end.lat'] ?? $errors['end.lon'] ?? $errors['end.city'] ?? $errors['end.postcode'] ?? null;
         if ($endError): ?>
             <span class="text-xs text-red-500"><?= esc($endError) ?></span>
         <?php endif ?>
         <div class="results"></div>
+        <input type="hidden" name="request[end][label]" value="<?= esc(old('request[end][label]')) ?>">
         <input type="hidden" name="request[end][lat]" value="<?= esc(old('request[end][lat]')) ?>">
         <input type="hidden" name="request[end][lon]" value="<?= esc(old('request[end][lon]')) ?>">
         <input type="hidden" name="request[end][city]" value="<?= esc(old('request[end][city]')) ?>">

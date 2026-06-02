@@ -24,6 +24,7 @@ $error  = session()->getFlashdata('error');
     <?php endif ?>
 
     <!-- Mon idée est de faire deux onglets sur la même page qui afficheront les deux différents formulaires -->
+    <!-- On peut ajouter des classes aux divs des résultats de l'autocomplétion dans geocoding.js ligne 51 -->
     <div class="bg-white border border-[rgba(37,63,114,0.25)] rounded-xl p-5">
         <?= view('itinerary/create/create_drive_form', ['errors' => $driveErrors, 'cars' => $cars ?? []]) ?>
     </div>
