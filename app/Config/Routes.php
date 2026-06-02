@@ -14,6 +14,7 @@ use App\Controllers\Journey\DriveController;
 
 use App\Controllers\Journey\RequestController;
 use App\Controllers\ProfilController;
+use App\Controllers\Debug;
 use App\Services\AjaxRequests;
 
 /**
@@ -94,6 +95,7 @@ $routes->group('', ['filter' => 'authadmin'], function ($routes) {
     $routes->post('user/ban/(:num)', [UserController::class, 'ban']); //Banning an user
 
     $routes->get('searchUser/(:alpha)', [SearchController::class, 'searchUser']);
+    $routes->get('debug', [Debug::class, 'debug']);
 });
 
 //Super-admin part
