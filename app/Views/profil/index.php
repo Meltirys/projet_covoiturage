@@ -343,7 +343,7 @@
         }
     }
 
-    function hideFrom(id) {
+    function hideForm(id) {
         document.querySelector('#' + id).style.display = 'none'
 
     }
