@@ -164,7 +164,16 @@ class RequestController extends BaseController
                 ->with('error', 'Demande introuvable');
         }
         $data = $this->request->getPost('request');
-        $rangeOfTime = $data['range-start'] . ' - ' . $data['range-end'];
+        $rangeStart = $data['range-start'] ?? '';
+        $rangeEnd = $data['range-end'] ?? '';
+
+        if (empty($rangeStart) || empty($rangeEnd) || $rangeEnd <= $rangeStart) {
+            return redirect()->back()
+            ->with('error', 'Les heures sont invalides')
+            ->withInput();
+        }
+
+        $rangeOfTime = $rangeStart . ' - ' . $rangeEnd;
         $requestModel->update($id, [
             'description' => $data['description'],
             'range_of_time' => $rangeOfTime,
