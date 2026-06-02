@@ -79,7 +79,7 @@ class BookingController extends BaseController
                 ->findAll();
             foreach ($requests as $r) {
                 $passenger = $userModel->find($r['id_user']);
-                $r['passenger_name'] = $passenger['first_name'] . ' ' . substr($passenger['last_name'],0, 1) . '.';
+                $r['passenger_name'] = $passenger['first_name'] . ' ' . substr($passenger['last_name'], 0, 1) . '.';
                 $pendingRequests[] = array_merge($r, ['journey' => $journey]);
             }
         }
@@ -201,6 +201,14 @@ class BookingController extends BaseController
         if (! $booking || $booking['id_user'] != session('user_id')) {
             return redirect()->to('mes-reservations')
                 ->with('error', 'Réservation introuvable');
+        }
+
+        $journeyModel = new JourneyDriveModel();
+        $journey      = $journeyModel->find($booking['id_journey_drive']);
+
+        if ($journey['departure'] <= date('Y-m-d H:i:s')) {
+            return redirect()->to('mes-reservations')
+                ->with('error', 'Impossible d\'annuler un trajet passé');
         }
 
         $bookingModel->delete($id_booking);
@@ -338,6 +346,11 @@ class BookingController extends BaseController
         if (!$journey || $journey['driver'] != session('user_id')) {
             return redirect()->to('mes-reservations')
                 ->with('error', 'Trajet introuvable ou action non autorisée');
+        }
+        // If the journey is no longer active
+        if ($journey['departure'] <= date('Y-m-d H:i:s')) {
+            return redirect()->to('mes-reservations')
+                ->with('error', 'Impossible d\'annuler un trajet passé');
         }
 
         // Cancel the journey and all related reservations
