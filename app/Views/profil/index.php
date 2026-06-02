@@ -54,6 +54,13 @@
                 <div class="mb-6">
                     <h3 class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase mb-2">Mes véhicules</h3>
 
+                    <?php if (session()->getFlashdata('car_success')): ?>
+                        <p class="text-xs text-green-600 mb-3"><?= session()->getFlashdata('car_success') ?></p>
+                    <?php endif ?>
+                    <?php if (session()->getFlashdata('car_error')): ?>
+                        <p class="text-xs text-red-500 mb-3"><?= session()->getFlashdata('car_error') ?></p>
+                    <?php endif ?>
+
                     <div class="grid grid-cols-1 gap-2 mb-3">
                         <?php if ($cars): ?>
                             <?php foreach ($cars as $car): ?>
@@ -83,13 +90,6 @@
                         <?php endif; ?>
                     </div>
 
-                    <?php if (session()->getFlashdata('car_added')): ?>
-                        <p class="text-xs text-green-600 mb-3"><?= session()->getFlashdata('car_added') ?></p>
-                    <?php endif ?>
-                    <?php if (session()->getFlashdata('car_not_added')): ?>
-                        <p class="text-xs text-red-500 mb-3"><?= session()->getFlashdata('car_not_added') ?></p>
-                    <?php endif ?>
-
                     <button onclick="showForm('add-car-form')" class="text-xs text-grey underline block text-right w-full mb-3 cursor-pointer">
                         + ajouter un véhicule
                     </button>
@@ -105,7 +105,7 @@
                     </div>
 
                     <div id="modify-car-form" style="display: <?= session()->getFlashdata('error_in_modify_car_form') ? 'flex' : 'none' ?>" class="flex-col gap-3">
-                        <?= form_open("car/modify") ?>
+                        <?= form_open("car/modify/" . session()->getFlashdata('idCar') ?? '') ?>
                         <?= view('/layouts/CarForm') ?>
                         <div class="flex gap-2 mt-2">
                             <button type="submit" class="flex-1 bg-bluegrey hover:bg-[#1a2f55] text-white rounded-xl py-2 text-sm transition-colors duration-200">Modifier</button>
@@ -321,11 +321,33 @@
 <script>
     function showForm(id) {
         document.querySelector('#' + id).style.display = 'flex'
+
+        //Hidding the other forms
+        if (id === "add-car-form") {
+            //Retrieving all the fields of the form
+            let brand = document.querySelector('#' + id).querySelector('#brand')
+            let model = document.querySelector('#' + id).querySelector('#model')
+            let year = document.querySelector('#' + id).querySelector('#year')
+            let places = document.querySelector('#' + id).querySelector('#places')
+            let color = document.querySelector('#' + id).querySelector('#color')
+            //Clearing all the values
+            brand.value = ''
+            model.value = ''
+            year.value = ''
+            places.value = ''
+            color.value = ''
+
+            document.querySelector('#modify-car-form').style.display = 'none'
+        } else if (id === "modify-car-form") {
+            document.querySelector('#add-car-form').style.display = 'none'
+        }
     }
 
-    function hideForm(id) {
+    function hideFrom(id) {
         document.querySelector('#' + id).style.display = 'none'
+
     }
+
 
     function toggleMode() {
         const driver = document.getElementById('driver');
