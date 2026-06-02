@@ -76,6 +76,14 @@ class CarController extends BaseController
             return redirect('404');
         }
 
+        //Chcking if the car is used on future journey
+        $journeyDriveModel = model('JourneyDriveModel');
+
+        if($journeyDriveModel->futureJourneyByCar($idCar)){
+            return redirect()->to('/myprofil')
+                ->with('car_error', 'Impossible de supprimer une voiture si elle est utilisé dans un futur trajet. Veuillez supprimer le trajet avant de supprimer la voiture');
+        }
+
         if (! $carModel->delete($idCar)) {
             $errors = $carModel->errors();
 

@@ -94,4 +94,11 @@ class JourneyDriveModel extends Model
 
         return $journey;
     }
+
+    public function futureJourneyByCar(int $idCar) : array {
+        return $this
+                ->where('id_car', $idCar)
+                ->where('departure < ', date('Y-m-d H:i:s'))
+                ->findAll();
+    }
 }
