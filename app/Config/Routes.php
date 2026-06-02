@@ -62,6 +62,10 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->post('request/save', 'Journey\RequestController::save'); // requête
     $routes->get('request/list', 'Journey\RequestController::index');
 
+    // Modification de demande de trajet
+    $routes->get('request/edit/(:num)', 'Journey\RequestController::edit/$1');
+    $routes->post('request/update/(:num)', 'Journey\RequestController::update/$1');
+
     // Recherche de trajets
     $routes->get('trajet', 'PagesController::searchJourney');
     $routes->get('drive/search', 'Journey\DriveController::search'); // conduite
