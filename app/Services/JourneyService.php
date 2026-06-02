@@ -129,7 +129,9 @@ class JourneyService
                 }
             }
 
-            // 5. Transaction safety
+            // 5. Generating the track
+
+            // 6. Transaction safety
             if ($this->db->transStatus() === false) {
                 throw new \RuntimeException('Transaction échouée');
             }
