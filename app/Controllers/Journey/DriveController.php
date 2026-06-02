@@ -86,7 +86,18 @@ class DriveController extends BaseController
         $data['journey']['departure'] = format_date_fr($data['journey']['departure']);
         $data['journey']['estimated_arrival'] = format_date_fr($data['journey']['estimated_arrival']);
 
+        $data['journey']['waypoints'] = [];
 
+        //Checking there are stages on the journey
+        if($data['journey']['stages']){
+            //Adding each city to the waypoints
+            foreach($data['journey']['stages'] as $stage){
+                array_push($data['journey']['waypoints'], $stage['city_name']);
+            }
+        }
+
+        array_push($data['journey']['waypoints'], $data['journey']['arrival_city']); //Adding the final city to the way point
+        
         $data['driver_name'] = $userModel->getUserName($data['journey']['driver']);; // Retrieving the driver name
         $data['car'] = $carModel->find($data['journey']['id_car']); //Retrieving the car information
 

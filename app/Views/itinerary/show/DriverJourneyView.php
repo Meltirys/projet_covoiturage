@@ -10,8 +10,12 @@
         <span><?= esc($journey['departure']) ?></span>
 
         <div>
-            <h1><?= esc($journey['departure_city']) ?></h1>
-            <h1>→ <?= esc($journey['arrival_city']) ?></h1>
+            <h1><?= esc($journey['departure_city']) ?>
+            <?php foreach($journey['waypoints'] as $waypoint) : ?>
+                    <span>-> <?= $waypoint ?></span>
+            <?php endforeach; ?>
+        </h1>
+            
         </div>
 
         <div>
@@ -43,19 +47,6 @@
                 </a>
             </div>
         </div>
-
-        <?php if (!empty($journey['stages'])): ?>
-            <div>
-                <p>LES ÉTAPES</p>
-                <?php foreach ($journey['stages'] as $stage): ?>
-                    <div>
-                        <p><?= esc($stage['address']) ?></p>
-                        <p><?= esc($stage['city_name']) ?> - <?= esc($stage['postcode']) ?></p>
-                        <p><?= esc(date('H\Hi', strtotime($stage['passing_time']))) ?></p>
-                    </div>
-                <?php endforeach ?>
-            </div>
-        <?php endif ?>
 
     </div>
 

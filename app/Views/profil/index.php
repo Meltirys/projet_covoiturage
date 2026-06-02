@@ -57,17 +57,21 @@
                     <div class="grid grid-cols-1 gap-2 mb-3">
                         <?php if ($cars): ?>
                             <?php foreach ($cars as $car): ?>
-                                <div class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
+                                <div id="car<?= $car['id_car'] ?>" class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
                                     <div>
                                         <p class="nav-m">
-                                            <?= esc($car['brand']) ?> <?= esc($car['model']) ?>
+                                            <span class="car-brand"><?= esc($car['brand']) ?></span>
+                                            <span class="car-model"><?= esc($car['model']) ?></span>
                                         </p>
                                         <p class="text-xs text-grey">
-                                            <?= esc($car['color']) ?> - <?= esc($car['year']) ?> - <?= esc($car['number_of_seat']) ?> places
+                                            <span class="car-color"><?= esc($car['color']) ?></span>
+                                            - <span class="car-year"><?= esc($car['year']) ?></span>
+                                            - <span class="car-places"><?= esc($car['number_of_seat']) ?></span> places
                                         </p>
                                     </div>
                                     <div class="flex gap-2">
-                                        <button type="button" class="text-xs text-bluegrey border border-babyblue rounded-full px-3 py-1 hover:bg-lightblue transition-colors duration-150">Modifier</button>
+                                        <button type="button" class="text-xs text-bluegrey border border-babyblue rounded-full px-3 py-1 hover:bg-lightblue transition-colors duration-150"
+                                            onclick="setupModify(<?= $car['id_car'] ?>)">Modifier</button>
                                         <?= form_open('/car/delete/' . $car['id_car']) ?>
                                         <button type="submit" class="text-xs text-red-500 border border-red-200 rounded-full px-3 py-1 hover:bg-red-50 transition-colors duration-150">Supprimer</button>
                                         <?= form_close() ?>
@@ -90,45 +94,22 @@
                         + ajouter un véhicule
                     </button>
 
-                    <div id="add-car-form" style="display: <?= session()->getFlashdata('error_in_car_form') ? 'flex' : 'none' ?>" class="flex-col gap-3">
+                    <div id="add-car-form" style="display: <?= session()->getFlashdata('error_in_add_car_form') ? 'flex' : 'none' ?>" class="flex-col gap-3">
                         <?= form_open("car/add") ?>
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-
-                            <div class="flex flex-col gap-1">
-                                <label for="brand" class="text-xs text-grey">Marque</label>
-                                <input type="text" id="brand" name="brand" value="<?= old('brand') ?>" class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey">
-                                <?php if ($errors['brand'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['brand'] ?></span><?php endif ?>
-                            </div>
-
-                            <div class="flex flex-col gap-1">
-                                <label for="model" class="text-xs text-grey">Modèle</label>
-                                <input type="text" id="model" name="model" value="<?= old('model') ?>" class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey">
-                                <?php if ($errors['model'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['model'] ?></span><?php endif ?>
-                            </div>
-
-                            <div class="flex flex-col gap-1">
-                                <label for="color" class="text-xs text-grey">Couleur</label>
-                                <input type="text" id="color" name="color" value="<?= old('color') ?>" class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey">
-                                <?php if ($errors['color'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['color'] ?></span><?php endif ?>
-                            </div>
-
-                            <div class="flex flex-col gap-1">
-                                <label for="year" class="text-xs text-grey">Année</label>
-                                <input type="text" id="year" name="year" value="<?= old('year') ?>" class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey">
-                                <?php if ($errors['year'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['year'] ?></span><?php endif ?>
-                            </div>
-
-                            <div class="flex flex-col gap-1 md:col-span-2">
-                                <label for="places" class="text-xs text-grey">Nombre de places</label>
-                                <input type="number" id="places" name="places" value="<?= old('places') ?>" class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey">
-                                <?php if ($errors['number_of_seat'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['number_of_seat'] ?></span><?php endif ?>
-                            </div>
-
-                        </div>
-
+                        <?= view('layouts/CarForm') ?>
                         <div class="flex gap-2 mt-2">
                             <button type="submit" class="flex-1 bg-bluegrey hover:bg-[#1a2f55] text-white rounded-xl py-2 text-sm transition-colors duration-200">Ajouter</button>
                             <button type="button" onclick="hideForm('add-car-form')" class="flex-1 border border-babyblue text-bluegrey rounded-xl py-2 text-sm hover:bg-lightblue transition-colors duration-200">Annuler</button>
+                        </div>
+                        <?= form_close() ?>
+                    </div>
+
+                    <div id="modify-car-form" style="display: <?= session()->getFlashdata('error_in_modify_car_form') ? 'flex' : 'none' ?>" class="flex-col gap-3">
+                        <?= form_open("car/modify") ?>
+                        <?= view('/layouts/CarForm') ?>
+                        <div class="flex gap-2 mt-2">
+                            <button type="submit" class="flex-1 bg-bluegrey hover:bg-[#1a2f55] text-white rounded-xl py-2 text-sm transition-colors duration-200">Modifier</button>
+                            <button type="button" onclick="hideForm('modify-car-form')" class="flex-1 border border-babyblue text-bluegrey rounded-xl py-2 text-sm hover:bg-lightblue transition-colors duration-200">Annuler</button>
                         </div>
                         <?= form_close() ?>
                     </div>
@@ -364,6 +345,29 @@
             thumb.style.left = '0.25rem';
             thumb.textContent = '🚗';
         }
+    }
+
+    function setupModify(idCar) {
+        showForm('modify-car-form')
+        let form = document.querySelector('#modify-car-form form')
+        form.action = "car/modify/" + idCar
+
+        //Retrieving all the fields of the form
+        let brand = form.querySelector('#brand')
+        let model = form.querySelector('#model')
+        let year = form.querySelector('#year')
+        let places = form.querySelector('#places')
+        let color = form.querySelector('#color')
+
+        //Assigning the values
+        brand.value = document.querySelector('#car' + idCar + ' .car-brand').textContent
+        model.value = document.querySelector('#car' + idCar + ' .car-model').textContent
+        year.value = document.querySelector('#car' + idCar + ' .car-year').textContent
+        places.value = document.querySelector('#car' + idCar + ' .car-places').textContent
+        color.value = document.querySelector('#car' + idCar + ' .car-color').textContent
+
+
+
     }
 
     document.getElementById('passenger').style.display = 'none';
