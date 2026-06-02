@@ -124,7 +124,6 @@ class RequestController extends BaseController
             // system error
             log_message('error', 'Error in save(): ' . $e->getMessage());
             log_message('error', 'Stack: ' . $e->getTraceAsString());
-            var_dump($data);
             return redirect()->back()
                 ->with('error', 'Une erreur s\'est produite')
                 ->withInput();
@@ -132,16 +131,74 @@ class RequestController extends BaseController
     }
 
     /**
+     * Edit an existing itinerary
+     * 
+     * parameter : itinerary id
+     */
+    public function edit($id)
+    {
+        helper('form');
+        $requestModel = model(JourneyRequestModel::class);
+        $request      = $requestModel->find($id);
+
+        if (! $request || $request['id_user'] != session('user_id')) {
+            return redirect()->to('request/list')
+                ->with('error', 'Demande introuvable');
+        }
+
+        return view('itinerary/edit/EditRequestView', ['request' => $request]);
+    }
+
+    /**
      * Updates an existing itinerary
      * 
      * parameter : itinerary id
      */
-    public function update($id) {}
+    public function update($id)
+    {
+        $requestModel = model(JourneyRequestModel::class);
+        $request = $requestModel->find($id);
+
+        if (!$request || $request['id_user'] != session('user_id')) {
+            return redirect()->to('request/list')
+                ->with('error', 'Demande introuvable');
+        }
+        $data = $this->request->getPost('request');
+        $rangeStart = $data['range-start'] ?? '';
+        $rangeEnd = $data['range-end'] ?? '';
+
+        if (empty($rangeStart) || empty($rangeEnd) || $rangeEnd <= $rangeStart) {
+            return redirect()->back()
+            ->with('error', 'Les heures sont invalides')
+            ->withInput();
+        }
+
+        $rangeOfTime = $rangeStart . ' - ' . $rangeEnd;
+        $requestModel->update($id, [
+            'description' => $data['description'],
+            'range_of_time' => $rangeOfTime,
+        ]);
+        return redirect()->to('request/list')
+            ->with('success', 'Votre demande à bien été mise à jour');
+    }
 
     /**
      * Deletes an existing itinerary
      * 
      * parameter : itinerary id
      */
-    public function delete($id) {}
+    public function delete($id)
+    {
+        $requestModel = model(JourneyRequestModel::class);
+        $request = $requestModel->find($id);
+
+        if (!$request || $request['id_user'] != session('user_id')) {
+            return redirect()->to('request/list')
+                ->with('error', 'Demande introuvable');
+        }
+
+        $requestModel->delete($id);
+        return redirect()->to('request/list')
+            ->with('success', 'Suppression réussite');
+    }
 }
