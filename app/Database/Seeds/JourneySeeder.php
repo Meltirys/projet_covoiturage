@@ -11,14 +11,15 @@ class JourneySeeder extends Seeder
 
         // 1. Récupère la ville et la location créées par UserSeeder
         $startId = $this->db->table('Location')
-            ->where('address', 'GRETA de Vannes')->get()->getRow()->id_location;
+            ->where('address', '20 Rue Winston Churchill') // Adresse du Greta de Vannes
+            ->get()->getRow()->id_location;
 
         // 2. Création et insertion de Auray
         $this->db->table('City')->insert(['name' => 'Auray', 'postcode' => '56400']);
         $aurayId = $this->db->insertID();
 
         $this->db->table('Location')->insert([
-            'address'   => 'Gare SNCF Auray',
+            'address'   => 'Place Raoul Dautry', // Adresse de la gare SNCF d'Auray
             'latitude'  => 47.68026,
             'longitude' => -2.99939,
             'id_city'   => $aurayId,
