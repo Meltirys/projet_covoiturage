@@ -264,17 +264,25 @@ class JourneyService
             );
 
             // 2. Journey
+
+            if ($startLocationId === $endLocationId) {
+                throw new \DomainException('Le point de départ et d\'arrivée ne peuvent pas être identiques');
+            }
+
+            if ($input['range-start'] >= $input['range-end']) {
+                throw new \DomainException('L\'heure de début de disponibilité doit être avant la fin');
+            }
+
             $input['range-of-time'] = $input['range-start'] . ' - ' . $input['range-end'];
 
             $journeyData = [
-                'description'       => $input['description'],
-                'departure'         => $input['start-datetime'],
-                'estimated_arrival' => $input['end-datetime'],
-                'range_of_time'     => $input['range-of-time'],
-                'id_user'           => $userId,
-                'start'             => $startLocationId,
-                'end'               => $endLocationId,
+                'description'   => $input['description'],
+                'range_of_time' => $input['range-of-time'],
+                'id_user'       => $userId,
+                'start'         => $startLocationId,
+                'end'           => $endLocationId,
             ];
+
 
             $journeyId = $journeyModel->insert($journeyData, true);
 
