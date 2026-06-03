@@ -7,16 +7,20 @@ use App\Models\CarModel;
 use App\Models\JourneyDriveModel;
 use App\Models\JourneyRequestModel;
 use App\Models\StagesModel;
+use App\Models\TrackModel;
 use CodeIgniter\Database\BaseConnection;
 use DateTime;
 
 class JourneyService
 {
+    private JourneyDriveModel $journeyModel;
+
     protected BaseConnection $db;
 
     public function __construct()
     {
         $this->db = db_connect();
+        $this->journeyModel = model(JourneyDriveModel::class);
     }
 
     /**
@@ -29,7 +33,6 @@ class JourneyService
     {
         $carModel       = model(CarModel::class);
         $locationService = service('locationService');
-        $journeyModel   = model(JourneyDriveModel::class);
         $stageModel     = model(StagesModel::class);
 
         $input['start-datetime'] = (new DateTime(
@@ -121,7 +124,7 @@ class JourneyService
                 'id_track'          => $idTrack
             ];
 
-            $journeyId = $journeyModel->insert($journeyData, true);
+            $journeyId = $this->journeyModel->insert($journeyData, true);
 
             if (! $journeyId) {
                 throw new \RuntimeException('Impossible de créer le trajet');
@@ -187,7 +190,6 @@ class JourneyService
     public function searchJourneyDrive(array $input): array
     {
         $locationService = service('locationService');
-        $journeyDriveModel = model(JourneyDriveModel::class);
         $stageModel = model(StagesModel::class);
         $bookingsModel = model(BookingModel::class);
 
@@ -200,31 +202,69 @@ class JourneyService
         // ├── sort
         // └── return results
 
-        // 1. cities + location
-        $departureLocation = $locationService->findLocationByAddress($input['start.address'], $input['start.city'], $input['start.postcode']);
-        $arrivalLocation = $locationService->findLocationByAddress($input['end.address'], $input['end.city'], $input['end.postcode']);
+        // 1. Lieux de départ et arrivée
+        $departureAddress = $input['start']['label'] ?? $input['start.address'] ?? '';
+        $departureCity = $input['start']['city'] ?? $input['start.city'] ?? '';
+        $departurePostcode = $input['start']['postcode'] ?? $input['start.postcode'] ?? '';
 
-        if (empty($departureLocation) || empty($arrivalLocation)) {
+        $arrivalAddress = $input['end']['label'] ?? $input['end.address'] ?? '';
+        $arrivalCity = $input['end']['city'] ?? $input['end.city'] ?? '';
+        $arrivalPostcode = $input['end']['postcode'] ?? $input['end.postcode'] ?? '';
+
+        $departureLocation = $locationService->findLocationByAddress(
+            $departureAddress,
+            $departureCity,
+            $departurePostcode
+        );
+        $arrivalLocation = $locationService->findLocationByAddress(
+            $arrivalAddress,
+            $arrivalCity,
+            $arrivalPostcode
+        );
+
+        $searchDate = $input['date'] ?? '';
+        $requestedSeats = (int) ($input['free-seats'] ?? 1);
+
+        if (empty($departureLocation) || empty($arrivalLocation) || empty($searchDate)) {
             return [];
         }
-        // 2. date 
-        // Intervale de temps pour l'horaire/date de début des trajets qui seront affichés
+
+        // 2. Date
+        // Intervalle de temps pour l'horaire/date de début des trajets qui seront affichés
         // convert date to datetime range
-        $startDay = $input['date'] . '00:00:00'; // début
+        $startDay = $searchDate . ' 00:00:00'; // début
         $endDay = date('Y-m-d H:i:s', strtotime($startDay . ' +1 day')); // fin
 
         // 3. Journeys
-        $journeys = $journeyDriveModel
-            ->where('start', $departureLocation['id_location'])
-            ->where('end', $arrivalLocation['id_location'])
-            ->where('departure >=', $startDay)
-            ->where('departure <', $endDay)
+        // Gathers all relevant data in journeys array
+        $journeys = $this->journeyModel
+            ->select('JourneyDrive.*, 
+                departure_location.address AS departure_address,
+                departure_city.postcode AS departure_postcode,
+                departure_city.name AS departure_city,
+                arrival_location.address AS arrival_address,
+                arrival_city.postcode AS arrival_postcode,
+                arrival_city.name AS arrival_city,
+                Car.brand AS car_brand,
+                Car.model AS car_model,
+                Users.first_name AS driver_first_name,
+                Users.last_name AS driver_last_name')
+            ->join('Location AS departure_location', 'departure_location.id_location = JourneyDrive.start')
+            ->join('City AS departure_city', 'departure_city.id_city = departure_location.id_city')
+            ->join('Location AS arrival_location', 'arrival_location.id_location = JourneyDrive.end')
+            ->join('City AS arrival_city', 'arrival_city.id_city = arrival_location.id_city')
+            ->join('Users', 'Users.id_user = JourneyDrive.driver')
+            ->join('Car', 'Car.id_car = JourneyDrive.id_car')
+            ->where('JourneyDrive.start', $departureLocation['id_location'])
+            ->where('JourneyDrive.end', $arrivalLocation['id_location'])
+            ->where('JourneyDrive.departure >=', $startDay)
+            ->where('JourneyDrive.departure <', $endDay)
             ->findAll();
 
         // 4. Filter seat availability
         $journeys = $this->filterAvailableSeats(
             $journeys,
-            $input['free-seats']
+            $requestedSeats
         );
 
         return $journeys;
@@ -240,7 +280,6 @@ class JourneyService
     {
         $carModel       = model(CarModel::class);
         $locationService = service('locationService');
-        $journeyModel   = model(JourneyRequestModel::class);
         $stageModel     = model(StagesModel::class);
 
         $this->db->transBegin();
@@ -283,8 +322,7 @@ class JourneyService
                 'end'           => $endLocationId,
             ];
 
-
-            $journeyId = $journeyModel->insert($journeyData, true);
+            $journeyId = $this->journeyModel->insert($journeyData, true);
 
             if (! $journeyId) {
                 throw new \RuntimeException('Impossible de créer le trajet');
@@ -310,9 +348,51 @@ class JourneyService
     public function updateJourneyRequest() {}
 
     /**
-     * 
+     * Deletes a journey
+     * @param $id The journey ID
+     * @return void
      */
-    public function deleteJourneyRequest() {}
+    public function deleteJourneyRequest($id): void
+    {
+        $bookingModel = model(BookingModel::class);
+        $stageModel = model(StagesModel::class);
+        $trackModel = model(TrackModel::class);
+
+        $this->db->transBegin();
+
+        $journey = $this->journeyModel->find($id);
+
+        if (!$journey) {
+            throw new \DomainException('Le trajet n\'existe pas');
+        }
+
+        $journeyId = $journey['id'];
+
+        try {
+            // Suppression des réservations
+            $bookingModel->where('id_journey_drive', $journeyId)->delete();
+
+            // Suppression des étapes
+            $stageModel->where('id_journey_drive', $journeyId)->delete();
+
+            // Suppression du tracking
+            $trackId = $journey['id_track'];
+            $trackModel->delete($trackId);
+
+            // Suppression du trajet
+            $this->journeyModel->delete($journeyId);
+
+            // Transaction safety
+            if ($this->db->transStatus() === false) {
+                throw new \RuntimeException('Transaction échouée');
+            }
+
+            $this->db->transCommit();
+        } catch (\Throwable $e) {
+            $this->db->transRollback();
+            throw $e;
+        }
+    }
 
     /**
      * 
@@ -320,15 +400,50 @@ class JourneyService
     public function searchJourneyRequest() {}
 
     /**
-     * Function to filter through journeys which don't have enough seats available
+     * Function to filter journeys which don't have enough free seats
+     * 
      * @param array $journeys Journeys matching in location and date
-     * @param string $input Amount of available seats requested
+     * @param int $requestedSeats Amount of requested seats
      * @return array $newJourneys The filtered journeys with enough free seats
      */
-    public function filterAvailableSeats(array $journeys, string $input): array
+    public function filterAvailableSeats(array $journeys, int $requestedSeats): array
     {
-        $newJourneys = [];
+        if (empty($journeys)) {
+            return [];
+        }
 
-        return $newJourneys;
+        $bookingModel = model(BookingModel::class);
+
+        $journeyIds = array_column($journeys, 'id_journey_drive');
+
+        // Get total booked seats per journey
+        $bookedSeats = $bookingModel
+            ->select('id_journey_drive, SUM(seat_taken) as booked') // Stores a "booked" value with the sum of all seats taken for a given journey
+            ->whereIn('id_journey_drive', $journeyIds)
+            ->where('is_validated', true)
+            ->where('deletion_date', null)
+            ->groupBy('id_journey_drive')
+            ->findAll();
+
+        // Re-index by journey id
+        $bookedByJourney = [];
+
+        foreach ($bookedSeats as $booking) {
+            $bookedByJourney[$booking['id_journey_drive']] = (int) $booking['booked'];
+        }
+
+        $filteredJourneys = [];
+
+        foreach ($journeys as $journey) {
+            $booked = $bookedByJourney[$journey['id_journey_drive']] ?? 0;
+            $remainingSeats = (int) $journey['number_of_place'] - $booked;
+
+            if ($remainingSeats >= $requestedSeats) {
+                $journey['available_seats'] = $remainingSeats;
+                $filteredJourneys[] = $journey;
+            }
+        }
+
+        return $filteredJourneys;
     }
 }

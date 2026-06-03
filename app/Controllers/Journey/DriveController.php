@@ -9,56 +9,56 @@ use App\Models\JourneyDriveModel;
 use App\Models\CarModel;
 use App\Validators\CreateJourneyDriveValidator;
 use App\Validators\SearchJourneyDriveValidator;
+use Exception;
 use PDOException;
 
 class DriveController extends BaseController
 {
 
     /**
-     * Searches for matching itineraries
+     * Manages journey search page
      */
     public function search()
     {
         /* Inputs :
-         * start = ['label', 'city', 'postcode', 'lat', 'lon']
-         * end = [...]
-         * date
-         * free-seats (default 1)
-         * (optional) filters
-         */
+        * start = ['label', 'city', 'postcode', 'lat', 'lon']
+        * end = [...]
+        * date
+        * free-seats (default 1)
+        * (optional) filters
+        */
+        helper('form');
 
-        $data = $this->request->getPost();
+        $data = $this->request->getGet();
 
-        // Validation
-        $validator = new SearchJourneyDriveValidator;
+        if (isset($data['start'])) {
+            // Validation
+            $validator = new SearchJourneyDriveValidator;
 
-        if (! $validator->validate($data)) {
-            return redirect()->back()
-                ->with('errors', $validator->getErrors())
-                ->withInput();
+            // if (! $validator->validate($data)) {
+            //     $data['errors'] = $validator->getErrors();
+
+            //     return view('itinerary/search/SearchView', $data);
+            // }
+
+            // Logic
+            try {
+                $journeyService = service('journeyService');
+
+                // === Ajouter options quand possible !
+                $data['journeys'] = $journeyService->searchJourneyDrive($data);
+            } catch (\Throwable $e) {
+                // system error
+                log_message('error', $e->getMessage());
+
+                $data['error'] = 'Une erreur s\'est produite';
+
+                return view('itinerary/search/SearchView', $data);
+            }
         }
 
-        // Logic
-        try {
-            $journeyService = service('journeyService');
 
-            // === Ajouter options quand possible !
-            $data['journeys'] = $journeyService->searchJourneyDrive($data);
-
-            return redirect()->to('trajet');
-        } catch (\DomainException $e) {
-            // user error (e.g. chosen more seats than available in car)
-            return redirect()->back()
-                ->with('error', $e->getMessage())
-                ->withInput();
-        } catch (\Throwable $e) {
-            // system error
-            log_message('error', $e->getMessage());
-
-            return redirect()->back()
-                ->with('error', 'Une erreur s\'est produite')
-                ->withInput();
-        }
+        return view('itinerary/search/SearchView', $data);
     }
 
     /**
@@ -89,15 +89,15 @@ class DriveController extends BaseController
         $data['journey']['waypoints'] = [];
 
         //Checking there are stages on the journey
-        if($data['journey']['stages']){
+        if ($data['journey']['stages']) {
             //Adding each city to the waypoints
-            foreach($data['journey']['stages'] as $stage){
+            foreach ($data['journey']['stages'] as $stage) {
                 array_push($data['journey']['waypoints'], $stage['city_name']);
             }
         }
 
         array_push($data['journey']['waypoints'], $data['journey']['arrival_city']); //Adding the final city to the way point
-        
+
         $data['driver_name'] = $userModel->getUserName($data['journey']['driver']);; // Retrieving the driver name
         $data['car'] = $carModel->find($data['journey']['id_car']); //Retrieving the car information
 
@@ -181,5 +181,25 @@ class DriveController extends BaseController
      * 
      * parameter : itinerary id
      */
-    public function delete($id) {}
+    public function delete($id)
+    {
+        $journeyService = service('journeyService');
+
+        log_message('debug', 'Deleting journey...');
+        try {
+
+            $journeyService->deleteJourney($id);
+
+            log_message('debug', 'Journey deleted successfully.');
+
+            return redirect()->to('profil')
+                ->with('status', 'Trajet supprimé avec succès');
+        } catch (\Throwable $e) {
+            log_message('error', 'Error in save(): ' . $e->getMessage());
+            log_message('error', 'Stack: ' . $e->getTraceAsString());
+
+            return redirect()->back()
+                ->with('error', 'Une erreur s\'est produite');
+        }
+    }
 }

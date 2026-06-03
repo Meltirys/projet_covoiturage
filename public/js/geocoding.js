@@ -35,7 +35,7 @@ async function searchAddress(inputElement, onSelect = null) {
 
   try {
     const response = await fetch(
-      `https://data.geopf.fr/geocodage/search?q=${encodeURIComponent(query)}&autocomplete=1&index=address,poi&limit=10&returntruegeometry=false`,
+      `https://data.geopf.fr/geocodage/search?q=${encodeURIComponent(query)}&autocomplete=1&index=address,poi&limit=10&returntruegeometry=false&lat=48.103&lon=-1.672`,
     );
 
     const data = await response.json();
