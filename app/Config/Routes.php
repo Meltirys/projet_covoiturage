@@ -104,7 +104,7 @@ $routes->group('', ['filter' => 'authadmin'], function ($routes) {
     $routes->post('user/ban/(:num)', [UserController::class, 'ban']); //Banning an user
 
     $routes->get('searchUser/(:alpha)', [SearchController::class, 'searchUser']);
-    $routes->get('debug', [Debug::class, 'debug']);
+    $routes->get('debug', [RequestController::class, 'create']);
 });
 
 //Super-admin part

@@ -23,6 +23,7 @@
 
 <?= $this->section('scripts') ?>
 
+<script src="<?= base_url('js/pagination.js') ?>"></script>
 <script src="<?= base_url('js/user-ban.js') ?>"></script>
 <script src="<?= base_url('js/user-suppression.js') ?>"></script>
 <?php if (session()->user_role == 3): ?>

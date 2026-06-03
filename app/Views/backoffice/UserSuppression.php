@@ -17,6 +17,8 @@
     <div id="researchResultsSuppression" class="space-y-3">
 
     </div>
+    <div id="paginationSuppression" class="space-x-3">
+
+    </div>
 
 </main>
-
