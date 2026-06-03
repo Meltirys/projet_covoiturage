@@ -104,8 +104,10 @@ $routes->group('', ['filter' => 'authadmin'], function ($routes) {
     $routes->post('user/delete/(:num)', [UserController::class, 'delete']); //Deleting an user
     $routes->post('user/ban/(:num)', [UserController::class, 'ban']); //Banning an user
 
+    $routes->post('report/solve/(:num)', [ReportController::class, 'solve']);
+
     $routes->get('searchUser/(:any)', [SearchController::class, 'searchUser']);
-    $routes->get('debug', [RequestController::class, 'create']);
+    $routes->get('debug', [Debug::class, 'debug']);
 });
 
 //Super-admin part

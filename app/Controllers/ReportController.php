@@ -46,4 +46,23 @@ class ReportController extends BaseController
         return redirect()->to('report')
             ->with('success', 'Le signalement à bien été pris en compte, il sera le traité le plus rapidement possible par nos administrateurs');
     }
+
+    /**
+     * Mark the report as solved in the database
+     * @param int $idReport The id of the report we want to solve
+     */
+    public function solve(int $idReport)
+    {
+        $reportModel = model('ReportModel');
+
+        if (!$reportModel->update($idReport, [
+            'is_resolved' => true
+        ])) {
+            redirect()->to('debug')
+                ->with('report_error', 'Une erreur est survenue lors de la résolution du signalement, veuillez réessayer');
+        }
+
+        return redirect()->to('debug')
+            ->with('report_success', 'Le signamelement a bien été marqué comme résolu');
+    }
 }
