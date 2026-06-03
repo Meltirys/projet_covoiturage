@@ -58,11 +58,11 @@ class ReportController extends BaseController
         if (!$reportModel->update($idReport, [
             'is_resolved' => true
         ])) {
-            redirect()->to('debug')
+            redirect()->to('backoffice')
                 ->with('report_error', 'Une erreur est survenue lors de la résolution du signalement, veuillez réessayer');
         }
 
-        return redirect()->to('debug')
+        return redirect()->to('backoffice')
             ->with('report_success', 'Le signamelement a bien été marqué comme résolu');
     }
 }

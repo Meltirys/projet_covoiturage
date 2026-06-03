@@ -15,8 +15,19 @@ class Paginator {
     load(data) {
         this.#allResults = data;
         this.#currentPage = 1;
-        this.#displayPage();
-        this.#displayPagination();
+        //Checking if there are data available, if not, display a message
+        if (data.length > 0) {
+            this.#displayPage();
+            this.#displayPagination();
+        }
+        else{
+            let noResults = document.createElement('p')
+            noResults.textContent = 'Aucun élément à afficher'
+
+            this.#resultsContainer.replaceChildren()
+            this.#resultsContainer.appendChild(noResults)
+        }
+
     }
 
     /**
@@ -56,7 +67,7 @@ class Paginator {
 
             if (i === this.#currentPage) button.disabled = true;
 
-                    //Generating the event when the button is clicked
+            //Generating the event when the button is clicked
             button.addEventListener('click', () => {
                 this.#currentPage = i;
                 this.#displayPage();
