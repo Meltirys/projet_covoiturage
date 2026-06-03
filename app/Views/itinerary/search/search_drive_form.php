@@ -1,4 +1,13 @@
-<?= form_open('drive/search', ['class' => 'flex flex-col gap-4', 'method' => 'get']) ?>
+<?php
+$request = service('request');
+$start = $request->getGet('start') ?? [];
+$end = $request->getGet('end') ?? [];
+$date = $request->getGet('date') ?? '';
+$freeSeats = $request->getGet('free-seats') ?? '';
+$filter = $request->getGet('filter') ?? '';
+?>
+
+<?= form_open(site_url('trajet'), ['class' => 'flex flex-col gap-4', 'method' => 'get']) ?>
 
 <!-- Départ / Arrivée -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 items-start">
@@ -8,17 +17,17 @@
         <label for="start" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Départ</label>
         <input class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey"
             type="text" name="start[label]" id="start"
-            value="<?= set_value('start[label]') ?>"
+            value="<?= esc($start['label'] ?? '') ?>"
             placeholder="Entrez votre départ" required>
         <?php $startError = $errors['start.label'] ?? $errors['start.lat'] ?? $errors['start.lon'] ?? $errors['start.city'] ?? $errors['start.postcode'] ?? null;
         if ($startError): ?>
             <span class="text-xs text-red-500"><?= esc($startError) ?></span>
         <?php endif ?>
         <div class="results"></div>
-        <input type="hidden" name="start[lat]">
-        <input type="hidden" name="start[lon]">
-        <input type="hidden" name="start[city]">
-        <input type="hidden" name="start[postcode]">
+        <input type="hidden" name="start[lat]" value="<?= esc($start['lat'] ?? '') ?>">
+        <input type="hidden" name="start[lon]" value="<?= esc($start['lon'] ?? '') ?>">
+        <input type="hidden" name="start[city]" value="<?= esc($start['city'] ?? '') ?>">
+        <input type="hidden" name="start[postcode]" value="<?= esc($start['postcode'] ?? '') ?>">
     </div>
 
     <!-- Arrivée -->
@@ -26,17 +35,17 @@
         <label for="end" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Arrivée</label>
         <input class="address-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey"
             type="text" name="end[label]" id="end"
-            value="<?= set_value('end[label]') ?>"
+            value="<?= esc($end['label'] ?? '') ?>"
             placeholder="Entrez votre destination" required>
         <?php $endError = $errors['end.label'] ?? $errors['end.lat'] ?? $errors['end.lon'] ?? $errors['end.city'] ?? $errors['end.postcode'] ?? null;
         if ($endError): ?>
             <span class="text-xs text-red-500"><?= esc($endError) ?></span>
         <?php endif ?>
         <div class="results"></div>
-        <input type="hidden" name="end[lat]">
-        <input type="hidden" name="end[lon]">
-        <input type="hidden" name="end[city]">
-        <input type="hidden" name="end[postcode]">
+        <input type="hidden" name="end[lat]" value="<?= esc($end['lat'] ?? '') ?>">
+        <input type="hidden" name="end[lon]" value="<?= esc($end['lon'] ?? '') ?>">
+        <input type="hidden" name="end[city]" value="<?= esc($end['city'] ?? '') ?>">
+        <input type="hidden" name="end[postcode]" value="<?= esc($end['postcode'] ?? '') ?>">
     </div>
 
 </div>
@@ -46,11 +55,11 @@
 
     <div class="flex flex-col gap-1">
         <label for="start-date" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Date</label>
-        <input type="date" name="start-date" id="start-date"
-            value="<?= set_value('start-date') ?>"
+        <input type="date" name="date" id="start-date"
+            value="<?= esc($date) ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
-        <?php if (isset($errors['start-date'])): ?>
-            <span class="text-xs text-red-500"><?= esc($errors['start-date']) ?></span>
+        <?php if (isset($errors['date'])): ?>
+            <span class="text-xs text-red-500"><?= esc($errors['date']) ?></span>
         <?php endif ?>
     </div>
 
@@ -62,12 +71,12 @@
 
     <div class="flex flex-col gap-1">
         <label for="passengers" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Passagers</label>
-        <input type="number" name="passengers" id="passengers"
+        <input type="number" name="free-seats" id="passengers"
             placeholder="1"
-            value="<?= set_value('passengers') ?>"
+            value="<?= esc($freeSeats) ?>"
             class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey">
-        <?php if (isset($errors['passengers'])): ?>
-            <span class="text-xs text-red-500"><?= esc($errors['passengers']) ?></span>
+        <?php if (isset($errors['free-seats'])): ?>
+            <span class="text-xs text-red-500"><?= esc($errors['free-seats']) ?></span>
         <?php endif ?>
     </div>
 
@@ -79,7 +88,7 @@
 <div class="flex flex-col gap-1">
     <label for="filter" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Filtres (optionnel)</label>
     <input type="text" name="filter" id="filter"
-        value="<?= set_value('filter') ?>"
+        value="<?= esc($filter) ?>"
         placeholder="Entrez vos filtres"
         class="border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey">
     <?php if (isset($errors['filter'])): ?>
