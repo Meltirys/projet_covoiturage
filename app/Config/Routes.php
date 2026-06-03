@@ -67,6 +67,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     // Modification de demande de trajet
     $routes->get('request/edit/(:num)', 'Journey\RequestController::edit/$1');
     $routes->post('request/update/(:num)', 'Journey\RequestController::update/$1');
+    $routes->post('request/delete/(:num)', 'Journey\RequestController::delete/$1');
 
     // Recherche de trajets
     $routes->get('trajet', 'PagesController::searchJourney');

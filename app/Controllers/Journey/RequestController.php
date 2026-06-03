@@ -3,13 +3,9 @@
 namespace App\Controllers\Journey;
 
 use App\Controllers\BaseController;
-use CodeIgniter\HTTP\ResponseInterface;
-use CodeIgniter\Exceptions\PageNotFoundException;
 use App\Models\JourneyRequestModel;
-use App\Models\CarModel;
 use App\Validators\CreateJourneyRequestValidator;
 use DateTime;
-use PDOException;
 
 class RequestController extends BaseController
 {
@@ -27,18 +23,26 @@ class RequestController extends BaseController
      * 
      * parameter : itinerary id
      */
-    public function show(?string $slug = null)
+    public function show($id)
     {
-        $model = model(JourneyRequestModel::class);
+        $requestModel  = model(JourneyRequestModel::class);
+        $locationModel = model('LocationModel');
+        $userModel     = model('UserModel');
 
-        $data['itinerary'] = $model->getItinerary($slug);
+        $request = $requestModel->find($id);
 
-        if ($data['itinerary'] === null) {
-            throw new PageNotFoundException('Cannot find the news item: ' . $slug);
+        if (! $request) {
+            return redirect()->to('request/list')
+                ->with('error', 'Demande introuvable');
         }
 
-        return view('news/view', $data);
+        $request['start_address'] = $locationModel->getFormattedAddress($request['start']);
+        $request['end_address']   = $locationModel->getFormattedAddress($request['end']);
+        $author = $userModel->find($request['id_user']);
+
+        return view('itinerary/show/RequestShowView', ['request' => $request, 'author' => $author]);
     }
+
 
     /**
      * Displays the creation page for a new itinerary
@@ -54,8 +58,14 @@ class RequestController extends BaseController
      */
     public function index()
     {
-        $requestModel = new JourneyRequestModel();
+        $requestModel = model(JourneyRequestModel::class);
+        $locationModel = model('LocationModel');
         $allRequest = $requestModel->findAll();
+
+        foreach ($allRequest as &$request) {
+            $request['start_address'] = $locationModel->getFormattedAddress($request['start']);
+            $request['end_address'] = $locationModel->getFormattedAddress($request['end']);
+        }
         return view('itinerary/show/RequestListView', ['requests' => $allRequest]);
     }
 
@@ -169,8 +179,8 @@ class RequestController extends BaseController
 
         if (empty($rangeStart) || empty($rangeEnd) || $rangeEnd <= $rangeStart) {
             return redirect()->back()
-            ->with('error', 'Les heures sont invalides')
-            ->withInput();
+                ->with('error', 'Les heures sont invalides')
+                ->withInput();
         }
 
         $rangeOfTime = $rangeStart . ' - ' . $rangeEnd;
