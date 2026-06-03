@@ -14,6 +14,9 @@ class DashboardController extends BaseController
         $dbUser = model('UserModel');
         $data['users'] = $dbUser->getNonValidatedUsers(); 
 
+        $reportModel = model('ReportModel');
+        $reports = $reportModel->getNonResolvedReport();
+
         return view('backoffice/Dashboard', $data);
     }
 }

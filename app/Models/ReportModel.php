@@ -12,7 +12,7 @@ class ReportModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['reporter' , 'reported', 'date', 'is_resolved', 'comment'];
+    protected $allowedFields    = ['reporter', 'reported', 'date', 'is_resolved', 'comment'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -43,4 +43,15 @@ class ReportModel extends Model
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    public function getNonResolvedReport(): array
+    {
+        return $this->select($this->table . ".*, 
+                CONCAT(reporter.first_name, ' ', reporter.last_name) AS reporter_name,
+                CONCAT(reported.first_name, ' ', reported.last_name) AS reported_name")
+            ->join('Users AS reporter', 'reporter.id_user = Report.reporter')
+            ->join('Users AS reported', 'reported.id_user = Report.reported')
+            ->where('is_resolved', false)
+            ->findAll();
+    }
 }
