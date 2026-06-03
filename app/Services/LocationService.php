@@ -31,7 +31,7 @@ class LocationService
         // 1. Retrieve the city
         $cityData = $this->cityModel
             ->where([
-                'city'     => $city,
+                'name'     => $city,
                 'postcode' => $postcode
             ])->first();
 
