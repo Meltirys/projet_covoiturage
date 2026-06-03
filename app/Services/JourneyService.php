@@ -13,18 +13,20 @@ use DateTime;
 
 class JourneyService
 {
-    private JourneyDriveModel $journeyModel;
+    private JourneyDriveModel $journeyDriveModel;
+    private JourneyRequestModel $journeyRequestModel;
 
     protected BaseConnection $db;
 
     public function __construct()
     {
         $this->db = db_connect();
-        $this->journeyModel = model(JourneyDriveModel::class);
+        $this->journeyDriveModel = model(JourneyDriveModel::class);
+        $this->journeyRequestModel = model(JourneyRequestModel::class);
     }
 
     /**
-     * Attempts to create every element of the driver's journey
+     * Attempts to create every element of the journey drive
      * @param array $input The user's inputs
      * @param int $userId The user's ID
      * @return int The JourneyDrive ID
@@ -124,7 +126,7 @@ class JourneyService
                 'id_track'          => $idTrack
             ];
 
-            $journeyId = $this->journeyModel->insert($journeyData, true);
+            $journeyId = $this->journeyDriveModel->insert($journeyData, true);
 
             if (! $journeyId) {
                 throw new \RuntimeException('Impossible de créer le trajet');
@@ -178,9 +180,51 @@ class JourneyService
     public function updateJourneyDrive() {}
 
     /**
-     * 
+     * Deletes a journey drive
+     * @param int $id The journey ID
+     * @return void
      */
-    public function deleteJourneyDrive() {}
+    public function deleteJourneyDrive(int $id): void
+    {
+        $bookingModel = model(BookingModel::class);
+        $stageModel = model(StagesModel::class);
+        $trackModel = model(TrackModel::class);
+
+        $this->db->transBegin();
+
+        $journey = $this->journeyDriveModel->find($id);
+
+        if (!$journey) {
+            throw new \DomainException('Le trajet n\'existe pas');
+        }
+
+        $journeyId = $journey['id'];
+
+        try {
+            // Suppression des réservations
+            $bookingModel->where('id_journey_drive', $journeyId)->delete();
+
+            // Suppression des étapes
+            $stageModel->where('id_journey_drive', $journeyId)->delete();
+
+            // Suppression du tracking
+            $trackId = $journey['id_track'];
+            $trackModel->delete($trackId);
+
+            // Suppression du trajet
+            $this->journeyDriveModel->delete($journeyId);
+
+            // Transaction safety
+            if ($this->db->transStatus() === false) {
+                throw new \RuntimeException('Transaction échouée');
+            }
+
+            $this->db->transCommit();
+        } catch (\Throwable $e) {
+            $this->db->transRollback();
+            throw $e;
+        }
+    }
 
     /**
      * 
@@ -196,11 +240,15 @@ class JourneyService
         // searchJourneyDrive()
         // ├── resolve departure location
         // ├── resolve arrival location
-        // ├── retrieve candidate journeys
-        // ├── filter by date
+        // ├── retrieve candidate journeys by location and date
         // ├── filter by seats
-        // ├── sort
         // └── return results
+
+        // Progress steps :
+        // 1. Allow matching against all stages/intermediary stops.
+        // 2. Verify stop order (start before end).
+        // 3. Later add route proximity search using the GeoJSON LineString.
+        // 4. If the project becomes large, move the geographic filtering into spatial SQL.
 
         // 1. Lieux de départ et arrivée
         $departureAddress = $input['start']['label'] ?? $input['start.address'] ?? '';
@@ -235,9 +283,45 @@ class JourneyService
         $startDay = $searchDate . ' 00:00:00'; // début
         $endDay = date('Y-m-d H:i:s', strtotime($startDay . ' +1 day')); // fin
 
+        $journeys = $this->journeyDriveModel
+            ->where('JourneyDrive.departure >=', $startDay)
+            ->where('JourneyDrive.arrival <', $endDay)
+            ->findAll();
+
+        // Stages
+        foreach ($journeys as $journey) {
+            $stages = $stageModel
+                ->where('id_journey_drive', $journey['id_journey_drive'])
+                ->orderBy('order')
+                ->findAll();
+
+            $route = [];
+
+            $route[] = $journey['start'];
+
+            foreach ($stages as $stage) {
+                $route[] = $stage['id_location'];
+            }
+
+            $route[] = $journey['end'];
+
+            // Returns the order of the user's desired locations in the route if location included in itinerary 
+            $departureIndex = array_search($departureLocation['id_location'], $route);
+            $arrivalIndex = array_search($arrivalLocation['id_location'], $route);
+
+            if (
+                $departureIndex !== false
+                && $arrivalIndex !== false
+                && $departureIndex < $arrivalIndex
+            ) {
+                $matches[] = $journey;
+            }
+        }
+
+
         // 3. Journeys
         // Gathers all relevant data in journeys array
-        $journeys = $this->journeyModel
+        $journeys = $this->journeyDriveModel
             ->select('JourneyDrive.*, 
                 departure_location.address AS departure_address,
                 departure_city.postcode AS departure_postcode,
@@ -255,10 +339,6 @@ class JourneyService
             ->join('City AS arrival_city', 'arrival_city.id_city = arrival_location.id_city')
             ->join('Users', 'Users.id_user = JourneyDrive.driver')
             ->join('Car', 'Car.id_car = JourneyDrive.id_car')
-            ->where('JourneyDrive.start', $departureLocation['id_location'])
-            ->where('JourneyDrive.end', $arrivalLocation['id_location'])
-            ->where('JourneyDrive.departure >=', $startDay)
-            ->where('JourneyDrive.departure <', $endDay)
             ->findAll();
 
         // 4. Filter seat availability
@@ -322,7 +402,7 @@ class JourneyService
                 'end'           => $endLocationId,
             ];
 
-            $journeyId = $this->journeyModel->insert($journeyData, true);
+            $journeyId = $this->journeyRequestModel->insert($journeyData, true);
 
             if (! $journeyId) {
                 throw new \RuntimeException('Impossible de créer le trajet');
@@ -348,19 +428,14 @@ class JourneyService
     public function updateJourneyRequest() {}
 
     /**
-     * Deletes a journey
-     * @param $id The journey ID
-     * @return void
+     * Deletes a journey request
+     * @param int $id The journey ID
      */
-    public function deleteJourneyRequest($id): void
+    public function deleteJourneyRequest(int $id): void
     {
-        $bookingModel = model(BookingModel::class);
-        $stageModel = model(StagesModel::class);
-        $trackModel = model(TrackModel::class);
-
         $this->db->transBegin();
 
-        $journey = $this->journeyModel->find($id);
+        $journey = $this->journeyRequestModel->find($id);
 
         if (!$journey) {
             throw new \DomainException('Le trajet n\'existe pas');
@@ -369,18 +444,8 @@ class JourneyService
         $journeyId = $journey['id'];
 
         try {
-            // Suppression des réservations
-            $bookingModel->where('id_journey_drive', $journeyId)->delete();
-
-            // Suppression des étapes
-            $stageModel->where('id_journey_drive', $journeyId)->delete();
-
-            // Suppression du tracking
-            $trackId = $journey['id_track'];
-            $trackModel->delete($trackId);
-
             // Suppression du trajet
-            $this->journeyModel->delete($journeyId);
+            $this->journeyRequestModel->delete($journeyId);
 
             // Transaction safety
             if ($this->db->transStatus() === false) {
