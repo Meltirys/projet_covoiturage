@@ -1,5 +1,11 @@
 let searchInputSuppression = document.querySelector("#searchInputSuppression")
 
+userSuppressionPaginator = new Paginator(
+    document.querySelector('#researchResultsSuppression'),
+    document.querySelector('#paginationSuppression'),
+    renderUserSuppression
+)
+
 //Creating the listener on text input
 searchInputSuppression.addEventListener("input", () => {
     //Only fetches when there are more than two characters entered
@@ -11,10 +17,7 @@ searchInputSuppression.addEventListener("input", () => {
                 }
             })
             .then(datas => {
-                allResults = datas;
-                currentPage = 1;
-                displayPage(currentPage, renderUserSuppression, "researchResultsSuppression");
-                displayPagination("paginationSuppression", renderUserSuppression, "researchResultsSuppression");
+                userSuppressionPaginator.load(datas)
             })
             .catch(e => console.log(e))
     }
