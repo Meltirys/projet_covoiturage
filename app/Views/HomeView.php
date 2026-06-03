@@ -138,7 +138,7 @@
                                 <div class="flex flex-col gap-1.5">
                                     <label class="text-[9px] font-medium tracking-[1.5px] uppercase text-grey">Genre</label>
                                     <select class="penn-input w-full border border-input-border bg-input-bg rounded-xl px-3 py-2.5 text-xs text-bluegrey focus:outline-none focus:border-ocean focus:bg-white transition-all duration-200" name="gender" required>
-                                        <option value="" disabled <?= old('gender', null) ?? 'selected' ?>>Sélectionner</option>
+                                        <option value="" disabled>Sélectionner</option>
                                         <option value="female" <?= old('gender') === 'female' ? 'selected' : '' ?>>Féminin</option>
                                         <option value="male" <?= old('gender') === 'male' ? 'selected' : '' ?>>Masculin</option>
                                         <option value="none" <?= old('gender') === 'none' ? 'selected' : '' ?>>Non communiqué</option>
