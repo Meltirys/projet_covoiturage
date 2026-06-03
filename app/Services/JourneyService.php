@@ -42,7 +42,16 @@ class JourneyService
 
         $this->db->transBegin();
 
+        //Creating the stops
+        $stops = $input['stops'] ?? [];
+
+        // Checks if the first values of the array are empty
+        if (empty(array_filter($stops[0]))) {
+            $stops = []; // We set the array to an empty array
+        }
+
         try {
+
             // 1. Verify car ownership and seat amount
             $car = $carModel
                 ->where('id_car', $input['car'])
@@ -74,7 +83,32 @@ class JourneyService
                 $input['end']['lon'] ?? null
             );
 
-            // 3. Journey
+            // 3. Generating the track
+            $trackService = service('TrackService');
+            $start = [$input['start']['lon'], $input['start']['lat']];
+            $end = [$input['end']['lon'], $input['end']['lat']];
+            $idTrack = null;
+
+
+
+            //Checking if there are stops in the journey
+            if ($stops) {
+                $trackStop = array_map(function ($row) {
+                    return [
+                        $row['lon'],
+                        $row['lat']
+                    ];
+                }, $stops); //Rebuilbing each stops into a new array and saving only the lat on lon values
+
+                $idTrack = $trackService->saveTrack($start, $end, $trackStop); //Creating the track in the database
+            } else {
+                $idTrack = $trackService->saveTrack($start, $end); //Creating the track in the database
+            }
+
+            if (!$idTrack) {
+                throw new \RuntimeException('Impossible de créer le tracé du trajet');
+            }
+            // 4. Journey
             $userId = session()->get('user_id');
 
             $journeyData = [
@@ -85,6 +119,7 @@ class JourneyService
                 'start'             => $startLocationId,
                 'end'               => $endLocationId,
                 'driver'            => $userId,
+                'id_track'          => $idTrack
             ];
 
             $journeyId = $journeyModel->insert($journeyData, true);
@@ -93,60 +128,32 @@ class JourneyService
                 throw new \RuntimeException('Impossible de créer le trajet');
             }
 
-            // 4. Stages (optional)
-            $stops = $input['stops'] ?? [];
-            $order = 1;
-
-            foreach ($stops as $stop) {
-
-                // Skip stop if empty
-                $isEmpty =
-                    empty($stop['label']) &&
-                    empty($stop['lat']) &&
-                    empty($stop['lon']) &&
-                    empty($stop['city']) &&
-                    empty($stop['postcode']);
-                if ($isEmpty) {
-                    continue;
-                }
-
-                $locationId = $locationService->getOrCreate(
-                    $stop['label'],
-                    $stop['city'],
-                    $stop['postcode'],
-                    $stop['lat'],
-                    $stop['lon']
-                );
-
-                $ok = $stageModel->insert([
-                    'id_journey_drive' => $journeyId,
-                    'id_location'      => $locationId,
-                    'order'            => $order++,
-                ]);
-
-                if ($ok === false) {
-                    throw new \RuntimeException('Erreur lors de la création des étapes');
-                }
-            }
-
-            // 5. Generating the track
-            $trackService = service('TrackService');
-            $start = [$input['start']['lon'], $input['start']['lat']];
-            $end = [$input['end']['lon'], $input['end']['lat']];
-
-            //Checking if there are stops in the journey
+            // 5. Stages (optional)
             if ($stops) {
-                $trackStop = array_map(function ($row) {
-                    return [
-                        $row['lon'],
-                        $row['lat']
-                    ];
-                }, $stops); //Rebuilbing each stops into a new array
+                $order = 1;
 
-                $trackService->saveTrack($start, $end, $trackStop); //Creating the track in the database
-            } else {
-                $trackService->saveTrack($start, $end); //Creating the track in the database
+                foreach ($stops as $stop) {
+
+                    $locationId = $locationService->getOrCreate(
+                        $stop['label'],
+                        $stop['city'],
+                        $stop['postcode'],
+                        $stop['lat'],
+                        $stop['lon']
+                    );
+
+                    $ok = $stageModel->insert([
+                        'id_journey_drive' => $journeyId,
+                        'id_location'      => $locationId,
+                        'order'            => $order++,
+                    ]);
+
+                    if ($ok === false) {
+                        throw new \RuntimeException('Erreur lors de la création des étapes');
+                    }
+                }
             }
+
 
 
             // 6. Transaction safety

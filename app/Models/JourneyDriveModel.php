@@ -14,7 +14,7 @@ class JourneyDriveModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     // Add id_track later, and remove nullability of id_track in db
-    protected $allowedFields    = ['number_of_place', 'departure', 'estimated_arrival', 'id_track', 'start', 'end', 'id_car', 'driver'];
+    protected $allowedFields    = ['number_of_place', 'departure', 'estimated_arrival', 'id_track', 'start', 'end', 'id_car', 'driver', 'id_track'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

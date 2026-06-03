@@ -70,7 +70,6 @@ class ProfilController extends BaseController
             $requests = $bookingModel
                 ->where('id_journey_drive', $journey['id_journey_drive'])
                 ->where('is_validated', false)
-                ->where('is_driver', false)
                 ->findAll();
             foreach ($requests as $r) {
                 $passenger = $userModel->find($r['id_user']);

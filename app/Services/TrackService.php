@@ -16,13 +16,14 @@ class TrackService
     }
 
     /**
-     * @param array $start
-     * @param array $end
-     * @param array $stops
+     * Save the track in the database.
+     * @param array $start The starting point of the track in an array form.
+     * @param array $end The end point of the track
+     * @param array $stops Optionnal : Stops on the track
      * 
-     * @return bool
+     * @return int The id of the newly created track
      */
-    public function saveTrack(array $start, array $end, array $stops = []): bool
+    public function saveTrack(array $start, array $end, array $stops = []): int
     {
         helper('french');
         $coordinates = $this->buildCoordinates($start, $end, $stops);
@@ -50,19 +51,17 @@ class TrackService
 
         if (empty($data['features'])) return false;
 
-        // Récupération de la géométrie et des métadonnées
+        //Retrieving the geometries
         $geometry = $data['features'][0]['geometry'];         // LineString GeoJSON
         $summary  = $data['features'][0]['properties']['summary'];
 
         $trackModel = model('TrackModel');
-        // Sauvegarde en base
-        $idTrack = $trackModel->insert([
+        // Saving in database
+        return $trackModel->insert([
             'geojson'  => json_encode($geometry),             // The complete geometry
             'distance' => $summary['distance'],               // The number of meters
             'duration' => $summary['duration'],       //Storing the number of seconds
         ]);
-
-        return $idTrack ?: null;
     }
 
     /**
