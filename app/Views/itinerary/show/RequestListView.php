@@ -9,8 +9,9 @@
     <?php else: ?>
         <?php foreach ($requests as $request): ?>
             <div>
-                <p><?= esc($request['description']) ?></p>
+                <p><?= esc($request['start_address']) ?> → <?= esc($request['end_address']) ?></p>
                 <p><?= esc($request['range_of_time']) ?></p>
+                <a href="<?= site_url('request/show/' . $request['id_journey_request']) ?>">Voir les détails</a>
             </div>
         <?php endforeach ?>
     <?php endif ?>
