@@ -1,4 +1,4 @@
-<?= form_open('drive/search', ['class' => 'flex flex-col gap-4']) ?>
+<?= form_open('drive/search', ['class' => 'flex flex-col gap-4', 'method' => 'get']) ?>
 
 <!-- Départ / Arrivée -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 items-start">
