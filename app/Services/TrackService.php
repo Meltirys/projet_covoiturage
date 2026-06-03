@@ -45,7 +45,6 @@ class TrackService
         ));
 
         $response = curl_exec($ch);
-        curl_close($ch);
 
         $data = json_decode($response, true);
 
@@ -68,16 +67,17 @@ class TrackService
      * Build the coordinates for the api. It takes arrays in parameters. Each arrays must be coordinates array. The longitude is the first element expected and latitude is the second.
      * @param array $start The starting point of the track in an array form.
      * @param array $end The end point of the track
-     * @param array $stops Optionnal : Stops on the track
+     * @param array $stops Optional : Stops on the track
      * 
      * @return string A string that is understable for the OpenRouteService api that contains all the coordinates of the track
      */
-    private function buildCoordinates(array $start, array $end, array $stops = []) : string{
+    private function buildCoordinates(array $start, array $end, array $stops = []): string
+    {
         $res = "[";
 
         $res .= "[" . $start[0] . ',' . $start[1] . "], ";
 
-        foreach($stops as $stop){
+        foreach ($stops as $stop) {
             $res .= "[" . $stop[0] . ',' . $stop[1] . "], ";
         }
 
@@ -85,9 +85,6 @@ class TrackService
 
         $res .= "]";
 
-        var_dump($res);
-
         return $res;
-
     }
 }
