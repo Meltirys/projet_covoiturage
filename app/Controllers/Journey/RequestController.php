@@ -25,6 +25,7 @@ class RequestController extends BaseController
      */
     public function show($id)
     {
+        helper('form');
         $requestModel  = model(JourneyRequestModel::class);
         $locationModel = model('LocationModel');
         $userModel     = model('UserModel');
@@ -40,7 +41,13 @@ class RequestController extends BaseController
         $request['end_address']   = $locationModel->getFormattedAddress($request['end']);
         $author = $userModel->find($request['id_user']);
 
-        return view('itinerary/show/RequestShowView', ['request' => $request, 'author' => $author]);
+        $ownRequest = $request['id_user'] == session('user_id');
+
+        return view('itinerary/show/RequestShowView', [
+            'request' => $request, 
+            'author' => $author,
+            'ownRequest' => $ownRequest,
+            ]);
     }
 
 
