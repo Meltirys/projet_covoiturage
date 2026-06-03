@@ -103,6 +103,10 @@
     <!-- Contenu -->
     <?= $this->renderSection('content') ?>
 
+
+    <footer>
+        <ul></ul>
+    </footer>
     <!-- Scripts -->
     <?= $this->renderSection('scripts') ?>
     <script>
@@ -121,10 +125,6 @@
             }
         }
     </script>
-
-    <footer>
-        <ul></ul>
-    </footer>
 </body>
 
 </html>
