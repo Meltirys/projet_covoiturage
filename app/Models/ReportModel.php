@@ -44,14 +44,15 @@ class ReportModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function getNonResolvedReport(): array
+    public function getReportInformations(bool $isResolved = false): array
     {
         return $this->select($this->table . ".*, 
                 CONCAT(reporter.first_name, ' ', reporter.last_name) AS reporter_name,
                 CONCAT(reported.first_name, ' ', reported.last_name) AS reported_name")
             ->join('Users AS reporter', 'reporter.id_user = Report.reporter')
             ->join('Users AS reported', 'reported.id_user = Report.reported')
-            ->where('is_resolved', false)
+            ->where('is_resolved', $isResolved)
+            ->orderBy('date', 'DESC')
             ->findAll();
     }
 }
