@@ -45,10 +45,10 @@ class JourneyService
         //Creating the stops
         $stops = $input['stops'] ?? [];
 
-        // Checks if the first values of the array are empty
-        if (empty(array_filter($stops[0]))) {
-            $stops = []; // We set the array to an empty array
-        }
+        //Removing all the empty stops and making a new array with new indexes
+        $stops = array_values(array_filter($stops, function ($item) {
+            return !empty(array_filter($item));
+        }));
 
         try {
 
@@ -88,7 +88,6 @@ class JourneyService
             $start = [$input['start']['lon'], $input['start']['lat']];
             $end = [$input['end']['lon'], $input['end']['lat']];
             $idTrack = null;
-
 
 
             //Checking if there are stops in the journey
