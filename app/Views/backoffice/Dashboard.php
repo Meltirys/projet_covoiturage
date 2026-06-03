@@ -27,8 +27,7 @@
 <script src="<?= base_url('js/user-ban.js') ?>"></script>
 <script src="<?= base_url('js/user-suppression.js') ?>"></script>
 <?php if (session()->user_role == 3): ?>
-    <
-        script src="<?= base_url('js/user-role.js') ?>">
+    <script src="<?= base_url('js/user-role.js') ?>">
         </script>
     <?php endif; ?>
 

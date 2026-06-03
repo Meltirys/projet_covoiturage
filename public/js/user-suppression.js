@@ -1,5 +1,6 @@
 let searchInputSuppression = document.querySelector("#searchInputSuppression")
 
+//Creating the paginator
 userSuppressionPaginator = new Paginator(
     document.querySelector('#researchResultsSuppression'),
     document.querySelector('#paginationSuppression'),

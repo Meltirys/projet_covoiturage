@@ -109,6 +109,9 @@ $routes->group('', ['filter' => 'authadmin'], function ($routes) {
 
 //Super-admin part
 $routes->group('', ['filter' => 'authsuper'], function ($routes) {
+
+    $routes->get('backoffice', [DashboardController::class, 'index']); //Show dashboard
+
     $routes->get('userRole', [UserRoleController::class, 'index']);
     $routes->get('searchUserWP/(:alpha)', [SearchController::class, 'searchUserWithPerm']);
     $routes->get('getAllPermissions', [UserRoleController::class, 'getAllPermissions']);

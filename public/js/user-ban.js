@@ -1,5 +1,12 @@
 let searchInputBan = document.querySelector("#searchUserBan")
 
+//Creating the paginator
+userBanPaginator = new Paginator(
+    document.querySelector('#researchResultsBan'),
+    document.querySelector('#paginationBan'),
+    renderBanResults
+)
+
 //Creating the listener on text input
 searchInputBan.addEventListener("input", () => {
     //Only fetches when there are more than two characters entered
@@ -11,16 +18,13 @@ searchInputBan.addEventListener("input", () => {
                 }
             })
             .then(datas => {
-                allResults = datas;
-                currentPage = 1;
-                displayPage(currentPage, renderBanResults, "researchResultsBan");
-                displayPagination("paginationSuppression", renderBanResults, "researchResultsBan");
+                userBanPaginator.load(datas)
             })
             .catch(e => console.log(e))
     }
 })
 
-function renderBanResults(datas) {
+function renderBanResults(element) {
 
     //Creating the elements
     let userDiv = document.createElement('div')
@@ -59,7 +63,7 @@ function renderBanResults(datas) {
     userInfos.appendChild(userMail)
     userDiv.appendChild(userInfos)
     userDiv.appendChild(suppressionForm)
-    
+
     return userDiv
 
 }

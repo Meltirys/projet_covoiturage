@@ -2,10 +2,10 @@
     <header class="flex justify-between items-center mb-6">
         <h2 class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Modifier le rôle d'un utilisateur</h2>
     </header>
-    <?php if (session()->getFlashdata('success')): ?>
+    <?php if (session()->getFlashdata('role_success')): ?>
         <p class="text-xs text-green-600 border border-green-200 rounded px-3 py-2 mb-4"><?= session()->getFlashdata('role_success') ?></p>
     <?php endif ?>
-    <?php if (session()->getFlashdata('error')): ?>
+    <?php if (session()->getFlashdata('role_error')): ?>
         <p class="text-xs text-red-500 border border-red-200 rounded px-3 py-2 mb-4"><?= session()->getFlashdata('role_error') ?></p>
     <?php endif ?>
     <div class="mb-6">
@@ -13,7 +13,6 @@
         <input type="text" id="searchUserRole" placeholder="Entrez le nom de l'utilisateur recherché" class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-babyblue focus:border-transparent">
     </div>
 
-    <div id="researchResultsRole" class="space-y-3">
-
-    </div>
+    <div id="researchResultsRole" class="space-y-3"></div>
+    <div id="paginationRole"></div>
 </main>
