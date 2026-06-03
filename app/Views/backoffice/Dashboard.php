@@ -28,6 +28,7 @@
 <script src="<?= base_url('js/pagination.js') ?>"></script>
 <script src="<?= base_url('js/user-ban.js') ?>"></script>
 <script src="<?= base_url('js/user-suppression.js') ?>"></script>
+<script src="<?= base_url('js/user-validation.js') ?>"></script>
 <script src="<?= base_url('js/report-manager.js') ?>"></script>
 <?php if (session()->user_role == 3): ?>
     <script src="<?= base_url('js/user-role.js') ?>">
@@ -35,9 +36,14 @@
 <?php endif; ?>
 
 <script>
-    const reports = <?= json_encode($reports) ?>; //Preloading the reports
+    const reports = <?= json_encode($reports) ?> //Preloading the reports
     console.log(reports)
-    reportManagementPaginator.load(reports);
+    reportManagementPaginator.load(reports)
+
+
+    const toValidateUsers = <?= json_encode($users) ?> //Preloading the users to validate
+    console.log(toValidateUsers)
+    validationPaginator.load(toValidateUsers)
 </script>
 
 

@@ -11,27 +11,10 @@
         <p class="text-xs text-red-500 mb-3"><?= session()->getFlashdata('user_validation_error') ?></p>
     <?php endif ?>
 
-    <?php if (empty($users)): ?>
-        <p class="text-sm text-grey text-center py-6">Aucun utilisateur en attente de validation.</p>
-    <?php else: ?>
-        <div class="flex flex-col gap-3">
-            <?php foreach ($users as $user): ?>
-                <div class="flex justify-between items-center bg-white border border-[rgba(37,63,114,0.25)] rounded-xl px-4 py-3">
-                    <div>
-                        <p class="text-sm font-poppins text-bluegrey"><?= esc($user['first_name']) ?> <?= esc($user['last_name']) ?></p>
-                        <p class="text-xs text-grey"><?= esc($user['email']) ?></p>
-                    </div>
-                    <div class="flex gap-2">
-                        <?= form_open('userValidation/accept/' . $user['id_user']) ?>
-                            <button type="submit" class="text-xs text-green-600 border border-green-200 rounded-full px-3 py-1 hover:bg-green-50 transition-colors duration-150">Accepter</button>
-                        <?= form_close() ?>
-                        <?= form_open('userValidation/refuse/' . $user['id_user']) ?>
-                            <button type="submit" class="text-xs text-red-500 border border-red-200 rounded-full px-3 py-1 hover:bg-red-50 transition-colors duration-150">Refuser</button>
-                        <?= form_close() ?>
-                    </div>
-                </div>
-            <?php endforeach ?>
-        </div>
-    <?php endif ?>
+    <div id="resultsValidation" class="space-y-3">
 
+    </div>
+    <div id="paginationValidation" class="space-x-3">
+
+    </div>
 </main>
