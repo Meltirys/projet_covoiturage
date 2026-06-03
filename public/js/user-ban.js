@@ -11,7 +11,7 @@ userBanPaginator = new Paginator(
 searchInputBan.addEventListener("input", () => {
     //Only fetches when there are more than two characters entered
     if (searchInputBan.value.length > 2) {
-        fetch('/searchUser/' + searchInputBan.value)
+        fetch('/searchUser/' + encodeURIComponent(searchInputBan.value))
             .then((r) => {
                 if (r.ok) {
                     return r.json()

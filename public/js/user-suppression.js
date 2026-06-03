@@ -11,7 +11,7 @@ userSuppressionPaginator = new Paginator(
 searchInputSuppression.addEventListener("input", () => {
     //Only fetches when there are more than two characters entered
     if (searchInputSuppression.value.length > 2) {
-        fetch('/searchUser/' + searchInputSuppression.value)
+        fetch('/searchUser/' + encodeURIComponent(searchInputSuppression.value))
             .then((r) => {
                 if (r.ok) {
                     return r.json()

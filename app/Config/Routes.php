@@ -103,7 +103,7 @@ $routes->group('', ['filter' => 'authadmin'], function ($routes) {
     $routes->post('user/delete/(:num)', [UserController::class, 'delete']); //Deleting an user
     $routes->post('user/ban/(:num)', [UserController::class, 'ban']); //Banning an user
 
-    $routes->get('searchUser/(:alpha)', [SearchController::class, 'searchUser']);
+    $routes->get('searchUser/(:any)', [SearchController::class, 'searchUser']);
     $routes->get('debug', [RequestController::class, 'create']);
 });
 
@@ -113,7 +113,7 @@ $routes->group('', ['filter' => 'authsuper'], function ($routes) {
     $routes->get('backoffice', [DashboardController::class, 'index']); //Show dashboard
 
     $routes->get('userRole', [UserRoleController::class, 'index']);
-    $routes->get('searchUserWP/(:alpha)', [SearchController::class, 'searchUserWithPerm']);
+    $routes->get('searchUserWP/(:any)', [SearchController::class, 'searchUserWithPerm']);
     $routes->get('getAllPermissions', [UserRoleController::class, 'getAllPermissions']);
 
     $routes->post('user/updateRole/(:num)', [UserRoleController::class, 'updateUserRole']);

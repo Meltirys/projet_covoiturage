@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 searchInputRole.addEventListener("input", () => {
                     //Only fetches when there are more than two characters entered
                     if (searchInputRole.value.length > 2) {
-                        fetch('/searchUserWP/' + searchInputRole.value)
+                        fetch('/searchUserWP/' + encodeURIComponent(searchInputRole.value))
                             .then((r) => {
                                 if (r.ok) {
                                     return r.json()
