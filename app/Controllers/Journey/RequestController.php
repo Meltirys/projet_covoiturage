@@ -46,8 +46,7 @@ class RequestController extends BaseController
         return view('itinerary/show/RequestShowView', [
             'request' => $request, 
             'author' => $author,
-            'ownRequest' => $ownRequest,
-            ]);
+            'ownRequest' => $ownRequest,]);
     }
 
 
