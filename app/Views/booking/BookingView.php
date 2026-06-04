@@ -1,13 +1,16 @@
+<?= $this->extend('layouts/main') ?> 
+<?= $this->section('content') ?>
+
 <header class="flex justify-between items-center mb-6">
     <h2 class="text-xs tracking-[0.15em] text-bluegrey uppercase">Réserver le trajet</h2>
 </header>
 
 <div class="bg-white border border-babyblue rounded-xl px-4 py-3 mb-4 flex flex-col gap-2">
-    <p class="text-xs text-grey">Trajet #<?= esc($journey['id_journey_drive']) ?></p>
+    <p class="text-xs text-grey">Trajet de <?= esc($journey['departure_city']) ?> → <?= esc($journey['arrival_city']) ?> par <?= esc($journey['driver_name']) ?></p>
     <p class="text-sm font-poppins text-bluegrey">Départ : <?= esc($journey['departure']) ?></p>
     <p class="text-sm font-poppins text-bluegrey">Arrivée : <?= esc($journey['estimated_arrival']) ?></p>
     <span class="text-xs text-bluegrey bg-lightblue rounded-full px-3 py-0.5 w-fit">
-        <?= esc($journey['number_of_place']) ?> place(s) disponible(s)
+        <?= esc($journey['available_seats']) ?> place(s) disponible(s)
     </span>
 </div>
 
@@ -37,3 +40,5 @@
         <?= form_close() ?>
     <?php endif ?>
 <?php endif ?>
+
+<?= $this->endSection() ?>

@@ -107,6 +107,14 @@ class BookingController extends BaseController
             return redirect()->to('/')
                 ->with('error', 'Trajet introuvable');
         }
+        $seatPicked = (int) model('BookingModel')
+            ->selectSum('seat_taken')
+            ->where('id_journey_drive', $id_journey_drive)
+            ->where('deletion_date IS NULL')
+            ->get()->getRow()->seat_taken;
+
+        $journey['available_seats'] = $journey['number_of_place'] - $seatPicked;
+
         // Enriching journey with location names, driver info and booking status
         $locationModel = model('LocationModel');
         $userModel = model('UserModel');
@@ -203,7 +211,6 @@ class BookingController extends BaseController
                 'passenger_email'      => $infos['passenger_email'],
                 'passenger_mobile'     => $infos['passenger_mobile'],
             ]);
-
         } catch (\Exception $e) {
             log_message('error', 'Erreur envoi mail : ' . $e->getMessage());
         }
