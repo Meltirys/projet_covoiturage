@@ -189,10 +189,8 @@ class BookingController extends BaseController
         try {
             //Preparing the mail
             $mailService = new MailService();
-            log_message('OK', 'Passage dans le try du mail');
             $infos = $this->gatherMailInfos($idBooking);
 
-            log_message('OK', 'Informations gathered');
 
             //Gathering the infos for the mail
             $mailService->sendBookingRequest($infos['driver_email'], [
@@ -206,7 +204,6 @@ class BookingController extends BaseController
                 'passenger_mobile'     => $infos['passenger_mobile'],
             ]);
 
-            log_message('OK', 'Mail envoyé');
         } catch (\Exception $e) {
             log_message('error', 'Erreur envoi mail : ' . $e->getMessage());
         }
