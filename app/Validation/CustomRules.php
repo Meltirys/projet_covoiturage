@@ -140,5 +140,8 @@ class CustomRules
         return password_verify($old_password, $userInfo['password']);
     }
 
-    public function isValidAddress(string $address): bool {}
+    public function notSameLocation(mixed $value, string $params, array $data): bool
+    {
+        return $data[$params] !== $value;
+    }
 }

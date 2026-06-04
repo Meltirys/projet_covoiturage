@@ -29,7 +29,7 @@
             type="text" name="drive[end][address]" id="drive-end"
             value="<?= esc(old('drive.end.address')) ?>"
             placeholder="Entrez votre destination" required>
-        <?php $endError = $errors['end.address'] ?? $errors['end.label'] ?? $errors['end.lat'] ?? $errors['end.lon'] ?? $errors['end.city'] ?? $errors['end.postcode'] ?? null;
+        <?php $endError = $errors['end.address'] ?? $errors['end.label'] ?? $errors['end.lat'] ?? $errors['end.lon'] ?? $errors['end.city'] ?? $errors['end.postcode'] ?? $errors['end'] ?? null;
         if ($endError): ?>
             <span class="text-xs text-red-500"><?= esc($endError) ?></span>
         <?php endif ?>
