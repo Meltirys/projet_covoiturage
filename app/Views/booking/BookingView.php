@@ -1,6 +1,3 @@
-<?= $this->extend('layouts/main') ?> 
-<?= $this->section('content') ?>
-
 <header class="flex justify-between items-center mb-6">
     <h2 class="text-xs tracking-[0.15em] text-bluegrey uppercase">Réserver le trajet</h2>
 </header>
@@ -40,5 +37,3 @@
         <?= form_close() ?>
     <?php endif ?>
 <?php endif ?>
-
-<?= $this->endSection() ?>

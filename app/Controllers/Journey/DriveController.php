@@ -84,6 +84,14 @@ class DriveController extends BaseController
             throw new PageNotFoundException('Cannot find the news item: ' . $slug);
         }
 
+        $seatPicked = (int) model('BookingModel')
+            ->selectSum('seat_taken')
+            ->where('id_journey_drive', $slug)
+            ->where('deletion_date IS NULL')
+            ->get()->getRow()->seat_taken;
+
+        $data['journey']['available_seats'] = $data['journey']['number_of_place'] - $seatPicked;
+
         //Reformating the dates
         $data['journey']['departure'] = format_date_fr($data['journey']['departure']);
         $data['journey']['estimated_arrival'] = format_date_fr($data['journey']['estimated_arrival']);

@@ -10,6 +10,7 @@
     <?php endif; ?>
 
     <div>
+
         <span><?= esc($journey['departure']) ?></span>
 
         <div>
