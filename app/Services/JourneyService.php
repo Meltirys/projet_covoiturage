@@ -532,16 +532,16 @@ class JourneyService
 
     /**
      * Compare un lieu donné aux lieux appartenant à un itinéraire et retourne 
-     * @param array $location Lieu à
+     * @param array $location
      * @param array $route
-     * @param bool $dist Si true, retourne également la distance au point le plus proche (défaut = false).
-     * Si activé retourne sous format ['location' = (int) id, 'distance' = (int) distance]
-     * @return mixed Si succès, retourne l'id_location trouvé | null sinon
+     * @param int $maxDistance défaut : 1000
+     * @return array format : ['route_position' => index route, 'distance' => distance, 'id_location' => id du lieu] | vide [] si aucune correspondance
      */
-    private function matchUserPointToRoute(array $location, array $route, bool $dist = false): mixed
+    private function matchUserPointToRoute(array $location, array $route, int $maxDistance = 1000): array
     {
         $bestDistance = PHP_INT_MAX; // var to find shortest distance
         $bestIndex = null;
+        $bestLocation = null;
 
         // Pour chaque lieu sur l'itinéraire
         foreach ($route as $order => $routeLocation) {
@@ -553,17 +553,18 @@ class JourneyService
                 $routeLocation['longitude']
             );
 
-            if ($distance < 1000 && $distance < $bestDistance) {
+            if ($distance < $maxDistance && $distance < $bestDistance) {
                 $bestDistance = $distance; // remplace la meilleure distance par la nouvelle meilleure distance
                 $bestIndex = $order;
+                $bestLocation = $routeLocation;
             }
         }
 
-        if ($dist === true && $bestIndex !== null) {
-            return ['location' => (int) $bestIndex, 'distance' => (int) $bestDistance];
+        if ($bestIndex === null) {
+            return [];
         }
 
-        return $bestIndex;
+        return ['route_position' => $bestIndex, 'distance' => $bestDistance, 'id_location' => $bestLocation];
     }
 
     /**
@@ -572,7 +573,7 @@ class JourneyService
      * @param array $stagesByJourney Liste des stages des journeys
      * @param array $departureLocation Lieu de départ donné par l'utilisateur
      * @param array $arrivalLocation Lieu d'arrivée donné par l'utilisateur
-     * @return array Tableau contenant les journeys 
+     * @return array Tableau contenant les journeys
      */
     private function matchJourneys(array $journeys, array $stagesByJourney, array $departureLocation, array $arrivalLocation): array
     {
@@ -586,17 +587,20 @@ class JourneyService
             $route = $this->buildJourneyRoute($journey, $stages);
 
             // Compare le début et la fin du trajet de l'utilisateur aux lieux appartenant à la route du trajet actuel
-            $departureIndex = null;
-            $arrivalIndex = null;
+            $departureMatch = null;
+            $arrivalMatch = null;
 
-            $departureIndex = $this->matchUserPointToRoute($departureLocation, $route);
-            $arrivalIndex = $this->matchUserPointToRoute($arrivalLocation, $route);
+            $departureMatch = $this->matchUserPointToRoute($departureLocation, $route);
+            $arrivalMatch = $this->matchUserPointToRoute($arrivalLocation, $route);
 
             if (
-                $departureIndex !== null
-                && $arrivalIndex !== null
-                && $departureIndex < $arrivalIndex
+                empty($departureMatch)
+                && empty($arrivalMatch)
+                && $departureMatch['route_position'] < $arrivalMatch['route_position']
             ) {
+                // ajout des données du calcul de distance ()
+                $journey['departure_match'] = $departureMatch;
+                $journey['arrival_match'] = $arrivalMatch;
                 $matches[] = $journey;
             }
         }
