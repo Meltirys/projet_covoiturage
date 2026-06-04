@@ -102,6 +102,13 @@ class BookingController extends BaseController
 
         $journeyModel = new JourneyDriveModel();
         $journey = $journeyModel->find($id_journey_drive);
+        $locationModel = model('LocationModel');
+        $userModel = model('UserModel');
+
+        $journey['departure_city'] = $locationModel->getFormattedAddress($journey['start']);
+        $journey['arrival_city']   = $locationModel->getFormattedAddress($journey['end']);
+        $driver = $userModel->find($journey['driver']);
+        $journey['driver_name'] = $driver['first_name'] . ' ' . substr($driver['last_name'], 0, 1) . '.';
         if (!$journey) {
             return redirect()->to('/')
                 ->with('error', 'Trajet introuvable');
@@ -123,6 +130,12 @@ class BookingController extends BaseController
         if (!$journey) {
             return redirect()->back()
                 ->with('error', 'Trajet introuvable');
+        }
+
+        // If the journey is already done
+        if ($journey['departure'] <= date('Y-m-d H:i:s')) {
+            return redirect()->back()
+            ->with('error', 'Impossible de réserver un trajet déjà passé');
         }
         // If is the driver
         if ($journey['driver'] == session('user_id')) {
@@ -234,6 +247,11 @@ class BookingController extends BaseController
                 ->with('error', 'Action non autorisée');
         }
 
+        if($journey['departure'] <= date('Y-m-d H:i:s')) {
+            return redirect()->to('mes-reservations')
+            ->with('error', 'Impossible de valider une réservation d\'un trajet passé');
+        }
+
         $bookingModel->update($id_booking, ['is_validated' => true]);
 
         //Preparing the mail service
@@ -270,6 +288,11 @@ class BookingController extends BaseController
         if (!$journey || $journey['driver'] != session('user_id')) {
             return redirect()->to('mes-reservations')
                 ->with('error', 'Action non autorisée');
+        }
+
+        if($journey['departure'] <= date('Y-m-d H:i:s')) {
+            return redirect()->to('mes-reservations')
+            ->with('error', 'Refus impossible sur un trajet déjà passé');
         }
 
         //Must be called before delete() because soft delete make booking unfindable with find()
