@@ -13,16 +13,21 @@ use DateTime;
 
 class JourneyService
 {
+    protected BaseConnection $db;
+
     private JourneyDriveModel $journeyDriveModel;
     private JourneyRequestModel $journeyRequestModel;
 
-    protected BaseConnection $db;
+    private LocationService $locationService;
+
+    private const MATCH_RADIUS_METERS = 1000;
 
     public function __construct()
     {
         $this->db = db_connect();
         $this->journeyDriveModel = model(JourneyDriveModel::class);
         $this->journeyRequestModel = model(JourneyRequestModel::class);
+        $this->locationService = service('locationService');
     }
 
     /**
@@ -34,13 +39,18 @@ class JourneyService
     public function createJourneyDrive(array $input, int $userId): int
     {
         $carModel       = model(CarModel::class);
-        $locationService = service('locationService');
         $stageModel     = model(StagesModel::class);
-        $trackModel = model('TrackModel');
+        $trackModel = model(TrackModel::class);
+        $locationService = $this->locationService;
 
-        $input['start-datetime'] = (new DateTime(
+        $departureTime = (new DateTime(
             $input['start-date'] . ' ' . $input['start-time']
         ))->format('Y-m-d H:i:s');
+        $now = new DateTime();
+
+        if ($departureTime >= $now) {
+            throw new \DomainException('La date de départ doit être dans le futur');
+        }
 
         $this->db->transBegin();
 
@@ -111,7 +121,7 @@ class JourneyService
                         $row['lon'],
                         $row['lat']
                     ];
-                }, $stops); //Rebuilbing each stops into a new array and saving only the lat on lon values
+                }, $stops); //Rebuilding each stop into a new array and saving only the lat on lon values
 
                 $idTrack = $trackService->saveTrack($start, $end, $trackStop); //Creating the track in the database
             } else {
@@ -125,13 +135,13 @@ class JourneyService
 
             //Calculating the estimated_arrival
             $duration = (int) $trackModel->find($idTrack)['duration']; //Retrieving the duration of the track
-            $date = new \DateTime($input['start-datetime']);
+            $date = new \DateTime($departureTime);
             $date->modify('+' . $duration . ' seconds');
             $estimatedArrival = $date->format('Y-m-d H:i:s');
 
             $journeyData = [
                 'number_of_place'   => (int) $input['seats'],
-                'departure'         => $input['start-datetime'],
+                'departure'         => $departureTime,
                 'estimated_arrival' => $estimatedArrival,
                 'id_car'            => $input['car'],
                 'start'             => $startLocationId,
@@ -213,6 +223,7 @@ class JourneyService
         }
 
         $journeyId = $journey['id'];
+        $trackId = $journey['id_track'];
 
         try {
             // Suppression des réservations
@@ -221,12 +232,12 @@ class JourneyService
             // Suppression des étapes
             $stageModel->where('id_journey_drive', $journeyId)->delete();
 
-            // Suppression du tracking
-            $trackId = $journey['id_track'];
-            $trackModel->delete($trackId);
-
             // Suppression du trajet
             $this->journeyDriveModel->delete($journeyId);
+
+            // Suppression du tracking
+            $trackModel->delete($trackId);
+
 
             // Transaction safety
             if ($this->db->transStatus() === false) {
@@ -248,8 +259,8 @@ class JourneyService
      */
     public function searchJourneyDrive(array $input): array
     {
-        $locationService = service('locationService');
         $stageModel = model(StagesModel::class);
+        $locationService = $this->locationService;
 
         // searchJourneyDrive()
         // ├── resolve departure location
@@ -260,13 +271,13 @@ class JourneyService
         // └── return results
 
         // 1. Lieux de départ et arrivée
-        $departureAddress = $input['start']['label'] ?? $input['start.address'] ?? '';
-        $departureCity = $input['start']['city'] ?? $input['start.city'] ?? '';
-        $departurePostcode = $input['start']['postcode'] ?? $input['start.postcode'] ?? '';
+        $departureAddress = $input['start']['label'] ?? '';
+        $departureCity = $input['start']['city'] ??  '';
+        $departurePostcode = $input['start']['postcode'] ?? '';
 
-        $arrivalAddress = $input['end']['label'] ?? $input['end.address'] ?? '';
-        $arrivalCity = $input['end']['city'] ?? $input['end.city'] ?? '';
-        $arrivalPostcode = $input['end']['postcode'] ?? $input['end.postcode'] ?? '';
+        $arrivalAddress = $input['end']['label'] ?? '';
+        $arrivalCity = $input['end']['city'] ?? '';
+        $arrivalPostcode = $input['end']['postcode'] ??  '';
 
         $departureLocation = $locationService->findLocationByAddress(
             $departureAddress,
@@ -357,7 +368,7 @@ class JourneyService
      */
     public function createJourneyRequest(array $input, int $userId): int
     {
-        $locationService = service('locationService');
+        $locationService = $this->locationService;
 
         $this->db->transBegin();
 
@@ -546,10 +557,10 @@ class JourneyService
      * Compare un lieu donné aux lieux appartenant à un itinéraire et retourne 
      * @param array $location
      * @param array $route
-     * @param int $maxDistance défaut : 1000
-     * @return array format : ['route_position' => index route, 'distance' => distance, 'id_location' => id du lieu] | vide [] si aucune correspondance
+     * @param int $maxDistance défaut : self::MATCH_RADIUS_METERS
+     * @return array format : ['route_position' => $bestIndex, 'distance' => $bestDistance, 'id_location' => $bestLocation] | vide [] si aucune correspondance
      */
-    private function matchUserPointToRoute(array $location, array $route, int $maxDistance = 1000): array
+    private function matchUserPointToRoute(array $location, array $route, int $maxDistance = self::MATCH_RADIUS_METERS): array
     {
         $bestDistance = PHP_INT_MAX; // var to find shortest distance
         $bestIndex = null;
@@ -568,7 +579,7 @@ class JourneyService
             if ($distance < $maxDistance && $distance < $bestDistance) {
                 $bestDistance = $distance; // remplace la meilleure distance par la nouvelle meilleure distance
                 $bestIndex = $order;
-                $bestLocation = $routeLocation;
+                $bestLocation = $routeLocation['id_location'];
             }
         }
 
@@ -606,8 +617,8 @@ class JourneyService
             $arrivalMatch = $this->matchUserPointToRoute($arrivalLocation, $route);
 
             if (
-                empty($departureMatch)
-                && empty($arrivalMatch)
+                !empty($departureMatch)
+                && !empty($arrivalMatch)
                 && $departureMatch['route_position'] < $arrivalMatch['route_position']
             ) {
                 // ajout des données du calcul de distance ()
