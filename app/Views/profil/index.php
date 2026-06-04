@@ -125,14 +125,16 @@
                             <p class="text-sm text-grey">Aucun trajet à venir.</p>
                         <?php else: ?>
                             <?php foreach ($driveUpcoming as $journey): ?>
-                                <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
-                                    <div>
-                                        <?php // Villes — à décommenter quand Track sera défini 
-                                        ?>
-                                        <p class="nav-m"><?= format_date_fr($journey['departure']) ?></p>
-                                    </div>
-                                    <span class="nav-d bg-lightblue rounded-full px-3 py-0.5"><?= esc($journey['places_restantes']) ?>/<?= esc($journey['number_of_place']) ?></span>
-                                </li>
+                                <a href="drive/show/<?= $journey['id_journey_drive'] ?>">
+                                    <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
+                                        <div>
+                                            <?php // Villes — à décommenter quand Track sera défini 
+                                            ?>
+                                            <p class="nav-m"><?= format_date_fr($journey['departure']) ?></p>
+                                        </div>
+                                        <span class="nav-d bg-lightblue rounded-full px-3 py-0.5"><?= esc($journey['places_restantes']) ?>/<?= esc($journey['number_of_place']) ?></span>
+                                    </li>
+                                </a>
                             <?php endforeach; ?>
                         <?php endif; ?>
                         <!-- boucle trajets passés -->
@@ -163,24 +165,26 @@
                                 <p class="text-sm text-grey">Aucune demande en attente.</p>
                             <?php else: ?>
                                 <?php foreach ($pendingRequests as $request): ?>
-                                    <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
-                                        <div>
-                                            <?php // Villes — à décommenter quand Track sera défini 
-                                            ?>
-                                            <p class="nav-m"><?= esc($request['passenger_name']) ?></p>
-                                            <p class="text-xs text-grey"><?= esc($request['journey']['departure']) ?></p>
-                                        </div>
-                                        <div class="flex gap-2">
-                                            <form action="<?= site_url('reservation/accepter/' . $request['id_booking']) ?>" method="post">
-                                                <?= csrf_field() ?>
-                                                <button type="submit" class="text-xs text-bluegrey border border-babyblue rounded-full px-3 py-1 hover:bg-lightblue transition-colors duration-150">✓</button>
-                                            </form>
-                                            <form action="<?= site_url('reservation/refuser/' . $request['id_booking']) ?>" method="post">
-                                                <?= csrf_field() ?>
-                                                <button type="submit" class="text-xs text-red-500 border border-red-200 rounded-full px-3 py-1 hover:bg-red-50 transition-colors duration-150">✗</button>
-                                            </form>
-                                        </div>
-                                    </li>
+                                    <a href="drive/show/<?= $request['id_journey_drive'] ?>">
+                                        <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
+                                            <div>
+                                                <?php // Villes — à décommenter quand Track sera défini 
+                                                ?>
+                                                <p class="nav-m"><?= esc($request['passenger_name']) ?></p>
+                                                <p class="text-xs text-grey"><?= esc($request['journey']['departure']) ?></p>
+                                            </div>
+                                            <div class="flex gap-2">
+                                                <form action="<?= site_url('reservation/accepter/' . $request['id_booking']) ?>" method="post">
+                                                    <?= csrf_field() ?>
+                                                    <button type="submit" class="text-xs text-bluegrey border border-babyblue rounded-full px-3 py-1 hover:bg-lightblue transition-colors duration-150">✓</button>
+                                                </form>
+                                                <form action="<?= site_url('reservation/refuser/' . $request['id_booking']) ?>" method="post">
+                                                    <?= csrf_field() ?>
+                                                    <button type="submit" class="text-xs text-red-500 border border-red-200 rounded-full px-3 py-1 hover:bg-red-50 transition-colors duration-150">✗</button>
+                                                </form>
+                                            </div>
+                                        </li>
+                                    </a>
                                 <?php endforeach; ?>
                             <?php endif; ?>
 
@@ -212,19 +216,21 @@
                             <p class="text-sm text-grey">Aucun trajet confirmé.</p>
                         <?php else: ?>
                             <?php foreach ($upcomingConfirmed as $booking): ?>
-                                <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
-                                    <div>
-                                        <?php // Villes — à décommenter quand Track sera défini 
-                                        ?>
-                                        <p class="nav-m"><?= format_date_fr($booking['journey']['departure']) ?></p>
-                                        <p class="text-xs text-grey"><?= esc($booking['driver_name']) ?></p>
-                                    </div>
-                                    <span class="text-xs font-poppins text-white bg-green-500 rounded-full px-3 py-0.5">Confirmé</span>
-                                    <form action="<?= site_url('reservation/annuler/' . $booking['id_booking']) ?>" method="post">
-                                        <?= csrf_field() ?>
-                                        <button type="submit" class="text-xs text-red-500 border border-red-200 rounded-full px-3 py-1 hover:bg-red-50 transition-colors duration-150">Annuler</button>
-                                    </form>
-                                </li>
+                                <a href="drive/show/<?= $booking['id_journey_drive'] ?>">
+                                    <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
+                                        <div>
+                                            <?php // Villes — à décommenter quand Track sera défini 
+                                            ?>
+                                            <p class="nav-m"><?= format_date_fr($booking['journey']['departure']) ?></p>
+                                            <p class="text-xs text-grey"><?= esc($booking['driver_name']) ?></p>
+                                        </div>
+                                        <span class="text-xs font-poppins text-white bg-green-500 rounded-full px-3 py-0.5">Confirmé</span>
+                                        <form action="<?= site_url('reservation/annuler/' . $booking['id_booking']) ?>" method="post">
+                                            <?= csrf_field() ?>
+                                            <button type="submit" class="text-xs text-red-500 border border-red-200 rounded-full px-3 py-1 hover:bg-red-50 transition-colors duration-150">Annuler</button>
+                                        </form>
+                                    </li>
+                                </a>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </ul>
@@ -235,19 +241,21 @@
                             <p class="text-sm text-grey">Aucune demande en attente.</p>
                         <?php else: ?>
                             <?php foreach ($upcomingPending as $booking): ?>
-                                <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
-                                    <div>
-                                        <?php // Villes — à décommenter quand Track sera défini 
-                                        ?>
-                                        <p class="nav-m"><?= format_date_fr($booking['journey']['departure']) ?></p>
-                                        <p class="text-xs text-grey"><?= esc($booking['driver_name']) ?></p>
-                                    </div>
-                                    <span class="text-xs font-poppins text-white bg-orange-400 rounded-full px-3 py-0.5">En attente</span>
-                                    <form action="<?= site_url('reservation/annuler/' . $booking['id_booking']) ?>" method="post">
-                                        <?= csrf_field() ?>
-                                        <button type="submit" class="text-xs text-red-500 border border-red-200 rounded-full px-3 py-1 hover:bg-red-50 transition-colors duration-150">Annuler</button>
-                                    </form>
-                                </li>
+                                <a href="drive/show/<?= $booking['id_journey_drive'] ?>">
+                                    <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
+                                        <div>
+                                            <?php // Villes — à décommenter quand Track sera défini 
+                                            ?>
+                                            <p class="nav-m"><?= format_date_fr($booking['journey']['departure']) ?></p>
+                                            <p class="text-xs text-grey"><?= esc($booking['driver_name']) ?></p>
+                                        </div>
+                                        <span class="text-xs font-poppins text-white bg-orange-400 rounded-full px-3 py-0.5">En attente</span>
+                                        <form action="<?= site_url('reservation/annuler/' . $booking['id_booking']) ?>" method="post">
+                                            <?= csrf_field() ?>
+                                            <button type="submit" class="text-xs text-red-500 border border-red-200 rounded-full px-3 py-1 hover:bg-red-50 transition-colors duration-150">Annuler</button>
+                                        </form>
+                                    </li>
+                                </a>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </ul>
@@ -258,15 +266,17 @@
                             <p class="text-sm text-grey">Aucun trajet passé.</p>
                         <?php else: ?>
                             <?php foreach ($pastJourney as $booking): ?>
-                                <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
-                                    <div>
-                                        <?php // Villes — à décommenter quand Track sera défini 
-                                        ?>
-                                        <p class="nav-m"><?= format_date_fr($booking['journey']['departure']) ?></p>
-                                        <p class="text-xs text-grey"><?= esc($booking['driver_name']) ?></p>
-                                    </div>
-                                    <span class="text-xs font-poppins text-grey bg-lightblue rounded-full px-3 py-0.5"><?= $booking['is_validated'] ? 'Effectué' : 'Refusé' ?></span>
-                                </li>
+                                <a href="drive/show/<?= $booking['id_journey_drive'] ?>">
+                                    <li class="flex justify-between items-center bg-white border border-babyblue rounded-xl px-4 py-3">
+                                        <div>
+                                            <?php // Villes — à décommenter quand Track sera défini 
+                                            ?>
+                                            <p class="nav-m"><?= format_date_fr($booking['journey']['departure']) ?></p>
+                                            <p class="text-xs text-grey"><?= esc($booking['driver_name']) ?></p>
+                                        </div>
+                                        <span class="text-xs font-poppins text-grey bg-lightblue rounded-full px-3 py-0.5"><?= $booking['is_validated'] ? 'Effectué' : 'Refusé' ?></span>
+                                    </li>
+                                </a>
                             <?php endforeach; ?>
                         <?php endif; ?>
                     </ul>

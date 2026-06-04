@@ -11,13 +11,29 @@
     </span>
 </div>
 
-<?= form_open('reservation') ?>
-<input type="hidden" name="id_journey_drive" value="<?= esc($journey['id_journey_drive']) ?>">
-<input type="hidden" name="seat_taken" value="1">
+<?php if (!$journey['is_driver']): ?>
 
-<div class="flex justify-center mt-4">
-    <button type="submit" class="border border-babyblue text-bluegrey bg-white text-sm font-medium px-6 py-2 rounded-full hover:bg-bluegrey hover:text-white transition-all duration-200">
-        Valider la réservation
-    </button>
-</div>
-<?= form_close() ?>
+    <?php if ($journey['has_booked']): ?>
+        <?= form_open('reservation/annuler/' . $journey['has_booked']['id_booking']) ?>
+        <input type="hidden" name="id_journey_drive" value="<?= esc($journey['id_journey_drive']) ?>">
+        <input type="hidden" name="seat_taken" value="1">
+
+        <div class="flex justify-center mt-4">
+            <button type="submit" class="border border-babyblue text-bluegrey bg-white text-sm font-medium px-6 py-2 rounded-full hover:bg-bluegrey hover:text-white transition-all duration-200">
+                Annuler la réservation
+            </button>
+        </div>
+
+    <?php else: ?>
+        <?= form_open('reservation') ?>
+        <input type="hidden" name="id_journey_drive" value="<?= esc($journey['id_journey_drive']) ?>">
+        <input type="hidden" name="seat_taken" value="1">
+
+        <div class="flex justify-center mt-4">
+            <button type="submit" class="border border-babyblue text-bluegrey bg-white text-sm font-medium px-6 py-2 rounded-full hover:bg-bluegrey hover:text-white transition-all duration-200">
+                Valider la réservation
+            </button>
+        </div>
+        <?= form_close() ?>
+    <?php endif ?>
+<?php endif ?>

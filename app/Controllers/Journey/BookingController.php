@@ -75,7 +75,7 @@ class BookingController extends BaseController
             $requests = $bookingModel
                 ->where('id_journey_drive', $journey['id_journey_drive'])
                 ->where('is_validated', false)
-                ->where('is_driver', false)
+                ->where('driver !=', session()->user_id)
                 ->findAll();
             foreach ($requests as $r) {
                 $passenger = $userModel->find($r['id_user']);
@@ -166,29 +166,34 @@ class BookingController extends BaseController
                 ->with('error', implode(' ', $validator->getErrors()));
         }
 
-        $idBooking = $bookingModel->insert(array_merge($data, [
-            'is_validated'  => false,
-            'is_driver'     => false,
-            'deletion_date' => null,
-        ]));
+        $idBooking = $bookingModel->save($data);
 
-        //Preparing the mail
-        $mailService = new MailService();
-        $infos = $this->gatherMailInfos($idBooking);
+        try {
+            //Preparing the mail
+            $mailService = new MailService();
+            log_message('OK', 'Passage dans le try du mail');
+            $infos = $this->gatherMailInfos($idBooking);
 
-        //Gathering the infos for the mail
-        $mailService->sendBookingRequest($infos['driver_email'], [
-            'driver_name'          => $infos['driver_name'],
-            'journey_date'         => $infos['departure'],
-            'journey_departure'    => $infos['start_address'],
-            'journey_arrival'      => $infos['end_address'],
-            'journey_seats'        => $availableSeat,
-            'passenger_name'       => $infos['passenger_name'],
-            'passenger_email'      => $infos['passenger_email'],
-            'passenger_mobile'     => $infos['passenger_mobile'],
-        ]);
+            log_message('OK', 'Informations gathered');
 
-        return redirect()->to('mes-reservations')
+            //Gathering the infos for the mail
+            $mailService->sendBookingRequest($infos['driver_email'], [
+                'driver_name'          => $infos['driver_name'],
+                'journey_date'         => $infos['departure'],
+                'journey_departure'    => $infos['start_address'],
+                'journey_arrival'      => $infos['end_address'],
+                'journey_seats'        => $availableSeat,
+                'passenger_name'       => $infos['passenger_name'],
+                'passenger_email'      => $infos['passenger_email'],
+                'passenger_mobile'     => $infos['passenger_mobile'],
+            ]);
+
+            log_message('OK', 'Mail envoyé');
+        } catch (\Exception $e) {
+            log_message('error', 'Erreur envoi mail : ' . $e->getMessage());
+        }
+
+        return redirect()->back()
             ->with('success', 'Réservation réussie');
     }
 
