@@ -266,6 +266,25 @@ class BookingController extends BaseController
                 ->with('error', 'Impossible de valider une réservation d\'un trajet passé');
         }
 
+        // Cheking if seats are still available
+
+        $seatPicked = (int) $bookingModel
+            ->selectSum('seat_taken')
+            ->where('id_journey_drive', $journey['id_journey_drive'])
+            ->where('is_validated', true)
+            ->where('deletion_date IS NULL')
+            ->get()->getRow()->seat_taken;
+        if ($journey['number_of_place'] - $seatPicked < 1) {
+            return redirect()->to('mes-reservations')
+            ->with('error', 'Aucune place disponible sur le trajet');
+        }
+
+        // Checking user validation if already booking
+
+        if($booking['is_validated']) {
+            return redirect()->to('mes-reservations')
+            ->with('error', 'Ce trajet à déjà été validé');
+        }
 
         $bookingModel->update($id_booking, ['is_validated' => true]);
 
