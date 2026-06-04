@@ -228,8 +228,9 @@ class JourneyService
         }
     }
 
+
     /**
-     * 
+     * Gets a list of journeys matching the user's request
      * @param array $input The user's inputs
      * @return array $journeys The matching journeys
      */
@@ -242,14 +243,9 @@ class JourneyService
         // ├── resolve departure location
         // ├── resolve arrival location
         // ├── retrieve candidate journeys by date
+        // ├── filter by geographical proximity
         // ├── filter by seats
         // └── return results
-
-        // Progress steps :
-        // 1. Allow matching against all stages/intermediary stops.
-        // 2. Verify stop order (start before end).
-        // 3. Later add route proximity search using the GeoJSON LineString.
-        // 4. If the project becomes large, move the geographic filtering into spatial SQL.
 
         // 1. Lieux de départ et arrivée
         $departureAddress = $input['start']['label'] ?? $input['start.address'] ?? '';
@@ -284,22 +280,29 @@ class JourneyService
 
         $journeys = $this->journeyDriveModel
             ->select('JourneyDrive.*, 
-                departure_location.address AS departure_address,
-                departure_city.postcode AS departure_postcode,
-                departure_city.name AS departure_city,
-                arrival_location.address AS arrival_address,
-                arrival_city.postcode AS arrival_postcode,
-                arrival_city.name AS arrival_city,
-                Car.brand AS car_brand,
-                Car.model AS car_model,
-                Users.first_name AS driver_first_name,
-                Users.last_name AS driver_last_name')
+                    departure_location.address AS departure_address,
+                    departure_location.latitude AS departure_lat,
+                    departure_location.longitude AS departure_lon,
+                    departure_city.postcode AS departure_postcode,
+                    departure_city.name AS departure_city,
+                    arrival_location.address AS arrival_address,
+                    arrival_location.latitude AS arrival_lat,
+                    arrival_location.longitude AS arrival_lon,
+                    arrival_city.postcode AS arrival_postcode,
+                    arrival_city.name AS arrival_city,
+                    Car.brand AS car_brand,
+                    Car.model AS car_model,
+                    Users.first_name AS driver_first_name,
+                    Users.last_name AS driver_last_name,
+                    Track.distance AS distance,
+                    Track.duration AS duration')
             ->join('Location AS departure_location', 'departure_location.id_location = JourneyDrive.start')
             ->join('City AS departure_city', 'departure_city.id_city = departure_location.id_city')
             ->join('Location AS arrival_location', 'arrival_location.id_location = JourneyDrive.end')
             ->join('City AS arrival_city', 'arrival_city.id_city = arrival_location.id_city')
             ->join('Users', 'Users.id_user = JourneyDrive.driver')
             ->join('Car', 'Car.id_car = JourneyDrive.id_car')
+            ->join('Track', 'Track.id_track = JourneyDrive.id_track')
             ->where('JourneyDrive.departure >=', $startDay)
             ->where('JourneyDrive.departure <', $endDay)
             ->findAll();
@@ -311,6 +314,8 @@ class JourneyService
         $journeyIds = array_column($journeys, 'id_journey_drive');
 
         $stages = $stageModel
+            ->select('Stages.*, Location.latitude, Location.longitude')
+            ->join('Location', 'Location.id_location = Stages.id_location')
             ->whereIn('id_journey_drive', $journeyIds)
             ->orderBy('id_journey_drive')
             ->orderBy('order')
@@ -323,44 +328,14 @@ class JourneyService
         }
 
         // 3. Acquisition des journeys correspondants par itinéraire
-        $matches = [];
-
-        // Pour chaque journey, range les étapes dans l'ordre et regarde si les étapes correspondent à la requête de l'utilisateur, puis range le journey dans $matches[]
-        foreach ($journeys as $journey) {
-            $stages = $stagesByJourney[$journey['id_journey_drive']] ?? [];
-
-            // Range la route dans l'ordre
-            $route = [];
-
-            $route[] = $journey['start'];
-
-            foreach ($stages as $stage) {
-                $route[] = $stage['id_location'];
-            }
-
-            $route[] = $journey['end'];
-
-            // Retourne l'index des lieux demandés par l'utilisateur si ils se trouvent dans l'itinéraire du journey (false si pas de correspondance)
-            $departureIndex = array_search($departureLocation['id_location'], $route);
-            $arrivalIndex = array_search($arrivalLocation['id_location'], $route);
-
-            if (
-                $departureIndex !== false
-                && $arrivalIndex !== false
-                && $departureIndex < $arrivalIndex
-            ) {
-                $matches[] = $journey;
-            }
-        }
+        $matches = $this->matchJourneys($journeys, $stagesByJourney, $departureLocation, $arrivalLocation);
 
         // 4. Filtre par disponibilité des places
-        $journeys = $this->filterAvailableSeats(
-            $matches,
-            $requestedSeats
-        );
+        $journeys = $this->filterAvailableSeats($matches, $requestedSeats);
 
         return $journeys;
     }
+
 
     /**
      * Attempts to create every element of the requester's journey
@@ -370,9 +345,7 @@ class JourneyService
      */
     public function createJourneyRequest(array $input, int $userId): int
     {
-        $carModel       = model(CarModel::class);
         $locationService = service('locationService');
-        $stageModel     = model(StagesModel::class);
 
         $this->db->transBegin();
 
@@ -483,7 +456,7 @@ class JourneyService
      * @param int $requestedSeats Amount of requested seats
      * @return array $newJourneys The filtered journeys with enough free seats
      */
-    public function filterAvailableSeats(array $journeys, int $requestedSeats): array
+    private function filterAvailableSeats(array $journeys, int $requestedSeats): array
     {
         if (empty($journeys)) {
             return [];
@@ -522,5 +495,112 @@ class JourneyService
         }
 
         return $filteredJourneys;
+    }
+
+    /**
+     * Sorts an itinerary by its route order
+     * @param array $journey An itinerary containing a 'start' location id, 'departure_lat', 'departure_lon', and an 'end' location id, 'arrival_lat' and 'arrival_lon'
+     * @param array $stages The corresponding itinerary's stages each containing 'id_location', 'latitude' and 'longitude'
+     * @return array The route sorted in order of passage
+     */
+    private function buildJourneyRoute(array $journey, array $stages): array
+    {
+        $route = [];
+
+        $route[] = [
+            'id_location' => $journey['start'],
+            'latitude' => $journey['departure_lat'],
+            'longitude' => $journey['departure_lon']
+        ];
+
+        foreach ($stages as $stage) {
+            $route[] = [
+                'id_location' => $stage['id_location'],
+                'latitude' => $stage['latitude'],
+                'longitude' => $stage['longitude']
+            ];
+        }
+
+        $route[] = [
+            'id_location' => $journey['end'],
+            'latitude' => $journey['arrival_lat'],
+            'longitude' => $journey['arrival_lon']
+        ];
+
+        return $route;
+    }
+
+    /**
+     * Compare un lieu donné aux lieux appartenant à un itinéraire et retourne 
+     * @param array $location Lieu à
+     * @param array $route
+     * @param bool $dist Si true, retourne également la distance au point le plus proche (défaut = false).
+     * Si activé retourne sous format ['location' = (int) id, 'distance' = (int) distance]
+     * @return mixed Si succès, retourne l'id_location trouvé | null sinon
+     */
+    private function matchUserPointToRoute(array $location, array $route, bool $dist = false): mixed
+    {
+        $bestDistance = PHP_INT_MAX; // var to find shortest distance
+        $bestIndex = null;
+
+        // Pour chaque lieu sur l'itinéraire
+        foreach ($route as $order => $routeLocation) {
+            // Obtiens la distance entre le lieu utilisateur et le lieu de l'itinéraire
+            $distance = haversine_distance(
+                $location['latitude'],
+                $location['longitude'],
+                $routeLocation['latitude'],
+                $routeLocation['longitude']
+            );
+
+            if ($distance < 1000 && $distance < $bestDistance) {
+                $bestDistance = $distance; // remplace la meilleure distance par la nouvelle meilleure distance
+                $bestIndex = $order;
+            }
+        }
+
+        if ($dist === true && $bestIndex !== null) {
+            return ['location' => (int) $bestIndex, 'distance' => (int) $bestDistance];
+        }
+
+        return $bestIndex;
+    }
+
+    /**
+     * Trouve les journeys qui correspondent géographiquement à la requête de l'utilisateur
+     * @param array $journeys Liste de journeys
+     * @param array $stagesByJourney Liste des stages des journeys
+     * @param array $departureLocation Lieu de départ donné par l'utilisateur
+     * @param array $arrivalLocation Lieu d'arrivée donné par l'utilisateur
+     * @return array Tableau contenant les journeys 
+     */
+    private function matchJourneys(array $journeys, array $stagesByJourney, array $departureLocation, array $arrivalLocation): array
+    {
+        $matches = [];
+
+        foreach ($journeys as $journey) {
+            // $stages = [chaque stage dans stageByJourney qui a l'id_journey_drive du journey actuel]
+            $stages = $stagesByJourney[$journey['id_journey_drive']] ?? [];
+
+            // Range l'itinéraire par l'ordre de passage
+            $route = $this->buildJourneyRoute($journey, $stages);
+
+            // Compare le début et la fin du trajet de l'utilisateur aux lieux appartenant à la route du trajet actuel
+            $departureIndex = null;
+            $arrivalIndex = null;
+
+            $departureIndex = $this->matchUserPointToRoute($departureLocation, $route);
+            $arrivalIndex = $this->matchUserPointToRoute($arrivalLocation, $route);
+
+            if (
+                $departureIndex !== null
+                && $arrivalIndex !== null
+                && $departureIndex < $arrivalIndex
+            ) {
+                $matches[] = $journey;
+            }
+        }
+
+        return $matches;
     }
 }
