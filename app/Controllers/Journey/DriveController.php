@@ -27,18 +27,19 @@ class DriveController extends BaseController
         * free-seats (default 1)
         * (optional) filters
         */
+
         helper('form');
 
-        $data = $this->request->getGet();
+        $getData = $this->request->getGet();
 
-        if (isset($data['start'])) {
+        if (isset($getData['start'])) {
             // Validation
             $validator = new SearchJourneyDriveValidator;
 
-            // if (! $validator->validate($data)) {
-            //     $data['errors'] = $validator->getErrors();
+            // if (! $validator->validate($getData)) {
+            //     $getData['errors'] = $validator->getErrors();
 
-            //     return view('itinerary/search/SearchView', $data);
+            //     return view('itinerary/search/SearchView', $getData);
             // }
 
             // Logic
@@ -46,7 +47,7 @@ class DriveController extends BaseController
                 $journeyService = service('journeyService');
 
                 // === Ajouter options quand possible !
-                $data['journeys'] = $journeyService->searchJourneyDrive($data);
+                $data['journeys'] = $journeyService->searchJourneyDrive($getData);
             } catch (\Throwable $e) {
                 // system error
                 log_message('error', $e->getMessage());
@@ -58,7 +59,7 @@ class DriveController extends BaseController
         }
 
 
-        return view('itinerary/search/SearchView', $data);
+        return view('itinerary/search/SearchView');
     }
 
     /**
