@@ -15,7 +15,7 @@ class CreateUserReportTable extends Migration
                 'unsigned'       => true,
                 'auto_increment' => true,
             ],
-            'date'        => ['type' => 'DATE', 'null' => false, 'default' => new RawSql('CURRENT_TIMESTAMP')],
+            'date'        => ['type' => 'DATETIME', 'null' => false, 'default' => new RawSql('CURRENT_TIMESTAMP')],
             'comment'     => ['type' => 'TEXT'],
             'is_resolved' => ['type' => 'BOOLEAN', 'null' => false, 'default' => false],
             'reporter'    => ['type' => 'INT', 'null' => false, 'unsigned' => true],
