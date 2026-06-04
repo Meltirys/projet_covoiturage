@@ -85,6 +85,18 @@ class JourneyService
                 $input['end']['lon'] ?? null
             );
 
+            //Checking if there duplicate journey
+            $existingJ = $this->journeyDriveModel
+                ->where('driver', $userId)
+                ->where('start', $startLocationId)
+                ->where('end', $endLocationId)
+                ->where('departure', $input['start-datetime'])
+                ->where('deletion_date IS NULL')
+                ->first();
+            if ($existingJ) {
+                throw new \DomainException('Vous avez déjà proposer un trajet identique');
+            }
+
             // 3. Generating the track
             $trackService = service('TrackService');
             $start = [$input['start']['lon'], $input['start']['lat']];
