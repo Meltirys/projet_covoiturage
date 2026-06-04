@@ -64,8 +64,7 @@ class DriveController extends BaseController
 
     /**
      * Displays the page for a specific trip
-     * 
-     * parameter : itinerary id
+     * @param ?string $slug défaut : null | itinerary id
      */
     public function show(?string $slug = null)
     {
@@ -187,14 +186,18 @@ class DriveController extends BaseController
 
     /**
      * Updates an existing itinerary
-     * 
-     * parameter : itinerary id
+     * @param int $id The journey's id
      */
-    public function update($id) {}
+    public function update(int $id)
+    {
+        /*
+         * Inputs :
+         * 
+         */
+    }
 
     /**
      * Deletes an existing itinerary
-     * 
      * @param int $id The journey's id
      */
     public function delete(int $id)
