@@ -1,5 +1,5 @@
 class Paginator {
-    #ITEMS_PER_PAGE = 10;
+    #ITEMS_PER_PAGE = 5;
     #currentPage = 1;
     #allResults = [];
     #renderItem;
