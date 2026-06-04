@@ -123,8 +123,6 @@ class CreateJourneyDriveValidator extends BaseValidator
             ],
             'start-date' => $dateRules,
             'start-time' => $timeRules,
-            'end-date' => $dateRules,
-            'end-time' => $timeRules,
             'options'   => [
                 'rules' => 'permit_empty',
                 'errors' => [],

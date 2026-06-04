@@ -425,7 +425,16 @@ class UserSeeder extends Seeder
                 'year' => 1958,
                 'number_of_seat' => 5,
                 'id_user' => 1
-            ]
+            ],
+            [
+                'brand' => 'FSO',
+                'model' => 'Warszawa',
+                'color' => 'Rouge',
+                'year' => 1958,
+                'number_of_seat' => 5,
+                'id_user' => 2
+            ],
+
         ];
 
         $this->db->table('Users')->insertBatch($data);

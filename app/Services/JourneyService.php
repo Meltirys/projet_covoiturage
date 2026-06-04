@@ -36,13 +36,10 @@ class JourneyService
         $carModel       = model(CarModel::class);
         $locationService = service('locationService');
         $stageModel     = model(StagesModel::class);
+        $trackModel = model('TrackModel');
 
         $input['start-datetime'] = (new DateTime(
             $input['start-date'] . ' ' . $input['start-time']
-        ))->format('Y-m-d H:i:s');
-
-        $input['end-datetime'] = (new DateTime(
-            $input['end-date'] . ' ' . $input['end-time']
         ))->format('Y-m-d H:i:s');
 
         $this->db->transBegin();
@@ -113,12 +110,17 @@ class JourneyService
                 throw new \RuntimeException('Impossible de créer le tracé du trajet');
             }
             // 4. Journey
-            $userId = session()->get('user_id');
+
+            //Calculating the estimated_arrival
+            $duration = (int) $trackModel->find($idTrack)['duration']; //Retrieving the duration of the track
+            $date = new \DateTime($input['start-datetime']);
+            $date->modify('+' . $duration . ' seconds');
+            $estimatedArrival = $date->format('Y-m-d H:i:s');
 
             $journeyData = [
                 'number_of_place'   => (int) $input['seats'],
                 'departure'         => $input['start-datetime'],
-                'estimated_arrival' => $input['end-datetime'],
+                'estimated_arrival' => $estimatedArrival,
                 'id_car'            => $input['car'],
                 'start'             => $startLocationId,
                 'end'               => $endLocationId,

@@ -78,7 +78,7 @@
 </div>
 <!--  -->
 
-<!-- Date départ / Heure départ -->
+<!-- Date départ -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
 
     <div class="flex flex-col gap-1">
@@ -100,29 +100,6 @@
             <span class="text-xs text-red-500"><?= esc($errors['start-time']) ?></span>
         <?php endif ?>
     </div>
-</div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
-    <!-- Date arrivée / Heure arrivée -->
-    <div class="flex flex-col gap-1">
-        <label for="drive-end-date" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Date d'arrivée</label>
-        <input type="date" name="drive[end-date]" id="drive-end-date"
-            value="<?= esc(old('drive.end-date')) ?>"
-            class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
-        <?php if (isset($errors['end-date'])): ?>
-            <span class="text-xs text-red-500"><?= esc($errors['end-date']) ?></span>
-        <?php endif ?>
-    </div>
-
-    <div class="flex flex-col gap-1">
-        <label for="drive-end-time" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Heure d'arrivée</label>
-        <input type="time" name="drive[end-time]" id="drive-end-time"
-            value="<?= esc(old('drive.end-time')) ?>"
-            class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
-        <?php if (isset($errors['end-time'])): ?>
-            <span class="text-xs text-red-500"><?= esc($errors['end-time']) ?></span>
-        <?php endif ?>
-    </div>
-
 </div>
 <!--  -->
 
