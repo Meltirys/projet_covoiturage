@@ -96,7 +96,7 @@ class CreateJourneyDriveValidator extends BaseValidator
             'end.lon' => $lonRules,
 
             'end' => [
-                'rules' => 'notSameLocation[start]',
+                'rules' => 'notSame[start]',
                 'errors' => [
                     'notSameLocation' => 'L\'adresse d\'arrivée ne doit pas être la même que celle du départ',
                 ]

@@ -140,7 +140,15 @@ class CustomRules
         return password_verify($old_password, $userInfo['password']);
     }
 
-    public function notSameLocation(mixed $value, string $params, array $data): bool
+    /**
+     * Compare if two values are the same.
+     * @param mixed $value The value to test   
+     * @param string $params The parameter name we want to compare 
+     * @param array $data All the tested datas of the validator
+     * 
+     * @return bool true if the values are the same, false otherwise
+     */
+    public function notSame(mixed $value, string $params, array $data): bool
     {
         return $data[$params] !== $value;
     }
