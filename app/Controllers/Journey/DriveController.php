@@ -71,9 +71,11 @@ class DriveController extends BaseController
         helper('form');
         helper('french_helper');
 
+        $connectedUser = session()->user_id;
         $journeyModel = model(JourneyDriveModel::class);
         $userModel = model('UserModel');
         $carModel = model('CarModel');
+        $bookingModel = model('BookingModel');
 
         $data['journey'] = $journeyModel->getAllJourneyInfos($slug); //Retrieving the information of the journey
 
@@ -82,7 +84,7 @@ class DriveController extends BaseController
             throw new PageNotFoundException('Cannot find the news item: ' . $slug);
         }
 
-        //Reformation the dates
+        //Reformating the dates
         $data['journey']['departure'] = format_date_fr($data['journey']['departure']);
         $data['journey']['estimated_arrival'] = format_date_fr($data['journey']['estimated_arrival']);
 
@@ -100,7 +102,12 @@ class DriveController extends BaseController
 
         $data['driver_name'] = $userModel->getUserName($data['journey']['driver']);; // Retrieving the driver name
         $data['car'] = $carModel->find($data['journey']['id_car']); //Retrieving the car information
+        $data['journey']['is_driver'] = $data['journey']['driver'] == $connectedUser; //Checking if the user is the driver
 
+        //Checking if the user already booked the journey
+        $data['journey']['has_booked'] = $bookingModel->where('id_user', $connectedUser)
+            ->where('id_journey_drive', $slug)
+            ->first();
 
         return view('/itinerary/show/DriverJourneyView', $data);
     }

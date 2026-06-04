@@ -9,21 +9,10 @@ class UserSeeder extends Seeder
     public function run()
     {
 
-        $this->db->query('SET FOREIGN_KEY_CHECKS = 0'); //Temporarly desactivating que the foreign keys
-
-        // We empty the tables before inserting the new values
-        $this->db->table('Car')->truncate();
-        $this->db->table('Users')->truncate();
-        $this->db->table('UserPermission')->truncate();
-        $this->db->table('Location')->truncate();
-        $this->db->table('City')->truncate();
-
-        $this->db->query('SET FOREIGN_KEY_CHECKS = 1'); //Reactivating the foreign keys
-
         $this->db->table('City')->insert(['name' => 'Vannes', 'postcode' => '56000']);
         $cityId = $this->db->insertID();
         $this->db->table('Location')->insert([
-            'address'   => 'GRETA de Vannes',
+            'address'   => '20 Rue Winston Churchill',
             'latitude'  => 47.64829,
             'longitude' => -2.77503,
             'id_city'   => $cityId,

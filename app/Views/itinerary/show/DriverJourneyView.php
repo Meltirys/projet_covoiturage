@@ -2,6 +2,9 @@
 
 <?= $this->section('content') ?>
 <div>
+    <?php if (session()->getFlashdata('success')): ?>
+        <p class="text-xs text-green-600 border border-green-200 rounded px-3 py-2 mb-4"><?= session()->getFlashdata('success') ?></p>
+    <?php endif ?>
     <?php if (session()->getFlashdata('error')): ?>
         <p class="text-xs text-red-500 border border-red-200 rounded px-3 py-2 mb-4"><?= session()->getFlashdata('error') ?></p>
     <?php endif; ?>
@@ -11,11 +14,11 @@
 
         <div>
             <h1><?= esc($journey['departure_city']) ?>
-            <?php foreach($journey['waypoints'] as $waypoint) : ?>
+                <?php foreach ($journey['waypoints'] as $waypoint) : ?>
                     <span>-> <?= $waypoint ?></span>
-            <?php endforeach; ?>
-        </h1>
-            
+                <?php endforeach; ?>
+            </h1>
+
         </div>
 
         <div>
@@ -49,7 +52,6 @@
         </div>
 
     </div>
-
     <?= view('booking/BookingView', ['journey' => $journey]) ?>
 </div>
 <?= $this->endSection() ?>

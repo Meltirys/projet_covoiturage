@@ -24,5 +24,3 @@
     </button>
 </div>
 <?= form_close() ?>
-
-<?= $this->endSection() ?>
