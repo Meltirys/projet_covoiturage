@@ -8,6 +8,7 @@ use App\Models\JourneyDriveModel;
 use App\Models\UserModel;
 use App\Validators\BookingValidator;
 use App\Services\MailService;
+use PhpParser\Node\Expr\AssignOp\Mod;
 
 class BookingController extends BaseController
 {
@@ -106,6 +107,18 @@ class BookingController extends BaseController
             return redirect()->to('/')
                 ->with('error', 'Trajet introuvable');
         }
+        // Enriching journey with location names, driver info and booking status
+        $locationModel = model('LocationModel');
+        $userModel = model('UserModel');
+        $journey['departure_city'] = $locationModel->getFormattedAddress($journey['start']);
+        $journey['arrival_city']   = $locationModel->getFormattedAddress($journey['end']);
+        $driver = $userModel->find($journey['driver']);
+        $journey['driver_name']  = $driver['first_name'] . ' ' . substr($driver['last_name'], 0, 1) . '.';
+        $journey['is_driver']    = $journey['driver'] == session('user_id');
+        $journey['has_booked']   = model('BookingModel')
+            ->where('id_user', session('user_id'))
+            ->where('id_journey_drive', $id_journey_drive)
+            ->first();
         return view('booking/BookingView', ['journey' => $journey]);
     }
 
@@ -123,6 +136,11 @@ class BookingController extends BaseController
         if (!$journey) {
             return redirect()->back()
                 ->with('error', 'Trajet introuvable');
+        }
+        // If departure is already passed
+        if ($journey['departure'] <= date('Y-m-d H:i:s')) {
+            return redirect()->back()
+                ->with('error', 'Impossible de réserver un trajet déjà passé');
         }
         // If is the driver
         if ($journey['driver'] == session('user_id')) {
@@ -239,6 +257,12 @@ class BookingController extends BaseController
                 ->with('error', 'Action non autorisée');
         }
 
+        if ($journey['departure'] <= date('Y-m-d H:i:s')) {
+            return redirect()->to('mes-reservations')
+                ->with('error', 'Impossible de valider une réservation d\'un trajet passé');
+        }
+
+
         $bookingModel->update($id_booking, ['is_validated' => true]);
 
         //Preparing the mail service
@@ -276,6 +300,12 @@ class BookingController extends BaseController
             return redirect()->to('mes-reservations')
                 ->with('error', 'Action non autorisée');
         }
+
+        if ($journey['departure'] <= date('Y-m-d H:i:s')) {
+            return redirect()->to('mes-reservations')
+                ->with('error', 'Refus impossible sur un trajet déjà passé');
+        }
+
 
         //Must be called before delete() because soft delete make booking unfindable with find()
         $infos = $this->gatherMailInfos($id_booking, $booking['id_user']);

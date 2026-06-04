@@ -51,6 +51,7 @@ $error  = session()->getFlashdata('error');
                                 <p><strong>Places restantes :</strong> <?= esc($journey['available_seats'] ?? $journey['number_of_place']) ?></p>
                             </div>
                         </div>
+                        <a href="<?= site_url('reservation/' . $journey['id_journey_drive']) ?>">Réserver</a>
                     </div>
                 <?php endforeach ?>
             </div>
