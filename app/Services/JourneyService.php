@@ -237,12 +237,11 @@ class JourneyService
     {
         $locationService = service('locationService');
         $stageModel = model(StagesModel::class);
-        $bookingsModel = model(BookingModel::class);
 
         // searchJourneyDrive()
         // ├── resolve departure location
         // ├── resolve arrival location
-        // ├── retrieve candidate journeys by location and date
+        // ├── retrieve candidate journeys by date
         // ├── filter by seats
         // └── return results
 
@@ -279,50 +278,10 @@ class JourneyService
             return [];
         }
 
-        // 2. Date
-        // Intervalle de temps pour l'horaire/date de début des trajets qui seront affichés
-        // convert date to datetime range
-        $startDay = $searchDate . ' 00:00:00'; // début
-        $endDay = date('Y-m-d H:i:s', strtotime($startDay . ' +1 day')); // fin
+        // 2. Recherche des journeys correspondants par date
+        $startDay = $searchDate . ' 00:00:00';
+        $endDay = date('Y-m-d H:i:s', strtotime($startDay . ' +1 day'));
 
-        $journeys = $this->journeyDriveModel
-            ->where('JourneyDrive.departure >=', $startDay)
-            ->where('JourneyDrive.arrival <', $endDay)
-            ->findAll();
-
-        // Stages
-        foreach ($journeys as $journey) {
-            $stages = $stageModel
-                ->where('id_journey_drive', $journey['id_journey_drive'])
-                ->orderBy('order')
-                ->findAll();
-
-            $route = [];
-
-            $route[] = $journey['start'];
-
-            foreach ($stages as $stage) {
-                $route[] = $stage['id_location'];
-            }
-
-            $route[] = $journey['end'];
-
-            // Returns the order of the user's desired locations in the route if location included in itinerary 
-            $departureIndex = array_search($departureLocation['id_location'], $route);
-            $arrivalIndex = array_search($arrivalLocation['id_location'], $route);
-
-            if (
-                $departureIndex !== false
-                && $arrivalIndex !== false
-                && $departureIndex < $arrivalIndex
-            ) {
-                $matches[] = $journey;
-            }
-        }
-
-
-        // 3. Journeys
-        // Gathers all relevant data in journeys array
         $journeys = $this->journeyDriveModel
             ->select('JourneyDrive.*, 
                 departure_location.address AS departure_address,
@@ -341,11 +300,62 @@ class JourneyService
             ->join('City AS arrival_city', 'arrival_city.id_city = arrival_location.id_city')
             ->join('Users', 'Users.id_user = JourneyDrive.driver')
             ->join('Car', 'Car.id_car = JourneyDrive.id_car')
+            ->where('JourneyDrive.departure >=', $startDay)
+            ->where('JourneyDrive.departure <', $endDay)
             ->findAll();
 
-        // 4. Filter seat availability
+        if (empty($journeys)) {
+            return [];
+        }
+
+        $journeyIds = array_column($journeys, 'id_journey_drive');
+
+        $stages = $stageModel
+            ->whereIn('id_journey_drive', $journeyIds)
+            ->orderBy('id_journey_drive')
+            ->orderBy('order')
+            ->findAll();
+
+        $stagesByJourney = [];
+
+        foreach ($stages as $stage) {
+            $stagesByJourney[$stage['id_journey_drive']][] = $stage;
+        }
+
+        // 3. Acquisition des journeys correspondants par itinéraire
+        $matches = [];
+
+        // Pour chaque journey, range les étapes dans l'ordre et regarde si les étapes correspondent à la requête de l'utilisateur, puis range le journey dans $matches[]
+        foreach ($journeys as $journey) {
+            $stages = $stagesByJourney[$journey['id_journey_drive']] ?? [];
+
+            // Range la route dans l'ordre
+            $route = [];
+
+            $route[] = $journey['start'];
+
+            foreach ($stages as $stage) {
+                $route[] = $stage['id_location'];
+            }
+
+            $route[] = $journey['end'];
+
+            // Retourne l'index des lieux demandés par l'utilisateur si ils se trouvent dans l'itinéraire du journey (false si pas de correspondance)
+            $departureIndex = array_search($departureLocation['id_location'], $route);
+            $arrivalIndex = array_search($arrivalLocation['id_location'], $route);
+
+            if (
+                $departureIndex !== false
+                && $arrivalIndex !== false
+                && $departureIndex < $arrivalIndex
+            ) {
+                $matches[] = $journey;
+            }
+        }
+
+        // 4. Filtre par disponibilité des places
         $journeys = $this->filterAvailableSeats(
-            $journeys,
+            $matches,
             $requestedSeats
         );
 
