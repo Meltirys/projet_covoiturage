@@ -107,6 +107,14 @@ class BookingController extends BaseController
             return redirect()->to('/')
                 ->with('error', 'Trajet introuvable');
         }
+        $seatPicked = (int) model('BookingModel')
+            ->selectSum('seat_taken')
+            ->where('id_journey_drive', $id_journey_drive)
+            ->where('deletion_date IS NULL')
+            ->get()->getRow()->seat_taken;
+
+        $journey['available_seats'] = $journey['number_of_place'] - $seatPicked;
+
         // Enriching journey with location names, driver info and booking status
         $locationModel = model('LocationModel');
         $userModel = model('UserModel');
@@ -203,7 +211,6 @@ class BookingController extends BaseController
                 'passenger_email'      => $infos['passenger_email'],
                 'passenger_mobile'     => $infos['passenger_mobile'],
             ]);
-
         } catch (\Exception $e) {
             log_message('error', 'Erreur envoi mail : ' . $e->getMessage());
         }
@@ -259,6 +266,25 @@ class BookingController extends BaseController
                 ->with('error', 'Impossible de valider une réservation d\'un trajet passé');
         }
 
+        // Cheking if seats are still available
+
+        $seatPicked = (int) $bookingModel
+            ->selectSum('seat_taken')
+            ->where('id_journey_drive', $journey['id_journey_drive'])
+            ->where('is_validated', true)
+            ->where('deletion_date IS NULL')
+            ->get()->getRow()->seat_taken;
+        if ($journey['number_of_place'] - $seatPicked < 1) {
+            return redirect()->to('mes-reservations')
+            ->with('error', 'Aucune place disponible sur le trajet');
+        }
+
+        // Checking user validation if already booking
+
+        if($booking['is_validated']) {
+            return redirect()->to('mes-reservations')
+            ->with('error', 'Ce trajet à déjà été validé');
+        }
 
         $bookingModel->update($id_booking, ['is_validated' => true]);
 
