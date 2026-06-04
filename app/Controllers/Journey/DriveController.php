@@ -179,16 +179,16 @@ class DriveController extends BaseController
     /**
      * Deletes an existing itinerary
      * 
-     * parameter : itinerary id
+     * @param int $id The journey's id
      */
-    public function delete($id)
+    public function delete(int $id)
     {
         $journeyService = service('journeyService');
 
         log_message('debug', 'Deleting journey...');
         try {
 
-            $journeyService->deleteJourney($id);
+            $journeyService->deleteJourneyDrive($id);
 
             log_message('debug', 'Journey deleted successfully.');
 
