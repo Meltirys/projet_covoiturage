@@ -12,6 +12,7 @@ use App\Models\CityModel;
 use App\Services\LocationService;
 use App\Validators\RegistrationValidator;
 use App\Services\MailService;
+use App\Validators\AvatarValidator;
 use App\Validators\UpdateUserInfos;
 use App\Validators\BanUserValidator;
 
@@ -179,7 +180,7 @@ class UserController extends BaseController
         $userModel = model(UserModel::class);
 
         /* 
-         * Tries to save a new user. 
+         * Tries to update an user. 
          * If there were errors, returns to view with them in the following format :
          * [ 'field1' => 'error message', 'field2' => 'error message', ]
          */
@@ -190,6 +191,19 @@ class UserController extends BaseController
                 ->with('errors', $errors)
                 ->withInput()
                 ->with('error', 'Une erreur est survenue lors de la sauvegarde de vos informations');
+        }
+
+        //Updating informations for the session
+        session()->set([
+            'user_first_name' => $user['first_name'],
+            'user_last_name' => $user['last_name'],
+
+        ]);
+        //Updating the avatar if a new one has been submitted
+        if (array_key_exists('avatar_filename', $user)) {
+            session()->set([
+                'avatar_filename' => $user['avatar_filename'],
+            ]);
         }
 
         return redirect()->to('/profil/modify')
@@ -231,6 +245,103 @@ class UserController extends BaseController
         //If no errors
         return redirect()->to('profil/changePassword')
             ->with('password_success', 'Mot de passe modifié avec succès.');
+    }
+
+    /**
+     * Update the avatar of the connected user
+     */
+    public function updateAvatar()
+    {
+
+        $validation = service('validation');
+
+        $validation->setRules([
+            'avatar' => [
+                'rules' => 'uploaded[avatar]|is_image[avatar]|mime_in[avatar,image/jpg,image/jpeg,image/png,image/webp]|max_size[avatar,2048]|max_dims[avatar,1920,1080]',
+                'errors' => [
+                    'is_image' => 'Le fichier doit être une image',
+                    'mime_in'  => 'Format accepté : jpg, jpeg, png, webp',
+                    'max_size' => 'L\'image ne doit pas dépasser 2Mo',
+                    'max_dims' => 'L\'image ne doit pas dépasser 1920x1080 pixels',
+                ]
+            ]
+        ]);
+
+        if (!$validation->withRequest($this->request)->run()) {
+            return redirect()->to('/profil/modify')
+                ->with('avatar_update_error', $validation->getErrors())
+                ->withInput();
+        }
+
+        $file = $this->request->getFile('avatar');
+        // --- Preparing the avatar ---
+        if ($file->isValid() && !$file->hasMoved()) {
+            // Generating a random name
+            $newName = $file->getRandomName();
+
+            //Saving the old avatar filename
+            $oldAvatar = session('avatar_filename');
+
+            // Moving the file in the desired directory
+            $file->move(ROOTPATH . 'public/img/avatars', $newName);
+
+            // Only saving the name of the file in the database
+            $avatarFilename = $newName;
+
+            $userModel = model('UserModel');
+
+            /* 
+         * Tries to update an user. 
+         * If there were errors, returns to view with them in the following format :
+         * [ 'field1' => 'error message', 'field2' => 'error message', ]
+         */
+            if (! $userModel->update(session()->user_id, [
+                'avatar_filename' => $avatarFilename
+            ])) {
+                $errors = $userModel->errors();
+
+                return redirect()->to('/profil/modify')
+                    ->with('errors', $errors)
+                    ->withInput()
+                    ->with('error', 'Une erreur est survenue lors de la sauvegarde de vos informations');
+            }
+
+            //Removing the old avatar
+            if ($oldAvatar && file_exists(ROOTPATH . 'public/img/avatars/' . $oldAvatar)) {
+                unlink(ROOTPATH . 'public/img/avatars/' . $oldAvatar);
+            }
+
+            //Updating the session with the new avatar
+            session()->set([
+                'avatar_filename' => $avatarFilename
+            ]);
+
+            return redirect()->to('/profil/modify')
+                ->with('success', 'Votre nouvel avatar est maintenant visible');
+        } else {
+            return redirect()->to('/profil/modify')
+                ->with('error', 'Une erreur est survenue lors de la sauvegarde de vos informations');
+        }
+    }
+
+    /**
+     * Delete the avatar of the connected user
+     */
+    public function deleteAvatar()
+    {
+        $oldAvatar = session('avatar_filename');
+
+        if ($oldAvatar && file_exists(ROOTPATH . 'public/img/avatars/' . $oldAvatar)) {
+            unlink(ROOTPATH . 'public/img/avatars/' . $oldAvatar);
+        }
+
+        $userModel = model('UserModel');
+        $userModel->update(session()->user_id, ['avatar_filename' => null]);
+
+        session()->set(['avatar_filename' => null]);
+
+        return redirect()->to('/profil/modify')
+            ->with('success', 'Avatar supprimé avec succès');
     }
 
     /**

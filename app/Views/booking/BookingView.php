@@ -31,7 +31,7 @@
 
         <div class="flex justify-center mt-4">
             <button type="submit" class="border border-babyblue text-bluegrey bg-white text-sm font-medium px-6 py-2 rounded-full hover:bg-bluegrey hover:text-white transition-all duration-200">
-                Valider la réservation
+                Demander une place
             </button>
         </div>
         <?= form_close() ?>

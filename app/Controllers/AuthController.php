@@ -57,6 +57,7 @@ class AuthController extends BaseController
                 'user_role' => $user['id_user_permission'],
                 'user_first_name' => $user['first_name'],
                 'user_last_name' => $user['last_name'],
+                'avatar_filename' => $user['avatar_filename'],
                 'logged_in' => true,
             ]);
 
@@ -90,4 +91,5 @@ class AuthController extends BaseController
 
         return view('auth/register_form');
     }
+    
 }

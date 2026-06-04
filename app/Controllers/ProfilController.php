@@ -28,7 +28,7 @@ class ProfilController extends BaseController
         $upcomingConfirmed = [];
         $upcomingPending   = [];
         $pastJourney       = [];
-        $passengerJourneyDone =0;
+        $passengerJourneyDone = 0;
         foreach ($allBookings as $booking) {
             $journey = $journeyModel->find($booking['id_journey_drive']);
             $booking['journey']     = $journey;
@@ -36,7 +36,7 @@ class ProfilController extends BaseController
             $booking['driver_name'] = $driver['first_name'] . ' ' . substr($driver['last_name'], 0, 1) . '.';
             if ($journey['departure'] < $today) {
                 $pastJourney[] = $booking;
-                if($booking['is_validated']) $passengerJourneyDone++; //Updating the stats
+                if ($booking['is_validated']) $passengerJourneyDone++; //Updating the stats
 
             } elseif ($booking['is_validated']) {
                 $upcomingConfirmed[] = $booking;
@@ -99,8 +99,12 @@ class ProfilController extends BaseController
 
         $data['user'] = $this->loadUserInfos();
 
+        //Retrieving the potential errors in the forms
         if (session()->getFlashdata('user_update_error')) {
             $data['errors'] = session()->getFlashdata('user_update_error');
+        }
+        if (session()->getFlashdata('avatar_update_error')) {
+            $data['errors'] = session()->getFlashdata('avatar_update_error');
         }
 
         return view('profil/modify', $data);

@@ -51,6 +51,8 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     //Profil
     $routes->get('profil/modify', [ProfilController::class, 'modify']);
     $routes->get('profil/changePassword', [ProfilController::class, 'showPasswordChange']);
+    $routes->post('user/avatar/update', [UserController::class, 'updateAvatar']);
+    $routes->post('user/avatar/delete', [UserController::class, 'deleteAvatar']);
 
     //User form routes
     $routes->post('user/update', [UserController::class, 'update']);

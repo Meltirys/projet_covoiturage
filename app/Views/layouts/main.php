@@ -38,9 +38,14 @@
             <div class="flex items-center gap-3">
                 <!-- Avatar desktop -->
                 <div class="hidden md:flex items-center gap-2 border border-sand rounded-full px-3 py-1">
-                    <span class="text-xs text-sand font-medium">
-                        <?= strtoupper(substr(session('user_first_name'), 0, 1)) ?><?= strtoupper(substr(session('user_last_name'), 0, 1)) ?>
-                    </span>
+                    <?php if (session('avatar_filename')): ?>
+                        <img src="<?= base_url('img/avatars/' . session('avatar_filename')) ?> " alt="Avatar">
+                    <?php else: ?>
+                        <span class="text-xs text-sand font-medium">
+                            <?= strtoupper(substr(session('user_first_name'), 0, 1)) ?><?= strtoupper(substr(session('user_last_name'), 0, 1)) ?>
+                        </span>
+                    <?php endif; ?>
+
                     <span class="text-xs text-babyblue"><?= session('user_first_name') ?></span>
                 </div>
                 <!-- Burger mobile -->

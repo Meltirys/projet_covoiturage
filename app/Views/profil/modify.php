@@ -12,7 +12,7 @@
          <p class="text-xs text-red-500 border border-red-200 rounded px-3 py-2 mb-4"><?= session()->getFlashdata('error') ?></p>
      <?php endif ?>
 
-     <?= form_open('/user/update') ?>
+     <?= form_open('/user/update', ['enctype' => "multipart/form-data"]) ?>
 
 
      <div class="bg-white border border-babyblue rounded-xl p-5 flex flex-col gap-3 mb-4">
@@ -71,12 +71,42 @@
              </div>
          </div>
 
+
      </div>
      <div class="flex justify-center mt-2">
          <button type="submit" name="submit" class="border border-babyblue text-bluegrey bg-white text-sm font-medium px-6 py-2 rounded-full hover:bg-bluegrey hover:text-white transition-all">
              Modifier
          </button>
      </div>
+
+     <?= form_close() ?>
+
+     <?= form_open('user/avatar/update', ['enctype' => "multipart/form-data"]) ?>
+     <div class="flex flex-col gap-1">
+         <?php if (session()->avatar_filename): ?>
+             <label class="text-xs tracking-widest text-bluegrey uppercase">Avatar actuel</label>
+             <img src="<?= base_url('img/avatars/' . session()->avatar_filename) ?>" alt="Avatar" />
+         <?php else: ?>
+             <p>Aucun avatar utilisé pour le moment</p>
+         <?php endif; ?>
+     </div>
+     <div class="flex flex-col gap-1">
+
+         <label class="text-xs tracking-widest text-bluegrey uppercase">Avatar</label>
+         <input class="w-full rounded-xl border border-babyblue px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-babyblue" type="file" name="avatar">
+         <?php if ($errors['avatar'] ?? null): ?><span class="text-xs text-red-500"><?= $errors['avatar'] ?></span><?php endif ?>
+     </div>
+     <div class="flex justify-center mt-2">
+         <button type="submit" name="submit" class="border border-babyblue text-bluegrey bg-white text-sm font-medium px-6 py-2 rounded-full hover:bg-bluegrey hover:text-white transition-all">
+             <?= session('avatar_filename') ? 'Modifier' : 'Ajouter'  ?>
+         </button>
+         <button type="submit" form="deleteAvatarForm" class="border border-babyblue text-bluegrey bg-white text-sm font-medium px-6 py-2 rounded-full hover:bg-bluegrey hover:text-white transition-all">
+             Supprimer l'avatar
+         </button>
+     </div>
+     <?= form_close() ?>
+
+     <?= form_open('user/avatar/delete', ['id' => 'deleteAvatarForm']) ?>
 
      <?= form_close() ?>
 
