@@ -12,90 +12,7 @@ use PhpParser\Node\Expr\AssignOp\Mod;
 
 class BookingController extends BaseController
 {
-    /**
-     * Handle journey bookings between passengers and drivers.
-     * 
-     *  Build the 6 below boards and send them to MyBookingView ;
-     * $upcomingConfirmed - Passenger validated upcoming bookings, (booking + journey[] + driver_name)
-     * $upconmingPending - Passenger pending upcoming bookings, (booking + journey[] + driver_name)
-     * $past Journey - Passenger past bookings, (booking + journey[] + driver_name)
-     * $driveUpcoming - Driver upcoming proposed Journey, (journey + place_restantes)
-     * $drivePast - Driver past proposed Journey, (journey)
-     * $pendingRequest - Pending booking request on driver's journey, (booking + journey[])
-     * 
-     */
-    public function index()
-    {
-        $bookingModel = new BookingModel();
-        $journeyModel = new JourneyDriveModel();
-        $userModel    = new UserModel();
-        $today = date('Y-m-d');
-
-        // Partie passager
-        $allBookings = $bookingModel->where('id_user', session('user_id'))->findAll();
-        $upcomingConfirmed = [];
-        $upcomingPending   = [];
-        $pastJourney       = [];
-        foreach ($allBookings as $booking) {
-            $journey = $journeyModel->find($booking['id_journey_drive']);
-            $booking['journey'] = $journey;
-            $driver = $userModel->find($journey['driver']);
-            $booking['driver_name'] = $driver['first_name'] . ' ' . substr($driver['last_name'], 0, 1) . '.';
-
-            if ($journey['departure'] < $today) {
-                $pastJourney[] = $booking;
-            } elseif ($booking['is_validated']) {
-                $upcomingConfirmed[] = $booking;
-            } else {
-                $upcomingPending[] = $booking;
-            }
-        }
-
-        // Partie conducteur
-
-        $myJourneys = $journeyModel->where('driver', session('user_id'))->findAll();
-        $driveUpcoming   = [];
-        $drivePast       = [];
-        $pendingRequests  = [];
-        foreach ($myJourneys as $journey) {
-            $placesOccupees = (int) $bookingModel
-                ->selectSum('seat_taken')
-                ->where('id_journey_drive', $journey['id_journey_drive'])
-                ->where('is_validated', true)
-                ->where('deletion_date IS NULL')
-                ->get()->getRow()->seat_taken;
-
-            $journey['places_restantes'] = $journey['number_of_place'] - $placesOccupees;
-
-            if ($journey['departure'] < $today) {
-                $drivePast[] = $journey;
-            } else {
-                $driveUpcoming[] = $journey;
-            }
-
-            $requests = $bookingModel
-                ->where('id_journey_drive', $journey['id_journey_drive'])
-                ->where('is_validated', false)
-                ->where('driver !=', session()->user_id)
-                ->findAll();
-            foreach ($requests as $r) {
-                $passenger = $userModel->find($r['id_user']);
-                $r['passenger_name'] = $passenger['first_name'] . ' ' . substr($passenger['last_name'], 0, 1) . '.';
-                $pendingRequests[] = array_merge($r, ['journey' => $journey]);
-            }
-        }
-
-        $data = [
-            'upcomingConfirmed' => $upcomingConfirmed,
-            'upcomingPending'   => $upcomingPending,
-            'pastJourney'       => $pastJourney,
-            'driveUpcoming'     => $driveUpcoming,
-            'drivePast'         => $drivePast,
-            'pendingRequests'   => $pendingRequests,
-        ];
-        return view('booking/MyBookingsView', $data);
-    }
-
+    
     // Display BookingView with journey details with id_journey_drive
     public function show($id_journey_drive)
     {
@@ -226,7 +143,7 @@ class BookingController extends BaseController
         $bookingModel = new BookingModel();
         $booking = $bookingModel->find($id_booking);
         if (! $booking || $booking['id_user'] != session('user_id')) {
-            return redirect()->to('mes-reservations')
+            return redirect()->to('myprofil')
                 ->with('error', 'Réservation introuvable');
         }
 
@@ -234,7 +151,7 @@ class BookingController extends BaseController
         $journey      = $journeyModel->find($booking['id_journey_drive']);
 
         if ($journey['departure'] <= date('Y-m-d H:i:s')) {
-            return redirect()->to('mes-reservations')
+            return redirect()->to('myprofil')
                 ->with('error', 'Impossible d\'annuler un trajet passé');
         }
 
@@ -251,18 +168,18 @@ class BookingController extends BaseController
         $journeyModel = new JourneyDriveModel();
         $booking = $bookingModel->find($id_booking);
         if (!$booking) {
-            return redirect()->to('mes-reservations')
+            return redirect()->to('myprofil')
                 ->with('error', 'Réservation introuvable');
         }
 
         $journey = $journeyModel->find($booking['id_journey_drive']);
         if (!$journey || $journey['driver'] != session('user_id')) {
-            return redirect()->to('mes-reservations')
+            return redirect()->to('myprofil')
                 ->with('error', 'Action non autorisée');
         }
 
         if ($journey['departure'] <= date('Y-m-d H:i:s')) {
-            return redirect()->to('mes-reservations')
+            return redirect()->to('myprofil')
                 ->with('error', 'Impossible de valider une réservation d\'un trajet passé');
         }
 
@@ -275,14 +192,14 @@ class BookingController extends BaseController
             ->where('deletion_date IS NULL')
             ->get()->getRow()->seat_taken;
         if ($journey['number_of_place'] - $seatPicked < 1) {
-            return redirect()->to('mes-reservations')
+            return redirect()->to('myprofil')
             ->with('error', 'Aucune place disponible sur le trajet');
         }
 
         // Checking user validation if already booking
 
         if($booking['is_validated']) {
-            return redirect()->to('mes-reservations')
+            return redirect()->to('myprofil')
             ->with('error', 'Ce trajet à déjà été validé');
         }
 
@@ -302,7 +219,7 @@ class BookingController extends BaseController
             'journey_arrival'      => $infos['end_address'],
             'driver_name'          => $infos['driver_name'],
         ]);
-        return redirect()->to('mes-reservations')
+        return redirect()->to('myprofil')
             ->with('success', 'Demande acceptée !');
     }
 
@@ -314,18 +231,18 @@ class BookingController extends BaseController
         $journeyModel = new JourneyDriveModel();
         $booking = $bookingModel->find($id_booking);
         if (!$booking) {
-            return redirect()->to('mes-reservations')
+            return redirect()->to('myprofil')
                 ->with('error', 'Réservation introuvable');
         }
 
         $journey = $journeyModel->find($booking['id_journey_drive']);
         if (!$journey || $journey['driver'] != session('user_id')) {
-            return redirect()->to('mes-reservations')
+            return redirect()->to('myprofil')
                 ->with('error', 'Action non autorisée');
         }
 
         if ($journey['departure'] <= date('Y-m-d H:i:s')) {
-            return redirect()->to('mes-reservations')
+            return redirect()->to('myprofil')
                 ->with('error', 'Refus impossible sur un trajet déjà passé');
         }
 
@@ -347,7 +264,7 @@ class BookingController extends BaseController
             'driver_name'          => $infos['driver_name'],
         ]);
 
-        return redirect()->to('mes-reservations')
+        return redirect()->to('myprofil')
             ->with('success', 'Réservation refusée');
     }
 
@@ -402,12 +319,12 @@ class BookingController extends BaseController
 
         $journey = $journeyModel->find($id_journey_drive);
         if (!$journey || $journey['driver'] != session('user_id')) {
-            return redirect()->to('mes-reservations')
+            return redirect()->to('myprofil')
                 ->with('error', 'Trajet introuvable ou action non autorisée');
         }
         // If the journey is no longer active
         if ($journey['departure'] <= date('Y-m-d H:i:s')) {
-            return redirect()->to('mes-reservations')
+            return redirect()->to('myprofil')
                 ->with('error', 'Impossible d\'annuler un trajet passé');
         }
 
@@ -421,7 +338,7 @@ class BookingController extends BaseController
         // Cancel the trip
         $journeyModel->update($id_journey_drive, ['deletion_date' => date('Y-m-d')]);
 
-        return redirect()->to('mes-reservations')
+        return redirect()->to('myprofil')
             ->with('success', 'Trajet annulé');
     }
 }

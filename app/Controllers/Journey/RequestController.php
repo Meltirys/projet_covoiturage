@@ -217,4 +217,5 @@ class RequestController extends BaseController
         return redirect()->to('request/list')
             ->with('success', 'Suppression réussite');
     }
+    
 }
