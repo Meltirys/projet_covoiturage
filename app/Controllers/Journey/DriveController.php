@@ -194,6 +194,7 @@ class DriveController extends BaseController
          * start-location,end-location, stages, departure datetime, estimated arrival datetime, id-car, number of seats
          */
         if ($id === null) {
+            log_message('debug', 'Journey ID not found');
             return view('404');
         }
 
@@ -216,6 +217,11 @@ class DriveController extends BaseController
 
         // Acquiring the data of the journey before edition
         $originalJourney = $journeyDriveModel->getAllJourneyInfos($id);
+
+        if ($originalJourney['driver'] !== session()->user_id) {
+            log_message('debug', 'Original journey doesn\'t belong to current user');
+            return view('404');
+        }
 
         // Logic
         try {
@@ -255,7 +261,7 @@ class DriveController extends BaseController
     public function delete(int $id)
     {
         $journeyService = service('journeyService');
-
+        // todo : add check to see if journey belongs to user
         log_message('debug', 'Deleting journey...');
         try {
 
