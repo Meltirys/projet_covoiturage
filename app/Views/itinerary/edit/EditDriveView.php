@@ -57,7 +57,7 @@ $selectedSeat = old('drive.seats', $journey['number_of_place']);
 
             if (!car) return;
 
-            for (let i = 1; i <= car.number_of_seat; i++) {
+            for (let i = 1; i <= car.car_number_of_seat; i++) {
                 const option = document.createElement("option");
 
                 option.value = i;
