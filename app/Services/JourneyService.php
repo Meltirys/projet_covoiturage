@@ -18,6 +18,8 @@ class JourneyService
     private JourneyDriveModel $journeyDriveModel;
     private JourneyRequestModel $journeyRequestModel;
 
+    private StagesModel $stagesModel;
+
     private LocationService $locationService;
 
     private const MATCH_RADIUS_METERS = 1000;
@@ -29,6 +31,7 @@ class JourneyService
         $this->db = db_connect();
         $this->journeyDriveModel = model(JourneyDriveModel::class);
         $this->journeyRequestModel = model(JourneyRequestModel::class);
+        $this->stagesModel = model(StagesModel::class);
         $this->locationService = service('locationService');
     }
 
@@ -41,44 +44,17 @@ class JourneyService
     public function createJourneyDrive(array $input, int $userId): int
     {
         $carModel       = model(CarModel::class);
-        $stageModel     = model(StagesModel::class);
-        $trackModel = model(TrackModel::class);
         $locationService = $this->locationService;
-
-        $departureTime = (new DateTime(
-            $input['start-date'] . ' ' . $input['start-time']
-        ))->format('Y-m-d H:i:s');
-        $now = new DateTime();
-
-        if ($departureTime >= $now) {
-            throw new \DomainException('La date de départ doit être dans le futur');
-        }
 
         $this->db->transBegin();
 
-        //Creating the stops
-        $stops = $input['stops'] ?? [];
+        // Removes all the empty stops and makes a new array with new indexes
+        $input['stops'] = $this->sanitizeStops($input['stops'] ?? []);
 
-        //Removing all the empty stops and making a new array with new indexes
-        $stops = array_values(array_filter($stops, function ($item) {
-            return !empty(array_filter($item));
-        }));
 
         try {
-
             // 1. Verify car ownership and seat amount
-            $car = $carModel
-                ->where('id_car', $input['car'])
-                ->where('id_user', $userId)
-                ->first();
-
-            if (! $car) {
-                throw new \DomainException('Voiture invalide');
-            }
-
-            if ($input['seats'] > $car['number_of_seat']) {
-                throw new \DomainException('Pas assez de places dans cette voiture');
-            }
+            $this->validateCar((int)$input['car'], (int)$input['driver'], (int)$input['seats']);
 
             // 2. Cities + Locations
             $startLocationId = $locationService->getOrCreate(
@@ -97,7 +73,7 @@ class JourneyService
                 $input['end']['lon'] ?? null
             );
 
-            //Checking if there duplicate journey
+            // Checking if there duplicate journey
             $existingJ = $this->journeyDriveModel
                 ->where('driver', $userId)
                 ->where('start', $startLocationId)
@@ -106,41 +82,22 @@ class JourneyService
                 ->where('deletion_date IS NULL')
                 ->first();
             if ($existingJ) {
-                throw new \DomainException('Vous avez déjà proposer un trajet identique');
+                throw new \DomainException('Vous avez déjà proposé un trajet identique');
             }
 
             // 3. Generating the track
-            $trackService = service('TrackService');
-            $start = [$input['start']['lon'], $input['start']['lat']];
-            $end = [$input['end']['lon'], $input['end']['lat']];
-            $idTrack = null;
-
-
-            //Checking if there are stops in the journey
-            if ($stops) {
-                $trackStop = array_map(function ($row) {
-                    return [
-                        $row['lon'],
-                        $row['lat']
-                    ];
-                }, $stops); //Rebuilding each stop into a new array and saving only the lat on lon values
-
-                $idTrack = $trackService->saveTrack($start, $end, $trackStop); //Creating the track in the database
-            } else {
-                $idTrack = $trackService->saveTrack($start, $end); //Creating the track in the database
-            }
+            $idTrack = $this->buildTrack($input);
 
             if (!$idTrack) {
                 throw new \RuntimeException('Impossible de créer le tracé du trajet');
             }
+
             // 4. Journey
+            // Calculating the estimated_arrival
+            $departureTime = $this->getDeparture($input);
+            $estimatedArrival = $this->estimateJourneyArrival($idTrack, $departureTime);
 
-            //Calculating the estimated_arrival
-            $duration = (int) $trackModel->find($idTrack)['duration']; //Retrieving the duration of the track
-            $date = new \DateTime($departureTime);
-            $date->modify('+' . $duration . ' seconds');
-            $estimatedArrival = $date->format('Y-m-d H:i:s');
-
+            // Formatting the data
             $journeyData = [
                 'number_of_place'   => (int) $input['seats'],
                 'departure'         => $departureTime,
@@ -159,32 +116,9 @@ class JourneyService
             }
 
             // 5. Stages (optional)
-            if ($stops) {
-                $order = 1;
-
-                foreach ($stops as $stop) {
-
-                    $locationId = $locationService->getOrCreate(
-                        $stop['label'],
-                        $stop['city'],
-                        $stop['postcode'],
-                        $stop['lat'],
-                        $stop['lon']
-                    );
-
-                    $ok = $stageModel->insert([
-                        'id_journey_drive' => $journeyId,
-                        'id_location'      => $locationId,
-                        'order'            => $order++,
-                    ]);
-
-                    if ($ok === false) {
-                        throw new \RuntimeException('Erreur lors de la création des étapes');
-                    }
-                }
+            if ($input['stops']) {
+                $this->saveStages($journeyId, $input['stops']);
             }
-
-
 
             // 6. Transaction safety
             if ($this->db->transStatus() === false) {
@@ -201,11 +135,97 @@ class JourneyService
     }
 
     /**
-     * 
+     * Updates an existing itinerary
+     * @param array $original The original journey data
+     * @param array $input The updated journey data
      */
-    public function updateJourneyDrive()
+    public function updateJourneyDrive(array $original, array $input): void
     {
-        // TODO
+
+        $stageModel     = $this->stagesModel;
+        $locationService = $this->locationService;
+
+        $this->db->transBegin();
+
+        // Removes all the empty stops and makes a new array with new indexes
+        $input['stops'] = $this->sanitizeStops($input['stops'] ?? []);
+
+        try {
+            // 1. Verify car ownership and seat amount
+            $this->validateCar((int)$input['car'], (int)$input['driver'], (int)$input['seats']);
+
+            // 2. Cities + Locations
+            $startLocationId = $locationService->getOrCreate(
+                $input['start']['label'],
+                $input['start']['city'],
+                $input['start']['postcode'],
+                $input['start']['lat'],
+                $input['start']['lon']
+            );
+
+            $endLocationId = $locationService->getOrCreate(
+                $input['end']['label'],
+                $input['end']['city'],
+                $input['end']['postcode'],
+                $input['end']['lat'],
+                $input['end']['lon']
+            );
+
+            // 3. Track
+            $routeChanged = $this->detectRouteChange($original, $input);
+
+            $idTrack = $input['id_track'];
+
+            if ($routeChanged) {
+                $idTrack = $this->buildTrack($input);
+            }
+
+            // 4. Journey
+            // Calculating the estimated_arrival
+            $departureTime = $this->getDeparture($input);
+            $estimatedArrival = $this->estimateJourneyArrival($idTrack, $departureTime);
+
+            // Formatting the data
+            $journeyData = [
+                'number_of_place'   => (int) $input['seats'],
+                'departure'         => $departureTime,
+                'estimated_arrival' => $estimatedArrival,
+                'id_car'            => $input['car'],
+                'start'             => $startLocationId,
+                'end'               => $endLocationId,
+                'driver'            => $input['driver'],
+                'id_track'          => $idTrack
+            ];
+
+            $journeyId = $input['id_journey_drive'];
+
+            $updateStatus = $this->journeyDriveModel->update($journeyId, $journeyData);
+
+            if ($updateStatus === false) {
+                throw new \RuntimeException('Impossible de modifier le trajet');
+            }
+
+            // 5. Stages (optional)
+            if ($routeChanged) {
+                // Deletes old itinerary's stages
+                $stageModel->where('id_journey_drive', $journeyId)->delete();
+
+                if (!empty($input['stops'])) {
+                    // Saves new stages if existing
+                    $this->saveStages($journeyId, $input['stops']);
+                }
+            }
+
+            // 6. Transaction safety
+            if ($this->db->transStatus() === false) {
+                throw new \RuntimeException('Transaction échouée');
+            }
+
+            $this->db->transCommit();
+        } catch (\Throwable $e) {
+            $this->db->transRollback();
+            throw $e;
+        }
     }
 
     /**
@@ -216,7 +236,7 @@ class JourneyService
     public function deleteJourneyDrive(int $id): void
     {
         $bookingModel = model(BookingModel::class);
-        $stageModel = model(StagesModel::class);
+        $stageModel = $this->stagesModel;
         $trackModel = model(TrackModel::class);
 
         $this->db->transBegin();
@@ -264,7 +284,7 @@ class JourneyService
      */
     public function searchJourneyDrive(array $input): array
     {
-        $stageModel = model(StagesModel::class);
+        $stageModel = $this->stagesModel;
         $locationService = $this->locationService;
 
         // searchJourneyDrive()
@@ -640,5 +660,175 @@ class JourneyService
         }
 
         return $matches;
+    }
+
+    /**
+     * Removes all the empty stops and makes a new array with new indexes
+     * @param array $stops
+     * @return array
+     */
+    private function sanitizeStops(array $stops): array
+    {
+        $sanitizedStops = array_values(array_filter($stops, function ($item) {
+            return !empty($item['lat']) && !empty($item['lon']);
+        }));
+
+        return $sanitizedStops;
+    }
+
+    /**
+     * From data containing an original journey and a new journey, checks if the route is different
+     * @param array $original The original journey data
+     * @param array $input The updated journey data
+     * @return bool
+     */
+    private function detectRouteChange(array $original, array $input): bool
+    {
+        // Normalizing data for checking if itinerary has changed
+        $oldStart = ['lat' => $original['start']['lat'], 'lon' => $original['start']['lon']];
+        $newStart = ['lat' => $input['start']['lat'], 'lon' => $input['start']['lon']];
+        $oldEnd = ['lat' => $original['end']['lat'], 'lon' => $original['end']['lon']];
+        $newEnd = ['lat' => $input['end']['lat'], 'lon' => $input['end']['lon']];
+
+        $normalizeStop = fn($s) => $s['lat'] . '|' . $s['lon'];
+
+        $oldStops = array_map($normalizeStop, $original['stops'] ?? []);
+        $newStops = array_map($normalizeStop, $input['stops'] ?? []);
+
+        // Has itinerary changed ?
+        $routeChanged =
+            $oldStart != $newStart ||
+            $oldEnd != $newEnd ||
+            $oldStops != $newStops;
+
+        return $routeChanged;
+    }
+
+    /**
+     * Builds a journey's track
+     * @param array $input
+     * @return int The track id
+     */
+    private function buildTrack(array $input): int
+    {
+        $trackService = service('TrackService');
+        $stops = $input['stops'];
+        $start = [$input['start']['lon'], $input['start']['lat']];
+        $end = [$input['end']['lon'], $input['end']['lat']];
+
+        // Checking if there are stops in the journey
+        $trackStop = array_map(function ($row) {
+            return [
+                $row['lon'],
+                $row['lat']
+            ];
+        }, $stops); // Rebuilding each stop into a new array and saving only the lat on lon values
+
+        $idTrack = $trackService->saveTrack($start, $end, $trackStop, $input['id_track'] ?? null); //  Generation and saving of the tracking
+
+        return $idTrack;
+    }
+
+    /**
+     * Saves a new series of stages
+     * @param int $id Journey ID
+     * @param array $stops
+     * @return void
+     */
+    private function saveStages(int $id, array $stops): void
+    {
+        $order = 1;
+
+        foreach ($stops as $stop) {
+
+            $locationId = $this->locationService->getOrCreate(
+                $stop['label'],
+                $stop['city'],
+                $stop['postcode'],
+                $stop['lat'],
+                $stop['lon']
+            );
+
+            $status = $this->stagesModel->insert([
+                'id_journey_drive' => $id,
+                'id_location'      => $locationId,
+                'order'            => $order++,
+            ]);
+
+            if ($status === false) {
+                throw new \RuntimeException('Erreur lors de la création des étapes');
+            }
+        }
+    }
+
+    /**
+     * Checks validity of departure time and returns a valid dateTime string for departure
+     * @param array $input
+     * @return string Departure time (Y-m-d H:i:s)
+     */
+    private function getDeparture(array $input): string
+    {
+        $departure = (new DateTime(
+            $input['start-date'] . ' ' . $input['start-time']
+        ));
+        $now = new DateTime();
+
+        if ($departure <= $now) {
+            throw new \DomainException('La date de départ doit être dans le futur');
+        }
+
+        $departureTime = $departure->format('Y-m-d H:i:s');
+
+        return $departureTime;
+    }
+
+    /**
+     * Estimates the arrival time of the journey
+     * @param int $idTrack
+     * @param string $departureTime
+     * @return string Estimated arrival (Y-m-d H:i:s)
+     */
+    private function estimateJourneyArrival(int $idTrack, string $departureTime): string
+    {
+        $trackModel = model(TrackModel::class);
+        $track = $trackModel->find($idTrack);
+
+        if (!$track) {
+            throw new \RuntimeException('Track introuvable');
+        }
+
+        $duration = $track['duration']; // Retrieving the duration of the track
+        $date = new \DateTime($departureTime);
+        $date->modify('+' . $duration . ' seconds');
+        $estimatedArrival = $date->format('Y-m-d H:i:s');
+
+        return $estimatedArrival;
+    }
+
+    /**
+     *  Checks car and seats validity, returns car data
+     * @param int $carId
+     * @param int $userId
+     * @param int $requestedSeats
+     * @return array Car data
+     */
+    private function validateCar(int $carId, int $userId, int $requestedSeats): array
+    {
+        $carModel = model(CarModel::class);
+
+        $car = $carModel
+            ->where('id_car', $carId)
+            ->where('id_user', $userId)
+            ->first();
+
+        if (! $car) {
+            throw new \DomainException('Voiture invalide');
+        }
+
+        if ($requestedSeats > $car['number_of_seat']) {
+            throw new \DomainException('Pas assez de places dans cette voiture');
+        }
+
+        return $car;
     }
 }
