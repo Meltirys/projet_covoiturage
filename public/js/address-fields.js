@@ -1,97 +1,89 @@
-/**
- * Fills the hidden fields with the matching data
- * @param {*} feature Data from geocoding API
- * @param {*} inputElement User input element
- */
-function fillAddressFields(feature, inputElement) {
-  const coords = feature.geometry.coordinates;
-  const properties = feature.properties;
-  const container = inputElement.parentElement;
+reportManagementPaginator = new Paginator(
+    document.querySelector('#researchResultsReport'),
+    document.querySelector('#paginationReport'),
+    renderReportManagement
+)
 
-  inputElement.value = feature.properties.label;
-  container.querySelector('input[name$="[label]"]').value =
-    properties.name || "";
-  container.querySelector('input[name$="[lat]"]').value = coords[1];
-  container.querySelector('input[name$="[lon]"]').value = coords[0];
-  container.querySelector('input[name$="[city]"]').value =
-    properties.city || "";
-  container.querySelector('input[name$="[postcode]"]').value =
-    properties.postcode || "";
+reportHistoryPaginator = new Paginator(
+    document.querySelector('#researchResultsReportHistory'),
+    document.querySelector('#paginationReportHistory'),
+    renderReportHistory
+)
+
+function renderReportManagement(element) {
+    let reportDiv       = document.createElement('div')
+    let reportHeader    = document.createElement('div')
+    let reportBody      = document.createElement('div')
+    let reporterReported = document.createElement('p')
+    let dateOfReport    = document.createElement('p')
+    let reportReasonText = document.createElement('p')
+    let reportComment   = document.createElement('p')
+    let resolvedForm    = document.createElement('form')
+    let csrfToken       = document.createElement('input')
+    let resolvedButton  = document.createElement('button')
+
+    reporterReported.textContent = (element['reporter_name'] ?? 'utilisateur supprimé') + ' a signalé ' + (element['reported_name'] ?? 'utilisateur supprimé')
+    dateOfReport.textContent     = element['date']
+    reportComment.textContent    = element['comment']
+    reportReasonText.textContent = 'Message lié au signalement :'
+
+    resolvedForm.appendChild(csrfToken)
+    resolvedForm.appendChild(resolvedButton)
+    resolvedForm.method = 'POST'
+    resolvedForm.action = 'report/solve/' + element['id_report']
+    resolvedButton.type = 'submit'
+    resolvedButton.textContent = 'Marquer comme résolu'
+
+    csrfToken.type  = 'hidden'
+    csrfToken.name  = document.querySelector('meta[name="csrf-name"]').content
+    csrfToken.value = document.querySelector('meta[name="csrf-token"]').content
+
+    reportDiv.className          = 'flex flex-col gap-3 bg-ocean-mid border border-ocean-light rounded-[14px] px-4 py-3 hover-border-gold transition-colors'
+    reportHeader.className       = 'flex items-center justify-between gap-3'
+    reporterReported.className   = 'text-sm font-medium text-lightgrey'
+    dateOfReport.className       = 'text-xs text-grey whitespace-nowrap'
+    reportBody.className         = 'flex flex-col gap-1'
+    reportReasonText.className   = 'text-[0.625rem] tracking-[0.12em] uppercase font-semibold text-grey'
+    reportComment.className      = 'text-xs text-lightgrey'
+    resolvedButton.className     = 'text-xs border border-gold/40 text-gold rounded-full px-3 py-1 hover:bg-gold/10 transition-colors cursor-pointer self-end'
+
+    reportHeader.appendChild(reporterReported)
+    reportHeader.appendChild(dateOfReport)
+    reportBody.appendChild(reportReasonText)
+    reportBody.appendChild(reportComment)
+    reportDiv.appendChild(reportHeader)
+    reportDiv.appendChild(reportBody)
+    reportDiv.appendChild(resolvedForm)
+    return reportDiv
 }
-// ===== Start/End
-document.querySelectorAll(".address-input").forEach((input) => {
-  initializeAddressInput(input, fillAddressFields);
-});
-// ===== Stops
-const stops = document.querySelectorAll(".stop-input");
-if (stops.length !== 0) {
-  stops.forEach((input) => {
-    initializeAddressInput(input, handleStopSelection);
-  });
 
-  /**
-   * Applies fillAddressFields and handles callback of createStop function if needed
-   * @param {*} feature
-   * @param {*} inputElement User input element
-   */
-  function handleStopSelection(feature, inputElement) {
-    fillAddressFields(feature, inputElement);
+function renderReportHistory(element) {
+    let reportDiv        = document.createElement('div')
+    let reportHeader     = document.createElement('div')
+    let reportBody       = document.createElement('div')
+    let reporterReported = document.createElement('p')
+    let dateOfReport     = document.createElement('p')
+    let reportReasonText = document.createElement('p')
+    let reportComment    = document.createElement('p')
 
-    const container = inputElement.parentElement;
+    reporterReported.textContent = (element['reporter_name'] ?? 'utilisateur supprimé') + ' a signalé ' + (element['reported_name'] ?? 'utilisateur supprimé')
+    dateOfReport.textContent     = element['date']
+    reportComment.textContent    = element['comment']
+    reportReasonText.textContent = 'Message lié au signalement :'
 
-    if (
-      container === stopsContainer.lastElementChild &&
-      container.querySelector('input[name$="[lat]"]').value !== ""
-    ) {
-      createStop();
-    }
-  }
+    reportDiv.className        = 'flex flex-col gap-3 bg-ocean-mid border border-ocean-light rounded-[14px] px-4 py-3 opacity-60'
+    reportHeader.className     = 'flex items-center justify-between gap-3'
+    reporterReported.className = 'text-sm font-medium text-lightgrey'
+    dateOfReport.className     = 'text-xs text-grey whitespace-nowrap'
+    reportBody.className       = 'flex flex-col gap-1'
+    reportReasonText.className = 'text-[0.625rem] tracking-[0.12em] uppercase font-semibold text-grey'
+    reportComment.className    = 'text-xs text-lightgrey'
 
-  // Initializing optional stops
-
-  const stopsContainer = document.getElementById("stops-container");
-  let stopIndex = stops.length;
-
-  /**
-   * Creates input fields for new stops
-   */
-  function createStop() {
-    const stop = document.createElement("div");
-
-    stop.className = "stop address-field flex flex-col gap-1";
-
-    stop.innerHTML = `  
-                <input 
-                    type="text" 
-                    name="drive[stops][${stopIndex}][address]"
-                    class="stop-input border border-[rgba(37,63,114,0.25)] rounded-lg px-3 py-2 text-sm text-[#253F72] focus:outline-none focus:border-[#253F72]"
-                    placeholder="Entrer un arrêt">
-                <input type="hidden" name="drive[stops][${stopIndex}][label]">
-                <input type="hidden" name="drive[stops][${stopIndex}][lat]">
-                <input type="hidden" name="drive[stops][${stopIndex}][lon]">
-                <input type="hidden" name="drive[stops][${stopIndex}][city]">
-                <input type="hidden" name="drive[stops][${stopIndex}][postcode]">
-                <div class="results"></div>
-                    <button type="button" class="remove-stop text-xs text-[rgba(37,63,114,0.5)] underline text-right bg-transparent border-none cursor-pointer">
-                        Retirer
-                    </button>
-            `;
-    stopsContainer.appendChild(stop);
-
-    initializeAddressInput(
-      stop.querySelector(".stop-input"),
-      handleStopSelection,
-    );
-
-    stopIndex++;
-  }
-
-  /*
-   * Adds a remove button
-   */
-  stopsContainer.addEventListener("click", (e) => {
-    if (e.target.classList.contains("remove-stop")) {
-      e.target.closest(".stop").remove();
-    }
-  });
+    reportHeader.appendChild(reporterReported)
+    reportHeader.appendChild(dateOfReport)
+    reportBody.appendChild(reportReasonText)
+    reportBody.appendChild(reportComment)
+    reportDiv.appendChild(reportHeader)
+    reportDiv.appendChild(reportBody)
+    return reportDiv
 }

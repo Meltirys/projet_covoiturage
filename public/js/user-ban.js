@@ -1,21 +1,16 @@
 let searchInputBan = document.querySelector("#searchUserBan")
 
-//Creating the paginator
 userBanPaginator = new Paginator(
     document.querySelector('#researchResultsBan'),
     document.querySelector('#paginationBan'),
     renderBanResults
 )
 
-//Creating the listener on text input
 searchInputBan.addEventListener("input", () => {
-    //Only fetches when there are more than two characters entered
     if (searchInputBan.value.length > 2) {
         fetch('/searchUser/' + encodeURIComponent(searchInputBan.value))
             .then((r) => {
-                if (r.ok) {
-                    return r.json()
-                }
+                if (r.ok) return r.json()
             })
             .then(datas => {
                 userBanPaginator.load(datas)
@@ -25,45 +20,37 @@ searchInputBan.addEventListener("input", () => {
 })
 
 function renderBanResults(element) {
-
-    //Creating the elements
-    let userDiv = document.createElement('div')
-    let userInfos = document.createElement('div')
-    let userName = document.createElement('p')
-    let userMail = document.createElement('p')
+    let userDiv         = document.createElement('div')
+    let userInfos       = document.createElement('div')
+    let userName        = document.createElement('p')
+    let userMail        = document.createElement('p')
     let suppressionForm = document.createElement('form')
-    let csrfToken = document.createElement('input')
+    let csrfToken       = document.createElement('input')
     let suppressionButton = document.createElement('button')
 
-    //Filling up the content
-    userName.textContent = element['name']
-    userMail.textContent = element['email']
-    suppressionButton.textContent = "Bannir"
+    userName.textContent          = element['name']
+    userMail.textContent          = element['email']
+    suppressionButton.textContent = 'Bannir'
 
-    //Setting up the form
     suppressionForm.appendChild(csrfToken)
     suppressionForm.appendChild(suppressionButton)
-    suppressionForm.method = "POST"
-    suppressionForm.action = "user/ban/" + element['id_user']
-    suppressionButton.type = "submit"
-    //CSRF token
-    csrfToken.type = "hidden"
-    csrfToken.name = document.querySelector('meta[name="csrf-name"]').content
+    suppressionForm.method = 'POST'
+    suppressionForm.action = 'user/ban/' + element['id_user']
+    suppressionButton.type = 'submit'
+
+    csrfToken.type  = 'hidden'
+    csrfToken.name  = document.querySelector('meta[name="csrf-name"]').content
     csrfToken.value = document.querySelector('meta[name="csrf-token"]').content
 
-    //Adding the styles
-    userDiv.className = "flex items-center justify-between bg-white border border-gray-200 rounded-lg px-4 py-3 shadow-sm"
-    userInfos.className = "flex flex-col"
-    userName.className = "text-sm font-semibold text-gray-800"
-    userMail.className = "text-xs text-gray-500"
-    suppressionButton.className = "btn-danger"
+    userDiv.className           = 'flex items-center justify-between bg-ocean-mid border border-ocean-light rounded-[14px] px-4 py-3 hover-border-gold transition-colors gap-3'
+    userInfos.className         = 'flex flex-col'
+    userName.className          = 'text-sm font-medium text-lightgrey'
+    userMail.className          = 'text-xs text-grey mt-0.5'
+    suppressionButton.className = 'text-xs border border-red/40 text-red rounded-full px-3 py-1 hover:bg-red/20 transition-colors cursor-pointer'
 
-    //Building everything together
     userInfos.appendChild(userName)
     userInfos.appendChild(userMail)
     userDiv.appendChild(userInfos)
     userDiv.appendChild(suppressionForm)
-
     return userDiv
-
 }

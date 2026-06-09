@@ -1,51 +1,45 @@
 <?= $this->extend('layouts/main') ?>
-
 <?= $this->section('content') ?>
 
-<aside>
+<div class="profile-hero px-4 md:px-8 py-10 md:py-14 mb-8">
+    <div class="relative z-10 max-w-5xl mx-auto">
+        <p class="section-title flex items-center gap-2 text-[0.625rem] tracking-[0.2em] uppercase font-bold text-gold mb-5">
+            Admin
+        </p>
+        <h1 class="font-pfd text-4xl md:text-6xl font-light leading-[0.92] tracking-tight text-lightgrey">
+            Dashboard<br>
+            <em class="italic text-gold">administration</em>
+        </h1>
+    </div>
+</div>
 
-</aside>
-
-<main class="w-full max-w-5xl mx-auto px-4 py-6 md:px-8 md:py-10 font-poppins">
-
+<main class="w-full max-w-5xl mx-auto px-4 md:px-8 pb-12 font-poppins">
     <?= view('backoffice/ReportManagement') ?>
     <?= view('backoffice/ReportHistory') ?>
     <?= view('backoffice/UserBan') ?>
     <?php if (session()->user_role == 3): ?>
         <?= view('backoffice/UserRole') ?>
     <?php endif; ?>
-
     <?= view('backoffice/UserSuppression') ?>
     <?= view('backoffice/UserValidation') ?>
-
-
 </main>
 
 <?= $this->endSection() ?>
-
 <?= $this->section('scripts') ?>
-
-
 <script src="<?= base_url('js/pagination.js') ?>"></script>
 <script src="<?= base_url('js/user-ban.js') ?>"></script>
 <script src="<?= base_url('js/user-suppression.js') ?>"></script>
 <script src="<?= base_url('js/user-validation.js') ?>"></script>
 <script src="<?= base_url('js/report-manager.js') ?>"></script>
 <?php if (session()->user_role == 3): ?>
-    <script src="<?= base_url('js/user-role.js') ?>">
-    </script>
+    <script src="<?= base_url('js/user-role.js') ?>"></script>
 <?php endif; ?>
-
 <script>
-    const reports = <?= json_encode($reports) ?> //Preloading the reports
+    const reports      = <?= json_encode($reports) ?>
+    const reportHistory = <?= json_encode($reportsHistory) ?>
+    const toValidateUsers = <?= json_encode($users) ?>
     reportManagementPaginator.load(reports)
-
-    const reportHistory = <?= json_encode($reportsHistory) ?> //Preloading the users to validate
     reportHistoryPaginator.load(reportHistory)
-
-    const toValidateUsers = <?= json_encode($users) ?> //Preloading the users to validate
     validationPaginator.load(toValidateUsers)
 </script>
-
-
 <?= $this->endSection() ?>

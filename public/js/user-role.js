@@ -1,40 +1,30 @@
-//The select template that contains all the roles
 let userRoleSelect = document.createElement('select')
 userRoleSelect.name = "new_role"
+userRoleSelect.className = "rounded-xl bg-ocean-light border border-ocean-light px-3 py-1.5 text-sm text-lightgrey focus:outline-none focus:border-gold/40 transition-colors"
 
-//Creating the paginator
 userRolePaginator = new Paginator(
     document.querySelector('#researchResultsRole'),
     document.querySelector('#paginationRole'),
     renderRoleResults
 )
 
-//Creating the select form of the role. We will clone him for each instance of user created.
 document.addEventListener('DOMContentLoaded', () => {
     fetch('/getAllPermissions/')
         .then((r) => {
-            if (r.ok) {
-                return r.json()
-            }
+            if (r.ok) return r.json()
         })
         .then(datas => {
-            //Creating the select
             if (datas) {
                 datas.forEach((elem) => {
                     userRoleSelect.add(new Option(elem['label'], elem['level']))
                 })
 
                 let searchInputRole = document.querySelector("#searchUserRole")
-
-                //Creating the listener on text input
                 searchInputRole.addEventListener("input", () => {
-                    //Only fetches when there are more than two characters entered
                     if (searchInputRole.value.length > 2) {
                         fetch('/searchUserWP/' + encodeURIComponent(searchInputRole.value))
                             .then((r) => {
-                                if (r.ok) {
-                                    return r.json()
-                                }
+                                if (r.ok) return r.json()
                             })
                             .then(datas => {
                                 userRolePaginator.load(datas)
@@ -43,55 +33,45 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 })
             }
-
         })
         .catch(e => console.log(e))
 })
 
 function renderRoleResults(element) {
-
-    //Creating the elements
-    let userDiv = document.createElement('div')
-    let userInfos = document.createElement('div')
-    let userName = document.createElement('p')
-    let userMail = document.createElement('p')
+    let userDiv         = document.createElement('div')
+    let userInfos       = document.createElement('div')
+    let userName        = document.createElement('p')
+    let userMail        = document.createElement('p')
     let suppressionForm = document.createElement('form')
-    let csrfToken = document.createElement('input')
-    let select = userRoleSelect.cloneNode(true)
-
+    let csrfToken       = document.createElement('input')
+    let select          = userRoleSelect.cloneNode(true)
     let suppressionButton = document.createElement('button')
 
-    //Filling up the content
-    userName.textContent = element['name']
-    userMail.textContent = element['email']
-    select.value = element['level']
-    suppressionButton.textContent = "Modifier le rôle"
+    userName.textContent          = element['name']
+    userMail.textContent          = element['email']
+    select.value                  = element['level']
+    suppressionButton.textContent = 'Modifier le rôle'
 
-    //Setting up the form
     suppressionForm.appendChild(select)
     suppressionForm.appendChild(csrfToken)
     suppressionForm.appendChild(suppressionButton)
-    suppressionForm.method = "POST"
-    suppressionForm.action = "user/updateRole/" + element['id_user']
-    suppressionButton.type = "submit"
+    suppressionForm.method = 'POST'
+    suppressionForm.action = 'user/updateRole/' + element['id_user']
+    suppressionButton.type = 'submit'
 
-    //CSRF token
-    csrfToken.type = "hidden"
-    csrfToken.name = document.querySelector('meta[name="csrf-name"]').content
+    csrfToken.type  = 'hidden'
+    csrfToken.name  = document.querySelector('meta[name="csrf-name"]').content
     csrfToken.value = document.querySelector('meta[name="csrf-token"]').content
 
-    //Adding the styles
-    userDiv.className = "flex items-center justify-between bg-white border border-babyblue rounded-lg px-4 py-3 shadow-sm"
-    userInfos.className = "flex flex-col"
-    userName.className = "text-sm font-semibold text-bluegrey"
-    userMail.className = "text-xs text-grey"
-    suppressionButton.className = "btn-danger"
+    userDiv.className           = 'flex items-center justify-between bg-ocean-mid border border-ocean-light rounded-[14px] px-4 py-3 hover-border-gold transition-colors gap-3'
+    userInfos.className         = 'flex flex-col'
+    userName.className          = 'text-sm font-medium text-lightgrey'
+    userMail.className          = 'text-xs text-grey mt-0.5'
+    suppressionButton.className = 'text-xs border border-gold/40 text-gold rounded-full px-3 py-1 hover:bg-gold/10 transition-colors cursor-pointer whitespace-nowrap'
 
-    //Building everything together
     userInfos.appendChild(userName)
     userInfos.appendChild(userMail)
     userDiv.appendChild(userInfos)
     userDiv.appendChild(suppressionForm)
-
     return userDiv
 }

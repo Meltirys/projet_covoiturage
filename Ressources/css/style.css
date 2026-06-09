@@ -1,293 +1,252 @@
 @import "tailwindcss";
 @source "../../app/Views/**/*.php";
 @source "./public/**/*.js";
- 
-/* Safelist classes dynamiques */
-@source inline("{bg-ocean,bg-ocean-light,text-ocean,bg-sand,text-sand,bg-white, bg-sand-light,hover:bg-ocean-light,border-ocean,bg-input-bg,border-input-border}");
-@source inline("{bg-red-500,hover:bg-red-600,text-white,text-sm,font-medium,px-4,py-1.5,rounded-lg,transition-colors,cursor-pointer,flex,items-center,justify-between,bg-white,border,border-gray-200,shadow-sm,flex-col,font-semibold,text-gray-800,text-gray-500}");
- 
+
 /* ===== FONTS ===== */
 @font-face {
-  font-display: swap;
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 200;
+  font-display: swap; font-family: "Poppins"; font-style: normal; font-weight: 200;
   src: url("/fonts/poppins-v24-latin-200.woff2") format("woff2");
 }
 @font-face {
-  font-display: swap;
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 300;
+  font-display: swap; font-family: "Poppins"; font-style: normal; font-weight: 300;
   src: url("/fonts/poppins-v24-latin-300.woff2") format("woff2");
 }
 @font-face {
-  font-display: swap;
-  font-family: "Poppins";
-  font-style: italic;
-  font-weight: 300;
+  font-display: swap; font-family: "Poppins"; font-style: italic; font-weight: 300;
   src: url("/fonts/poppins-v24-latin-300italic.woff2") format("woff2");
 }
 @font-face {
-  font-display: swap;
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 400;
+  font-display: swap; font-family: "Poppins"; font-style: normal; font-weight: 400;
   src: url("/fonts/poppins-v24-latin-regular.woff2") format("woff2");
 }
 @font-face {
-  font-display: swap;
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 600;
+  font-display: swap; font-family: "Poppins"; font-style: normal; font-weight: 600;
   src: url("/fonts/poppins-v24-latin-600.woff2") format("woff2");
 }
 @font-face {
-  font-display: swap;
-  font-family: "Poppins";
-  font-style: normal;
-  font-weight: 700;
+  font-display: swap; font-family: "Poppins"; font-style: normal; font-weight: 700;
   src: url("/fonts/poppins-v24-latin-700.woff2") format("woff2");
 }
 @font-face {
-  font-display: swap;
-  font-family: "Playfair Display";
-  font-style: normal;
-  font-weight: 400;
+  font-display: swap; font-family: "Playfair Display"; font-style: normal; font-weight: 400;
   src: url("/fonts/playfair-display-v40-latin-regular.woff2") format("woff2");
 }
 @font-face {
-  font-display: swap;
-  font-family: "Playfair Display";
-  font-style: italic;
-  font-weight: 400;
+  font-display: swap; font-family: "Playfair Display"; font-style: italic; font-weight: 400;
   src: url("/fonts/playfair-display-v40-latin-italic.woff2") format("woff2");
 }
 @font-face {
-  font-display: swap;
-  font-family: "Playfair Display";
-  font-style: normal;
-  font-weight: 500;
+  font-display: swap; font-family: "Playfair Display"; font-style: normal; font-weight: 500;
   src: url("/fonts/playfair-display-v40-latin-500.woff2") format("woff2");
 }
 @font-face {
-  font-display: swap;
-  font-family: "Playfair Display";
-  font-style: italic;
-  font-weight: 500;
+  font-display: swap; font-family: "Playfair Display"; font-style: italic; font-weight: 500;
   src: url("/fonts/playfair-display-v40-latin-500italic.woff2") format("woff2");
 }
 @font-face {
-  font-display: swap;
-  font-family: "Playfair Display";
-  font-style: normal;
-  font-weight: 600;
+  font-display: swap; font-family: "Playfair Display"; font-style: normal; font-weight: 600;
   src: url("/fonts/playfair-display-v40-latin-600.woff2") format("woff2");
 }
 @font-face {
-  font-display: swap;
-  font-family: "Playfair Display";
-  font-style: italic;
-  font-weight: 600;
+  font-display: swap; font-family: "Playfair Display"; font-style: italic; font-weight: 600;
   src: url("/fonts/playfair-display-v40-latin-600italic.woff2") format("woff2");
 }
 @font-face {
-  font-display: swap;
-  font-family: "Playfair Display";
-  font-style: normal;
-  font-weight: 700;
+  font-display: swap; font-family: "Playfair Display"; font-style: normal; font-weight: 700;
   src: url("/fonts/playfair-display-v40-latin-700.woff2") format("woff2");
 }
 @font-face {
-  font-display: swap;
-  font-family: "Playfair Display";
-  font-style: italic;
-  font-weight: 700;
+  font-display: swap; font-family: "Playfair Display"; font-style: italic; font-weight: 700;
   src: url("/fonts/playfair-display-v40-latin-700italic.woff2") format("woff2");
 }
 @font-face {
-  font-display: swap;
-  font-family: "Playfair Display";
-  font-style: normal;
-  font-weight: 800;
+  font-display: swap; font-family: "Playfair Display"; font-style: normal; font-weight: 800;
   src: url("/fonts/playfair-display-v40-latin-800.woff2") format("woff2");
 }
- 
-/* ===== THEME ===== */
-@theme {
-  --color-bluegrey:     oklch(0.375 0.0933 262.44);
-  --color-grey:         oklch(0.5352 0.0329 268.07);
-  --color-babyblue:     oklch(0.8181 0.0356 241.55);
-  --color-lightgrey:    oklch(0.9821 0 0);
-  --color-ocean:        oklch(0.28 0.075 240);
-  --color-ocean-light:  oklch(0.38 0.085 240);
-  --color-sand:         oklch(0.84 0.10 85);
-  --color-sand-light:   oklch(0.98 0.015 85);
-  --color-input-bg:     #F7FAFB;
-  --color-input-border: rgba(13, 59, 94, 0.25);
+
+/* ===== THÈME — palette Voya ===== */
+@theme inline {
   --font-poppins: "Poppins", sans-serif;
   --font-pfd:     "Playfair Display", serif;
+
+  /* Fonds */
+  --color-ocean:        #12171b;   /* bg principal */
+  --color-ocean-mid:    #131720;   /* surface */
+  --color-ocean-light:  #1C2128;   /* surface hover / bordures */
+
+  /* Textes */
+  --color-lightgrey:    #E8EAF0;   /* texte principal */
+  --color-grey:         #6B7380;   /* texte secondaire */
+  --color-bluegrey:     #3D4450;   /* texte très atténué */
+  --color-cyan:     #4ECDC4;   /* accent cyan */
+
+  /* Accents */
+  --color-gold:         #D4A843;   /* or principal */
+  --color-gold-light:   #F0C866;   /* or hover */
+
+  /* États */
+  --color-red:          #D94F4F;
+  --color-green:        #3DB870;
+
+  /* Divers (conservés pour compatibilité) */
+  --color-input-bg:     #111418;
+  --color-input-border: rgba(255,255,255,0.07);
 }
- 
+
 /* ===== BASE ===== */
 @layer base {
-  input,
-  textarea,
-  select {
-    background-color: #f2f5f8;
+  body, main {
+    background-color: theme(colors.ocean);
+    color: theme(colors.lightgrey);
+    font-family: "Poppins", sans-serif;
+  }
+  input, textarea, select {
+    background-color: theme(colors.ocean-mid);
+    border-color: theme(colors.ocean-light);
+    color: theme(colors.lightgrey);
+  }
+  input::placeholder, textarea::placeholder {
+    color: theme(colors.grey);
   }
 }
- 
-/* ===== COMPOSANTS GLOBAUX ===== */
+
+/* ===== COMPOSANTS ===== */
 @layer components {
-  .nav-link {
-    @apply border border-grey rounded-full px-4 py-1 text-sm whitespace-nowrap;
-  }
-  .btn-primary {
-    @apply bg-bluegrey hover:bg-[#1a2f55] text-white px-6 py-3 rounded-lg transition-colors duration-200;
-  }
-  .nav-d {
-    @apply text-xs font-poppins text-bluegrey;
-  }
-  .nav-m {
-    @apply text-sm font-poppins text-bluegrey;
-  }
-  .section-title {
-    font-family: "Poppins", sans-serif;
-    font-size: 0.625rem;
-    letter-spacing: 0.15em;
-    color: #253f72;
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-  }
-  .card {
-    @apply bg-white rounded-xl shadow p-4 mb-3;
-  }
-  .btn-danger {
-    @apply bg-[#ef4444] hover:bg-[#dc2626] text-white text-sm font-medium px-4 py-1.5 rounded-lg transition-colors cursor-pointer;
-    border: none;
-  }
+
+  /* Toggle conducteur/passager */
+  #mode-toggle { background: theme(colors.ocean-light); border: 1px solid theme(colors.gold); transition: background 0.3s; }
+  #mode-toggle.active { background: theme(colors.gold); }
+
+  /* Menu mobile */
   .m-menu {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 50%;
-    height: 100vh;
-    z-index: 50;
-    flex-direction: column;
-    align-items: flex-end;
-    background-color: var(--color-lightgrey);
-    padding: 2rem 1.25rem;
-    gap: 1rem;
+    position: fixed; top: 0; right: 0;
+    width: 50%; height: 100vh; z-index: 50;
+    display: flex; flex-direction: column; align-items: flex-end;
+    background-color: theme(colors.ocean);
+    padding: 2rem 1.25rem; gap: 1rem;
     box-shadow: -4px 0 24px rgba(0,0,0,0.15);
-    display: flex;
     transform: translateX(100%);
     transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.m-menu.open {
-    transform: translateX(0);
-}
-.m-menu.open {
-    display: flex;
-    transform: translateX(0);
-}
-  .header {
-    justify-content: space-around;
   }
-  @media (max-width: 768px) {
-    .header {
-      justify-content: space-between;
-    }
-  }
+  .m-menu.open { transform: translateX(0); }
+
+  /* Animations HomeView */
+  .penn-eyebrow { opacity:0; transform:translateY(10px); }
+  .penn-hero    { opacity:0; transform:translateY(14px); }
+  .penn-stats   { opacity:0; transform:translateY(14px); }
+  .penn-card    { opacity:0; transform:translateY(20px); }
+  .auth-panel   { animation: fadeSlideIn 0.3s ease forwards; }
+
+  /* Orbes */
+  .orb { pointer-events:none; z-index:0; position:absolute; border-radius:9999px; }
+  .orb-1 { width:220px; height:220px; top:-80px; right:-60px; opacity:.25; animation:float1 8s ease-in-out infinite; }
+  .orb-2 { width:120px; height:120px; bottom:-40px; left:-30px; opacity:.08; animation:float2 10s ease-in-out infinite; }
+  .orb-3 { width:80px; height:80px; bottom:30%; right:10%; opacity:.15; animation:float3 12s ease-in-out infinite; }
+  .orb-4 { width:300px; height:300px; top:50%; left:50%; transform:translate(-50%,-50%); opacity:.04; animation:pulse-orb 6s ease-in-out infinite; }
 }
- 
-/* ===== ORBES ANIMÉES (HomeView) ===== */
-.orb {
-  pointer-events: none;
-  z-index: 0;
-  position: absolute;
-  border-radius: 9999px;
-}
-.orb-1 {
-  width: 220px;
-  height: 220px;
-  top: -80px;
-  right: -60px;
-  opacity: 0.25;
-  animation: float1 8s ease-in-out infinite;
-}
-.orb-2 {
-  width: 120px;
-  height: 120px;
-  bottom: -40px;
-  left: -30px;
-  opacity: 0.08;
-  animation: float2 10s ease-in-out infinite;
-}
-.orb-3 {
-  width: 80px;
-  height: 80px;
-  bottom: 30%;
-  right: 10%;
-  opacity: 0.15;
-  animation: float3 12s ease-in-out infinite;
-}
-.orb-4 {
-  width: 300px;
-  height: 300px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0.04;
-  animation: pulse-orb 6s ease-in-out infinite;
-}
- 
-/* ===== CLASSES PENN (HomeView) ===== */
-.penn-eyebrow {
-  opacity: 0;
-  transform: translateY(10px);
-}
-.penn-hero {
-  opacity: 0;
-  transform: translateY(14px);
-}
-.penn-stats {
-  opacity: 0;
-  transform: translateY(14px);
-}
-.penn-card {
-  opacity: 0;
-  transform: translateY(20px);
-}
-.auth-panel {
-  animation: fadeSlideIn 0.3s ease forwards;
-}
- 
+
 /* ===== KEYFRAMES ===== */
 @keyframes float1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  33%       { transform: translate(-12px, 14px) scale(1.04); }
-  66%       { transform: translate(8px, -10px) scale(0.97); }
+  0%,100% { transform:translate(0,0) scale(1); }
+  33%     { transform:translate(-12px,14px) scale(1.04); }
+  66%     { transform:translate(8px,-10px) scale(0.97); }
 }
 @keyframes float2 {
-  0%, 100% { transform: translate(0, 0); }
-  50%       { transform: translate(10px, -16px); }
+  0%,100% { transform:translate(0,0); }
+  50%     { transform:translate(10px,-16px); }
 }
 @keyframes float3 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50%       { transform: translate(-8px, 12px) scale(1.08); }
+  0%,100% { transform:translate(0,0) scale(1); }
+  50%     { transform:translate(-8px,12px) scale(1.08); }
 }
 @keyframes pulse-orb {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.04; }
-  50%       { transform: translate(-50%, -50%) scale(1.1); opacity: 0.07; }
+  0%,100% { transform:translate(-50%,-50%) scale(1); opacity:.04; }
+  50%     { transform:translate(-50%,-50%) scale(1.1); opacity:.07; }
 }
 @keyframes fadeSlideIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity:0; transform:translateY(8px); }
+  to   { opacity:1; transform:translateY(0); }
 }
 @keyframes shake {
-  10%, 90%      { transform: translateX(-2px); }
-  20%, 80%      { transform: translateX(4px); }
-  30%, 50%, 70% { transform: translateX(-4px); }
-  40%, 60%      { transform: translateX(4px); }
+  10%,90% { transform:translateX(-2px); }
+  20%,80% { transform:translateX(4px); }
+  30%,50%,70% { transform:translateX(-4px); }
+  40%,60% { transform:translateX(4px); }
+}
+
+/* ===== PROFIL — uniquement ce qui est impossible en Tailwind pur ===== */
+@layer components {
+
+  /* Hero : fond sombre + dégradés ambiants + grille de lignes (pseudo-éléments impossibles en Tailwind) */
+.profile-hero {
+    position: relative;
+    overflow: hidden;
+    background-color: #12171b;
+    border-bottom: 1px solid theme(colors.ocean-light);
+}
+.profile-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 75% 120% at 0% 55%, color-mix(in oklch, theme(colors.gold) 15%, transparent), transparent 60%),
+        radial-gradient(ellipse 40% 60% at 100% 20%, color-mix(in oklch, theme(colors.cyan) 4%, transparent), transparent 50%),
+        repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(255,255,255,0.018) 80px),
+        repeating-linear-gradient(0deg,  transparent, transparent 39px, rgba(255,255,255,0.012) 40px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+  /* Monogramme : gradient sombre impossible en Tailwind */
+  .profile-monogram {
+    background: linear-gradient(145deg, #2A2210, #1A1508);
+    border-color: color-mix(in oklch, theme(colors.gold) 28%, transparent);
+  }
+
+  /* Section title : pseudo-élément barre gauche */
+  .section-title::before {
+    content: '';
+    display: block;
+    width: 1.25rem;
+    height: 1px;
+    background: linear-gradient(90deg, theme(colors.gold), transparent);
+    flex-shrink: 0;
+  }
+
+  /* Stats : responsive mobile cards → desktop colonne */
+  @media (min-width: 768px) {
+    .profile-stats {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      gap: 0;
+      padding-left: clamp(1.5rem, 3vw, 3rem);
+      border-left: 1px solid theme(colors.ocean-light);
+      flex-shrink: 0;
+      min-width: 160px;
+    }
+    .profile-stat {
+      background: transparent !important;
+      border: none !important;
+      border-radius: 0 !important;
+      border-bottom: 1px solid theme(colors.ocean-light) !important;
+      padding: 0.875rem 0 !important;
+      flex-direction: column;
+      align-items: flex-end !important;
+      gap: 0.375rem;
+    }
+    .profile-stat:last-child { border-bottom: none !important; }
+    .profile-stat-n {
+      font-size: clamp(2rem, 4vw, 3rem) !important;
+      color: theme(colors.lightgrey) !important;
+    }
+    .profile-stat-l { text-align: right; }
+  }
+
+  /* Hover gold sur bordures — color-mix non supporté en Tailwind */
+  .hover-border-gold:hover  { border-color: color-mix(in oklch, theme(colors.gold) 28%, transparent); }
+  .hover-border-gold-sm:hover { border-color: color-mix(in oklch, theme(colors.gold) 40%, transparent); }
+
+  /* param-arrow : transition translateX au hover du parent */
+  .param-link:hover .param-arrow { color: theme(colors.gold); transform: translateX(3px); }
+
 }

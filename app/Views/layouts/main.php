@@ -11,57 +11,56 @@
     <title>PennRide</title>
 </head>
 
-<body class="min-h-screen font-poppins bg-sand-light">
+<body class="min-h-screen font-poppins bg-ocean text-lightgrey">
 
     <!-- ===== HEADER ===== -->
-    <header class="bg-ocean px-5 md:px-10 flex items-center justify-between h-16">
+    <header class="flex items-center justify-between px-5 md:px-10 h-16 bg-ocean-mid border-b border-gold/30">
 
         <!-- Logo -->
         <a href="/" class="flex items-center gap-3">
             <img src="/img/logo.png" alt="PennRide" class="w-10 h-10 rounded-xl">
-            <span class="hidden md:block text-sand text-xs tracking-widest uppercase font-light">PennRide</span>
+            <span class="hidden md:block text-xs tracking-widest uppercase font-light text-sand">PennRide</span>
         </a>
 
         <?php if (session('logged_in')): ?>
 
             <!-- Nav desktop -->
             <nav class="hidden md:flex items-center gap-2">
-                <a class="nav-d hover:text-sand transition-colors px-3 py-2 rounded-lg hover:bg-ocean-light" href="<?= site_url('trajet') ?>">Trajets</a>
-                <a class="nav-d hover:text-sand transition-colors px-3 py-2 rounded-lg hover:bg-ocean-light" href="/nouveau-trajet">Proposer</a>
-                <a class="nav-d hover:text-sand transition-colors px-3 py-2 rounded-lg hover:bg-ocean-light" href="/myprofil">Mon profil</a>
+                <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="<?= site_url('trajet') ?>">Trajets</a>
+                <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/nouveau-trajet">Proposer</a>
+                <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/myprofil">Mon profil</a>
                 <?php if (session('user_role') == 2): ?>
-                    <a class="text-xs font-poppins text-ocean bg-sand px-3 py-1 rounded-full font-medium ml-2" href="/backoffice">Admin</a>
+                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/backoffice">Admin</a>
                 <?php endif; ?>
             </nav>
 
             <!-- Avatar + burger -->
             <div class="flex items-center gap-3">
                 <!-- Avatar desktop -->
-                <div class="hidden md:flex items-center gap-2 border border-sand rounded-full px-3 py-1">
+                <div class="hidden md:flex items-center gap-2 border border-gold/30 rounded-full px-3 py-1">
                     <?php if (session('avatar_filename')): ?>
-                        <img src="<?= base_url('img/avatars/' . session('avatar_filename')) ?> " alt="Avatar">
+                        <img src="<?= base_url('img/avatars/' . session('avatar_filename')) ?>" alt="Avatar">
                     <?php else: ?>
-                        <span class="text-xs text-sand font-medium">
+                        <span class="text-xs font-medium text-gold">
                             <?= strtoupper(substr(session('user_first_name'), 0, 1)) ?><?= strtoupper(substr(session('user_last_name'), 0, 1)) ?>
                         </span>
                     <?php endif; ?>
-
-                    <span class="text-xs text-babyblue"><?= session('user_first_name') ?></span>
+                    <span class="text-xs text-grey"><?= session('user_first_name') ?></span>
                 </div>
                 <!-- Burger mobile -->
-                <button class="md:hidden p-2" onclick="toggleMobileMenu()">
+                <button class="md:hidden p-2 text-grey" onclick="toggleMobileMenu()">
                     <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
-                        <rect y="0" width="20" height="2" rx="1" fill="#F0C878" />
-                        <rect y="7" width="20" height="2" rx="1" fill="#F0C878" />
-                        <rect y="14" width="20" height="2" rx="1" fill="#F0C878" />
+                        <rect y="0"  width="20" height="2" rx="1" fill="currentColor"/>
+                        <rect y="7"  width="20" height="2" rx="1" fill="currentColor"/>
+                        <rect y="14" width="20" height="2" rx="1" fill="currentColor"/>
                     </svg>
                 </button>
             </div>
 
         <?php else: ?>
             <div class="flex gap-2">
-                <a href="/" class="text-xs font-poppins text-babyblue border border-babyblue rounded-full px-4 py-1.5 hover:bg-ocean-light transition-colors">Connexion</a>
-                <a href="/" class="text-xs font-poppins text-ocean bg-sand rounded-full px-4 py-1.5 font-medium hover:bg-sand-light transition-colors">Inscription</a>
+                <a href="/" class="text-xs font-poppins text-grey border border-ocean-light rounded-full px-4 py-1.5 hover:bg-ocean-light transition-colors">Connexion</a>
+                <a href="/" class="text-xs font-poppins font-medium bg-sand text-ocean rounded-full px-4 py-1.5 hover:opacity-90 transition-opacity">Inscription</a>
             </div>
         <?php endif; ?>
 
@@ -69,56 +68,52 @@
 
     <!-- Overlay -->
     <div id="menuOverlay"
-        class="fixed inset-0 z-40 hidden bg-bluegrey"
-        style="transition: opacity 0.35s ease; opacity: 0;"
+        class="fixed inset-0 z-40 hidden"
+        style="background:rgba(0,0,0,0.5); transition: opacity 0.35s ease; opacity: 0;"
         onclick="toggleMobileMenu()">
     </div>
 
     <!-- Menu mobile -->
     <div id="mobileMenu" class="m-menu">
         <!-- Header menu -->
-        <div class="flex items-center justify-between w-full mb-6 pb-4 border-b border-babyblue">
+        <div class="flex items-center justify-between w-full mb-6 pb-4 border-b border-ocean-light">
             <?php if (session('logged_in')): ?>
                 <div class="flex items-center gap-2">
-                    <div class="w-8 h-8 rounded-full bg-ocean flex items-center justify-center text-sand text-xs font-medium">
+                    <div class="w-8 h-8 rounded-full bg-ocean-mid flex items-center justify-center text-xs font-medium text-sand">
                         <?= strtoupper(substr(session('user_first_name'), 0, 1)) ?><?= strtoupper(substr(session('user_last_name'), 0, 1)) ?>
                     </div>
-                    <span class="text-xs text-bluegrey"><?= session('user_first_name') ?> <?= session('user_last_name') ?></span>
+                    <span class="text-xs text-grey"><?= session('user_first_name') ?> <?= session('user_last_name') ?></span>
                 </div>
             <?php else: ?>
                 <span class="text-xs text-grey">Menu</span>
             <?php endif; ?>
-            <button class="text-grey text-xl" onclick="toggleMobileMenu()">✕</button>
+            <button class="text-xl text-grey" onclick="toggleMobileMenu()">✕</button>
         </div>
 
         <?php if (session('logged_in')): ?>
-            <a class="nav-m w-full py-3 border-b border-babyblue" href="<?= site_url('trajet') ?>" onclick="toggleMobileMenu()">Trajets</a>
-            <a class="nav-m w-full py-3 border-b border-babyblue" href="/nouveau-trajet" onclick="toggleMobileMenu()">Proposer un trajet</a>
-            <a class="nav-m w-full py-3 border-b border-babyblue" href="/myprofil" onclick="toggleMobileMenu()">Mon profil</a>
+            <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="<?= site_url('trajet') ?>" onclick="toggleMobileMenu()">Trajets</a>
+            <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="/nouveau-trajet" onclick="toggleMobileMenu()">Proposer un trajet</a>
+            <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="/myprofil" onclick="toggleMobileMenu()">Mon profil</a>
             <?php if (session('user_role') == 2): ?>
-                <a class="text-sm font-poppins text-ocean font-medium w-full py-3 border-b border-babyblue" href="/backoffice" onclick="toggleMobileMenu()">Dashboard admin</a>
+                <a class="text-sm font-poppins font-medium text-sand w-full py-3 border-b border-ocean-light" href="/backoffice" onclick="toggleMobileMenu()">Dashboard admin</a>
             <?php endif; ?>
-            <a class="text-sm font-poppins text-red-500 w-full py-3 mt-2" href="/logout">Déconnexion</a>
+            <a class="text-sm font-poppins text-red w-full py-3 mt-2" href="/logout">Déconnexion</a>
         <?php else: ?>
-            <a class="nav-m w-full py-3 border-b border-babyblue" href="/" onclick="toggleMobileMenu()">Connexion</a>
-            <a class="nav-m w-full py-3" href="/" onclick="toggleMobileMenu()">Inscription</a>
+            <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="/" onclick="toggleMobileMenu()">Connexion</a>
+            <a class="nav-m text-sm font-poppins text-grey w-full py-3" href="/" onclick="toggleMobileMenu()">Inscription</a>
         <?php endif; ?>
     </div>
 
     <!-- Contenu -->
     <?= $this->renderSection('content') ?>
 
-
-    <footer>
-        <ul></ul>
-    </footer>
     <!-- Scripts -->
     <?= $this->renderSection('scripts') ?>
     <script>
         function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
+            const menu    = document.getElementById('mobileMenu');
             const overlay = document.getElementById('menuOverlay');
-            const isOpen = menu.classList.contains('open');
+            const isOpen  = menu.classList.contains('open');
             if (isOpen) {
                 menu.classList.remove('open');
                 overlay.style.opacity = '0';
@@ -130,6 +125,11 @@
             }
         }
     </script>
+
+    <footer>
+        <ul></ul>
+    </footer>
+
 </body>
 
 </html>

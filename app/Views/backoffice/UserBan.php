@@ -1,24 +1,17 @@
- <main class="w-full max-w-5xl mx-auto px-4 py-6 md:px-8 md:py-10 font-poppins">
-
-    <header class="flex justify-between items-center mb-6">
-        <h2 class="text-xs tracking-[0.15em] text-bluegrey uppercase">Bannir un utilisateur</h2>
-    </header>
-
+<section class="mb-8 pt-8 border-t border-gold/20">
     <?php if (session()->getFlashdata('ban_success')): ?>
-        <p class="text-xs text-green-600 border border-green-200 rounded px-3 py-2 mb-4"><?= session()->getFlashdata('ban_success') ?></p>
+        <p class="text-xs text-green border border-green/30 rounded-lg px-3 py-2 mb-4"><?= session()->getFlashdata('ban_success') ?></p>
     <?php endif ?>
     <?php if (session()->getFlashdata('ban_error')): ?>
-        <p class="text-xs text-red-500 border border-red-200 rounded px-3 py-2 mb-4"><?= session()->getFlashdata('ban_error') ?></p>
+        <p class="text-xs text-red border border-red/30 rounded-lg px-3 py-2 mb-4"><?= session()->getFlashdata('ban_error') ?></p>
     <?php endif ?>
-
-    <div class="mb-6">
-        <label for="searchUser" class="block text-sm text-gray-700 mb-1">Rechercher un utilisateur</label>
-        <input type="text" id="searchUserBan" placeholder="Entrez le nom de l'utilisateur recherché"
-            class="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-babyblue focus:border-transparent">
+    <h3 class="text-[0.625rem] tracking-[0.2em] uppercase font-bold text-gold mb-4">Bannir un utilisateur</h3>
+    <div class="mb-4">
+        <label for="searchInputSuppression" class="text-[0.625rem] tracking-[0.12em] uppercase font-semibold text-grey block mb-2">Rechercher un utilisateur</label>
+        <input type="text" id="searchUserBan"
+            placeholder="Entrez le nom de l'utilisateur recherché"
+            class="w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey placeholder:text-grey focus:outline-none focus:border-gold/40 transition-colors">
     </div>
-
-    <div id="researchResultsBan" class="space-y-3"></div>
-    <div id="paginationBan"></div>
-
-</main>
-
+    <div id="researchResultsBan" class="flex flex-col gap-3"></div>
+    <div id="paginationBan" class="flex gap-2 mt-6"></div>
+</section>
