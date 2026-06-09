@@ -19,11 +19,12 @@ class TrackService
      * Save the track in the database.
      * @param array $start The starting point of the track in an array form.
      * @param array $end The end point of the track
-     * @param array $stops Optionnal : Stops on the track
+     * @param array $stops Optional : Stops on the track
+     * @param ?int $trackId = null Optional : Existing track ID for editing
      * 
      * @return int The id of the newly created track
      */
-    public function saveTrack(array $start, array $end, array $stops = []): int
+    public function saveTrack(array $start, array $end, array $stops = [], ?int $trackId = null): int
     {
         helper('french');
         $coordinates = $this->buildCoordinates($start, $end, $stops);
@@ -51,16 +52,25 @@ class TrackService
         if (empty($data['features'])) return false;
 
         //Retrieving the geometries
-        $geometry = $data['features'][0]['geometry'];         // LineString GeoJSON
-        $summary  = $data['features'][0]['properties']['summary'];
+        $geometry = $data['features'][0]['geometry'];               // LineString GeoJSON
+        $summary  = $data['features'][0]['properties']['summary'];  // Distance & duration
 
-        $trackModel = model('TrackModel');
         // Saving in database
-        return $trackModel->insert([
-            'geojson'  => json_encode($geometry),             // The complete geometry
-            'distance' => $summary['distance'],               // The number of meters
-            'duration' => $summary['duration'],       //Storing the number of seconds
-        ]);
+        $trackModel = model('TrackModel');
+
+        $data = [
+            'geojson'  => json_encode($geometry),   // The complete geometry
+            'distance' => $summary['distance'],     // The number of meters
+            'duration' => $summary['duration'],     // The duration
+        ];
+
+        // If $trackId isn't null, updates its existing row instead of inserting a new one
+        if ($trackId !== null) {
+            $trackModel->update($trackId, $data);
+            return $trackId;
+        }
+
+        return $trackModel->insert($data);
     }
 
     /**
