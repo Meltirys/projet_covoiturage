@@ -44,9 +44,10 @@ class RequestController extends BaseController
         $ownRequest = $request['id_user'] == session('user_id');
 
         return view('itinerary/show/RequestShowView', [
-            'request' => $request, 
+            'request' => $request,
             'author' => $author,
-            'ownRequest' => $ownRequest,]);
+            'ownRequest' => $ownRequest,
+        ]);
     }
 
 
@@ -101,6 +102,19 @@ class RequestController extends BaseController
             $data['end-date'] . ' ' . $data['end-time']
         ))->format('Y-m-d H:i:s');
 
+        //
+        if ((new DateTime($data['start-datetime'])) <= new DateTime()) {
+            return redirect()->back()
+                ->with('error', 'La date de départ ne peut être antérieure !')
+                ->withInput();
+        }
+
+        //
+        if ((new DateTime($data['end-datetime'])) <= (new DateTime($data['start-datetime']))) {
+            return redirect()->back()
+                ->with('error', 'La date d\'arrivée doit être postérieure à la date de départ')
+                ->withInput();
+        }
 
         // Validation
         $validator = new CreateJourneyRequestValidator;
@@ -129,7 +143,7 @@ class RequestController extends BaseController
 
             log_message('debug', 'Journey created successfully. ID: ' . $journeyId);
             return redirect()->to('/')
-                ->with('status', 'Itinéraire créé avec succès');
+                ->with('success', 'Itinéraire créé avec succès');
         } catch (\DomainException $e) {
             // user error (e.g. chosen more seats than available in car)
             log_message('debug', 'Domain error: ' . $e->getMessage());
@@ -217,5 +231,4 @@ class RequestController extends BaseController
         return redirect()->to('request/list')
             ->with('success', 'Suppression réussite');
     }
-    
 }

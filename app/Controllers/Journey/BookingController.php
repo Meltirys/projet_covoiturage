@@ -12,39 +12,11 @@ use PhpParser\Node\Expr\AssignOp\Mod;
 
 class BookingController extends BaseController
 {
-    
+
     // Display BookingView with journey details with id_journey_drive
     public function show($id_journey_drive)
     {
-        helper('form');
-
-        $journeyModel = new JourneyDriveModel();
-        $journey = $journeyModel->find($id_journey_drive);
-        if (!$journey) {
-            return redirect()->to('/')
-                ->with('error', 'Trajet introuvable');
-        }
-        $seatPicked = (int) model('BookingModel')
-            ->selectSum('seat_taken')
-            ->where('id_journey_drive', $id_journey_drive)
-            ->where('deletion_date IS NULL')
-            ->get()->getRow()->seat_taken;
-
-        $journey['available_seats'] = $journey['number_of_place'] - $seatPicked;
-
-        // Enriching journey with location names, driver info and booking status
-        $locationModel = model('LocationModel');
-        $userModel = model('UserModel');
-        $journey['departure_city'] = $locationModel->getFormattedAddress($journey['start']);
-        $journey['arrival_city']   = $locationModel->getFormattedAddress($journey['end']);
-        $driver = $userModel->find($journey['driver']);
-        $journey['driver_name']  = $driver['first_name'] . ' ' . substr($driver['last_name'], 0, 1) . '.';
-        $journey['is_driver']    = $journey['driver'] == session('user_id');
-        $journey['has_booked']   = model('BookingModel')
-            ->where('id_user', session('user_id'))
-            ->where('id_journey_drive', $id_journey_drive)
-            ->first();
-        return view('booking/BookingView', ['journey' => $journey]);
+        return redirect()->to('drive/show/' . $id_journey_drive);
     }
 
     /**
