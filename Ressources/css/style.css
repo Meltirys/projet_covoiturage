@@ -64,33 +64,63 @@
   src: url("/fonts/playfair-display-v40-latin-800.woff2") format("woff2");
 }
 
-/* ===== THÈME — palette Voya ===== */
+/* ===== VARIABLES DE THÈME ===== */
+
+/* Thème clair (défaut) */
+:root {
+  --color-ocean:        #F0EDE8;
+  --color-ocean-mid:    #E8E4DE;
+  --color-ocean-light:  #DDD9D2;
+  --color-lightgrey:    #1A1510;
+  --color-grey:         #6B6358;
+  --color-bluegrey:     #9A9188;
+  --color-gold:         #B8832A;
+  --color-gold-light:   #D4A843;
+  --color-cyan:         #2A8A84;
+  --color-red:          #C0392B;
+  --color-green:        #2E8B57;
+  --color-sand:         #1A1510;
+  --color-input-bg:     #E0DCD6;
+  --color-input-border: rgba(100, 80, 50, 0.2);
+}
+
+/* Thème sombre */
+html.dark {
+  --color-ocean:        #12171b;
+  --color-ocean-mid:    #131720;
+  --color-ocean-light:  #1C2128;
+  --color-lightgrey:    #E8EAF0;
+  --color-grey:         #6B7380;
+  --color-bluegrey:     #3D4450;
+  --color-gold:         #D4A843;
+  --color-gold-light:   #F0C866;
+  --color-cyan:         #4ECDC4;
+  --color-red:          #D94F4F;
+  --color-green:        #3DB870;
+  --color-sand:         #F5E6C8;
+  --color-input-bg:     #111418;
+  --color-input-border: rgba(255,255,255,0.07);
+}
+
+/* ===== THÈME — tokens Tailwind pointent vers les variables ===== */
 @theme inline {
   --font-poppins: "Poppins", sans-serif;
   --font-pfd:     "Playfair Display", serif;
 
-  /* Fonds */
-  --color-ocean:        #12171b;   /* bg principal */
-  --color-ocean-mid:    #131720;   /* surface */
-  --color-ocean-light:  #1C2128;   /* surface hover / bordures */
-
-  /* Textes */
-  --color-lightgrey:    #E8EAF0;   /* texte principal */
-  --color-grey:         #6B7380;   /* texte secondaire */
-  --color-bluegrey:     #3D4450;   /* texte très atténué */
-  --color-cyan:     #4ECDC4;   /* accent cyan */
-
-  /* Accents */
-  --color-gold:         #D4A843;   /* or principal */
-  --color-gold-light:   #F0C866;   /* or hover */
-
-  /* États */
-  --color-red:          #D94F4F;
-  --color-green:        #3DB870;
-
-  /* Divers (conservés pour compatibilité) */
-  --color-input-bg:     #111418;
-  --color-input-border: rgba(255,255,255,0.07);
+  --color-ocean:        var(--color-ocean);
+  --color-ocean-mid:    var(--color-ocean-mid);
+  --color-ocean-light:  var(--color-ocean-light);
+  --color-lightgrey:    var(--color-lightgrey);
+  --color-grey:         var(--color-grey);
+  --color-bluegrey:     var(--color-bluegrey);
+  --color-gold:         var(--color-gold);
+  --color-gold-light:   var(--color-gold-light);
+  --color-cyan:         var(--color-cyan);
+  --color-red:          var(--color-red);
+  --color-green:        var(--color-green);
+  --color-sand:         var(--color-sand);
+  --color-input-bg:     var(--color-input-bg);
+  --color-input-border: var(--color-input-border);
 }
 
 /* ===== BASE ===== */
@@ -99,11 +129,13 @@
     background-color: theme(colors.ocean);
     color: theme(colors.lightgrey);
     font-family: "Poppins", sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
   input, textarea, select {
     background-color: theme(colors.ocean-mid);
     border-color: theme(colors.ocean-light);
     color: theme(colors.lightgrey);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
   }
   input::placeholder, textarea::placeholder {
     color: theme(colors.grey);
@@ -113,11 +145,9 @@
 /* ===== COMPOSANTS ===== */
 @layer components {
 
-  /* Toggle conducteur/passager */
   #mode-toggle { background: theme(colors.ocean-light); border: 1px solid theme(colors.gold); transition: background 0.3s; }
   #mode-toggle.active { background: theme(colors.gold); }
 
-  /* Menu mobile */
   .m-menu {
     position: fixed; top: 0; right: 0;
     width: 50%; height: 100vh; z-index: 50;
@@ -130,14 +160,12 @@
   }
   .m-menu.open { transform: translateX(0); }
 
-  /* Animations HomeView */
   .penn-eyebrow { opacity:0; transform:translateY(10px); }
   .penn-hero    { opacity:0; transform:translateY(14px); }
   .penn-stats   { opacity:0; transform:translateY(14px); }
   .penn-card    { opacity:0; transform:translateY(20px); }
   .auth-panel   { animation: fadeSlideIn 0.3s ease forwards; }
 
-  /* Orbes */
   .orb { pointer-events:none; z-index:0; position:absolute; border-radius:9999px; }
   .orb-1 { width:220px; height:220px; top:-80px; right:-60px; opacity:.25; animation:float1 8s ease-in-out infinite; }
   .orb-2 { width:120px; height:120px; bottom:-40px; left:-30px; opacity:.08; animation:float2 10s ease-in-out infinite; }
@@ -174,36 +202,34 @@
   40%,60% { transform:translateX(4px); }
 }
 
-/* ===== PROFIL — uniquement ce qui est impossible en Tailwind pur ===== */
+/* ===== PROFIL ===== */
 @layer components {
 
-  /* Hero : fond sombre + dégradés ambiants + grille de lignes (pseudo-éléments impossibles en Tailwind) */
-.profile-hero {
+  .profile-hero {
     position: relative;
     overflow: hidden;
-    background-color: #12171b;
+    background-color: theme(colors.ocean);
     border-bottom: 1px solid theme(colors.ocean-light);
-}
-.profile-hero::before {
+    transition: background-color 0.3s ease;
+  }
+  .profile-hero::before {
     content: '';
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(ellipse 75% 120% at 0% 55%, color-mix(in oklch, theme(colors.gold) 15%, transparent), transparent 60%),
-        radial-gradient(ellipse 40% 60% at 100% 20%, color-mix(in oklch, theme(colors.cyan) 4%, transparent), transparent 50%),
-        repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(255,255,255,0.018) 80px),
-        repeating-linear-gradient(0deg,  transparent, transparent 39px, rgba(255,255,255,0.012) 40px);
+      radial-gradient(ellipse 75% 120% at 0% 55%, color-mix(in oklch, theme(colors.gold) 15%, transparent), transparent 60%),
+      radial-gradient(ellipse 40% 60% at 100% 20%, color-mix(in oklch, theme(colors.cyan) 4%, transparent), transparent 50%),
+      repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(0,0,0,0.018) 80px),
+      repeating-linear-gradient(0deg,  transparent, transparent 39px, rgba(0,0,0,0.012) 40px);
     pointer-events: none;
     z-index: 0;
-}
+  }
 
-  /* Monogramme : gradient sombre impossible en Tailwind */
   .profile-monogram {
-    background: linear-gradient(145deg, #2A2210, #1A1508);
+    background: linear-gradient(145deg, color-mix(in oklch, theme(colors.gold) 15%, theme(colors.ocean)), theme(colors.ocean));
     border-color: color-mix(in oklch, theme(colors.gold) 28%, transparent);
   }
 
-  /* Section title : pseudo-élément barre gauche */
   .section-title::before {
     content: '';
     display: block;
@@ -213,7 +239,6 @@
     flex-shrink: 0;
   }
 
-  /* Stats : responsive mobile cards → desktop colonne */
   @media (min-width: 768px) {
     .profile-stats {
       flex-direction: column;
@@ -242,11 +267,7 @@
     .profile-stat-l { text-align: right; }
   }
 
-  /* Hover gold sur bordures — color-mix non supporté en Tailwind */
-  .hover-border-gold:hover  { border-color: color-mix(in oklch, theme(colors.gold) 28%, transparent); }
+  .hover-border-gold:hover    { border-color: color-mix(in oklch, theme(colors.gold) 28%, transparent); }
   .hover-border-gold-sm:hover { border-color: color-mix(in oklch, theme(colors.gold) 40%, transparent); }
-
-  /* param-arrow : transition translateX au hover du parent */
   .param-link:hover .param-arrow { color: theme(colors.gold); transform: translateX(3px); }
-
 }

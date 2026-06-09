@@ -1,29 +1,32 @@
 <!DOCTYPE html>
 <html lang="fr">
- 
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<?= csrf_hash() ?>">
     <meta name="csrf-name" content="<?= csrf_token() ?>">
+    <!-- Thème appliqué avant le paint pour éviter le flash -->
+    <script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark')</script>
     <link rel="icon" type="image/png" href="/img/logo.png">
+    <script src="/js/theme-toggle.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <title>PennRide</title>
 </head>
- 
+
 <body class="min-h-screen font-poppins bg-ocean text-lightgrey">
- 
+
     <!-- ===== HEADER ===== -->
     <header class="flex items-center justify-between px-5 md:px-10 h-16 bg-ocean-mid border-b border-gold/30">
- 
+
         <!-- Logo -->
         <a href="/" class="flex items-center gap-3">
             <img src="/img/logo.png" alt="PennRide" class="w-10 h-10 rounded-xl">
             <span class="hidden md:block text-xs tracking-widest uppercase font-light text-sand">PennRide</span>
         </a>
- 
+
         <?php if (session('logged_in')): ?>
- 
+
             <!-- Nav desktop -->
             <nav class="hidden md:flex items-center gap-2">
                 <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="<?= site_url('trajet') ?>">Trajets</a>
@@ -33,7 +36,7 @@
                     <a class="text-xs font-poppins font-medium ml-2 px-3 py-1 rounded-full bg-sand text-ocean" href="/backoffice">Admin</a>
                 <?php endif; ?>
             </nav>
- 
+
             <!-- Avatar + burger -->
             <div class="flex items-center gap-3">
                 <!-- Avatar desktop -->
@@ -56,23 +59,23 @@
                     </svg>
                 </button>
             </div>
- 
+
         <?php else: ?>
             <div class="flex gap-2">
                 <a href="/" class="text-xs font-poppins text-grey border border-ocean-light rounded-full px-4 py-1.5 hover:bg-ocean-light transition-colors">Connexion</a>
                 <a href="/" class="text-xs font-poppins font-medium bg-sand text-ocean rounded-full px-4 py-1.5 hover:opacity-90 transition-opacity">Inscription</a>
             </div>
         <?php endif; ?>
- 
+
     </header>
- 
+
     <!-- Overlay -->
     <div id="menuOverlay"
         class="fixed inset-0 z-40 hidden"
         style="background:rgba(0,0,0,0.5); transition: opacity 0.35s ease; opacity: 0;"
         onclick="toggleMobileMenu()">
     </div>
- 
+
     <!-- Menu mobile -->
     <div id="mobileMenu" class="m-menu">
         <!-- Header menu -->
@@ -89,7 +92,7 @@
             <?php endif; ?>
             <button class="text-xl text-grey" onclick="toggleMobileMenu()">✕</button>
         </div>
- 
+
         <?php if (session('logged_in')): ?>
             <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="<?= site_url('trajet') ?>" onclick="toggleMobileMenu()">Trajets</a>
             <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="/nouveau-trajet" onclick="toggleMobileMenu()">Proposer un trajet</a>
@@ -103,10 +106,10 @@
             <a class="nav-m text-sm font-poppins text-grey w-full py-3" href="/" onclick="toggleMobileMenu()">Inscription</a>
         <?php endif; ?>
     </div>
- 
+
     <!-- Contenu -->
     <?= $this->renderSection('content') ?>
- 
+
     <!-- Scripts -->
     <?= $this->renderSection('scripts') ?>
     <script>
@@ -125,3 +128,11 @@
             }
         }
     </script>
+
+    <footer>
+        <ul></ul>
+    </footer>
+
+</body>
+
+</html>
