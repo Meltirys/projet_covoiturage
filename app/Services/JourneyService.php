@@ -22,7 +22,8 @@ class JourneyService
 
     private LocationService $locationService;
 
-    private const MATCH_RADIUS_METERS = 1000;
+    // Constant which defines the radius to accept a location as a "match" when the user searches for itineraries
+    private const int MATCH_RADIUS_METERS = 1000;
 
     public function __construct()
     {
