@@ -1,22 +1,14 @@
 <?php
 
-namespace App\Validators;
+namespace App\Validators\JourneyDrive;
 
 use App\Validation\CustomRules;
+use App\Validators\BaseValidator;
 
-class CreateJourneyDriveValidator extends BaseValidator
+class SearchJourneyDriveValidator extends BaseValidator
 {
-    /**
-     * List all the rules that needs to be followed in order to be valid
-     * 
-     * @return array Array containing all the rules
-     */
-    public function rules(): array
+    protected function rules(): array
     {
-        /*
-         * /!\ Reminder to add options once implemented /!\
-         */
-
         $cityRules = [
             'rules' => 'required|min_length[2]|max_length[50]',
             'errors' => [
@@ -113,19 +105,12 @@ class CreateJourneyDriveValidator extends BaseValidator
 
             // ===== OTHER
 
-            'car' => [
-                'rules' => 'required|is_natural_no_zero',
-                'errors' => [
-                    'required' => 'Le choix du véhicule est obligatoire',
-                    'is_natural_no_zero' => 'Veuillez choisir un véhicule valide',
-                ]
-            ],
-            'seats'      => [
-                'rules' => 'required|min_length[1]|max_length[2]',
+            'free-seats'      => [
+                'rules' => 'required|greater_than_equal_to[1]|less_than_equal_to[8]',
                 'errors' => [
                     'required' => 'Le nombre de places disponsibles est obligatoire',
-                    'min_length' => 'Le nombre de places choisi ne doit pas être inférieur à 1',
-                    'max_length' => 'Le nombre de places choisi est trop grand',
+                    'greater_than_equal_to' => 'Le nombre de places choisi ne doit pas être inférieur à 1',
+                    'less_than_equal_to' => 'Le nombre de places choisi est trop grand',
                 ]
             ],
             'start-date' => $dateRules,
