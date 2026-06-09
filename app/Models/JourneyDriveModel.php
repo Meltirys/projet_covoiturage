@@ -13,8 +13,7 @@ class JourneyDriveModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    // Add id_track later, and remove nullability of id_track in db
-    protected $allowedFields    = ['number_of_place', 'departure', 'estimated_arrival', 'id_track', 'start', 'end', 'id_car', 'driver', 'id_track'];
+    protected $allowedFields    = ['number_of_place', 'departure', 'estimated_arrival', 'start', 'end', 'id_car', 'driver', 'id_track'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -47,7 +46,11 @@ class JourneyDriveModel extends Model
     protected $afterDelete    = [];
 
 
-
+    /**
+     * Retrieves all of a given journey's data
+     * @param int $idJourney
+     * @return array
+     */
     public function getAllJourneyInfos(int $idJourney): ?array
     {
         $journey = $this->select('
@@ -55,9 +58,13 @@ class JourneyDriveModel extends Model
                 CONCAT(Users.first_name, " ", LEFT(Users.last_name, 1), ".") AS driver_name,
                 Users.avatar_filename,
                 departure_location.address                                    AS departure_address,
+                departure_location.latitude                                   AS departure_lat,
+                departure_location.longitude                                  AS departure_lon,
                 departure_city.postcode                                       AS departure_postcode,
                 departure_city.name                                           AS departure_city,
                 arrival_location.address                                      AS arrival_address,
+                arrival_location.latitude                                     AS arrival_lat,
+                arrival_location.longitude                                    AS arrival_lon,
                 arrival_city.postcode                                         AS arrival_postcode,
                 arrival_city.name                                             AS arrival_city,
                 Car.brand                                                     AS car_brand,
@@ -81,6 +88,8 @@ class JourneyDriveModel extends Model
             ->select('
                             Stages.*,
                             Location.address,
+                            Location.latitude AS lat,
+                            Location.longitude AS lon,
                             City.postcode,
                             City.name AS city_name
                         ')
@@ -95,10 +104,11 @@ class JourneyDriveModel extends Model
         return $journey;
     }
 
-    public function futureJourneyByCar(int $idCar) : array {
+    public function futureJourneyByCar(int $idCar): array
+    {
         return $this
-                ->where('id_car', $idCar)
-                ->where('departure < ', date('Y-m-d H:i:s'))
-                ->findAll();
+            ->where('id_car', $idCar)
+            ->where('departure < ', date('Y-m-d H:i:s'))
+            ->findAll();
     }
 }
