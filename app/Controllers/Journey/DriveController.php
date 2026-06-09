@@ -69,7 +69,7 @@ class DriveController extends BaseController
     public function show(?string $slug = null)
     {
         helper('form');
-        helper('french_helper');
+        helper('french');
 
         $connectedUser = session()->user_id;
         $journeyModel = model(JourneyDriveModel::class);
@@ -192,7 +192,7 @@ class DriveController extends BaseController
     {
         /*
          * Inputs :
-         * 
+         * departure, estimated arrival, start-location, end-location, id-car, number of seats
          */
     }
 
