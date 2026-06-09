@@ -6,8 +6,9 @@ use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use App\Models\JourneyDriveModel;
-use App\Validators\CreateJourneyDriveValidator;
-use App\Validators\SearchJourneyDriveValidator;
+use App\Validators\JourneyDrive\CreateJourneyDriveValidator;
+use App\Validators\JourneyDrive\EditJourneyDriveValidator;
+use App\Validators\JourneyDrive\SearchJourneyDriveValidator;
 use Exception;
 use PDOException;
 
@@ -186,13 +187,19 @@ class DriveController extends BaseController
      * Updates an existing itinerary
      * @param int $id The journey's id
      */
-    public function update(int $id)
+    public function update(?int $id = null)
     {
         /*
          * Inputs :
          * start-location,end-location, stages, departure datetime, estimated arrival datetime, id-car, number of seats
          */
+        if ($id === null) {
+            return view('404');
+        }
+
         $data = $this->request->getPost('drive');
+
+        $journeyDriveModel = model(JourneyDriveModel::class);
 
         // Validation
         $validator = new EditJourneyDriveValidator;
@@ -207,12 +214,16 @@ class DriveController extends BaseController
 
         log_message('debug', 'Validation passed. Editing journey...');
 
+        // Acquiring the data of the journey before edition
+        $originalJourney = $journeyDriveModel->getAllJourneyInfos($id);
+
         // Logic
         try {
             $journeyService = service('journeyService');
 
             // === Ajouter options quand possible !
             $journeyId = $journeyService->updateJourneyDrive(
+                $originalJourney,
                 $data,
                 session()->get('user_id')
             );
