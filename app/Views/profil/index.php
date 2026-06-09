@@ -118,6 +118,12 @@
                 <!-- Trajets conducteur -->
                 <div class="mb-6">
                     <h3 class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase mb-2">Mes trajets proposés</h3>
+                    <?php if (session()->getFlashdata('error')): ?>
+                        <p class="text-xs text-red-500 mb-3"><?= session()->getFlashdata('error') ?></p>
+                    <?php endif ?>
+                    <?php if (session()->getFlashdata('success')): ?>
+                        <p class="text-xs text-green-600 mb-3"><?= session()->getFlashdata('success') ?></p>
+                    <?php endif ?>
                     <h4 class="text-xs font-poppins text-grey mb-2">À venir</h4>
                     <ul class="flex flex-col gap-2">
                         <!-- boucle trajets à venir -->
