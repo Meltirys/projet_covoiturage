@@ -2,6 +2,8 @@
 $status = session()->getFlashdata('status');
 $errors = session()->getFlashdata('errors') ?? [];
 $error  = session()->getFlashdata('error');
+$selectedCar = old('drive.car', $journey['id_car']);
+$selectedSeat = old('drive.seats', $journey['number_of_place']);
 ?>
 
 <?= $this->extend('layouts/main') ?>
@@ -23,7 +25,7 @@ $error  = session()->getFlashdata('error');
     <?php endif ?>
 
     <div class="bg-white border border-[rgba(37,63,114,0.25)] rounded-xl p-5">
-        <?= view('itinerary/edit/edit_drive_form', ['errors' => $errors, 'cars' => $cars ?? []]) ?>
+        <?= view('itinerary/edit/edit_drive_form', ['errors', 'cars', 'journey', 'selectedCar']) ?>
     </div>
 </main>
 
@@ -40,7 +42,13 @@ $error  = session()->getFlashdata('error');
         const carSelect = document.getElementById("drive-car");
         const seatSelect = document.getElementById("drive-seats");
 
-        const oldSeatValue = "<?= old('drive.seats') ?>";
+        if (carSelect && seatSelect && Array.isArray(cars) && cars.length > 0) {
+            // Initiate seat population on car selection change
+            carSelect.addEventListener("change", populateSeats);
+
+            // Initial population on page load
+            populateSeats();
+        }
 
         function populateSeats() {
             const car = cars.find(c => String(c.id_car) === carSelect.value); // match l'id des voitures dans cars à l'id sélectionné dans le dropdown
@@ -49,27 +57,21 @@ $error  = session()->getFlashdata('error');
 
             if (!car) return;
 
-            for (let i = 1; i <= car.seats; i++) {
-                const opt = document.createElement("option");
+            for (let i = 1; i <= car.number_of_seat; i++) {
+                const option = document.createElement("option");
 
-                opt.value = i;
-                opt.textContent = `${i}`;
+                option.value = i;
+                option.textContent = `${i}`;
 
                 // Repopulate old seat selection
-                if (String(i) === oldSeatValue) {
-                    opt.selected = true;
+                if (String(i) === $selectedSeat) {
+                    option.selected = true;
                 }
 
-                seatSelect.appendChild(opt);
+                seatSelect.appendChild(option);
             }
         }
-        if (carSelect && seatSelect && Array.isArray(cars) && cars.length > 0) {
-            // Initiate seat population on car selection change
-            carSelect.addEventListener("change", populateSeats);
 
-            // Initial population on page load
-            populateSeats();
-        }
     });
 </script>
 <?= $this->endSection() ?>
