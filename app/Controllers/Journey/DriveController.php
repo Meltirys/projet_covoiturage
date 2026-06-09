@@ -45,7 +45,7 @@ class DriveController extends BaseController
                 $journeyService = service('journeyService');
 
                 // === Ajouter options quand possible !
-                $data['journeys'] = $journeyService->searchJourneyDrive($getData);
+                $getData['journeys'] = $journeyService->searchJourneyDrive($getData);
             } catch (\Throwable $e) {
                 // system error
                 log_message('error', $e->getMessage());
@@ -57,7 +57,7 @@ class DriveController extends BaseController
         }
 
 
-        return view('itinerary/search/SearchView');
+        return view('itinerary/search/SearchView', $getData);
     }
 
     /**

@@ -102,7 +102,7 @@ class JourneyService
                 ->where('driver', $userId)
                 ->where('start', $startLocationId)
                 ->where('end', $endLocationId)
-                ->where('departure', $input['start-datetime'])
+                ->where('departure', $departureTime)
                 ->where('deletion_date IS NULL')
                 ->first();
             if ($existingJ) {

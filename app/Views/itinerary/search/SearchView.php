@@ -63,7 +63,7 @@ $error        = session()->getFlashdata('error');
                         </div>
 
                         <div class="flex justify-end">
-                            <a href="<?= site_url('reservation/' . $journey['id_journey_drive']) ?>"
+                            <a href="<?= site_url('drive/show/' . $journey['id_journey_drive']) ?>"
                                 class="bg-gold text-ocean font-semibold text-xs px-5 py-2 rounded-full hover:opacity-90 transition-opacity">
                                 Réserver
                             </a>
