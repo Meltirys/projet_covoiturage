@@ -24,6 +24,8 @@ class JourneyService
 
     public function __construct()
     {
+        helper('geo');
+
         $this->db = db_connect();
         $this->journeyDriveModel = model(JourneyDriveModel::class);
         $this->journeyRequestModel = model(JourneyRequestModel::class);
@@ -201,7 +203,10 @@ class JourneyService
     /**
      * 
      */
-    public function updateJourneyDrive() {}
+    public function updateJourneyDrive()
+    {
+        // TODO
+    }
 
     /**
      * Deletes a journey drive
@@ -433,7 +438,10 @@ class JourneyService
     /**
      * 
      */
-    public function updateJourneyRequest() {}
+    public function updateJourneyRequest()
+    {
+        // TODO
+    }
 
     /**
      * Deletes a journey request
@@ -470,7 +478,10 @@ class JourneyService
     /**
      * 
      */
-    public function searchJourneyRequest() {}
+    public function searchJourneyRequest()
+    {
+        // TODO
+    }
 
     /**
      * Function to filter journeys which don't have enough free seats
