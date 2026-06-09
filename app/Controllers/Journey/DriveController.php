@@ -6,7 +6,6 @@ use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use App\Models\JourneyDriveModel;
-use App\Models\CarModel;
 use App\Validators\CreateJourneyDriveValidator;
 use App\Validators\SearchJourneyDriveValidator;
 use Exception;
@@ -14,7 +13,6 @@ use PDOException;
 
 class DriveController extends BaseController
 {
-
     /**
      * Manages journey search page
      */
@@ -192,8 +190,51 @@ class DriveController extends BaseController
     {
         /*
          * Inputs :
-         * departure, estimated arrival, start-location, end-location, id-car, number of seats
+         * start-location,end-location, stages, departure datetime, estimated arrival datetime, id-car, number of seats
          */
+        $data = $this->request->getPost('drive');
+
+        // Validation
+        $validator = new EditJourneyDriveValidator;
+
+        if (! $validator->validate($data)) {
+            log_message('debug', 'Validation failed. Errors: ' . json_encode($validator->getErrors()));
+            return redirect()->back()
+                ->with('drive_errors', $validator->getErrors())
+                ->with('failed_form', 'drive')
+                ->withInput();
+        }
+
+        log_message('debug', 'Validation passed. Editing journey...');
+
+        // Logic
+        try {
+            $journeyService = service('journeyService');
+
+            // === Ajouter options quand possible !
+            $journeyId = $journeyService->updateJourneyDrive(
+                $data,
+                session()->get('user_id')
+            );
+
+            log_message('debug', 'Journey modified successfully. ID: ' . $journeyId);
+            return redirect()->to('/')
+                ->with('status', 'Itinéraire modifié avec succès');
+        } catch (\DomainException $e) {
+            // user error (e.g. chosen more seats than available in car)
+            log_message('debug', 'Domain error: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
+        } catch (\Throwable $e) {
+            // system error
+            log_message('error', 'Error in save(): ' . $e->getMessage());
+            log_message('error', 'Stack: ' . $e->getTraceAsString());
+
+            return redirect()->back()
+                ->with('error', 'Une erreur s\'est produite')
+                ->withInput();
+        }
     }
 
     /**
