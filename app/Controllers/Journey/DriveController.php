@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use App\Models\JourneyDriveModel;
+use App\Services\JourneyService;
 use App\Validators\JourneyDrive\CreateJourneyDriveValidator;
 use App\Validators\JourneyDrive\EditJourneyDriveValidator;
 use App\Validators\JourneyDrive\SearchJourneyDriveValidator;
@@ -15,10 +16,12 @@ use PDOException;
 class DriveController extends BaseController
 {
     private JourneyDriveModel $journeyDriveModel;
+    private JourneyService $journeyService;
 
     public function __construct()
     {
         $this->journeyDriveModel = model(JourneyDriveModel::class);
+        $this->journeyService = service('journeyService');
     }
 
     /**
@@ -26,6 +29,8 @@ class DriveController extends BaseController
      */
     public function search()
     {
+        helper('form');
+
         /* Inputs :
         * start = ['label', 'city', 'postcode', 'lat', 'lon']
         * end = [...]
@@ -34,24 +39,22 @@ class DriveController extends BaseController
         * (optional) filters
         */
 
-        helper('form');
-
         $getData = $this->request->getGet();
 
         if (isset($getData['start'])) {
             // Validation
             $validator = new SearchJourneyDriveValidator;
 
-            // if (! $validator->validate($getData)) {
-            //     $getData['errors'] = $validator->getErrors();
-
-            //     return view('itinerary/search/SearchView', $getData);
-            // }
+            if (! $validator->validate($getData)) {
+                log_message('debug', 'Validation failed. Errors: ' . json_encode($validator->getErrors()));
+                return redirect()->back()
+                    ->with('errors', $validator->getErrors())
+                    ->withInput();
+            }
 
             // Logic
+            $journeyService = $this->journeyService;
             try {
-                $journeyService = service('journeyService');
-
                 // === Ajouter options quand possible !
                 $getData['journeys'] = $journeyService->searchJourneyDrive($getData);
             } catch (\Throwable $e) {
@@ -161,10 +164,8 @@ class DriveController extends BaseController
 
         // Logic
         try {
-            $journeyService = service('journeyService');
-
             // === Ajouter options quand possible !
-            $journeyId = $journeyService->createJourneyDrive(
+            $journeyId = $this->journeyService->createJourneyDrive(
                 $data,
                 session()->get('user_id')
             );
@@ -222,20 +223,23 @@ class DriveController extends BaseController
         // Acquiring the data of the journey before edition
         $originalJourney = $this->journeyDriveModel->getAllJourneyInfos($id);
 
+        if ($originalJourney === null) {
+            log_message('debug', 'Existing journey not found');
+            throw new \DomainException('Ce trajet n\'existe pas');
+        }
+
         $this->canManageJourney($originalJourney['driver']); // authorization check
 
         // Logic
         try {
-            $journeyService = service('journeyService');
-
             // === Ajouter options quand possible !
-            $journeyId = $journeyService->updateJourneyDrive(
+            $this->journeyService->updateJourneyDrive(
                 $originalJourney,
                 $data,
                 session()->get('user_id')
             );
 
-            log_message('debug', 'Journey modified successfully. ID: ' . $journeyId);
+            log_message('debug', 'Journey modified successfully.');
             return redirect()->to('/')
                 ->with('status', 'Itinéraire modifié avec succès');
         } catch (\DomainException $e) {
@@ -261,7 +265,6 @@ class DriveController extends BaseController
      */
     public function delete(int $id)
     {
-        $journeyService = service('journeyService');
         // todo : add check to see if journey belongs to user
         $ownerId = $this->journeyDriveModel->find($id)['driver'];
 
@@ -270,7 +273,7 @@ class DriveController extends BaseController
         log_message('debug', 'Deleting journey...');
 
         try {
-            $journeyService->deleteJourneyDrive($id);
+            $this->journeyService->deleteJourneyDrive($id);
 
             log_message('debug', 'Journey deleted successfully.');
 
