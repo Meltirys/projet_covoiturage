@@ -56,30 +56,20 @@ class JourneyService
 
         try {
             // 1. Verify car ownership and seat amount
-            $this->validateCar((int)$input['car'], (int)$input['driver'], (int)$input['seats']);
+            $this->validateCar(
+                (int)$input['car'],
+                (int)$userId,
+                (int)$input['seats']
+            );
 
             // 2. Cities + Locations
-            $startLocationId = $locationService->getOrCreate(
-                $input['start']['label'],
-                $input['start']['city'],
-                $input['start']['postcode'],
-                $input['start']['lat'] ?? null,
-                $input['start']['lon'] ?? null
-            );
-
-            $endLocationId = $locationService->getOrCreate(
-                $input['end']['label'],
-                $input['end']['city'],
-                $input['end']['postcode'],
-                $input['end']['lat'] ?? null,
-                $input['end']['lon'] ?? null
-            );
+            $locationIds = $this->createStartEndLocations($input);
 
             // Checking if there duplicate journey
             $existingJ = $this->journeyDriveModel
                 ->where('driver', $userId)
-                ->where('start', $startLocationId)
-                ->where('end', $endLocationId)
+                ->where('start', $locationIds['start'])
+                ->where('end', $locationIds['end'])
                 ->where('departure', $departureTime)
                 ->where('deletion_date IS NULL')
                 ->first();
@@ -106,8 +96,8 @@ class JourneyService
                 'departure'         => $departureTime,
                 'estimated_arrival' => $estimatedArrival,
                 'id_car'            => $input['car'],
-                'start'             => $startLocationId,
-                'end'               => $endLocationId,
+                'start'             => $locationIds['start'],
+                'end'               => $locationIds['end'],
                 'driver'            => $userId,
                 'id_track'          => $idTrack
             ];
@@ -141,12 +131,11 @@ class JourneyService
      * Updates an existing itinerary
      * @param array $original The original journey data
      * @param array $input The updated journey data
+     * @param int $userId
      */
-    public function updateJourneyDrive(array $original, array $input): void
+    public function updateJourneyDrive(array $original, array $input, int $userId): void
     {
-
-        $stageModel     = $this->stagesModel;
-        $locationService = $this->locationService;
+        $stageModel = $this->stagesModel;
 
         $this->db->transBegin();
 
@@ -155,24 +144,14 @@ class JourneyService
 
         try {
             // 1. Verify car ownership and seat amount
-            $this->validateCar((int)$input['car'], (int)$input['driver'], (int)$input['seats']);
+            $this->validateCar(
+                (int)$input['car'],
+                (int)$userId,
+                (int)$input['seats']
+            );
 
             // 2. Cities + Locations
-            $startLocationId = $locationService->getOrCreate(
-                $input['start']['label'],
-                $input['start']['city'],
-                $input['start']['postcode'],
-                $input['start']['lat'],
-                $input['start']['lon']
-            );
-
-            $endLocationId = $locationService->getOrCreate(
-                $input['end']['label'],
-                $input['end']['city'],
-                $input['end']['postcode'],
-                $input['end']['lat'],
-                $input['end']['lon']
-            );
+            $locationIds = $this->createStartEndLocations($input);
 
             // 3. Track
             $routeChanged = $this->detectRouteChange($original, $input);
@@ -194,9 +173,9 @@ class JourneyService
                 'departure'         => $departureTime,
                 'estimated_arrival' => $estimatedArrival,
                 'id_car'            => $input['car'],
-                'start'             => $startLocationId,
-                'end'               => $endLocationId,
-                'driver'            => $input['driver'],
+                'start'             => $locationIds['start'],
+                'end'               => $locationIds['end'],
+                'driver'            => $userId,
                 'id_track'          => $idTrack
             ];
 
@@ -388,6 +367,7 @@ class JourneyService
     }
 
 
+
     /**
      * Attempts to create every element of the requester's journey
      * @param array $input The user's inputs
@@ -398,32 +378,15 @@ class JourneyService
     {
         $locationService = $this->locationService;
 
+        $this->checkDatesValidity($input);
+
         $this->db->transBegin();
 
         try {
             // 1. Cities + Locations
-            $startLocationId = $locationService->getOrCreate(
-                $input['start']['label'],
-                $input['start']['city'],
-                $input['start']['postcode'],
-                $input['start']['lat'] ?? null,
-                $input['start']['lon'] ?? null
-            );
-
-            $endLocationId = $locationService->getOrCreate(
-                $input['end']['label'],
-                $input['end']['city'],
-                $input['end']['postcode'],
-                $input['end']['lat'] ?? null,
-                $input['end']['lon'] ?? null
-            );
+            $locationIds = $this->createStartEndLocations($input);
 
             // 2. Journey
-
-            if ($startLocationId === $endLocationId) {
-                throw new \DomainException('Le point de départ et d\'arrivée ne peuvent pas être identiques');
-            }
-
             if ($input['range-start'] >= $input['range-end']) {
                 throw new \DomainException('L\'heure de début de disponibilité doit être avant la fin');
             }
@@ -434,8 +397,8 @@ class JourneyService
                 'description'   => $input['description'],
                 'range_of_time' => $input['range-of-time'],
                 'id_user'       => $userId,
-                'start'         => $startLocationId,
-                'end'           => $endLocationId,
+                'start'         => $locationIds['start'],
+                'end'           => $locationIds['end'],
             ];
 
             $journeyId = $this->journeyRequestModel->insert($journeyData, true);
@@ -507,8 +470,68 @@ class JourneyService
     }
 
     /**
+     * Validates the time of the start and end of the journey
+     * @param array $input
+     * @return void
+     */
+    private function checkDatesValidity(array $input): void
+    {
+        $input['start-datetime'] = (new DateTime(
+            $input['start-date'] . ' ' . $input['start-time']
+        ))->format('Y-m-d H:i:s');
+
+        $input['end-datetime'] = (new DateTime(
+            $input['end-date'] . ' ' . $input['end-time']
+        ))->format('Y-m-d H:i:s');
+
+        $now = new DateTime();
+
+        if ((new DateTime($input['start-datetime'])) <= $now) {
+            throw new \DomainException('La date de départ ne peut pas être dans le passé');
+        }
+
+        if ((new DateTime($input['end-datetime'])) <= (new DateTime($input['start-datetime']))) {
+            throw new \DomainException('La date d\'arrivée doit être après la date de départ');
+        }
+    }
+
+    /**
+     * Gets the start and end location IDs from journey data
+     * @param array $input Journey data
+     * @return array [$startLocationId, $endLocationId];
+     */
+    private function createStartEndLocations(array $input): array
+    {
+        $locationService = $this->locationService;
+
+        $startLocationId = $locationService->getOrCreate(
+            $input['start']['label'],
+            $input['start']['city'],
+            $input['start']['postcode'],
+            $input['start']['lat'] ?? null,
+            $input['start']['lon'] ?? null
+        );
+
+        $endLocationId = $locationService->getOrCreate(
+            $input['end']['label'],
+            $input['end']['city'],
+            $input['end']['postcode'],
+            $input['end']['lat'] ?? null,
+            $input['end']['lon'] ?? null
+        );
+
+        if ($startLocationId === $endLocationId) {
+            throw new \DomainException('Le point de départ et d\'arrivée ne peuvent pas être identiques');
+        }
+
+        $locationIds = ['start' => $startLocationId, 'end' => $endLocationId];
+
+        return $locationIds;
+    }
+
+
+    /**
      * Function to filter journeys which don't have enough free seats
-     * 
      * @param array $journeys Journeys matching in location and date
      * @param int $requestedSeats Amount of requested seats
      * @return array $newJourneys The filtered journeys with enough free seats
