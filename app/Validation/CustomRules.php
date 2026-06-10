@@ -169,6 +169,10 @@ class CustomRules
      */
     public function notSame(mixed $value, string $params, array $data): bool
     {
+        if (empty($value) || !isset($data[$params])) {
+            return true;
+        }
+
         return $data[$params] !== $value;
     }
 
