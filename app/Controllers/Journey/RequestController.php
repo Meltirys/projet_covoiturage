@@ -6,9 +6,9 @@ use App\Controllers\BaseController;
 use App\Models\JourneyRequestModel;
 use App\Services\JourneyService;
 use App\Validators\JourneyRequest\CreateJourneyRequestValidator;
+use App\Validators\JourneyRequest\UpdateJourneyRequestValidator;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use CodeIgniter\HTTP\RedirectResponse;
-use Throwable;
 
 class RequestController extends BaseController
 {
@@ -27,13 +27,51 @@ class RequestController extends BaseController
     public function search()
     {
         helper('form');
-        return view('itinerary/search/SearchView');
+
+        /* Inputs :
+        * start = ['label', 'city', 'postcode', 'lat', 'lon']
+        * end = [...]
+        * date
+        * free-seats (default 1)
+        * (optional) filters
+        */
+
+        $getData = $this->request->getGet();
+
+        if (isset($getData['start'])) {
+            // Validation
+            // $validator = new SearchJourneyRequestValidator;
+
+            // if (! $validator->validate($getData)) {
+            //     log_message('debug', 'Validation failed. Errors: ' . json_encode($validator->getErrors()));
+            //     return redirect()->back()
+            //         ->with('errors', $validator->getErrors())
+            //         ->withInput();
+            // }
+
+            // Logic
+            $journeyService = $this->journeyService;
+            try {
+                // === Ajouter options quand possible !
+                $getData['journeys'] = $journeyService->searchJourneyDrive($getData);
+            } catch (\Throwable $e) {
+                // system error
+                log_message('error', $e->getMessage());
+
+                $data['error'] = 'Une erreur s\'est produite';
+
+                return view('itinerary/search/SearchView', $data);
+            }
+        }
+
+
+        return view('itinerary/search/SearchRequestView', $getData);
     }
 
     /**
      * Displays the page for a specific trip
-     * 
      * @param int $id Journey ID
+     * @return string|RedirectResponse
      */
     public function show(int $id): string|RedirectResponse
     {
@@ -42,7 +80,7 @@ class RequestController extends BaseController
         $locationModel = model('LocationModel');
         $userModel     = model('UserModel');
 
-        $request = $$this->journeyRequestModel->find($id);
+        $request = $this->journeyRequestModel->find($id);
 
         if (! $request) {
             return redirect()->to('request/list')
@@ -65,8 +103,9 @@ class RequestController extends BaseController
 
     /**
      * Displays the creation page for a new itinerary
+     * @return string|RedirectResponse
      */
-    public function create()
+    public function create(): string|RedirectResponse
     {
         helper('form');
         return view('itinerary/create/CreateView');
@@ -74,8 +113,10 @@ class RequestController extends BaseController
 
     /**
      *  Display the list of all journey
+     * 
+     * @return string|RedirectResponse
      */
-    public function index()
+    public function index(): string|RedirectResponse
     {
         $locationModel = model('LocationModel');
         $allRequest = $this->journeyRequestModel->findAll();
@@ -90,8 +131,9 @@ class RequestController extends BaseController
 
     /**
      * Saves an itinerary
+     * @return string|RedirectResponse
      */
-    public function save()
+    public function save(): string|RedirectResponse
     {
         helper('form');
 
@@ -103,7 +145,6 @@ class RequestController extends BaseController
          * 
          * options?
          */
-
         $data = $this->request->getPost('request');
 
         // Validation
@@ -148,10 +189,10 @@ class RequestController extends BaseController
 
     /**
      * Edit an existing itinerary
-     * 
-     * parameter : itinerary id
+     * @param int $id
+     * @return string|RedirectResponse
      */
-    public function edit($id)
+    public function edit(int $id): string|RedirectResponse
     {
         helper('form');
 
@@ -167,10 +208,10 @@ class RequestController extends BaseController
 
     /**
      * Updates an existing itinerary
-     * 
-     * parameter : itinerary id
+     * @param int $id
+     * @return string|RedirectResponse
      */
-    public function update(int $id)
+    public function update(int $id): string|RedirectResponse
     {
         $data = $this->request->getPost('request');
 
@@ -187,25 +228,15 @@ class RequestController extends BaseController
 
         log_message('debug', 'Validation passed. Updating journey...');
 
-        $request = $this->journeyRequestModel->find($id);
-
-        if (!$request) {
-            throw new \DomainException('Ce trajet n\'existe pas');
-        }
-
-        $this->canManageJourney($request('id_user'));
-
-        $rangeStart = $data['range-start'] ?? '';
-        $rangeEnd = $data['range-end'] ?? '';
-
-        if (empty($rangeStart) || empty($rangeEnd) || $rangeEnd <= $rangeStart) {
-            return redirect()->back()
-                ->with('error', 'Les heures sont invalides')
-                ->withInput();
-        }
-
-        $rangeOfTime = $rangeStart . ' - ' . $rangeEnd;
         try {
+            $request = $this->journeyRequestModel->find($id);
+
+            if (!$request) {
+                throw new \DomainException('Ce trajet n\'existe pas');
+            }
+
+            $this->canManageJourney($request('id_user'));
+
             $this->journeyService->updateJourneyRequest($id, $data, session()->user_id);
 
             log_message('debug', 'Journey updated successfully.');
@@ -230,22 +261,37 @@ class RequestController extends BaseController
 
     /**
      * Deletes an existing itinerary
-     * 
-     * parameter : itinerary id
+     * @param int $id
+     * @return RedirectResponse
      */
-    public function delete($id)
+    public function delete(int $id): RedirectResponse
     {
-        $requestModel = model(JourneyRequestModel::class);
-        $request = $requestModel->find($id);
+        try {
+            $request = $this->journeyRequestModel->find($id);
 
-        if (!$request || $request['id_user'] != session('user_id')) {
-            return redirect()->to('request/list')
-                ->with('error', 'Demande introuvable');
+            if (!$request) {
+                throw new \DomainException('Ce trajet n\'existe pas');
+            }
+
+            $ownerId = $request['user_id'];
+
+            $this->canManageJourney($ownerId);
+
+            $this->journeyService->deleteJourneyRequest($id);
+
+            return redirect()->back()
+                ->with('success', 'Suppression réussite');
+        } catch (\DomainException $e) {
+            log_message('debug', 'Domain error: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', $e->getMessage());
+        } catch (\Throwable $e) {
+            log_message('error', 'Error in delete(): ' . $e->getMessage());
+            log_message('error', 'Stack: ' . $e->getTraceAsString());
+
+            return redirect()->back()
+                ->with('error', 'Une erreur s\'est produite');
         }
-
-        $requestModel->delete($id);
-        return redirect()->to('request/list')
-            ->with('success', 'Suppression réussite');
     }
 
     /**
@@ -258,8 +304,7 @@ class RequestController extends BaseController
         $isAdmin = in_array(session()->user_role, [2, 3], true);
 
         if (!$isOwner && !$isAdmin) {
-            log_message('debug', 'Original journey doesn\'t belong to current user');
-            throw PageNotFoundException::forPageNotFound();
+            throw new \DomainException('Vous n\'avez pas la permission nécessaire pour modifier ce trajet.');
         }
     }
 }
