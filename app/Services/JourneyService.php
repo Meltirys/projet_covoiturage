@@ -52,6 +52,7 @@ class JourneyService
         // Removes all the empty stops and makes a new array with new indexes
         $input['stops'] = $this->sanitizeStops($input['stops'] ?? []);
 
+        $departureTime = $this->getDeparture($input);
 
         try {
             // 1. Verify car ownership and seat amount
@@ -93,9 +94,10 @@ class JourneyService
                 throw new \RuntimeException('Impossible de créer le tracé du trajet');
             }
 
+
             // 4. Journey
+
             // Calculating the estimated_arrival
-            $departureTime = $this->getDeparture($input);
             $estimatedArrival = $this->estimateJourneyArrival($idTrack, $departureTime);
 
             // Formatting the data
