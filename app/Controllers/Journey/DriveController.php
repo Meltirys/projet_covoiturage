@@ -14,6 +14,13 @@ use PDOException;
 
 class DriveController extends BaseController
 {
+    private JourneyDriveModel $journeyDriveModel;
+
+    public function __construct()
+    {
+        $this->journeyDriveModel = model(JourneyDriveModel::class);
+    }
+
     /**
      * Manages journey search page
      */
@@ -71,12 +78,11 @@ class DriveController extends BaseController
         helper('french');
 
         $connectedUser = session()->user_id;
-        $journeyModel = model(JourneyDriveModel::class);
         $userModel = model('UserModel');
         $carModel = model('CarModel');
         $bookingModel = model('BookingModel');
 
-        $data['journey'] = $journeyModel->getAllJourneyInfos($slug); //Retrieving the information of the journey
+        $data['journey'] = $this->journeyDriveModel->getAllJourneyInfos($slug); //Retrieving the information of the journey
 
         //Checking if the journey exist. If there are no driver, do not display the page.
         if (!$data['journey'] || !$data['journey']['driver']) {
@@ -195,12 +201,10 @@ class DriveController extends BaseController
          */
         if ($id === null) {
             log_message('debug', 'Journey ID not found');
-            return view('404');
+            throw PageNotFoundException::forPageNotFound();
         }
 
         $data = $this->request->getPost('drive');
-
-        $journeyDriveModel = model(JourneyDriveModel::class);
 
         // Validation
         $validator = new EditJourneyDriveValidator;
@@ -216,12 +220,9 @@ class DriveController extends BaseController
         log_message('debug', 'Validation passed. Editing journey...');
 
         // Acquiring the data of the journey before edition
-        $originalJourney = $journeyDriveModel->getAllJourneyInfos($id);
+        $originalJourney = $this->journeyDriveModel->getAllJourneyInfos($id);
 
-        if ($originalJourney['driver'] !== session()->user_id) {
-            log_message('debug', 'Original journey doesn\'t belong to current user');
-            return view('404');
-        }
+        $this->canManageJourney($originalJourney['driver']); // authorization check
 
         // Logic
         try {
@@ -262,9 +263,13 @@ class DriveController extends BaseController
     {
         $journeyService = service('journeyService');
         // todo : add check to see if journey belongs to user
-        log_message('debug', 'Deleting journey...');
-        try {
+        $ownerId = $this->journeyDriveModel->find($id)['driver'];
 
+        $this->canManageJourney($ownerId); // authorization check
+
+        log_message('debug', 'Deleting journey...');
+
+        try {
             $journeyService->deleteJourneyDrive($id);
 
             log_message('debug', 'Journey deleted successfully.');
@@ -277,6 +282,21 @@ class DriveController extends BaseController
 
             return redirect()->back()
                 ->with('error', 'Une erreur s\'est produite');
+        }
+    }
+
+    /**
+     * Checks the user's authorization to manage journey
+     * @param int $ownerId
+     */
+    private function canManageJourney(int $ownerId): void
+    {
+        $isOwner = session()->user_id === $ownerId;
+        $isAdmin = in_array(session()->user_role, [2, 3], true);
+
+        if (!$isOwner && !$isAdmin) {
+            log_message('debug', 'Original journey doesn\'t belong to current user');
+            throw PageNotFoundException::forPageNotFound();
         }
     }
 }
