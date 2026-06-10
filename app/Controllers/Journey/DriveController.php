@@ -3,15 +3,13 @@
 namespace App\Controllers\Journey;
 
 use App\Controllers\BaseController;
-use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use App\Models\JourneyDriveModel;
 use App\Services\JourneyService;
 use App\Validators\JourneyDrive\CreateJourneyDriveValidator;
 use App\Validators\JourneyDrive\EditJourneyDriveValidator;
 use App\Validators\JourneyDrive\SearchJourneyDriveValidator;
-use Exception;
-use PDOException;
+use CodeIgniter\HTTP\RedirectResponse;
 
 class DriveController extends BaseController
 {
@@ -27,7 +25,7 @@ class DriveController extends BaseController
     /**
      * Manages journey search page
      */
-    public function search()
+    public function search(): string|RedirectResponse
     {
         helper('form');
 
@@ -53,17 +51,16 @@ class DriveController extends BaseController
             }
 
             // Logic
-            $journeyService = $this->journeyService;
             try {
                 // === Ajouter options quand possible !
-                $getData['journeys'] = $journeyService->searchJourneyDrive($getData);
+                $getData['journeys'] = $this->journeyService->searchJourneyDrive($getData);
             } catch (\Throwable $e) {
                 // system error
                 log_message('error', $e->getMessage());
 
-                $data['error'] = 'Une erreur s\'est produite';
-
-                return view('itinerary/search/SearchView', $data);
+                return redirect()->back()
+                    ->with('error', 'Une erreur s\'est produite')
+                    ->withInput();
             }
         }
 
@@ -75,7 +72,7 @@ class DriveController extends BaseController
      * Displays the page for a specific trip
      * @param ?string $slug défaut : null | itinerary id
      */
-    public function show(?string $slug = null)
+    public function show(?string $slug = null): string|RedirectResponse
     {
         helper('form');
         helper('french');
@@ -131,7 +128,7 @@ class DriveController extends BaseController
     /**
      * Saves an itinerary
      */
-    public function save()
+    public function save(): string|RedirectResponse
     {
         helper('form');
 
@@ -193,8 +190,9 @@ class DriveController extends BaseController
     /**
      * Updates an existing itinerary
      * @param int $id The journey's id
+     * @return string|RedirectResponse
      */
-    public function update(?int $id = null)
+    public function update(?int $id = null): string|RedirectResponse
     {
         /*
          * Inputs :
@@ -220,18 +218,18 @@ class DriveController extends BaseController
 
         log_message('debug', 'Validation passed. Editing journey...');
 
-        // Acquiring the data of the journey before edition
-        $originalJourney = $this->journeyDriveModel->getAllJourneyInfos($id);
-
-        if ($originalJourney === null) {
-            log_message('debug', 'Existing journey not found');
-            throw new \DomainException('Ce trajet n\'existe pas');
-        }
-
-        $this->canManageJourney($originalJourney['driver']); // authorization check
-
-        // Logic
         try {
+            // Acquiring the data of the journey before edition
+            $originalJourney = $this->journeyDriveModel->getAllJourneyInfos($id);
+
+            if ($originalJourney === null) {
+                log_message('debug', 'Existing journey not found');
+                throw new \DomainException('Ce trajet n\'existe pas');
+            }
+
+            $this->canManageJourney($originalJourney['driver']); // authorization check
+
+            // Logic
             // === Ajouter options quand possible !
             $this->journeyService->updateJourneyDrive(
                 $originalJourney,
@@ -262,25 +260,35 @@ class DriveController extends BaseController
     /**
      * Deletes an existing itinerary
      * @param int $id The journey's id
+     * @return RedirectResponse
      */
-    public function delete(int $id)
+    public function delete(int $id): RedirectResponse
     {
-        // todo : add check to see if journey belongs to user
-        $ownerId = $this->journeyDriveModel->find($id)['driver'];
-
-        $this->canManageJourney($ownerId); // authorization check
-
-        log_message('debug', 'Deleting journey...');
-
         try {
+            $journey = $this->journeyDriveModel->find($id);
+
+            if (!$journey) {
+                throw new \DomainException('Ce trajet n\'existe pas');
+            }
+
+            $ownerId = $journey['driver'];
+
+            $this->canManageJourney($ownerId); // authorization check
+
+            log_message('debug', 'Deleting journey...');
+
             $this->journeyService->deleteJourneyDrive($id);
 
             log_message('debug', 'Journey deleted successfully.');
 
             return redirect()->to('profil')
                 ->with('status', 'Trajet supprimé avec succès');
+        } catch (\DomainException $e) {
+            log_message('debug', 'Domain error: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', $e->getMessage());
         } catch (\Throwable $e) {
-            log_message('error', 'Error in save(): ' . $e->getMessage());
+            log_message('error', 'Error in delete(): ' . $e->getMessage());
             log_message('error', 'Stack: ' . $e->getTraceAsString());
 
             return redirect()->back()
@@ -289,8 +297,9 @@ class DriveController extends BaseController
     }
 
     /**
-     * Checks the user's authorization to manage journey
+     * Throws new DomainException if user is not authorized to manage this journey
      * @param int $ownerId
+     * @return void
      */
     private function canManageJourney(int $ownerId): void
     {
@@ -298,8 +307,7 @@ class DriveController extends BaseController
         $isAdmin = in_array(session()->user_role, [2, 3], true);
 
         if (!$isOwner && !$isAdmin) {
-            log_message('debug', 'Original journey doesn\'t belong to current user');
-            throw PageNotFoundException::forPageNotFound();
+            throw new \DomainException('Vous n\'avez pas la permission nécessaire pour modifier ce trajet.');
         }
     }
 }
