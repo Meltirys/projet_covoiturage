@@ -5,14 +5,16 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\CarModel;
 use App\Models\JourneyDriveModel;
+use CodeIgniter\Exceptions\PageNotFoundException;
 use DateTime;
 
 class PagesController extends BaseController
 {
     /**
      * Home page
+     * @return string
      */
-    public function home()
+    public function home(): string
     {
         helper('form');
 
@@ -21,8 +23,9 @@ class PagesController extends BaseController
 
     /**
      * Journey creation page
+     * @return string
      */
-    public function createJourney()
+    public function createJourney(): string
     {
         helper('form');
 
@@ -44,9 +47,10 @@ class PagesController extends BaseController
     }
 
     /**
-     * Itinerary search page
+     * Itinerary search page (currently only JourneyDrive searching)
+     * @return string
      */
-    public function searchJourney()
+    public function searchJourney(): string
     {
         helper('form');
 
@@ -54,12 +58,14 @@ class PagesController extends BaseController
     }
 
     /**
-     * 
+     * JourneyDrive edition page
+     * @param ?int $id = null
+     * @return string|PageNotFoundException
      */
-    public function editJourney(?int $id = null)
+    public function editJourneyDrive(?int $id = null): string|PageNotFoundException
     {
         if ($id === null) {
-            return view('404');
+            throw PageNotFoundException::forPageNotFound();
         }
 
         helper('form');
@@ -69,11 +75,9 @@ class PagesController extends BaseController
 
         $data['journey'] = $journeyDriveModel->getAllJourneyInfos($id);
 
-        $userId = session()->get('user_id');
-
         // Echoue si l'utilisateur n'est pas le propriétaire du trajet
-        if ($data['driver'] != $userId) {
-            return view('404');
+        if ($data['driver'] != session()->get('user_id')) {
+            throw PageNotFoundException::forPageNotFound();
         }
 
         // Formattage des données
