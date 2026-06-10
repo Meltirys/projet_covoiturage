@@ -4,11 +4,23 @@ namespace App\Controllers\Journey;
 
 use App\Controllers\BaseController;
 use App\Models\JourneyRequestModel;
-use App\Validators\CreateJourneyRequestValidator;
-use DateTime;
+use App\Services\JourneyService;
+use App\Validators\JourneyRequest\CreateJourneyRequestValidator;
+use CodeIgniter\Exceptions\PageNotFoundException;
+use CodeIgniter\HTTP\RedirectResponse;
+use Throwable;
 
 class RequestController extends BaseController
 {
+    private JourneyRequestModel $journeyRequestModel;
+    private JourneyService $journeyService;
+
+    public function __construct()
+    {
+        $this->journeyRequestModel = model(JourneyRequestModel::class);
+        $this->journeyService = service('journeyService');
+    }
+
     /**
      * Displays the search page listing itineraries
      */
@@ -21,16 +33,16 @@ class RequestController extends BaseController
     /**
      * Displays the page for a specific trip
      * 
-     * parameter : itinerary id
+     * @param int $id Journey ID
      */
-    public function show($id)
+    public function show(int $id): string|RedirectResponse
     {
         helper('form');
-        $requestModel  = model(JourneyRequestModel::class);
+
         $locationModel = model('LocationModel');
         $userModel     = model('UserModel');
 
-        $request = $requestModel->find($id);
+        $request = $$this->journeyRequestModel->find($id);
 
         if (! $request) {
             return redirect()->to('request/list')
@@ -65,14 +77,14 @@ class RequestController extends BaseController
      */
     public function index()
     {
-        $requestModel = model(JourneyRequestModel::class);
         $locationModel = model('LocationModel');
-        $allRequest = $requestModel->findAll();
+        $allRequest = $this->journeyRequestModel->findAll();
 
         foreach ($allRequest as &$request) {
             $request['start_address'] = $locationModel->getFormattedAddress($request['start']);
             $request['end_address'] = $locationModel->getFormattedAddress($request['end']);
         }
+
         return view('itinerary/show/RequestListView', ['requests' => $allRequest]);
     }
 
@@ -94,28 +106,6 @@ class RequestController extends BaseController
 
         $data = $this->request->getPost('request');
 
-        $data['start-datetime'] = (new DateTime(
-            $data['start-date'] . ' ' . $data['start-time']
-        ))->format('Y-m-d H:i:s');
-
-        $data['end-datetime'] = (new DateTime(
-            $data['end-date'] . ' ' . $data['end-time']
-        ))->format('Y-m-d H:i:s');
-
-        //
-        if ((new DateTime($data['start-datetime'])) <= new DateTime()) {
-            return redirect()->back()
-                ->with('error', 'La date de départ ne peut être antérieure !')
-                ->withInput();
-        }
-
-        //
-        if ((new DateTime($data['end-datetime'])) <= (new DateTime($data['start-datetime']))) {
-            return redirect()->back()
-                ->with('error', 'La date d\'arrivée doit être postérieure à la date de départ')
-                ->withInput();
-        }
-
         // Validation
         $validator = new CreateJourneyRequestValidator;
 
@@ -129,14 +119,10 @@ class RequestController extends BaseController
 
         log_message('debug', 'Validation passed. Creating journey...');
 
-
-
         // Logic
         try {
-            $journeyService = service('journeyService');
-
             // === Ajouter options quand possible !
-            $journeyId = $journeyService->createJourneyRequest(
+            $journeyId = $this->journeyService->createJourneyRequest(
                 $data,
                 session()->get('user_id')
             );
@@ -168,8 +154,8 @@ class RequestController extends BaseController
     public function edit($id)
     {
         helper('form');
-        $requestModel = model(JourneyRequestModel::class);
-        $request      = $requestModel->find($id);
+
+        $request = $this->journeyRequestModel->find($id);
 
         if (! $request || $request['id_user'] != session('user_id')) {
             return redirect()->to('request/list')
@@ -184,16 +170,31 @@ class RequestController extends BaseController
      * 
      * parameter : itinerary id
      */
-    public function update($id)
+    public function update(int $id)
     {
-        $requestModel = model(JourneyRequestModel::class);
-        $request = $requestModel->find($id);
-
-        if (!$request || $request['id_user'] != session('user_id')) {
-            return redirect()->to('request/list')
-                ->with('error', 'Demande introuvable');
-        }
         $data = $this->request->getPost('request');
+
+        // Validation
+        $validator = new UpdateJourneyRequestValidator;
+
+        if (! $validator->validate($data)) {
+            log_message('debug', 'Validation failed. Errors: ' . json_encode($validator->getErrors()));
+            return redirect()->back()
+                ->with('errors', $validator->getErrors())
+                ->with('failed_form', 'request')
+                ->withInput();
+        }
+
+        log_message('debug', 'Validation passed. Updating journey...');
+
+        $request = $this->journeyRequestModel->find($id);
+
+        if (!$request) {
+            throw new \DomainException('Ce trajet n\'existe pas');
+        }
+
+        $this->canManageJourney($request('id_user'));
+
         $rangeStart = $data['range-start'] ?? '';
         $rangeEnd = $data['range-end'] ?? '';
 
@@ -204,12 +205,27 @@ class RequestController extends BaseController
         }
 
         $rangeOfTime = $rangeStart . ' - ' . $rangeEnd;
-        $requestModel->update($id, [
-            'description' => $data['description'],
-            'range_of_time' => $rangeOfTime,
-        ]);
-        return redirect()->to('request/list')
-            ->with('success', 'Votre demande à bien été mise à jour');
+        try {
+            $this->journeyService->updateJourneyRequest($id, $data, session()->user_id);
+
+            log_message('debug', 'Journey updated successfully.');
+
+            return redirect()->to('request/list')
+                ->with('success', 'Votre demande à bien été mise à jour');
+        } catch (\DomainException $e) {
+            // domain error
+            log_message('debug', 'Domain error: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', $e->getMessage())
+                ->withInput();
+        } catch (\Throwable $e) {
+            // system error
+            log_message('error', 'Error in update(): ' . $e->getMessage());
+            log_message('error', 'Stack: ' . $e->getTraceAsString());
+            return redirect()->back()
+                ->with('error', 'Une erreur s\'est produite')
+                ->withInput();
+        }
     }
 
     /**
@@ -230,5 +246,20 @@ class RequestController extends BaseController
         $requestModel->delete($id);
         return redirect()->to('request/list')
             ->with('success', 'Suppression réussite');
+    }
+
+    /**
+     * Checks the user's authorization to manage journey
+     * @param int $ownerId
+     */
+    private function canManageJourney(int $ownerId): void
+    {
+        $isOwner = session()->user_id === $ownerId;
+        $isAdmin = in_array(session()->user_role, [2, 3], true);
+
+        if (!$isOwner && !$isAdmin) {
+            log_message('debug', 'Original journey doesn\'t belong to current user');
+            throw PageNotFoundException::forPageNotFound();
+        }
     }
 }
