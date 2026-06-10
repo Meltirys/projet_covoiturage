@@ -13,6 +13,10 @@ class CustomRules
      */
     public function adultCheck(string $date): bool
     {
+        if (empty($date)) {
+            return true;
+        }
+
         $birthDate = new DateTime($date);
         $today = new DateTime();
 
@@ -26,6 +30,10 @@ class CustomRules
      */
     public function validateDate(string $value): bool
     {
+        if (empty($value)) {
+            return true;
+        }
+
         $dt = \DateTime::createFromFormat('Y-m-d', $value);
 
         return $dt && $dt->format('Y-m-d') === $value;
@@ -38,6 +46,10 @@ class CustomRules
      */
     public function validateTime(string $value): bool
     {
+        if (empty($value)) {
+            return true;
+        }
+
         $dt = \DateTime::createFromFormat('H:i', $value);
 
         return $dt && $dt->format('H:i') === $value;
@@ -50,6 +62,10 @@ class CustomRules
      */
     public function validateDatetime(string $value): bool
     {
+        if (empty($value)) {
+            return true;
+        }
+
         $dt = \DateTime::createFromFormat('Y-m-d H:i:s', $value);
 
         return $dt && $dt->format('Y-m-d H:i:s') === $value;
@@ -133,6 +149,9 @@ class CustomRules
      */
     public function isOldPassword(string $old_password): bool
     {
+        if (empty($old_password)) {
+            return true;
+        }
 
         $dbUser = model('UserModel');
         $userInfo = $dbUser->find(session()->user_id);
@@ -151,5 +170,38 @@ class CustomRules
     public function notSame(mixed $value, string $params, array $data): bool
     {
         return $data[$params] !== $value;
+    }
+
+    /**
+     * Checks if a date occurs before another
+     * @param string $value
+     * @param string $otherField
+     * @param array $data
+     * @return bool
+     */
+    public function beforeDate(string $value, string $otherField, array $data): bool
+    {
+        if (empty($value) || !isset($data[$otherField])) {
+            // this function isn't responsible for checking existence of values so return true in that case
+            return true;
+        }
+
+        return new DateTime($value) <= new DateTime($data[$otherField]);
+    }
+
+    /**
+     * Checks if a date occurs exactly now or later
+     * @param string $value
+     * @return bool
+     */
+    public function equalOrAfterNow(string $value): bool
+    {
+        if (empty($value)) {
+            return true;
+        }
+
+        $now = new DateTime();
+
+        return new DateTime($value) >= $now;
     }
 }
