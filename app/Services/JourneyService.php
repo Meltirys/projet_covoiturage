@@ -424,9 +424,11 @@ class JourneyService
     /**
      * 
      */
-    public function updateJourneyRequest()
+    public function updateJourneyRequest(int $id, array $input)
     {
-        // TODO
+
+
+        $rangeOfTime = $input['range-start'] . ' - ' . $input['range-end'];
     }
 
     /**
