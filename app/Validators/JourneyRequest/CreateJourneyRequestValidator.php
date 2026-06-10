@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Validators;
+namespace App\Validators\JourneyRequest;
 
 use App\Validation\CustomRules;
+use App\Validators\BaseValidator;
 
 class CreateJourneyRequestValidator extends BaseValidator
 {
@@ -92,10 +93,12 @@ class CreateJourneyRequestValidator extends BaseValidator
             'start-datetime' => $datetimeRules,
             'end-datetime'   => $datetimeRules,
             'range-start' => [
-                'rules' => 'required|regex_match[/^([01]\d|2[0-3]):([0-5]\d)$/]',
+                'rules' => 'required|regex_match[/^([01]\d|2[0-3]):([0-5]\d)$/]|beforeDate[range-end]|equalOrAfterNow',
                 'errors' => [
-                    'required' => 'L\'heure de début de disponibilité est obligatoire',
+                    'required' => 'L\'heure de départ de disponibilité est obligatoire',
                     'regex_match' => 'L\'heure doit être dans le format HH:MM',
+                    'beforeDate' => 'L\'heure de départ doit être avant l\'heure d\'arrivée',
+                    'equalOrAfterNow' => 'L\'heure de départ ne peut pas être dans le passé'
                 ]
             ],
             'range-end' => [
