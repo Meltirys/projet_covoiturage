@@ -227,7 +227,7 @@
         <!-- Header compact connecté -->
         <header class="flex items-center justify-between px-5 md:px-10 h-16 bg-ocean-mid border-b border-gold/30">
             <a href="/" class="flex items-center gap-3">
-                <img src="/img/logo.png" alt="PennRide" class="w-10 h-10 rounded-xl">
+                <img src="/img/logo_golden.png" alt="PennRide" class="w-10 h-10 rounded-xl">
                 <span class="hidden md:block text-sand text-xs tracking-widest uppercase font-light">PennRide</span>
             </a>
             <nav class="hidden md:flex items-center gap-2">
