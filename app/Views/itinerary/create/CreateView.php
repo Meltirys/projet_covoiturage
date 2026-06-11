@@ -33,12 +33,12 @@ $error         = session()->getFlashdata('error');
         <button id="tab-drive"
             onclick="switchTab('drive')"
             class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold px-4 py-2.5 transition-colors border-b-2 -mb-px border-gold text-gold cursor-pointer">
-            🚗 Conducteur
+            <i class="fa-solid fa-car" style="color: var(--color-gold)"></i> Conducteur
         </button>
         <button id="tab-request"
             onclick="switchTab('request')"
             class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold px-4 py-2.5 transition-colors border-b-2 -mb-px border-transparent text-grey hover:text-sand cursor-pointer">
-            🚶 Passager
+            <i class="fa-solid fa-person-walking" style="color: var(--color-gold)"></i> Passager
         </button>
     </div>
 
