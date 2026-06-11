@@ -35,9 +35,9 @@
     <script src="<?= base_url('js/user-role.js') ?>"></script>
 <?php endif; ?>
 <script>
-    const reports      = <?= json_encode($reports) ?>
-    const reportHistory = <?= json_encode($reportsHistory) ?>
-    const toValidateUsers = <?= json_encode($users) ?>
+    const reports      = <?= json_encode($reports) ?>; // Ne pas oublier les ; !!
+    const reportHistory = <?= json_encode($reportsHistory) ?>;
+    const toValidateUsers = <?= json_encode($users) ?>;
     reportManagementPaginator.load(reports)
     reportHistoryPaginator.load(reportHistory)
     validationPaginator.load(toValidateUsers)
