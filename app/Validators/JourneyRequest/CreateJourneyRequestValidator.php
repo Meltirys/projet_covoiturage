@@ -90,15 +90,12 @@ class CreateJourneyRequestValidator extends BaseValidator
             'end.lon' => $lonRules,
             // ===== OTHER
 
-            'start-datetime' => $datetimeRules,
-            'end-datetime'   => $datetimeRules,
             'range-start' => [
-                'rules' => 'required|regex_match[/^([01]\d|2[0-3]):([0-5]\d)$/]|beforeDate[range-end]|equalOrAfterNow',
+                'rules' => 'required|regex_match[/^([01]\d|2[0-3]):([0-5]\d)$/]|beforeDate[range-end]|',
                 'errors' => [
                     'required' => 'L\'heure de départ de disponibilité est obligatoire',
                     'regex_match' => 'L\'heure doit être dans le format HH:MM',
                     'beforeDate' => 'L\'heure de départ doit être avant l\'heure d\'arrivée',
-                    'equalOrAfterNow' => 'L\'heure de départ ne peut pas être dans le passé'
                 ]
             ],
             'range-end' => [
