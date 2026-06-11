@@ -122,6 +122,7 @@ class DriveController extends BaseController
             ->where('id_journey_drive', $slug)
             ->first();
 
+        $data['geojson'] = model('TrackModel')->find($data['journey']['id_track'])['geojson'] ?? null;
         return view('/itinerary/show/DriverJourneyView', $data);
     }
 

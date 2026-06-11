@@ -53,10 +53,16 @@
         </div>
 
     </div>
+    <div id="map"
+        data-geojson="<?= esc($geojson) ?>"
+        style="height: 400px; width: 100%; border-radius: 12px;">
+    </div>
     <?= view('booking/BookingView', ['journey' => $journey]) ?>
 </div>
 <?= $this->endSection() ?>
 
-<?= $this->section('script') ?>
-
+<?= $this->section('scripts') ?>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/js/journey-map.js"></script>
 <?= $this->endSection() ?>
