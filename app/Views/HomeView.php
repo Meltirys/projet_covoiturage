@@ -18,7 +18,7 @@
 
                 <!-- Logo -->
                 <div class="relative z-10 mb-10 md:mb-16 penn-eyebrow">
-                    <img src="/img/logo.png" alt="PennRide" class="w-10 h-10 rounded-xl">
+                    <img src="/img/logo_golden.png" alt="PennRide" class="w-10 h-10 rounded-xl">
                 </div>
 
                 <!-- Eyebrow -->
