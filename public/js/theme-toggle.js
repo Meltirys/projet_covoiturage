@@ -15,8 +15,8 @@ function updateToggleIcon(isDark) {
   const btn = document.getElementById("theme-toggle-btn");
   if (btn)
     btn.innerHTML = isDark
-      ? '<i class="fa-solid fa-sun"></i>'
-      : '<i class="fa-solid fa-moon"></i>';
+      ? '<i class="fa-solid fa-sun" style="color: var(--color-gold)"></i>'
+      : '<i class="fa-solid fa-moon" style="color: var(--color-gold)"></i>';
 }
 
 document.addEventListener("DOMContentLoaded", () => {
