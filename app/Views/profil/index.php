@@ -369,7 +369,7 @@
                                     <p class="text-xs text-grey">Nom, email, photo…</p>
                                 </div>
                             </div>
-                            <span class="param-arrow text-grey text-base transition-all flex-shrink-0">›</span>
+                            <span class="param-arrow text-grey text-base transition-all flex-shrink-0"><i class="fa-solid fa-angle-right" style="color: var(--color-gold)"></i></span>
                         </a>
                         <a href="profil/changePassword"
                             class="flex items-center justify-between px-4 py-3 hover-border-gold transition-colors no-underline group gap-3">
@@ -380,7 +380,7 @@
                                     <p class="text-xs text-grey">Modifier la sécurité</p>
                                 </div>
                             </div>
-                            <span class="param-arrow text-grey text-base transition-all flex-shrink-0">›</span>
+                            <span class="param-arrow text-grey text-base transition-all flex-shrink-0"><i class="fa-solid fa-angle-right" style="color: var(--color-gold)"></i></span>
                         </a>
                     </div>
                 </section>
