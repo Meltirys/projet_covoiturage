@@ -393,12 +393,12 @@
                         <?= csrf_field() ?>
                         <button type="submit"
                             class="w-full flex items-center justify-center gap-2 bg-transparent border border-red/30 text-red rounded-[14px] px-4 py-3 text-sm hover:bg-red/15 transition-colors cursor-pointer">
-                            <span>🗑</span> Supprimer mon compte
+                            <span><i class="fa-solid fa-trash-can" style="color: var(--color-gold)"></i></span> Supprimer mon compte
                         </button>
                     </form>
                     <a href="/logout"
                         class="w-full flex items-center justify-center gap-2 bg-ocean-mid border border-ocean-light text-grey rounded-[14px] px-4 py-3 text-sm hover:border-white/20 hover:text-lightgrey transition-colors no-underline">
-                        <span>↪</span> Se déconnecter
+                        <span><i class="fa-solid fa-right-to-bracket" style="color: var(--color-gold)"></i></span> Se déconnecter
                     </a>
                 </section>
 
