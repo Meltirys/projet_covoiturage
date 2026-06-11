@@ -141,7 +141,7 @@
                                     Ajouter
                                 </button>
                                 <button type="button" onclick="hideForm('add-car-form')"
-                                    class="w-full bg-ocean-mid text-cyan border border-ocean-light rounded-[14px] px-4 py-3 text-sm hover:bg-ocean-light transition-colors cursor-pointer">
+                                    class="w-full bg-ocean-mid text-gold border border-ocean-light rounded-[14px] px-4 py-3 text-sm hover:bg-ocean-light transition-colors cursor-pointer">
                                     Annuler
                                 </button>
                             </div>
@@ -158,7 +158,7 @@
                                     Modifier
                                 </button>
                                 <button type="button" onclick="hideForm('modify-car-form')"
-                                    class="w-full bg-ocean-mid text-cyan border border-ocean-light rounded-[14px] px-4 py-3 text-sm hover:bg-ocean-light transition-colors cursor-pointer">
+                                    class="w-full bg-ocean-mid text-gold border border-ocean-light rounded-[14px] px-4 py-3 text-sm hover:bg-ocean-light transition-colors cursor-pointer">
                                     Annuler
                                 </button>
                             </div>
