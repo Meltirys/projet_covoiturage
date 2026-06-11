@@ -8,7 +8,7 @@
     <meta name="csrf-name" content="<?= csrf_token() ?>">
     <!-- Thème appliqué avant le paint pour éviter le flash -->
     <script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark')</script>
-    <link rel="icon" type="image/png" href="/img/logo.png">
+    <link rel="icon" type="image/png" href="/img/logo_golden.png">
     <script src="/js/theme-toggle.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <title>PennRide</title>
@@ -21,7 +21,7 @@
 
         <!-- Logo -->
         <a href="/" class="flex items-center gap-3">
-            <img src="/img/logo.png" alt="PennRide" class="w-10 h-10 rounded-xl">
+            <img src="/img/logo_golden.png" alt="PennRide" class="w-10 h-10 rounded-xl">
             <span class="hidden md:block text-xs tracking-widest uppercase font-light text-sand">PennRide</span>
         </a>
 
