@@ -15,6 +15,7 @@
 
 <body class="min-h-screen font-poppins bg-ocean text-lightgrey">
 
+<?php if (session('logged_in') || uri_string() !== ''): ?>
     <header class="flex items-center justify-between px-5 md:px-10 h-16 bg-ocean-mid border-b border-gold/30">
 
         <a href="/" class="flex items-center gap-3">
@@ -63,6 +64,7 @@
         <?php endif; ?>
 
     </header>
+    <?php endif; ?>
 
     <div id="menuOverlay"
         class="fixed inset-0 z-40 hidden"

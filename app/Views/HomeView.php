@@ -1,4 +1,4 @@
-<?= $this->extend('layouts/blank') ?>
+<?= $this->extend('layouts/main') ?>
 
 <?= $this->section('content') ?>
 
@@ -223,28 +223,6 @@
         </div>
 
     <?php else: ?>
-
-        <!-- Header compact connecté -->
-        <header class="flex items-center justify-between px-5 md:px-10 h-16 bg-ocean-mid border-b border-gold/30">
-            <a href="/" class="flex items-center gap-3">
-                <img src="/img/logo_golden.png" alt="PennRide" class="w-10 h-10 rounded-xl">
-                <span class="hidden md:block text-sand text-xs tracking-widest uppercase font-light">PennRide</span>
-            </a>
-            <nav class="hidden md:flex items-center gap-2">
-                <a class="text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="<?= site_url('trajet') ?>">Trajets</a>
-                <a class="text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/nouveau-trajet">Proposer</a>
-                <a class="text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/myprofil">Mon profil</a>
-                <?php if (session('user_role') == 2): ?>
-                    <a class="text-xs font-poppins font-medium ml-2 px-3 py-1 rounded-full bg-sand text-ocean" href="/backoffice">Admin</a>
-                <?php endif; ?>
-            </nav>
-            <div class="flex items-center gap-2 border border-gold/30 rounded-full px-3 py-1">
-                <span class="text-xs font-medium text-gold">
-                    <?= strtoupper(substr(session('user_first_name'), 0, 1)) ?><?= strtoupper(substr(session('user_last_name'), 0, 1)) ?>
-                </span>
-                <span class="text-xs text-grey"><?= session('user_first_name') ?></span>
-            </div>
-        </header>
 
         <!-- Contenu connecté -->
         <div class="px-4 md:px-12 py-8">
