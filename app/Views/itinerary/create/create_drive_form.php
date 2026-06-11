@@ -13,10 +13,10 @@
             <span class="text-xs text-red"><?= esc($startError) ?></span>
         <?php endif ?>
         <div class="results"></div>
-        <input type="hidden" name="drive[start][label]"    value="<?= esc(old('drive.start.label')) ?>">
-        <input type="hidden" name="drive[start][lat]"      value="<?= esc(old('drive.start.lat')) ?>">
-        <input type="hidden" name="drive[start][lon]"      value="<?= esc(old('drive.start.lon')) ?>">
-        <input type="hidden" name="drive[start][city]"     value="<?= esc(old('drive.start.city')) ?>">
+        <input type="hidden" name="drive[start][label]" value="<?= esc(old('drive.start.label')) ?>">
+        <input type="hidden" name="drive[start][lat]" value="<?= esc(old('drive.start.lat')) ?>">
+        <input type="hidden" name="drive[start][lon]" value="<?= esc(old('drive.start.lon')) ?>">
+        <input type="hidden" name="drive[start][city]" value="<?= esc(old('drive.start.city')) ?>">
         <input type="hidden" name="drive[start][postcode]" value="<?= esc(old('drive.start.postcode')) ?>">
     </div>
 
@@ -31,10 +31,10 @@
             <span class="text-xs text-red"><?= esc($endError) ?></span>
         <?php endif ?>
         <div class="results"></div>
-        <input type="hidden" name="drive[end][label]"    value="<?= esc(old('drive.end.label')) ?>">
-        <input type="hidden" name="drive[end][lat]"      value="<?= esc(old('drive.end.lat')) ?>">
-        <input type="hidden" name="drive[end][lon]"      value="<?= esc(old('drive.end.lon')) ?>">
-        <input type="hidden" name="drive[end][city]"     value="<?= esc(old('drive.end.city')) ?>">
+        <input type="hidden" name="drive[end][label]" value="<?= esc(old('drive.end.label')) ?>">
+        <input type="hidden" name="drive[end][lat]" value="<?= esc(old('drive.end.lat')) ?>">
+        <input type="hidden" name="drive[end][lon]" value="<?= esc(old('drive.end.lon')) ?>">
+        <input type="hidden" name="drive[end][city]" value="<?= esc(old('drive.end.city')) ?>">
         <input type="hidden" name="drive[end][postcode]" value="<?= esc(old('drive.end.postcode')) ?>">
     </div>
 
@@ -52,10 +52,10 @@
                     class="stop-input w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey placeholder:text-grey focus:outline-none focus:border-gold/40 transition-colors"
                     value="<?= esc($stop['address'] ?? '') ?>"
                     placeholder="Entrer un arrêt">
-                <input type="hidden" name="drive[stops][<?= $index ?>][label]"    value="<?= esc($stop['label'] ?? '') ?>">
-                <input type="hidden" name="drive[stops][<?= $index ?>][lat]"      value="<?= esc($stop['lat'] ?? '') ?>">
-                <input type="hidden" name="drive[stops][<?= $index ?>][lon]"      value="<?= esc($stop['lon'] ?? '') ?>">
-                <input type="hidden" name="drive[stops][<?= $index ?>][city]"     value="<?= esc($stop['city'] ?? '') ?>">
+                <input type="hidden" name="drive[stops][<?= $index ?>][label]" value="<?= esc($stop['label'] ?? '') ?>">
+                <input type="hidden" name="drive[stops][<?= $index ?>][lat]" value="<?= esc($stop['lat'] ?? '') ?>">
+                <input type="hidden" name="drive[stops][<?= $index ?>][lon]" value="<?= esc($stop['lon'] ?? '') ?>">
+                <input type="hidden" name="drive[stops][<?= $index ?>][city]" value="<?= esc($stop['city'] ?? '') ?>">
                 <input type="hidden" name="drive[stops][<?= $index ?>][postcode]" value="<?= esc($stop['postcode'] ?? '') ?>">
                 <div class="results"></div>
                 <?php if ($index > 0): ?>
@@ -90,6 +90,20 @@
         <?php if (isset($errors['start-time'])): ?>
             <span class="text-xs text-red"><?= esc($errors['start-time']) ?></span>
         <?php endif ?>
+    </div>
+    <div class="flex flex-col gap-2">
+        <label class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">
+            Récurrence <span class="normal-case font-normal tracking-normal text-grey">(optionnel)</span>
+        </label>
+        <div class="flex flex-wrap gap-3">
+            <?php foreach (['monday' => 'Lun', 'tuesday' => 'Mar', 'wednesday' => 'Mer', 'thursday' => 'Jeu', 'friday' => 'Ven', 'saturday' => 'Sam', 'sunday' => 'Dim'] as $value => $label): ?>
+                <label class="flex items-center gap-1 text-sm text-lightgrey cursor-pointer">
+                    <input type="checkbox" name="drive[recurrence][]" value="<?= $value ?>"
+                        <?= in_array($value, old('drive.recurrence', [])) ? 'checked' : '' ?>>
+                    <?= $label ?>
+                </label>
+            <?php endforeach ?>
+        </div>
     </div>
 </div>
 

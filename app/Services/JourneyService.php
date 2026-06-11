@@ -127,6 +127,33 @@ class JourneyService
         }
     }
 
+    public function createRecurringJourneyDrive(array $input, int $userId, array $days): array
+    {
+        $createIds = [];
+        $referenceDate = new \DateTime($input['start-date']);
+        $refDayNum = (int)$referenceDate->format('N'); // 1=lun, 7=dim
+
+        $dayNumbers = [
+            'monday' => 1, 'tuesday' => 2, 'wednesday' => 3, 'thursday' => 4,
+            'friday' => 5, 'saturday' => 6, 'sunday' => 7,
+        ];
+
+        foreach ($days as $day) {
+            $targetDayNum = $dayNumbers[$day] ?? null;
+            if ($targetDayNum === null) continue;
+
+            $diff = ($targetDayNum - $refDayNum + 7) % 7;
+            $date = clone $referenceDate;
+            if ($diff > 0) {
+                $date->modify('+' . $diff . ' days');
+            }
+
+            $input['start-date'] = $date->format('Y-m-d');
+            $createIds[] = $this->createJourneyDrive($input, $userId);
+        }
+
+        return $createIds;
+    }
     /**
      * Updates an existing itinerary
      * @param array $original The original journey data
@@ -827,9 +854,8 @@ class JourneyService
 
         $duration = $track['duration']; // Retrieving the duration of the track
         $date = new \DateTime($departureTime);
-        $date->modify('+' . $duration . ' seconds');
+        $date->modify('+' . (int)$duration . ' seconds');
         $estimatedArrival = $date->format('Y-m-d H:i:s');
-
         return $estimatedArrival;
     }
 

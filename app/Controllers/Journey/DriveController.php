@@ -161,13 +161,14 @@ class DriveController extends BaseController
 
         // Logic
         try {
-            // === Ajouter options quand possible !
-            $journeyId = $this->journeyService->createJourneyDrive(
-                $data,
-                session()->get('user_id')
-            );
+            $days = $data['recurrence'] ?? [];
 
-            log_message('debug', 'Journey created successfully. ID: ' . $journeyId);
+            if (!empty($days)) {
+                $this->journeyService->createRecurringJourneyDrive($data, session()->get('user_id'), $days);
+            } else {
+                $this->journeyService->createJourneyDrive($data, session()->get('user_id'));
+            }
+
             return redirect()->to('/')
                 ->with('status', 'Itinéraire créé avec succès');
         } catch (\DomainException $e) {
