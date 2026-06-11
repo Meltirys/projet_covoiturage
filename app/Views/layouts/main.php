@@ -7,7 +7,7 @@
     <meta name="csrf-token" content="<?= csrf_hash() ?>">
     <meta name="csrf-name" content="<?= csrf_token() ?>">
     <script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark')</script>
-    <link rel="icon" type="image/png" href="/img/logo.png">
+    <link rel="icon" type="image/png" href="/img/logo_golden.png">
     <script src="/js/theme-toggle.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <title>PennRide</title>
@@ -18,7 +18,7 @@
     <header class="flex items-center justify-between px-5 md:px-10 h-16 bg-ocean-mid border-b border-gold/30">
 
         <a href="/" class="flex items-center gap-3">
-            <img src="/img/logo.png" alt="PennRide" class="w-10 h-10 rounded-xl">
+            <img src="/img/logo_golden.png" alt="PennRide" class="w-10 h-10 rounded-xl">
             <span class="hidden md:block text-xs tracking-widest uppercase font-light text-sand">PennRide</span>
         </a>
 
