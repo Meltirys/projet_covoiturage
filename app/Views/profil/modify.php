@@ -138,6 +138,9 @@
 
     <?= form_close() ?>
 
+    <?= form_open('user/avatar/delete', ['id' => 'deleteAvatarForm']) ?>
+    <?= form_close() ?>
+
 </main>
 
 <script>
