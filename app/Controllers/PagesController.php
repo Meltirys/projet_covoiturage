@@ -82,7 +82,6 @@ class PagesController extends BaseController
         }
 
         helper('form');
-        helper('french');
 
         $journeyDriveModel = model(JourneyDriveModel::class);
         $carModel = model(CarModel::class);
@@ -90,7 +89,7 @@ class PagesController extends BaseController
         $journey = $journeyDriveModel->getAllJourneyInfos($id);
 
         if (!$journey) {
-            throw PageNotFoundException::forPageNotFound('Une erreur s\'est produite. Impossible de trouver l\'itinéraire : ' + $id);
+            throw PageNotFoundException::forPageNotFound('Une erreur s\'est produite. Impossible de trouver l\'itinéraire : ' . $id);
         }
 
         // Echoue si l'utilisateur n'est pas le propriétaire du trajet
@@ -105,10 +104,10 @@ class PagesController extends BaseController
         $journey['arrival_label'] = $journey['arrival_address'];
         $journey['arrival_address'] = $journey['arrival_label'] . " " . $journey['arrival_postcode'] . " " . $journey['arrival_city'];
 
-        foreach ($journey['stages'] as $stage) {
-            $stage['label'] =  $stage['address'];
-            $stage['city'] = $stage['city_name'];
-            $stage['address'] = $stage['label'] . " " . $stage['postcode'] . " " . $stage['city'];
+        foreach ($journey['stages'] as $key => $stage) {
+            $journey['stages'][$key]['label'] =  $stage['address'];
+            $journey['stages'][$key]['city'] =  $stage['city_name'];
+            $journey['stages'][$key]['address'] = $journey['stages'][$key]['label'] . " " . $stage['postcode'] . " " . $stage['city_name'];
         }
 
         $dateDeparture = new Datetime($journey['departure']);
