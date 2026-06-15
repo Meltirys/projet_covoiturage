@@ -134,8 +134,13 @@ class JourneyService
         $refDayNum = (int)$referenceDate->format('N'); // 1=lun, 7=dim
 
         $dayNumbers = [
-            'monday' => 1, 'tuesday' => 2, 'wednesday' => 3, 'thursday' => 4,
-            'friday' => 5, 'saturday' => 6, 'sunday' => 7,
+            'monday' => 1,
+            'tuesday' => 2,
+            'wednesday' => 3,
+            'thursday' => 4,
+            'friday' => 5,
+            'saturday' => 6,
+            'sunday' => 7,
         ];
 
         foreach ($days as $day) {
@@ -823,10 +828,10 @@ class JourneyService
      */
     private function getDeparture(array $input): string
     {
-        $departure = (new DateTime(
+        $departure = (new \DateTime(
             $input['start-date'] . ' ' . $input['start-time']
         ));
-        $now = new DateTime();
+        $now = new \DateTime();
 
         if ($departure <= $now) {
             throw new \DomainException('La date de départ doit être dans le futur');
@@ -852,10 +857,11 @@ class JourneyService
             throw new \RuntimeException('Track introuvable');
         }
 
-        $duration = $track['duration']; // Retrieving the duration of the track
-        $date = new \DateTime($departureTime);
-        $date->modify('+' . (int)$duration . ' seconds');
-        $estimatedArrival = $date->format('Y-m-d H:i:s');
+        $duration = (int)$track['duration']; // Retrieving the duration of the track as an integer
+        $date = new \DateTime($departureTime); // Converting departure time into a DateTime object
+        $date->modify('+' . $duration . ' seconds'); // Applying duration (must be integer) modification to the date
+        $estimatedArrival = $date->format('Y-m-d H:i:s'); // Storing the formatted new date as the estimated arrival
+
         return $estimatedArrival;
     }
 
