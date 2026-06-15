@@ -12,7 +12,6 @@ class PagesController extends BaseController
 {
     /**
      * Home page
-     * @return string
      */
     public function home(): string
     {
@@ -23,7 +22,6 @@ class PagesController extends BaseController
 
     /**
      * Journey creation page
-     * @return string
      */
     public function createJourney(): string
     {
@@ -48,7 +46,6 @@ class PagesController extends BaseController
 
     /**
      * Itinerary search page (currently only JourneyDrive searching)
-     * @return string
      */
     public function searchJourney(): string
     {
