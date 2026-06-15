@@ -2,6 +2,7 @@
 
 namespace App\Validation;
 
+use App\Models\JourneyDriveModel;
 use DateTime;
 
 class CustomRules
@@ -11,7 +12,7 @@ class CustomRules
      * @param string $date Birthdate (format Y-m-d)
      * @return bool
      */
-    public function adultCheck(string $date): bool
+    public function is_adult(string $date): bool
     {
         if (empty($date)) {
             return true;
@@ -28,7 +29,7 @@ class CustomRules
      * @param string $value The date
      * @return bool
      */
-    public function validateDate(string $value): bool
+    public function valid_date(string $value): bool
     {
         if (empty($value)) {
             return true;
@@ -44,7 +45,7 @@ class CustomRules
      * @param string $value The time
      * @return bool
      */
-    public function validateTime(string $value): bool
+    public function valid_time(string $value): bool
     {
         if (empty($value)) {
             return true;
@@ -60,7 +61,7 @@ class CustomRules
      * @param string $value The datetime
      * @return bool
      */
-    public function validateDatetime(string $value): bool
+    public function valid_datetime(string $value): bool
     {
         if (empty($value)) {
             return true;
@@ -76,7 +77,7 @@ class CustomRules
      * @param array $value Array containing the stops
      * @return bool
      */
-    public function validStops(array $value): bool
+    public function valid_stops(array $value): bool
     {
         if (empty($value)) {
             return true;
@@ -147,7 +148,7 @@ class CustomRules
      * @param string $old_password The old password typed by the user
      * @return bool True if it matches the password in the database, false otherwise
      */
-    public function isOldPassword(string $old_password): bool
+    public function is_old_password(string $old_password): bool
     {
         if (empty($old_password)) {
             return true;
@@ -167,7 +168,7 @@ class CustomRules
      * 
      * @return bool true if the values are the same, false otherwise
      */
-    public function notSame(mixed $value, string $params, array $data): bool
+    public function location_different_from(mixed $value, string $params, array $data): bool
     {
         if (empty($value) || !isset($data[$params])) {
             return true;
@@ -183,7 +184,7 @@ class CustomRules
      * @param array $data
      * @return bool
      */
-    public function beforeDate(string $value, string $otherField, array $data): bool
+    public function before_date(string $value, string $otherField, array $data): bool
     {
         if (empty($value) || !isset($data[$otherField])) {
             // this function isn't responsible for checking existence of values so return true in that case
@@ -198,7 +199,7 @@ class CustomRules
      * @param string $value
      * @return bool
      */
-    public function equalOrAfterNow(string $value): bool
+    public function equal_or_after_now(string $value): bool
     {
         if (empty($value)) {
             return true;
@@ -207,5 +208,25 @@ class CustomRules
         $now = new DateTime();
 
         return new DateTime($value) >= $now;
+    }
+
+    /**
+     * Checks if the new amount of seats conflicts with the amount of seats allocated in a journey this car is used in
+     * @param string $value
+     * @param int $carId
+     * @return bool
+     */
+    public function no_journey_conflict(string $value, int $carId): bool
+    {
+        if (!$value) {
+            return true;
+        }
+
+        $journeyDriveModel = model(JourneyDriveModel::class);
+        $journeys = $journeyDriveModel->select('number_of_place')->where('id_car', $carId)->findAll();
+
+        $places = array_column($journeys, 'number_of_place');
+
+        return empty($places) || max($places) <= (int) $value;
     }
 }
