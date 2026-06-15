@@ -49,7 +49,7 @@ class PagesController extends BaseController
      */
     public function contactPage(): string
     {
-        return view('contactView');
+        return view('ContactView');
     }
 
     /**

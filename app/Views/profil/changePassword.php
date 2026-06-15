@@ -62,3 +62,4 @@
     <?= form_close() ?>
 
 </main>
+<?= $this->endSection() ?>
