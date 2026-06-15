@@ -71,9 +71,14 @@ class DriveController extends BaseController
     /**
      * Displays the page for a specific trip
      * @param ?string $slug défaut : null | itinerary id
+     * @return string|RedirectResponse
      */
     public function show(?string $slug = null): string|RedirectResponse
     {
+        if ($slug === null) {
+            throw PageNotFoundException::forPageNotFound();
+        }
+
         helper('form');
         helper('french');
 
@@ -86,7 +91,7 @@ class DriveController extends BaseController
 
         //Checking if the journey exist. If there are no driver, do not display the page.
         if (!$data['journey'] || !$data['journey']['driver']) {
-            throw new PageNotFoundException('Cannot find the news item: ' . $slug);
+            throw new PageNotFoundException('Impossible de trouver l\'itinéraire : ' . $slug);
         }
 
         $seatPicked = (int) model('BookingModel')
