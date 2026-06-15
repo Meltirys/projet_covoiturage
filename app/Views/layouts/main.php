@@ -23,7 +23,7 @@
 
             <a href="/" class="flex items-center gap-3">
                 <img src="/img/logo_golden.png" alt="PennRide" class="w-10 h-10 rounded-xl">
-                <span class="hidden md:block text-xs tracking-widest uppercase font-light text-sand">PennRide</span>
+                <span class="hidden md:block font-pfd text-lg text-bluegrey">Penn<em class="italic text-gold">Ride</em></span>
             </a>
 
             <?php if (session('logged_in')): ?>
@@ -126,9 +126,77 @@
         }
     </script>
 
-    <footer>
-        <ul></ul>
+    <footer class="border-t mt-auto bg-ocean-mid" style="border-color: rgba(180,140,60,0.15);">
+        <div class="max-w-5xl mx-auto px-5 md:px-10 py-10">
+
+            <!-- Grille principale -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+
+                <!-- Colonne brand -->
+                <div class="md:col-span-1">
+                    <div class="flex items-center gap-2 mb-3">
+                        <img src="/img/logo_golden.png" alt="PennRide" class="w-8 h-8 rounded-lg">
+                        <span class="font-pfd text-lg text-bluegrey">Penn<em class="italic text-gold">Ride</em></span>
+                    </div>
+                    <p class="text-xs text-grey leading-relaxed mb-4">
+                        Le covoiturage solidaire réservé aux membres du GRETA.
+                    </p>
+                </div>
+
+                <!-- Navigation -->
+                <div>
+                    <p class="text-gold uppercase tracking-widest mb-4 font-medium" style="font-size: 9px; letter-spacing: 0.2em;">Navigation</p>
+                    <ul class="flex flex-col gap-2">
+                        <li><a href="/trajet" class="text-xs text-grey hover:text-gold transition-colors">Rechercher un trajet</a></li>
+                        <li><a href="/nouveau-trajet" class="text-xs text-grey hover:text-gold transition-colors">Proposer un trajet</a></li>
+                        <li><a href="/myprofil" class="text-xs text-grey hover:text-gold transition-colors">Mon profil</a></li>
+                        <li><a href="/" class="text-xs text-grey hover:text-gold transition-colors">Se connecter</a></li>
+                    </ul>
+                </div>
+
+                <!-- Informations -->
+                <div>
+                    <p class="text-gold uppercase tracking-widest mb-4 font-medium" style="font-size: 9px; letter-spacing: 0.2em;">Informations</p>
+                    <ul class="flex flex-col gap-2">
+                        <li><a href="#" class="text-xs text-grey hover:text-gold transition-colors">Mentions légales</a></li>
+                        <li><a href="#" class="text-xs text-grey hover:text-gold transition-colors">Politique de confidentialité</a></li>
+                        <li><a href="#" class="text-xs text-grey hover:text-gold transition-colors">CGU</a></li>
+                        <li><a href="#" class="text-xs text-grey hover:text-gold transition-colors">Nous contacter</a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Barre du bas -->
+            <div class="flex items-center justify-between pt-6" style="border-top: 0.5px solid rgba(180,140,60,0.15);">
+                <p class="text-grey" style="font-size: 11px;">
+                    © 2026 <span class="text-gold">PennRide</span> · GRETA Bretagne Sud · Fait avec ♥ en Bretagne
+                </p>
+                <div class="flex items-center gap-2">
+                    <a href="#" class="w-7 h-7 rounded-full flex items-center justify-center text-grey hover:text-gold transition-colors" style="border: 0.5px solid rgba(180,140,60,0.2); font-size: 12px;">
+                        <i class="fa-brands fa-github"></i>
+                    </a>
+                    <a href="#" class="w-7 h-7 rounded-full flex items-center justify-center text-grey hover:text-gold transition-colors" style="border: 0.5px solid rgba(180,140,60,0.2); font-size: 12px;">
+                        <i class="fa-regular fa-envelope"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
     </footer>
+
+    <style>
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.4;
+            }
+        }
+    </style>
 
 </body>
 
