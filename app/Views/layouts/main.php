@@ -42,7 +42,7 @@
                     <div>
                         <div class="hidden md:flex items-center gap-2 border border-gold/30 rounded-full px-2 py-1">
                             <?php if (session('avatar_filename')): ?>
-                                <img src="<?= base_url('img/avatars/' . session('avatar_filename')) ?>" alt="Avatar" class="w-6 h-6 rounded-full object-cover">
+                                <a href="/myprofil"><img src="<?= base_url('img/avatars/' . session('avatar_filename')) ?>" alt="Avatar" class="w-6 h-6 rounded-full object-cover"></a>
                             <?php else: ?>
                                 <span class="text-xs font-medium text-gold">
                                     <?= strtoupper(substr(session('user_first_name'), 0, 1)) ?><?= strtoupper(substr(session('user_last_name'), 0, 1)) ?>
