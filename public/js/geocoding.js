@@ -19,7 +19,6 @@ function initializeAddressInput(input, onSelect = null) {
 
 /**
  * Function which allows the usage of geocoding queries with data.geopf.fr/geocodage API
- *
  * @param {*} inputElement User input element
  * @param {function} onSelect Callback function
  */
