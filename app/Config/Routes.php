@@ -27,13 +27,13 @@ use App\Services\AjaxRequests;
 // $routes->méthodehttp(get ou post)('url que l'on souhaite afficher', 'nomducontrolleur::méthode)
 // => $route->get('url', 'controller::méthode')
 
-$routes->get('/', 'PagesController::home');
+$routes->get('/', 'PagesController::home'); // index
 $routes->get('/mentions-legales', 'PagesController::mentionsLegales');
 $routes->get('/cgu', 'PagesController::cgu');
 
 if (ENVIRONMENT === 'production') {
     $routes->set404Override(function () {
-        return view('errors/custom_404');
+        return view('errors/custom_404'); // page 404 custom
     });
 }
 
