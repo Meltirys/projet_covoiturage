@@ -41,7 +41,7 @@
                     <button id="theme-toggle-btn" onclick="toggleTheme()" class="text-lg p-1 cursor-pointer">🌙</button>
                     <div>
                         <div class="hidden md:flex items-center gap-2 border border-gold/30 rounded-full px-2 py-1">
-                            <?php if (empty(session('avatar_filename'))): ?>
+                            <?php if (session('avatar_filename')): ?>
                                 <a href="/myprofil"><img src="<?= base_url('img/avatars/' . session('avatar_filename')) ?>" alt="Avatar" class="w-6 h-6 rounded-full object-cover"></a>
                             <?php else: ?>
                                 <span class="text-xs font-medium text-gold">
