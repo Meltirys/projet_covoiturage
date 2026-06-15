@@ -2,6 +2,8 @@
 
 namespace App\Validators;
 
+use App\Validation\CustomRules;
+
 class CarValidator extends BaseValidator
 {
     protected function rules(): array
@@ -41,12 +43,13 @@ class CarValidator extends BaseValidator
                 ]
             ],
             'number_of_seat' => [
-                'rules'  => 'required|integer|greater_than[0]|less_than_equal_to[8]',
+                'rules'  => 'required|integer|greater_than[0]|less_than_equal_to[8]|no_journey_conflict[id_car]',
                 'errors' => [
-                    'required'           => 'Le nombre de places est obligatoire.',
-                    'integer'            => 'Le nombre de places doit être un nombre entier.',
-                    'greater_than'       => 'Le nombre de places doit être supérieur à 0.',
-                    'less_than_equal_to' => 'Le nombre de places ne peut pas dépasser 8.',
+                    'required'            => 'Le nombre de places est obligatoire.',
+                    'integer'             => 'Le nombre de places doit être un nombre entier.',
+                    'greater_than'        => 'Le nombre de places doit être supérieur à 0.',
+                    'less_than_equal_to'  => 'Le nombre de places ne peut pas dépasser 8.',
+                    'no_journey_conflict' => 'Le nombre de places est en conflit avec un de vos trajets. Veuillez modifier le trajet avant de modifier le nombre de places.'
                 ]
             ],
         ];
