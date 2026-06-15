@@ -72,33 +72,42 @@ class PagesController extends BaseController
         helper('french');
 
         $journeyDriveModel = model(JourneyDriveModel::class);
+        $carModel = model(CarModel::class);
 
-        $data['journey'] = $journeyDriveModel->getAllJourneyInfos($id);
+        $journey = $journeyDriveModel->getAllJourneyInfos($id);
+
+        if (!$journey) {
+            throw PageNotFoundException::forPageNotFound('Une erreur s\'est produite. Impossible de trouver l\'itinéraire : ' + $id);
+        }
 
         // Echoue si l'utilisateur n'est pas le propriétaire du trajet
-        if ($data['driver'] != session()->get('user_id')) {
-            throw PageNotFoundException::forPageNotFound();
+        if ($journey['driver'] != session()->get('user_id')) {
+            throw PageNotFoundException::forPageNotFound(); // Remplacer par une page de non-authorisation
         }
 
         // Formattage des données
-        $data['journey']['departure_label'] = $data['journey']['departure_address'];
-        $data['journey']['departure_address'] = $data['journey']['departure_label'] . " " . $data['journey']['departure_postcode'] . " " . $data['journey']['departure_city'];
+        $journey['departure_label'] = $journey['departure_address'];
+        $journey['departure_address'] = $journey['departure_label'] . " " . $journey['departure_postcode'] . " " . $journey['departure_city'];
 
-        $data['journey']['arrival_label'] = $data['journey']['arrival_address'];
-        $data['journey']['arrival_address'] = $data['journey']['arrival_label'] . " " . $data['journey']['arrival_postcode'] . " " . $data['journey']['arrival_city'];
+        $journey['arrival_label'] = $journey['arrival_address'];
+        $journey['arrival_address'] = $journey['arrival_label'] . " " . $journey['arrival_postcode'] . " " . $journey['arrival_city'];
 
-        $data['journey']['stages']['label'] = $data['journey']['stages']['address'];
-        $data['journey']['stages']['city'] = $data['journey']['stages']['city_name'];
-        $data['journey']['stages']['address'] = $data['journey']['stages']['label'] . " " . $data['journey']['stages']['postcode'] . " " . $data['journey']['stages']['city'];
+        foreach ($journey['stages'] as $stage) {
+            $stage['label'] =  $stage['address'];
+            $stage['city'] = $stage['city_name'];
+            $stage['address'] = $stage['label'] . " " . $stage['postcode'] . " " . $stage['city'];
+        }
 
-        $dateDeparture = new Datetime($data['journey']['departure']);
-        $data['journey']['departure_date'] = $dateDeparture->format('Y-m-d');
-        $data['journey']['departure_time'] = $dateDeparture->format('H:i');
+        $dateDeparture = new Datetime($journey['departure']);
+        $journey['departure_date'] = $dateDeparture->format('Y-m-d');
+        $journey['departure_time'] = $dateDeparture->format('H:i');
 
-        $dateArrival = new DateTime($data['journey']['estimated_arrival']);
-        $data['journey']['arrival_date'] = $dateArrival->format('Y-m-d');
-        $data['journey']['arrival_time'] = $dateArrival->format('H:i');
+        $dateArrival = new DateTime($journey['estimated_arrival']);
+        $journey['arrival_date'] = $dateArrival->format('Y-m-d');
+        $journey['arrival_time'] = $dateArrival->format('H:i');
 
-        return view('itinerary/edit/EditDriveView', $data);
+        $cars = $carModel->where('id_user', $journey['driver'])->findAll();
+
+        return view('itinerary/edit/EditDriveView', ['journey' => $journey, 'cars' => $cars]);
     }
 }
