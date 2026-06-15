@@ -29,6 +29,12 @@ use App\Services\AjaxRequests;
 
 $routes->get('/', 'PagesController::home');
 
+if (ENVIRONMENT === 'production') {
+    $routes->set404Override(function () {
+        return view('errors/custom_404');
+    });
+}
+
 // Authentification
 $routes->group('', ['filter' => 'guest'], function ($routes) {
     $routes->get('authentification', 'PagesController::login');
@@ -36,6 +42,7 @@ $routes->group('', ['filter' => 'guest'], function ($routes) {
     $routes->post('signup', 'UserController::saveUser');
 });
 
+// Section Utilisateur authentifié
 $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('logout', 'AuthController::logout');
 
@@ -68,7 +75,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 
     // Modification de trajet conducteur
     $routes->get('trajet/modification/(:num)', 'PagesController::editJourneyDrive/$1');
-    $routes->post('drive/edit', 'Journey\DriveController::update');
+    $routes->post('drive/edit/(:num)', 'Journey\DriveController::update/$1');
 
     // Modification de demande de trajet
     $routes->get('request/edit/(:num)', 'Journey\RequestController::edit/$1');
@@ -97,7 +104,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 });
 
 
-//Admin part
+// Section Admin
 $routes->group('', ['filter' => 'authadmin'], function ($routes) {
 
     $routes->get('backoffice', [DashboardController::class, 'index']); //Show dashboard
@@ -114,7 +121,7 @@ $routes->group('', ['filter' => 'authadmin'], function ($routes) {
     $routes->get('debug', [Debug::class, 'debug']);
 });
 
-//Super-admin part
+// Section Super-Admin
 $routes->group('', ['filter' => 'authsuper'], function ($routes) {
 
     $routes->get('backoffice', [DashboardController::class, 'index']); //Show dashboard
