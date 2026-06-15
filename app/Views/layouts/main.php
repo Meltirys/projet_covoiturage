@@ -161,7 +161,7 @@
 
         <!-- Barre du bas -->
         <div class="flex items-center justify-between pt-5" style="border-top: 0.5px solid rgba(180,140,60,0.1);">
-            <p class="text-grey" style="font-size: 10px;">© 2026 <span class="text-gold">PennRide</span> · Fait avec ♥ en Bretagne</p>
+            <p class="text-grey" style="font-size: 10px;">© 2026 <span class="text-gold">PennRide</span></p>
             <div class="flex items-center gap-2">
                 <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 13px;"><i class="fa-brands fa-github"></i></a>
                 <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 13px;"><i class="fa-regular fa-envelope"></i></a>
