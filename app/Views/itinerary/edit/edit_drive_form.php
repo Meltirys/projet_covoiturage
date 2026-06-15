@@ -115,7 +115,7 @@
             <option value="">-- Choisissez le véhicule --</option>
             <?php if (isset($cars)): ?>
                 <?php foreach ($cars as $car): ?>
-                    <option value="<?= $car['id_car'] ?>" <?= $selectedCar == $car['id_car'] ? 'selected' : '' ?>><?= esc($car['label']) ?></option>
+                    <option value="<?= $car['id_car'] ?>" <?= $selectedCar == $car['id_car'] ? 'selected' : '' ?>><?= esc($car['brand']) . ' ' . esc($car['model']) ?></option>
                 <?php endforeach ?>
             <?php endif ?>
         </select>
@@ -141,7 +141,7 @@
 <div class="flex flex-col gap-1">
     <label for="drive-options" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Options</label>
     <input type="text" name="drive[options]" id="drive-options"
-        value="<?= esc(old('drive.options', $journey['options'])) ?>"
+        value="<?= esc(old('drive.options', $journey['options'] ?? "")) ?>"
         placeholder="Entrez vos options"
         class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey">
     <?php if (isset($errors['options'])): ?>
