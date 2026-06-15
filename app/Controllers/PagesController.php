@@ -37,6 +37,22 @@ class PagesController extends BaseController
     }
 
     /**
+     * Comment ça marche ?
+     */
+    public function HowItWorks(): string
+    {
+        return view('HowItWorks');
+    }
+
+    /**
+     * Contact
+     */
+    public function contactPage(): string
+    {
+        return view('contactView');
+    }
+
+    /**
      * Journey creation page
      */
     public function createJourney(): string
