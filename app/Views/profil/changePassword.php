@@ -1,4 +1,5 @@
-<?= view('layouts/main') ?>
+<?= $this->extend('layouts/main') ?>
+<?= $this->section('content') ?>
 
 <div class="profile-hero px-4 md:px-8 py-10 md:py-14 mb-8">
     <div class="relative z-10 max-w-5xl mx-auto">

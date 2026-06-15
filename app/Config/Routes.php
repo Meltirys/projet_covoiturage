@@ -28,8 +28,10 @@ use App\Services\AjaxRequests;
 // => $route->get('url', 'controller::méthode')
 
 $routes->get('/', 'PagesController::home'); // index
-$routes->get('/mentions-legales', 'PagesController::mentionsLegales');
-$routes->get('/cgu', 'PagesController::cgu');
+$routes->get('/mentions-legales', 'PagesController::mentionsLegales'); // mentions légales
+$routes->get('/cgu', 'PagesController::cgu'); // conditions générales d'utilisation
+$routes->get('/comment-ca-marche', 'PagesController::howItWorks'); // conseils d'utilisation
+$routes->get('/contact-page', 'PagesController::contactView'); // page de contact
 
 if (ENVIRONMENT === 'production') {
     $routes->set404Override(function () {

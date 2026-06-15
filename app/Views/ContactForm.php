@@ -1,3 +1,5 @@
+<?php helper('form'); ?>
+
 <div>
     <?= form_open('/contact') ?>
     <div class="flex flex-col gap-4 mb-5">

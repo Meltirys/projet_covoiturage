@@ -29,10 +29,10 @@
             <?php if (session('logged_in')): ?>
 
                 <nav class="hidden md:flex items-center gap-2">
-                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="#">Comment ça marche ?</a>
+                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/comment-ca-marche">Comment ça marche ?</a>
                     <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="<?= site_url('trajet') ?>">Trajets</a>
                     <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/nouveau-trajet">Proposer</a>
-                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="#">Contact</a>
+                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="contact-page">Contact</a>
                     <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/myprofil">Mon profil</a>
                     <?php if (session('user_role') == 2): ?>
                         <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/backoffice">Admin</a>
@@ -98,7 +98,7 @@
             <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="#" onclick="toggleMobileMenu()">Comment ça marche ?</a>
             <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="<?= site_url('trajet') ?>" onclick="toggleMobileMenu()">Trajets</a>
             <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="/nouveau-trajet" onclick="toggleMobileMenu()">Proposer un trajet</a>
-            <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="#" onclick="toggleMobileMenu()">Contact</a>
+            <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="/contact-page" onclick="toggleMobileMenu()">Contact</a>
             <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="/myprofil" onclick="toggleMobileMenu()">Mon profil</a>
             <?php if (session('user_role') == 2): ?>
                 <a class="text-sm font-poppins font-medium text-sand w-full py-3 border-b border-ocean-light" href="/backoffice" onclick="toggleMobileMenu()">Dashboard admin</a>
