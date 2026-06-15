@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 use App\Models\JourneyRequestModel;
 use App\Services\JourneyService;
 use App\Validators\JourneyRequest\CreateJourneyRequestValidator;
+use App\Validators\JourneyRequest\SearchJourneyRequestValidator;
 use App\Validators\JourneyRequest\UpdateJourneyRequestValidator;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use CodeIgniter\HTTP\RedirectResponse;
@@ -40,14 +41,14 @@ class RequestController extends BaseController
 
         if (isset($getData['start'])) {
             // Validation
-            // $validator = new SearchJourneyRequestValidator;
+            $validator = new SearchJourneyRequestValidator;
 
-            // if (! $validator->validate($getData)) {
-            //     log_message('debug', 'Validation failed. Errors: ' . json_encode($validator->getErrors()));
-            //     return redirect()->back()
-            //         ->with('errors', $validator->getErrors())
-            //         ->withInput();
-            // }
+            if (! $validator->validate($getData)) {
+                log_message('debug', 'Validation failed. Errors: ' . json_encode($validator->getErrors()));
+                return redirect()->back()
+                    ->with('errors', $validator->getErrors())
+                    ->withInput();
+            }
 
             // Logic
             $journeyService = $this->journeyService;
@@ -58,9 +59,9 @@ class RequestController extends BaseController
                 // system error
                 log_message('error', $e->getMessage());
 
-                $data['error'] = 'Une erreur s\'est produite';
-
-                return view('itinerary/search/SearchView', $data);
+                return redirect()->back()
+                    ->with('error', 'Une erreur s\'est produite')
+                    ->withInput();
             }
         }
 
@@ -212,8 +213,13 @@ class RequestController extends BaseController
      * @param int $id
      * @return string|RedirectResponse
      */
-    public function update(int $id): string|RedirectResponse
+    public function update(?int $id = null): string|RedirectResponse
     {
+        if ($id === null) {
+            log_message('debug', 'Journey ID not found');
+            throw PageNotFoundException::forPageNotFound();
+        }
+
         $data = $this->request->getPost('request');
 
         // Validation
