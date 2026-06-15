@@ -8,9 +8,8 @@ use App\Validators\BaseValidator;
 class UpdateJourneyRequestValidator extends BaseValidator
 {
     /**
-     * List all the rules that needs to be followed in order to be valid
-     * 
-     * @return array Array containing all the rules
+     * List the rules that needs to be followed in order to be valid
+     * @return array Array containing the rules
      */
     public function rules(): array
     {
