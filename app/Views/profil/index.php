@@ -138,7 +138,7 @@
                         <div id="add-car-form" class="flex-col gap-3"
                             style="display:<?= session()->getFlashdata('error_in_add_car_form') ? 'flex' : 'none' ?>">
                             <?= form_open("car/add") ?>
-                            <?= view('layouts/CarForm') ?>
+                            <?= view('profil/CarForm') ?>
                             <div class="flex gap-2 mt-2">
                                 <button type="submit"
                                     class="w-full bg-gold text-ocean font-semibold rounded-[14px] px-4 py-3 text-sm hover:bg-gold-light transition-colors cursor-pointer">
@@ -155,7 +155,7 @@
                         <div id="modify-car-form" class="flex-col gap-3"
                             style="display:<?= session()->getFlashdata('error_in_modify_car_form') ? 'flex' : 'none' ?>">
                             <?= form_open("car/modify/" . session()->getFlashdata('idCar') ?? '') ?>
-                            <?= view('/layouts/CarForm') ?>
+                            <?= view('/profil/CarForm') ?>
                             <div class="flex gap-2 mt-2">
                                 <button type="submit"
                                     class="w-full bg-gold text-ocean font-semibold rounded-[14px] px-4 py-3 text-sm hover:bg-gold-light transition-colors cursor-pointer">
