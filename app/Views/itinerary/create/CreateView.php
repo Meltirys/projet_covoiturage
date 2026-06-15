@@ -69,9 +69,10 @@ $error         = session()->getFlashdata('error');
 <script src="/js/geocoding.js"></script>
 <script src="/js/address-fields.js"></script>
 <script>
+    // Tabs
     function switchTab(tab) {
         const isDrive = tab === 'drive'
-        document.getElementById('panel-drive').style.display   = isDrive ? 'block' : 'none'
+        document.getElementById('panel-drive').style.display = isDrive ? 'block' : 'none'
         document.getElementById('panel-request').style.display = isDrive ? 'none' : 'block'
         document.getElementById('tab-drive').classList.toggle('border-gold', isDrive)
         document.getElementById('tab-drive').classList.toggle('text-gold', isDrive)
@@ -83,9 +84,10 @@ $error         = session()->getFlashdata('error');
         document.getElementById('tab-request').classList.toggle('text-grey', isDrive)
     }
 
+    // Car fields
     document.addEventListener('DOMContentLoaded', () => {
         const cars = <?= json_encode($cars ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
-        const carSelect  = document.getElementById('drive-car')
+        const carSelect = document.getElementById('drive-car')
         const seatSelect = document.getElementById('drive-seats')
         const oldSeatValue = '<?= old('drive.seats') ?>'
 
@@ -108,7 +110,7 @@ $error         = session()->getFlashdata('error');
         }
 
         <?php if (!empty($requestErrors)): ?>
-        switchTab('request')
+            switchTab('request')
         <?php endif ?>
     })
 </script>
