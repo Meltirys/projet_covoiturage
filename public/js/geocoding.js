@@ -1,7 +1,6 @@
 /**
  * Adds an event listener to an address input
- *
- * @param {*} input User input element
+ * @param {array} input User input element
  * @param {function} onSelect Callback function
  */
 function initializeAddressInput(input, onSelect = null) {
@@ -19,7 +18,7 @@ function initializeAddressInput(input, onSelect = null) {
 
 /**
  * Function which allows the usage of geocoding queries with data.geopf.fr/geocodage API
- * @param {*} inputElement User input element
+ * @param {array} inputElement User input element
  * @param {function} onSelect Callback function
  */
 async function searchAddress(inputElement, onSelect = null) {
@@ -33,6 +32,7 @@ async function searchAddress(inputElement, onSelect = null) {
   }
 
   try {
+    // Requête API
     const response = await fetch(
       `https://data.geopf.fr/geocodage/search?q=${encodeURIComponent(query)}&autocomplete=1&index=address,poi&limit=10&returntruegeometry=false&lat=48.103&lon=-1.672`,
     );
@@ -44,6 +44,7 @@ async function searchAddress(inputElement, onSelect = null) {
       return;
     }
 
+    // Displays autocompletion results
     data.features.forEach((feature) => {
       const option = document.createElement("div");
 
