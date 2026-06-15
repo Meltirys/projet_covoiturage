@@ -51,10 +51,10 @@ class CreateJourneyRequestValidator extends BaseValidator
             ]
         ];
         $datetimeRules = [
-            'rules' => 'required|validateDatetime',
+            'rules' => 'required|valid_datetime',
             'errors' => [
                 'required' => 'La date et heure sont obligatoires.',
-                'validateDatetime' => 'La date et heure sont invalides.',
+                'valid_datetime' => 'La date et heure sont invalides.',
             ]
         ];
 
@@ -91,11 +91,11 @@ class CreateJourneyRequestValidator extends BaseValidator
             // ===== OTHER
 
             'range-start' => [
-                'rules' => 'required|regex_match[/^([01]\d|2[0-3]):([0-5]\d)$/]|beforeDate[range-end]|',
+                'rules' => 'required|regex_match[/^([01]\d|2[0-3]):([0-5]\d)$/]|before_date[range-end]|',
                 'errors' => [
                     'required' => 'L\'heure de départ de disponibilité est obligatoire',
                     'regex_match' => 'L\'heure doit être dans le format HH:MM',
-                    'beforeDate' => 'L\'heure de départ doit être avant l\'heure d\'arrivée',
+                    'before_date' => 'L\'heure de départ doit être avant l\'heure d\'arrivée',
                 ]
             ],
             'range-end' => [

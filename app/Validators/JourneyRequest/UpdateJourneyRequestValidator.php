@@ -46,9 +46,9 @@ class UpdateJourneyRequestValidator extends BaseValidator
             ]
         ];
         $datetimeRules = [
-            'rules' => 'permit_empty|validateDatetime',
+            'rules' => 'permit_empty|valid_datetime',
             'errors' => [
-                'validateDatetime' => 'La date et heure sont invalides.',
+                'valid_datetime' => 'La date et heure sont invalides.',
             ]
         ];
 
@@ -85,11 +85,11 @@ class UpdateJourneyRequestValidator extends BaseValidator
             'start-datetime' => $datetimeRules,
             'end-datetime'   => $datetimeRules,
             'range-start' => [
-                'rules' => 'permit_empty|regex_match[/^([01]\d|2[0-3]):([0-5]\d)$/]|beforeDate[range-end]|equalOrAfterNow',
+                'rules' => 'permit_empty|regex_match[/^([01]\d|2[0-3]):([0-5]\d)$/]|before_date[range-end]|equal_or_after_now',
                 'errors' => [
                     'regex_match' => 'L\'heure doit être dans le format HH:MM',
-                    'beforeDate' => 'L\'heure de départ doit être avant l\'heure d\'arrivée',
-                    'equalOrAfterNow' => 'L\'heure de départ ne peut pas être dans le passé'
+                    'before_date' => 'L\'heure de départ doit être avant l\'heure d\'arrivée',
+                    'equal_or_after_now' => 'L\'heure de départ ne peut pas être dans le passé'
                 ]
             ],
             'range-end' => [

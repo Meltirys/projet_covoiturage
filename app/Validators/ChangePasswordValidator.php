@@ -14,10 +14,10 @@ class ChangePasswordValidator extends BaseValidator
     protected function rules(): array
     {
         return [
-            'old_password'=> [
-                'rules' => 'isOldPassword',
-                'errors' =>[
-                    'isOldPassword' => 'Le mot de passe entré n\'est pas le bon'
+            'old_password' => [
+                'rules' => 'is_old_password',
+                'errors' => [
+                    'is_old_password' => 'Le mot de passe entré n\'est pas le bon'
                 ]
             ],
             'password' => [

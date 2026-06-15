@@ -43,17 +43,17 @@ class EditJourneyDriveValidator extends BaseValidator
             ]
         ];
         $dateRules = [
-            'rules' => 'required|validateDate',
+            'rules' => 'required|valid_date',
             'errors' => [
                 'required' => 'La date est obligatoire.',
-                'validateDate' => 'La date est invalide.',
+                'valid_date' => 'La date est invalide.',
             ]
         ];
         $timeRules = [
-            'rules' => 'required|validateTime',
+            'rules' => 'required|valid_time',
             'errors' => [
                 'required' => 'Le temps est obligatoire.',
-                'validateTime' => 'Le temps est invalide.',
+                'valid_time' => 'Le temps est invalide.',
             ]
         ];
 
@@ -89,18 +89,18 @@ class EditJourneyDriveValidator extends BaseValidator
             'end.lon' => $lonRules,
 
             'end' => [
-                'rules' => 'notSame[start]',
+                'rules' => 'location_different_from[start]',
                 'errors' => [
-                    'notSameLocation' => 'L\'adresse d\'arrivée ne doit pas être la même que celle du départ',
+                    'location_different_from' => 'L\'adresse d\'arrivée ne doit pas être la même que celle du départ',
                 ]
             ],
 
             // ===== STOPS
 
             'stops' => [
-                'rules' => 'permit_empty|validStops',
+                'rules' => 'permit_empty|valid_stops',
                 'errors' => [
-                    'validStops' => 'Un ou plusieurs arrêts sont invalides',
+                    'valid_stops' => 'Un ou plusieurs arrêts sont invalides',
                 ]
             ],
 
