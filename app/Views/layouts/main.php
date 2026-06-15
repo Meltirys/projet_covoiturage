@@ -138,7 +138,7 @@
                     <img src="/img/logo_golden.png" alt="PennRide" class="w-7 h-7 rounded-lg opacity-80">
                     <span class="font-pfd text-base text-bluegrey">Penn<em class="italic text-gold">Ride</em></span>
                 </div>
-                <p class="text-grey leading-relaxed" style="font-size: 11px; max-width: 180px;">Covoiturage solidaire · GRETA Bretagne Sud</p>
+                <p class="text-grey leading-relaxed" style="font-size: 11px; max-width: 180px;">Covoiturage solidaire · GRETA</p>
             </div>
 
             <!-- Liens -->
