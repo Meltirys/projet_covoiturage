@@ -29,8 +29,10 @@
             <?php if (session('logged_in')): ?>
 
                 <nav class="hidden md:flex items-center gap-2">
+                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="#">Comment ça marche ?</a>
                     <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="<?= site_url('trajet') ?>">Trajets</a>
                     <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/nouveau-trajet">Proposer</a>
+                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="#">Contact</a>
                     <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/myprofil">Mon profil</a>
                     <?php if (session('user_role') == 2): ?>
                         <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/backoffice">Admin</a>
@@ -93,8 +95,10 @@
         </div>
 
         <?php if (session('logged_in')): ?>
+            <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="#" onclick="toggleMobileMenu()">Comment ça marche ?</a>
             <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="<?= site_url('trajet') ?>" onclick="toggleMobileMenu()">Trajets</a>
             <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="/nouveau-trajet" onclick="toggleMobileMenu()">Proposer un trajet</a>
+            <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="#" onclick="toggleMobileMenu()">Contact</a>
             <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="/myprofil" onclick="toggleMobileMenu()">Mon profil</a>
             <?php if (session('user_role') == 2): ?>
                 <a class="text-sm font-poppins font-medium text-sand w-full py-3 border-b border-ocean-light" href="/backoffice" onclick="toggleMobileMenu()">Dashboard admin</a>
@@ -161,7 +165,7 @@
 
             <!-- Barre du bas -->
             <div class="flex items-center justify-between pt-5" style="border-top: 0.5px solid rgba(180,140,60,0.1);">
-                <p class="text-grey" style="font-size: 10px;">© 2026 <span class="text-gold">PennRide</span></p>
+                <p class="text-grey" style="font-size: 10px;">© 2026 <span class="text-gold">PennRide</span> · Développé en Bretagne</p>
                 <div class="flex items-center gap-2">
                     <a href="https://github.com/Meltirys/projet_covoiturage.git" class="text-grey hover:text-gold transition-colors" style="font-size: 13px;"><i class="fa-brands fa-github"></i></a>
                     <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 13px;"><i class="fa-regular fa-envelope"></i></a>
