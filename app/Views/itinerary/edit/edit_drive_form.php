@@ -1,6 +1,4 @@
-<?= form_open('drive/edit', ['class' => 'flex flex-col gap-4']) ?>
-
-<input type="hidden" name="id_journey_drive" value="<?= $journey['id_journey_drive'] ?>">
+<?= form_open('drive/edit/' . $journey['id_journey_drive'], ['class' => 'flex flex-col gap-4']) ?>
 
 <!-- Départ / Arrivée -->
 <div class=" grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 items-start">
