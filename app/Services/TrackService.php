@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\TrackModel;
 use Config\OpenRoutesServices;
 
 class TrackService
@@ -56,7 +57,7 @@ class TrackService
         $summary  = $data['features'][0]['properties']['summary'];  // Distance & duration
 
         // Saving in database
-        $trackModel = model('TrackModel');
+        $trackModel = model(TrackModel::class);
 
         $data = [
             'geojson'  => json_encode($geometry),   // The complete geometry
@@ -66,7 +67,12 @@ class TrackService
 
         // If $trackId isn't null, updates its existing row instead of inserting a new one
         if ($trackId !== null) {
-            $trackModel->update($trackId, $data);
+            $saved = $trackModel->update($trackId, $data);
+
+            if (!$saved) {
+                throw new \RuntimeException('Impossible de créer le tracé');
+            }
+
             return $trackId;
         }
 
