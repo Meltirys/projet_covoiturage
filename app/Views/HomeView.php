@@ -224,18 +224,156 @@
 
     <?php else: ?>
 
-        <!-- Contenu connecté -->
-        <div class="px-4 md:px-12 py-8">
-            <div class="max-w-sm mx-auto flex flex-col gap-3">
-                <a href="/trajet" class="block w-full bg-gold text-ocean text-center py-3 rounded-xl text-xs font-semibold tracking-widest uppercase transition-all duration-200 hover:opacity-90">Voir les trajets →</a>
-                <a href="/nouveau-trajet" class="block w-full border border-ocean-light text-grey text-center py-3 rounded-xl text-xs font-medium tracking-widest uppercase transition-colors duration-200 hover:bg-ocean-light">Proposer un trajet</a>
-                <a href="/myprofil" class="block w-full border border-ocean-light text-grey text-center py-3 rounded-xl text-xs font-medium tracking-widest uppercase transition-colors duration-200 hover:bg-ocean-light">Mon profil</a>
-                <?php if (session('user_role') == 2): ?>
-                    <a href="/backoffice" class="block w-full border border-gold/30 text-gold text-center py-3 rounded-xl text-xs font-medium tracking-widest uppercase transition-colors duration-200 hover:bg-gold/10">Dashboard admin</a>
-                <?php endif; ?>
-                <a href="/logout" class="block w-full border border-red/30 text-red text-center py-3 rounded-xl text-xs font-medium tracking-widest uppercase transition-colors duration-200 hover:bg-red/10">Se déconnecter</a>
+    <!-- ===== CONNECTÉ : page d'accueil avec carte + recherche + trajets ===== -->
+    <div class="min-h-screen bg-ocean">
+
+        <!-- CARTE -->
+        <div class="relative overflow-hidden" style="height: 200px;">
+            <img
+                src="https://staticmap.openstreetmap.de/staticmap.php?center=47.6480,2.7600&zoom=14&size=1200x300"
+                alt="Carte Vannes"
+                class="w-full h-full object-cover object-center"
+                style="filter: saturate(0.25) brightness(0.9) sepia(0.2);"
+            >
+            <!-- Overlay dégradé -->
+            <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(20,28,48,0.3) 0%, rgba(20,28,48,0.6) 100%);"></div>
+            <!-- Marqueur GRETA -->
+            <div class="absolute" style="top: 44%; left: 46%; transform: translate(-50%, -100%);">
+                <div class="relative flex items-center justify-center">
+                    <!-- Pulse -->
+                    <div class="absolute rounded-full" style="width:32px;height:32px;background:rgba(218,175,80,0.25);animation:pulse-map 2s ease-out infinite;top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+                    <!-- Dot -->
+                    <div class="rounded-full border-2 border-lightgrey" style="width:14px;height:14px;background:#DAAF50;box-shadow:0 2px 8px rgba(218,175,80,0.5);"></div>
+                </div>
+                <!-- Label -->
+                <div class="absolute text-center whitespace-nowrap" style="bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background:#DAAF50; color:#1E1A0E; font-size:9px; font-weight:600; padding:3px 10px; border-radius:20px; letter-spacing:0.5px;">
+                    Lycée Alain Lesage
+                </div>
+            </div>
+            <!-- Crédit -->
+            <span class="absolute bottom-2 right-3 text-lightgrey/40" style="font-size:9px;">© OpenStreetMap contributors</span>
+            <!-- Titre hero sur la carte -->
+            <div class="absolute bottom-5 left-5 z-10">
+                <p class="text-gold/70 uppercase tracking-widest mb-1" style="font-size:9px;letter-spacing:0.2em;">Bonjour, <?= session('user_first_name') ?></p>
+                <h1 class="font-pfd text-lightgrey font-light leading-tight" style="font-size:1.6rem;">Où vas-tu <em class="italic text-gold">aujourd'hui ?</em></h1>
             </div>
         </div>
+
+        <!-- CONTENU PRINCIPAL -->
+        <div class="px-4 md:px-10 py-6 max-w-5xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                <!-- FORMULAIRE RECHERCHE -->
+                <div class="bg-ocean-light border border-ocean-light rounded-2xl p-5">
+                    <p class="text-gold uppercase tracking-widest mb-4" style="font-size:9px;letter-spacing:0.2em;">Rechercher un trajet</p>
+
+                    <?= form_open('/trajet/search') ?>
+                    <div class="flex flex-col gap-3">
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-gold uppercase tracking-widest" style="font-size:9px;letter-spacing:0.2em;">Départ</label>
+                            <input class="address-input w-full rounded-xl bg-ocean border border-ocean-light px-3 py-2.5 text-xs text-lightgrey placeholder-grey focus:outline-none focus:border-gold/40 transition-all duration-200" type="text" name="departure" placeholder="Ex : GRETA Vannes">
+                            <div class="results"></div>
+                        </div>
+                        <div class="flex flex-col gap-1.5">
+                            <label class="text-gold uppercase tracking-widest" style="font-size:9px;letter-spacing:0.2em;">Arrivée</label>
+                            <input class="address-input w-full rounded-xl bg-ocean border border-ocean-light px-3 py-2.5 text-xs text-lightgrey placeholder-grey focus:outline-none focus:border-gold/40 transition-all duration-200" type="text" name="arrival" placeholder="Ex : Gare SNCF Auray">
+                            <div class="results"></div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-gold uppercase tracking-widest" style="font-size:9px;letter-spacing:0.2em;">Date</label>
+                                <input class="w-full rounded-xl bg-ocean border border-ocean-light px-3 py-2.5 text-xs text-lightgrey focus:outline-none focus:border-gold/40 transition-all duration-200" type="date" name="date">
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-gold uppercase tracking-widest" style="font-size:9px;letter-spacing:0.2em;">Passagers</label>
+                                <select class="w-full rounded-xl bg-ocean border border-ocean-light px-3 py-2.5 text-xs text-lightgrey focus:outline-none focus:border-gold/40 transition-all duration-200" name="passengers">
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-gold text-ocean font-semibold rounded-xl py-3 text-xs tracking-widest uppercase transition-all duration-200 hover:opacity-90 active:scale-[0.98] cursor-pointer mt-1">
+                            Rechercher →
+                        </button>
+                    </div>
+                    <?= form_close() ?>
+                </div>
+
+                <!-- TRAJETS DISPONIBLES -->
+                <div class="bg-ocean-light border border-ocean-light rounded-2xl p-5">
+                    <div class="flex items-baseline justify-between mb-4">
+                        <p class="text-gold uppercase tracking-widest" style="font-size:9px;letter-spacing:0.2em;">Trajets disponibles</p>
+                        <a href="/trajet" class="text-grey hover:text-gold transition-colors" style="font-size:10px;">Voir tout →</a>
+                    </div>
+
+                    <?php if (!empty($trajets)): ?>
+                        <div class="flex flex-col gap-0">
+                            <?php foreach (array_slice($trajets, 0, 5) as $trajet): ?>
+                            <div class="flex items-center justify-between py-3 border-b border-ocean-light last:border-b-0">
+                                <div>
+                                    <div class="font-pfd text-lightgrey font-light" style="font-size:14px;">
+                                        <?= esc($trajet['departure_label'] ?? $trajet['departure_address']) ?>
+                                        <em class="italic text-gold mx-1">→</em>
+                                        <?= esc($trajet['arrival_label'] ?? $trajet['arrival_address']) ?>
+                                    </div>
+                                    <div class="text-grey mt-1" style="font-size:10px;">
+                                        <?= date('D. d M · H\hi', strtotime($trajet['departure_datetime'])) ?>
+                                        · <?= esc($trajet['first_name'] ?? '') ?> <?= esc(substr($trajet['last_name'] ?? '', 0, 1)) ?>.
+                                    </div>
+                                    <span class="inline-block mt-1 text-grey border border-ocean rounded-full px-2 py-0.5" style="font-size:9px;">
+                                        <?= $trajet['available_seats'] ?> place<?= $trajet['available_seats'] > 1 ? 's' : '' ?>
+                                    </span>
+                                </div>
+                                <div class="text-right ml-4 shrink-0">
+                                    <div class="font-pfd text-gold font-light" style="font-size:20px;"><?= $trajet['price'] ?> €</div>
+                                    <a href="/trajet/<?= $trajet['id_itinerary'] ?>" class="text-grey hover:text-gold transition-colors" style="font-size:9px;">Voir →</a>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php else: ?>
+                        <div class="flex flex-col items-center justify-center py-8 text-grey">
+                            <p class="font-pfd italic text-xl text-gold/40 mb-2">Aucun trajet</p>
+                            <p style="font-size:11px;">Aucun trajet disponible pour le moment.</p>
+                            <a href="/nouveau-trajet" class="mt-4 text-gold border border-gold/30 rounded-full px-4 py-1.5 text-xs hover:bg-gold/10 transition-colors">Proposer le premier →</a>
+                        </div>
+                    <?php endif; ?>
+                </div>
+
+            </div>
+
+            <!-- LIENS RAPIDES -->
+            <div class="grid grid-cols-3 gap-3 mt-5">
+                <a href="/nouveau-trajet" class="flex flex-col items-center gap-2 bg-ocean-light border border-ocean-light rounded-2xl py-4 px-3 text-center hover:border-gold/30 transition-colors group">
+                    <span class="text-gold/60 group-hover:text-gold transition-colors" style="font-size:20px;">+</span>
+                    <span class="text-grey text-xs uppercase tracking-widest" style="font-size:9px;">Proposer</span>
+                </a>
+                <a href="/myprofil" class="flex flex-col items-center gap-2 bg-ocean-light border border-ocean-light rounded-2xl py-4 px-3 text-center hover:border-gold/30 transition-colors group">
+                    <span class="text-gold/60 group-hover:text-gold transition-colors" style="font-size:20px;">◎</span>
+                    <span class="text-grey text-xs uppercase tracking-widest" style="font-size:9px;">Mon profil</span>
+                </a>
+                <?php if (session('user_role') == 2): ?>
+                <a href="/backoffice" class="flex flex-col items-center gap-2 bg-ocean-light border border-gold/20 rounded-2xl py-4 px-3 text-center hover:border-gold/50 transition-colors group">
+                    <span class="text-gold/60 group-hover:text-gold transition-colors" style="font-size:20px;">⊞</span>
+                    <span class="text-gold/70 text-xs uppercase tracking-widest" style="font-size:9px;">Admin</span>
+                </a>
+                <?php else: ?>
+                <a href="/logout" class="flex flex-col items-center gap-2 bg-ocean-light border border-ocean-light rounded-2xl py-4 px-3 text-center hover:border-red/30 transition-colors group">
+                    <span class="text-grey group-hover:text-red transition-colors" style="font-size:20px;">⏻</span>
+                    <span class="text-grey text-xs uppercase tracking-widest" style="font-size:9px;">Quitter</span>
+                </a>
+                <?php endif; ?>
+            </div>
+        </div>
+    </div>
+
+    <style>
+    @keyframes pulse-map {
+        0%   { transform: translate(-50%,-50%) scale(1); opacity: 0.6; }
+        100% { transform: translate(-50%,-50%) scale(2.5); opacity: 0; }
+    }
+    </style>
 
     <?php endif; ?>
 

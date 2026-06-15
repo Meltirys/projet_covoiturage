@@ -10,9 +10,13 @@
             <p class="section-title flex items-center gap-2 text-[0.625rem] tracking-[0.2em] uppercase font-bold text-gold mb-5">Mon profil</p>
             <div class="flex items-center gap-4 md:gap-6">
                 <div class="profile-monogram w-14 h-14 md:w-20 md:h-20 rounded-full border flex items-center justify-center flex-shrink-0">
-                    <span class="font-pfd text-xl md:text-3xl font-light text-gold tracking-widest">
-                        <?= mb_strtoupper(mb_substr(session('user_first_name'), 0, 1)) ?><?= mb_strtoupper(mb_substr(session('user_last_name'), 0, 1)) ?>
-                    </span>
+                    <?php if (session('avatar_filename')): ?>
+                        <img src="<?= base_url('img/avatars/' . session('avatar_filename')) ?>" alt="Avatar" class="w-full h-full rounded-full object-cover">
+                    <?php else: ?>
+                        <span class="font-pfd text-xl text-gold">
+                            <?= strtoupper(substr(session('user_first_name'), 0, 1)) ?><?= strtoupper(substr(session('user_last_name'), 0, 1)) ?>
+                        </span>
+                    <?php endif; ?>
                 </div>
                 <h1 class="font-pfd text-4xl md:text-6xl font-light leading-[0.92] tracking-tight text-lightgrey">
                     <?= session('user_first_name') ?><br>

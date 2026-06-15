@@ -6,7 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="<?= csrf_hash() ?>">
     <meta name="csrf-name" content="<?= csrf_token() ?>">
-    <script>if(localStorage.getItem('theme')==='dark')document.documentElement.classList.add('dark')</script>
+    <script>
+        if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark')
+    </script>
     <link rel="icon" type="image/png" href="/img/logo_golden.png">
     <script src="/js/theme-toggle.js"></script>
     <link rel="stylesheet" href="/css/style.css">
@@ -16,55 +18,57 @@
 
 <body class="min-h-screen font-poppins bg-ocean text-lightgrey">
 
-<?php if (session('logged_in') || uri_string() !== ''): ?>
-    <header class="flex items-center justify-between px-5 md:px-10 h-16 bg-ocean-mid border-b border-gold/30">
+    <?php if (session('logged_in') || uri_string() !== ''): ?>
+        <header class="flex items-center justify-between px-5 md:px-10 h-16 bg-ocean-mid border-b border-gold/30">
 
-        <a href="/" class="flex items-center gap-3">
-            <img src="/img/logo_golden.png" alt="PennRide" class="w-10 h-10 rounded-xl">
-            <span class="hidden md:block text-xs tracking-widest uppercase font-light text-sand">PennRide</span>
-        </a>
+            <a href="/" class="flex items-center gap-3">
+                <img src="/img/logo_golden.png" alt="PennRide" class="w-10 h-10 rounded-xl">
+                <span class="hidden md:block text-xs tracking-widest uppercase font-light text-sand">PennRide</span>
+            </a>
 
-        <?php if (session('logged_in')): ?>
+            <?php if (session('logged_in')): ?>
 
-            <nav class="hidden md:flex items-center gap-2">
-                <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="<?= site_url('trajet') ?>">Trajets</a>
-                <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/nouveau-trajet">Proposer</a>
-                <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/myprofil">Mon profil</a>
-                <?php if (session('user_role') == 2): ?>
-                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/backoffice">Admin</a>
-                <?php endif; ?>
-            </nav>
-
-            <div class="flex items-center gap-3">
-                <button id="theme-toggle-btn" onclick="toggleTheme()" class="text-lg p-1 cursor-pointer">🌙</button>
-                <div class="hidden md:flex items-center gap-2 border border-gold/30 rounded-full px-3 py-1">
-                    <?php if (session('avatar_filename')): ?>
-                        <img src="<?= base_url('img/avatars/' . session('avatar_filename')) ?>" alt="Avatar">
-                    <?php else: ?>
-                        <span class="text-xs font-medium text-gold">
-                            <?= strtoupper(substr(session('user_first_name'), 0, 1)) ?><?= strtoupper(substr(session('user_last_name'), 0, 1)) ?>
-                        </span>
+                <nav class="hidden md:flex items-center gap-2">
+                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="<?= site_url('trajet') ?>">Trajets</a>
+                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/nouveau-trajet">Proposer</a>
+                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/myprofil">Mon profil</a>
+                    <?php if (session('user_role') == 2): ?>
+                        <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/backoffice">Admin</a>
                     <?php endif; ?>
-                    <span class="text-xs text-grey"><?= session('user_first_name') ?></span>
+                </nav>
+
+                <div class="flex items-center gap-3">
+                    <button id="theme-toggle-btn" onclick="toggleTheme()" class="text-lg p-1 cursor-pointer">🌙</button>
+                    <div>
+                        <div class="hidden md:flex items-center gap-2 border border-gold/30 rounded-full px-2 py-1">
+                            <?php if (session('avatar_filename')): ?>
+                                <img src="<?= base_url('img/avatars/' . session('avatar_filename')) ?>" alt="Avatar" class="w-6 h-6 rounded-full object-cover">
+                            <?php else: ?>
+                                <span class="text-xs font-medium text-gold">
+                                    <?= strtoupper(substr(session('user_first_name'), 0, 1)) ?><?= strtoupper(substr(session('user_last_name'), 0, 1)) ?>
+                                </span>
+                            <?php endif; ?>
+                            <span class="text-xs text-grey pr-1"><?= session('user_first_name') ?></span>
+                        </div>
+                    </div>
+                    <button class="md:hidden p-2 text-grey" onclick="toggleMobileMenu()">
+                        <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
+                            <rect y="0" width="20" height="2" rx="1" fill="currentColor" />
+                            <rect y="7" width="20" height="2" rx="1" fill="currentColor" />
+                            <rect y="14" width="20" height="2" rx="1" fill="currentColor" />
+                        </svg>
+                    </button>
                 </div>
-                <button class="md:hidden p-2 text-grey" onclick="toggleMobileMenu()">
-                    <svg width="20" height="16" viewBox="0 0 20 16" fill="none">
-                        <rect y="0"  width="20" height="2" rx="1" fill="currentColor"/>
-                        <rect y="7"  width="20" height="2" rx="1" fill="currentColor"/>
-                        <rect y="14" width="20" height="2" rx="1" fill="currentColor"/>
-                    </svg>
-                </button>
-            </div>
 
-        <?php else: ?>
-            <div class="flex gap-2">
-                <button id="theme-toggle-btn" onclick="toggleTheme()" class="text-lg p-1 cursor-pointer">🌙</button>
-                <a href="/" class="text-xs font-poppins text-grey border border-ocean-light rounded-full px-4 py-1.5 hover:bg-ocean-light transition-colors">Connexion</a>
-                <a href="/" class="text-xs font-poppins font-medium bg-sand text-ocean rounded-full px-4 py-1.5 hover:opacity-90 transition-opacity">Inscription</a>
-            </div>
-        <?php endif; ?>
+            <?php else: ?>
+                <div class="flex gap-2">
+                    <button id="theme-toggle-btn" onclick="toggleTheme()" class="text-lg p-1 cursor-pointer">🌙</button>
+                    <a href="/" class="text-xs font-poppins text-grey border border-ocean-light rounded-full px-4 py-1.5 hover:bg-ocean-light transition-colors">Connexion</a>
+                    <a href="/" class="text-xs font-poppins font-medium bg-sand text-ocean rounded-full px-4 py-1.5 hover:opacity-90 transition-opacity">Inscription</a>
+                </div>
+            <?php endif; ?>
 
-    </header>
+        </header>
     <?php endif; ?>
 
     <div id="menuOverlay"
@@ -107,9 +111,9 @@
     <?= $this->renderSection('scripts') ?>
     <script>
         function toggleMobileMenu() {
-            const menu    = document.getElementById('mobileMenu');
+            const menu = document.getElementById('mobileMenu');
             const overlay = document.getElementById('menuOverlay');
-            const isOpen  = menu.classList.contains('open');
+            const isOpen = menu.classList.contains('open');
             if (isOpen) {
                 menu.classList.remove('open');
                 overlay.style.opacity = '0';
