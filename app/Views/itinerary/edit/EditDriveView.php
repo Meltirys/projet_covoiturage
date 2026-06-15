@@ -53,8 +53,6 @@ $selectedSeat = old('drive.seats', $journey['number_of_place']);
         const selectedSeat = <?= json_encode($selectedSeat) ?>;
         const selectedCar = <?= json_encode($selectedCar) ?>;
 
-        console.log(cars);
-
         if (carSelect && seatSelect && Array.isArray(cars) && cars.length > 0) {
             // Initiate seat population on car selection change
             carSelect.addEventListener("change", populateSeats);
