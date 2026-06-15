@@ -25,7 +25,13 @@ $selectedSeat = old('drive.seats', $journey['number_of_place']);
     <?php endif ?>
 
     <div class="bg-white border border-[rgba(37,63,114,0.25)] rounded-xl p-5">
-        <?= view('itinerary/edit/edit_drive_form', ['errors', 'cars', 'journey', 'selectedCar']) ?>
+        <?= view('itinerary/edit/edit_drive_form', [
+            'errors' => $errors,
+            'journey' => $journey,
+            'cars' => $cars,
+            'selectedCar' => $selectedCar,
+            'selectedSeat' => $selectedSeat
+        ]) ?>
     </div>
 </main>
 
@@ -39,8 +45,15 @@ $selectedSeat = old('drive.seats', $journey['number_of_place']);
         // Création des nombres de places possibles
         const cars = <?= json_encode($cars ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
 
+        // Gets the fields
         const carSelect = document.getElementById("drive-car");
         const seatSelect = document.getElementById("drive-seats");
+
+        // Gets the values
+        const selectedSeat = <?= json_encode($selectedSeat) ?>;
+        const selectedCar = <?= json_encode($selectedCar) ?>;
+
+        console.log(cars);
 
         if (carSelect && seatSelect && Array.isArray(cars) && cars.length > 0) {
             // Initiate seat population on car selection change
@@ -51,20 +64,21 @@ $selectedSeat = old('drive.seats', $journey['number_of_place']);
         }
 
         function populateSeats() {
-            const car = cars.find(c => String(c.id_car) === carSelect.value); // match l'id des voitures dans cars à l'id sélectionné dans le dropdown
+            const selectedCarId = carSelect.value || selectedCar;
+            const car = cars.find(c => String(c.id_car) === String(selectedCarId)); // match l'id des voitures dans cars à l'id sélectionné dans le dropdown
 
             seatSelect.innerHTML = '<option value="">-- Choisissez le nombre de places disponibles --</option>';
 
             if (!car) return;
 
-            for (let i = 1; i <= car.car_number_of_seat; i++) {
+            for (let i = 1; i <= car.number_of_seat; i++) {
                 const option = document.createElement("option");
 
                 option.value = i;
-                option.textContent = `${i}`;
+                option.textContent = i;
 
                 // Repopulate old seat selection
-                if (String(i) === $selectedSeat) {
+                if (String(i) === String(selectedSeat)) {
                     option.selected = true;
                 }
 
