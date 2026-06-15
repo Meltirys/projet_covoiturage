@@ -52,6 +52,10 @@
             </div>
         </div>
 
+        <a href="<?= base_url('trajet/modification/' . $journey['id_journey_drive']) ?>">
+            Modifier l'itinéraire
+        </a>
+
     </div>
     <div id="map"
         data-geojson="<?= esc($geojson) ?>"
