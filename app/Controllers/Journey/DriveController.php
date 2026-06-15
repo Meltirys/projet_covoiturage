@@ -212,13 +212,14 @@ class DriveController extends BaseController
 
         $data = $this->request->getPost('drive');
 
+
         // Validation
         $validator = new EditJourneyDriveValidator;
 
         if (! $validator->validate($data)) {
             log_message('debug', 'Validation failed. Errors: ' . json_encode($validator->getErrors()));
             return redirect()->back()
-                ->with('drive_errors', $validator->getErrors())
+                ->with('errors', $validator->getErrors())
                 ->with('failed_form', 'drive')
                 ->withInput();
         }
@@ -245,7 +246,7 @@ class DriveController extends BaseController
             );
 
             log_message('debug', 'Journey modified successfully.');
-            return redirect()->to('/')
+            return redirect()->to('drive/show/' . $id)
                 ->with('status', 'Itinéraire modifié avec succès');
         } catch (\DomainException $e) {
             // user error (e.g. chosen more seats than available in car)
@@ -310,10 +311,7 @@ class DriveController extends BaseController
      */
     private function canManageJourney(int $ownerId): void
     {
-        $isOwner = session()->user_id === $ownerId;
-        $isAdmin = in_array(session()->user_role, [2, 3], true);
-
-        if (!$isOwner && !$isAdmin) {
+        if (!session()->user_id === $ownerId) {
             throw new \DomainException('Vous n\'avez pas la permission nécessaire pour modifier ce trajet.');
         }
     }
