@@ -213,14 +213,16 @@ class CustomRules
     /**
      * Checks if the new amount of seats conflicts with the amount of seats allocated in a journey this car is used in
      * @param string $value
-     * @param int $carId
+     * @param mixed $carId
      * @return bool
      */
-    public function no_journey_conflict(string $value, int $carId): bool
+    public function no_journey_conflict(string $value, mixed $carId): bool
     {
         if (!$value) {
             return true;
         }
+
+        $carId = (int) $carId;
 
         $journeyDriveModel = model(JourneyDriveModel::class);
         $journeys = $journeyDriveModel->select('number_of_place')->where('id_car', $carId)->findAll();
