@@ -68,9 +68,8 @@
                         Retirer
                     </button>
                 <?php endif; ?>
-                <?php $stopError = $errors["stops.$index.address"] ?? $errors["stops.$index.label"] ?? $errors["stops.$index.lat"] ?? $errors["stops.$index.lon"] ?? $errors["stops.$index.city"] ?? $errors["stops.$index.postcode"] ?? null;
-                if ($stopError): ?>
-                    <span class="text-xs text-red-500"><?= esc($stopError) ?></span>
+                <?php if (isset($errors['stops'])): ?>
+                    <span class="text-xs text-red-500"><?= esc($errors['stops']) ?></span>
                 <?php endif ?>
             </div>
         <?php endforeach; ?>
