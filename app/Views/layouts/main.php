@@ -126,63 +126,50 @@
         }
     </script>
 
-    <footer class="border-t mt-auto bg-ocean-mid" style="border-color: rgba(180,140,60,0.15);">
-        <div class="max-w-5xl mx-auto px-5 md:px-10 py-10">
+    <footer class="mt-auto" style="border-top: 0.5px solid rgba(180,140,60,0.15); background: var(--color-ocean-mid);">
+    <div class="px-5 md:px-10 py-8 max-w-5xl mx-auto">
 
-            <!-- Grille principale -->
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <!-- Ligne principale -->
+        <div class="flex flex-col md:flex-row md:items-start gap-8 md:gap-0 md:justify-between mb-8">
 
-                <!-- Colonne brand -->
-                <div class="md:col-span-1">
-                    <div class="flex items-center gap-2 mb-3">
-                        <img src="/img/logo_golden.png" alt="PennRide" class="w-8 h-8 rounded-lg">
-                        <span class="font-pfd text-lg text-bluegrey">Penn<em class="italic text-gold">Ride</em></span>
-                    </div>
-                    <p class="text-xs text-grey leading-relaxed mb-4">
-                        Le covoiturage solidaire réservé aux membres du GRETA.
-                    </p>
+            <!-- Brand -->
+            <div class="flex flex-col gap-3">
+                <div class="flex items-center gap-2">
+                    <img src="/img/logo_golden.png" alt="PennRide" class="w-7 h-7 rounded-lg opacity-80">
+                    <span class="font-pfd text-base text-bluegrey">Penn<em class="italic text-gold">Ride</em></span>
                 </div>
-
-                <!-- Navigation -->
-                <div>
-                    <p class="text-gold uppercase tracking-widest mb-4 font-medium" style="font-size: 9px; letter-spacing: 0.2em;">Navigation</p>
-                    <ul class="flex flex-col gap-2">
-                        <li><a href="/trajet" class="text-xs text-grey hover:text-gold transition-colors">Rechercher un trajet</a></li>
-                        <li><a href="/nouveau-trajet" class="text-xs text-grey hover:text-gold transition-colors">Proposer un trajet</a></li>
-                        <li><a href="/myprofil" class="text-xs text-grey hover:text-gold transition-colors">Mon profil</a></li>
-                        <li><a href="/" class="text-xs text-grey hover:text-gold transition-colors">Se connecter</a></li>
-                    </ul>
-                </div>
-
-                <!-- Informations -->
-                <div>
-                    <p class="text-gold uppercase tracking-widest mb-4 font-medium" style="font-size: 9px; letter-spacing: 0.2em;">Informations</p>
-                    <ul class="flex flex-col gap-2">
-                        <li><a href="#" class="text-xs text-grey hover:text-gold transition-colors">Mentions légales</a></li>
-                        <li><a href="#" class="text-xs text-grey hover:text-gold transition-colors">Politique de confidentialité</a></li>
-                        <li><a href="#" class="text-xs text-grey hover:text-gold transition-colors">CGU</a></li>
-                        <li><a href="#" class="text-xs text-grey hover:text-gold transition-colors">Nous contacter</a></li>
-                    </ul>
-                </div>
-
+                <p class="text-grey leading-relaxed" style="font-size: 11px; max-width: 180px;">Covoiturage solidaire · GRETA Bretagne Sud</p>
             </div>
 
-            <!-- Barre du bas -->
-            <div class="flex items-center justify-between pt-6" style="border-top: 0.5px solid rgba(180,140,60,0.15);">
-                <p class="text-grey" style="font-size: 11px;">
-                    © 2026 <span class="text-gold">PennRide</span> · GRETA Bretagne Sud · Fait avec ♥ en Bretagne
-                </p>
-                <div class="flex items-center gap-2">
-                    <a href="#" class="w-7 h-7 rounded-full flex items-center justify-center text-grey hover:text-gold transition-colors" style="border: 0.5px solid rgba(180,140,60,0.2); font-size: 12px;">
-                        <i class="fa-brands fa-github"></i>
-                    </a>
-                    <a href="#" class="w-7 h-7 rounded-full flex items-center justify-center text-grey hover:text-gold transition-colors" style="border: 0.5px solid rgba(180,140,60,0.2); font-size: 12px;">
-                        <i class="fa-regular fa-envelope"></i>
-                    </a>
+            <!-- Liens -->
+            <div class="flex gap-12">
+                <div class="flex flex-col gap-2">
+                    <p class="text-gold uppercase mb-1" style="font-size: 9px; letter-spacing: 0.2em;">Navigation</p>
+                    <a href="/trajet" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Trajets</a>
+                    <a href="/nouveau-trajet" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Proposer</a>
+                    <a href="/myprofil" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Mon profil</a>
                 </div>
+                <div class="flex flex-col gap-2">
+                    <p class="text-gold uppercase mb-1" style="font-size: 9px; letter-spacing: 0.2em;">Informations</p>
+                    <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Mentions légales</a>
+                    <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">CGU</a>
+                    <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Contact</a>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Barre du bas -->
+        <div class="flex items-center justify-between pt-5" style="border-top: 0.5px solid rgba(180,140,60,0.1);">
+            <p class="text-grey" style="font-size: 10px;">© 2026 <span class="text-gold">PennRide</span> · Fait avec ♥ en Bretagne</p>
+            <div class="flex items-center gap-2">
+                <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 13px;"><i class="fa-brands fa-github"></i></a>
+                <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 13px;"><i class="fa-regular fa-envelope"></i></a>
             </div>
         </div>
-    </footer>
+
+    </div>
+</footer>
 
     <style>
         @keyframes blink {
