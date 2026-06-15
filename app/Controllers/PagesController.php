@@ -21,6 +21,22 @@ class PagesController extends BaseController
     }
 
     /**
+     * Mentions légales
+     */
+    public function mentionsLegales(): string
+    {
+        return view('legal/LegalNotice');
+    }
+
+    /**
+     * CGU
+     */
+    public function cgu(): string
+    {
+        return view('legal/CGU');
+    }
+
+    /**
      * Journey creation page
      */
     public function createJourney(): string

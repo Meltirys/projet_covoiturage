@@ -28,6 +28,8 @@ use App\Services\AjaxRequests;
 // => $route->get('url', 'controller::méthode')
 
 $routes->get('/', 'PagesController::home');
+$routes->get('/mentions-legales', 'PagesController::mentionsLegales');
+$routes->get('/cgu', 'PagesController::cgu');
 
 if (ENVIRONMENT === 'production') {
     $routes->set404Override(function () {

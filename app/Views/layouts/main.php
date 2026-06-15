@@ -151,8 +151,8 @@
                     </div>
                     <div class="flex flex-col gap-2">
                         <p class="text-gold uppercase mb-1" style="font-size: 9px; letter-spacing: 0.2em;">Informations</p>
-                        <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Mentions légales</a>
-                        <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">CGU</a>
+                        <a href="/mentions-legales" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Mentions légales</a>
+                        <a href="/cgu" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">CGU</a>
                         <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Contact</a>
                     </div>
                 </div>
