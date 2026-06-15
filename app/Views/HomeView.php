@@ -224,38 +224,72 @@
 
     <?php else: ?>
 
-    <!-- ===== CONNECTÉ : page d'accueil avec carte + recherche + trajets ===== -->
+    <!-- ===== CONNECTÉ ===== -->
     <div class="min-h-screen bg-ocean">
 
-        <!-- CARTE -->
-        <div class="relative overflow-hidden" style="height: 200px;">
+        <!-- CARTE + HERO -->
+        <div class="relative overflow-hidden" style="height: 280px;">
             <img
                 src="https://staticmap.openstreetmap.de/staticmap.php?center=47.6480,2.7600&zoom=14&size=1200x300"
                 alt="Carte Vannes"
                 class="w-full h-full object-cover object-center"
                 style="filter: saturate(0.25) brightness(0.9) sepia(0.2);"
             >
-            <!-- Overlay dégradé -->
-            <div class="absolute inset-0" style="background: linear-gradient(to bottom, rgba(20,28,48,0.3) 0%, rgba(20,28,48,0.6) 100%);"></div>
+            <div class="absolute inset-0" style="background: linear-gradient(to top, rgba(13,17,23,0.97) 0%, rgba(13,17,23,0.6) 45%, rgba(13,17,23,0.1) 100%);"></div>
+
             <!-- Marqueur GRETA -->
-            <div class="absolute" style="top: 44%; left: 46%; transform: translate(-50%, -100%);">
+            <div class="absolute" style="top: 30%; left: 46%; transform: translate(-50%, -100%);">
                 <div class="relative flex items-center justify-center">
-                    <!-- Pulse -->
                     <div class="absolute rounded-full" style="width:32px;height:32px;background:rgba(218,175,80,0.25);animation:pulse-map 2s ease-out infinite;top:50%;left:50%;transform:translate(-50%,-50%);"></div>
-                    <!-- Dot -->
                     <div class="rounded-full border-2 border-lightgrey" style="width:14px;height:14px;background:#DAAF50;box-shadow:0 2px 8px rgba(218,175,80,0.5);"></div>
                 </div>
-                <!-- Label -->
                 <div class="absolute text-center whitespace-nowrap" style="bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); background:#DAAF50; color:#1E1A0E; font-size:9px; font-weight:600; padding:3px 10px; border-radius:20px; letter-spacing:0.5px;">
                     Lycée Alain Lesage
                 </div>
             </div>
-            <!-- Crédit -->
+
             <span class="absolute bottom-2 right-3 text-lightgrey/40" style="font-size:9px;">© OpenStreetMap contributors</span>
-            <!-- Titre hero sur la carte -->
-            <div class="absolute bottom-5 left-5 z-10">
+
+            <!-- Contenu hero superposé -->
+            <div class="absolute bottom-5 left-5 right-5 z-10">
                 <p class="text-gold/70 uppercase tracking-widest mb-1" style="font-size:9px;letter-spacing:0.2em;">Bonjour, <?= session('user_first_name') ?></p>
-                <h1 class="font-pfd text-lightgrey font-light leading-tight" style="font-size:1.6rem;">Où vas-tu <em class="italic text-gold">aujourd'hui ?</em></h1>
+                <h1 class="font-pfd text-lightgrey font-light leading-tight mb-3" style="font-size:1.6rem;">Où vas-tu <em class="italic text-gold">aujourd'hui ?</em></h1>
+
+                <!-- BLOC PROCHAIN TRAJET -->
+                <?php if (!empty($next_trip)): ?>
+                <a href="/myprofil" class="inline-flex items-center gap-0 rounded-xl overflow-hidden no-underline hover:opacity-90 transition-opacity" style="background:rgba(212,168,67,0.06);border:1px solid rgba(212,168,67,0.3);max-width:420px;">
+                    <div class="flex flex-col gap-1.5 px-4 py-3" style="border-right:1px solid rgba(212,168,67,0.3);">
+                        <div class="flex items-center gap-1.5" style="font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:#d4a843;">
+                            <div style="width:5px;height:5px;border-radius:50%;background:#d4a843;flex-shrink:0;"></div>
+                            <?= $next_trip['is_driver'] ? 'Conducteur' : 'Passager' ?> · <?= date('D. d M · H\hi', strtotime($next_trip['departure'])) ?>
+                        </div>
+                        <div class="font-pfd text-lightgrey font-light flex items-center gap-1" style="font-size:14px;white-space:nowrap;">
+                            <?= esc($next_trip['departure_city']) ?>
+                            <span style="color:#d4a843;font-size:12px;">→</span>
+                            <?= esc($next_trip['arrival_city']) ?>
+                        </div>
+                        <div class="text-grey" style="font-size:10px;">
+                            <?= $next_trip['is_driver'] ? ($next_trip['passenger_count'] ?? 0) . ' passager(s) confirmé(s)' : 'Réservé' ?>
+                        </div>
+                    </div>
+                    <?php if ($next_trip_count > 0): ?>
+                    <div class="flex flex-col items-center justify-center gap-0.5 px-4 py-3" style="flex-shrink:0;">
+                        <span class="font-pfd text-gold font-light" style="font-size:18px;line-height:1;">+<?= $next_trip_count ?></span>
+                        <span class="text-grey uppercase tracking-widest" style="font-size:8px;">autres</span>
+                    </div>
+                    <?php endif; ?>
+                </a>
+                <?php else: ?>
+                <div class="inline-flex items-start gap-3 rounded-xl px-4 py-3" style="background:rgba(212,168,67,0.04);border:1px solid rgba(212,168,67,0.15);">
+                    <div class="flex items-center justify-center rounded-full mt-0.5" style="width:28px;height:28px;border:1px solid rgba(212,168,67,0.3);flex-shrink:0;">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#d4a843" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.4"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="10" y1="14" x2="14" y2="18"/><line x1="14" y1="14" x2="10" y2="18"/></svg>
+                    </div>
+                    <div>
+                        <p style="font-size:12px;color:rgba(232,234,240,0.55);">Aucun trajet prévu pour le moment.</p>
+                        <p style="font-size:10px;color:#6b7380;">Recherche un trajet ou propose le tien.</p>
+                    </div>
+                </div>
+                <?php endif; ?>
             </div>
         </div>
 
@@ -266,7 +300,6 @@
                 <!-- FORMULAIRE RECHERCHE -->
                 <div class="bg-ocean-light border border-ocean-light rounded-2xl p-5">
                     <p class="text-gold uppercase tracking-widest mb-4" style="font-size:9px;letter-spacing:0.2em;">Rechercher un trajet</p>
-
                     <?= form_open('/trajet/search') ?>
                     <div class="flex flex-col gap-3">
                         <div class="flex flex-col gap-1.5">
@@ -306,7 +339,6 @@
                         <p class="text-gold uppercase tracking-widest" style="font-size:9px;letter-spacing:0.2em;">Trajets disponibles</p>
                         <a href="/trajet" class="text-grey hover:text-gold transition-colors" style="font-size:10px;">Voir tout →</a>
                     </div>
-
                     <?php if (!empty($trajets)): ?>
                         <div class="flex flex-col gap-0">
                             <?php foreach (array_slice($trajets, 0, 5) as $trajet): ?>
@@ -385,7 +417,6 @@
 <script src="/js/geocoding.js"></script>
 <script src="/js/profile-address.js"></script>
 <script>
-    // ===== ANIMATIONS D'ENTRÉE =====
     (function() {
         const isMobile = window.innerWidth < 768;
         const els = [
@@ -406,7 +437,6 @@
         });
     })();
 
-    // ===== ONGLETS AVEC SLIDING INDICATOR =====
     const btns      = document.querySelectorAll('.penn-tab-btn');
     const panels    = document.querySelectorAll('.auth-panel');
     const indicator = document.getElementById('tab-indicator');
@@ -440,7 +470,6 @@
     });
     setTimeout(() => moveIndicator(document.querySelector('.penn-tab-btn.text-gold')), 50);
 
-    // ===== SHAKE SUR SUBMIT INVALIDE =====
     document.querySelectorAll('.penn-btn').forEach(btn => {
         btn.closest('form')?.addEventListener('submit', function(e) {
             const inputs = this.querySelectorAll('[required]');
@@ -456,7 +485,6 @@
         });
     });
 
-    // ===== TAB INITIAL =====
     <?php if (session()->getFlashdata('singup_error') || !empty($errors)): ?>
         showTab('tab-inscription');
     <?php else: ?>
