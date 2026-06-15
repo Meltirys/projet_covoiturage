@@ -41,7 +41,7 @@
                     <button id="theme-toggle-btn" onclick="toggleTheme()" class="text-lg p-1 cursor-pointer">🌙</button>
                     <div>
                         <div class="hidden md:flex items-center gap-2 border border-gold/30 rounded-full px-2 py-1">
-                            <?php if (session('avatar_filename')): ?>
+                            <?php if (empty(session('avatar_filename'))): ?>
                                 <a href="/myprofil"><img src="<?= base_url('img/avatars/' . session('avatar_filename')) ?>" alt="Avatar" class="w-6 h-6 rounded-full object-cover"></a>
                             <?php else: ?>
                                 <span class="text-xs font-medium text-gold">
@@ -127,49 +127,49 @@
     </script>
 
     <footer class="mt-auto" style="border-top: 0.5px solid rgba(180,140,60,0.15); background: var(--color-ocean-mid);">
-    <div class="px-5 md:px-10 py-8 max-w-5xl mx-auto">
+        <div class="px-5 md:px-10 py-8 max-w-5xl mx-auto">
 
-        <!-- Ligne principale -->
-        <div class="flex flex-col md:flex-row md:items-start gap-8 md:gap-0 md:justify-between mb-8">
+            <!-- Ligne principale -->
+            <div class="flex flex-col md:flex-row md:items-start gap-8 md:gap-0 md:justify-between mb-8">
 
-            <!-- Brand -->
-            <div class="flex flex-col gap-3">
+                <!-- Brand -->
+                <div class="flex flex-col gap-3">
+                    <div class="flex items-center gap-2">
+                        <img src="/img/logo_golden.png" alt="PennRide" class="w-7 h-7 rounded-lg opacity-80">
+                        <span class="font-pfd text-base text-bluegrey">Penn<em class="italic text-gold">Ride</em></span>
+                    </div>
+                    <p class="text-grey leading-relaxed" style="font-size: 11px; max-width: 180px;">Covoiturage solidaire · GRETA</p>
+                </div>
+
+                <!-- Liens -->
+                <div class="flex gap-12">
+                    <div class="flex flex-col gap-2">
+                        <p class="text-gold uppercase mb-1" style="font-size: 9px; letter-spacing: 0.2em;">Navigation</p>
+                        <a href="/trajet" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Trajets</a>
+                        <a href="/nouveau-trajet" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Proposer</a>
+                        <a href="/myprofil" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Mon profil</a>
+                    </div>
+                    <div class="flex flex-col gap-2">
+                        <p class="text-gold uppercase mb-1" style="font-size: 9px; letter-spacing: 0.2em;">Informations</p>
+                        <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Mentions légales</a>
+                        <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">CGU</a>
+                        <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Contact</a>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Barre du bas -->
+            <div class="flex items-center justify-between pt-5" style="border-top: 0.5px solid rgba(180,140,60,0.1);">
+                <p class="text-grey" style="font-size: 10px;">© 2026 <span class="text-gold">PennRide</span></p>
                 <div class="flex items-center gap-2">
-                    <img src="/img/logo_golden.png" alt="PennRide" class="w-7 h-7 rounded-lg opacity-80">
-                    <span class="font-pfd text-base text-bluegrey">Penn<em class="italic text-gold">Ride</em></span>
-                </div>
-                <p class="text-grey leading-relaxed" style="font-size: 11px; max-width: 180px;">Covoiturage solidaire · GRETA</p>
-            </div>
-
-            <!-- Liens -->
-            <div class="flex gap-12">
-                <div class="flex flex-col gap-2">
-                    <p class="text-gold uppercase mb-1" style="font-size: 9px; letter-spacing: 0.2em;">Navigation</p>
-                    <a href="/trajet" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Trajets</a>
-                    <a href="/nouveau-trajet" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Proposer</a>
-                    <a href="/myprofil" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Mon profil</a>
-                </div>
-                <div class="flex flex-col gap-2">
-                    <p class="text-gold uppercase mb-1" style="font-size: 9px; letter-spacing: 0.2em;">Informations</p>
-                    <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Mentions légales</a>
-                    <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">CGU</a>
-                    <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Contact</a>
+                    <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 13px;"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 13px;"><i class="fa-regular fa-envelope"></i></a>
                 </div>
             </div>
 
         </div>
-
-        <!-- Barre du bas -->
-        <div class="flex items-center justify-between pt-5" style="border-top: 0.5px solid rgba(180,140,60,0.1);">
-            <p class="text-grey" style="font-size: 10px;">© 2026 <span class="text-gold">PennRide</span></p>
-            <div class="flex items-center gap-2">
-                <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 13px;"><i class="fa-brands fa-github"></i></a>
-                <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 13px;"><i class="fa-regular fa-envelope"></i></a>
-            </div>
-        </div>
-
-    </div>
-</footer>
+    </footer>
 
     <style>
         @keyframes blink {
