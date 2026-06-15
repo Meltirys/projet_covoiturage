@@ -188,10 +188,10 @@ class JourneyService
             // 3. Track
             $routeChanged = $this->detectRouteChange($original, $input);
 
-            $idTrack = $input['id_track'];
+            $idTrack = $original['id_track'];
 
             if ($routeChanged) {
-                $idTrack = $this->buildTrack($input);
+                $idTrack = $this->buildTrack($input, $idTrack);
             }
 
             // 4. Journey
@@ -211,7 +211,7 @@ class JourneyService
                 'id_track'          => $idTrack
             ];
 
-            $journeyId = $input['id_journey_drive'];
+            $journeyId = $original['id_journey_drive'];
 
             $updateStatus = $this->journeyDriveModel->update($journeyId, $journeyData);
 
@@ -536,9 +536,7 @@ class JourneyService
      */
     private function createStartEndLocations(array $input): array
     {
-        $locationService = $this->locationService;
-
-        $startLocationId = $locationService->getOrCreate(
+        $startLocationId = $this->locationService->getOrCreate(
             $input['start']['label'],
             $input['start']['city'],
             $input['start']['postcode'],
@@ -546,7 +544,7 @@ class JourneyService
             $input['start']['lon'] ?? null
         );
 
-        $endLocationId = $locationService->getOrCreate(
+        $endLocationId = $this->locationService->getOrCreate(
             $input['end']['label'],
             $input['end']['city'],
             $input['end']['postcode'],
@@ -563,6 +561,37 @@ class JourneyService
         return $locationIds;
     }
 
+    /**
+     * Saves a new series of stages
+     * @param int $id Journey ID
+     * @param array $stops
+     * @return void
+     */
+    private function saveStages(int $id, array $stops): void
+    {
+        $order = 1;
+
+        foreach ($stops as $stop) {
+
+            $locationId = $this->locationService->getOrCreate(
+                $stop['label'],
+                $stop['city'],
+                $stop['postcode'],
+                $stop['lat'],
+                $stop['lon']
+            );
+
+            $status = $this->stagesModel->insert([
+                'id_journey_drive' => $id,
+                'id_location'      => $locationId,
+                'order'            => $order++,
+            ]);
+
+            if ($status === false) {
+                throw new \RuntimeException('Erreur lors de la création des étapes');
+            }
+        }
+    }
 
     /**
      * Function to filter journeys which don't have enough free seats
@@ -745,14 +774,16 @@ class JourneyService
     private function detectRouteChange(array $original, array $input): bool
     {
         // Normalizing data for checking if itinerary has changed
-        $oldStart = ['lat' => $original['start']['lat'], 'lon' => $original['start']['lon']];
+        $oldStart = ['lat' => $original['departure_lat'], 'lon' => $original['departure_lon']];
         $newStart = ['lat' => $input['start']['lat'], 'lon' => $input['start']['lon']];
-        $oldEnd = ['lat' => $original['end']['lat'], 'lon' => $original['end']['lon']];
+        $oldEnd = ['lat' => $original['arrival_lat'], 'lon' => $original['arrival_lon']];
         $newEnd = ['lat' => $input['end']['lat'], 'lon' => $input['end']['lon']];
 
-        $normalizeStop = fn($s) => $s['lat'] . '|' . $s['lon'];
+        $normalizeStop = function ($stop) {
+            return ($stop['lat'] ?? '') . '|' . ($stop['lon'] ?? '');
+        };
 
-        $oldStops = array_map($normalizeStop, $original['stops'] ?? []);
+        $oldStops = array_map($normalizeStop, $original['stages'] ?? []);
         $newStops = array_map($normalizeStop, $input['stops'] ?? []);
 
         // Has itinerary changed ?
@@ -769,7 +800,7 @@ class JourneyService
      * @param array $input
      * @return int The track id
      */
-    private function buildTrack(array $input): int
+    private function buildTrack(array $input, ?int $idTrack = null): int
     {
         $trackService = service('TrackService');
         $stops = $input['stops'];
@@ -784,41 +815,9 @@ class JourneyService
             ];
         }, $stops); // Rebuilding each stop into a new array and saving only the lat on lon values
 
-        $idTrack = $trackService->saveTrack($start, $end, $trackStop, $input['id_track'] ?? null); //  Generation and saving of the tracking
+        $idTrack = $trackService->saveTrack($start, $end, $trackStop, $idTrack ?? null); //  Generation and saving of the tracking
 
         return $idTrack;
-    }
-
-    /**
-     * Saves a new series of stages
-     * @param int $id Journey ID
-     * @param array $stops
-     * @return void
-     */
-    private function saveStages(int $id, array $stops): void
-    {
-        $order = 1;
-
-        foreach ($stops as $stop) {
-
-            $locationId = $this->locationService->getOrCreate(
-                $stop['label'],
-                $stop['city'],
-                $stop['postcode'],
-                $stop['lat'],
-                $stop['lon']
-            );
-
-            $status = $this->stagesModel->insert([
-                'id_journey_drive' => $id,
-                'id_location'      => $locationId,
-                'order'            => $order++,
-            ]);
-
-            if ($status === false) {
-                throw new \RuntimeException('Erreur lors de la création des étapes');
-            }
-        }
     }
 
     /**
