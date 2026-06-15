@@ -17,10 +17,10 @@ class CarController extends BaseController
     {
         helper('form');
         $car = [
-            'brand'   => $this->request->getPost('brand'),
-            'model'    => $this->request->getPost('model'),
-            'color'        => $this->request->getPost('color'),
-            'year'     => $this->request->getPost('year'),
+            'brand'          => $this->request->getPost('brand'),
+            'model'          => $this->request->getPost('model'),
+            'color'          => $this->request->getPost('color'),
+            'year'           => $this->request->getPost('year'),
             'number_of_seat' => $this->request->getPost('places'),
         ];
 
@@ -109,15 +109,16 @@ class CarController extends BaseController
         }
 
         $car = [
-            'brand'   => $this->request->getPost('brand'),
-            'model'    => $this->request->getPost('model'),
-            'color'        => $this->request->getPost('color'),
-            'year'     => $this->request->getPost('year'),
+            'id_car'         => $idCar,
+            'brand'          => $this->request->getPost('brand'),
+            'model'          => $this->request->getPost('model'),
+            'color'          => $this->request->getPost('color'),
+            'year'           => $this->request->getPost('year'),
             'number_of_seat' => $this->request->getPost('places'),
         ];
 
         //Calling the specific validator
-        $validator = new CarValidator;
+        $validator = new CarValidator($idCar);
 
         //If an error is detected, we redirect the errors to the profil controller
         if (!$validator->validate($car)) {
