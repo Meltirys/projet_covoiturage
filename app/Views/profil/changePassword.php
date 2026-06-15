@@ -1,4 +1,4 @@
-<?= view('commons/header') ?>
+<?= view('layouts/main') ?>
 
 <div class="profile-hero px-4 md:px-8 py-10 md:py-14 mb-8">
     <div class="relative z-10 max-w-5xl mx-auto">
@@ -61,5 +61,3 @@
     <?= form_close() ?>
 
 </main>
-
-<?= view('commons/footer') ?>
