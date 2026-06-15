@@ -4,6 +4,8 @@ namespace App\Controllers\Journey;
 
 use App\Controllers\BaseController;
 use App\Models\JourneyRequestModel;
+use App\Models\LocationModel;
+use App\Models\UserModel;
 use App\Services\JourneyService;
 use App\Validators\JourneyRequest\CreateJourneyRequestValidator;
 use App\Validators\JourneyRequest\SearchJourneyRequestValidator;
@@ -78,8 +80,8 @@ class RequestController extends BaseController
     {
         helper('form');
 
-        $locationModel = model('LocationModel');
-        $userModel     = model('UserModel');
+        $locationModel = model(LocationModel::class);
+        $userModel     = model(UserModel::class);
 
         $request = $this->journeyRequestModel->find($id);
 
@@ -119,7 +121,7 @@ class RequestController extends BaseController
      */
     public function index(): string|RedirectResponse
     {
-        $locationModel = model('LocationModel');
+        $locationModel = model(LocationModel::class);
         $allRequest = $this->journeyRequestModel->findAll();
 
         foreach ($allRequest as &$request) {
