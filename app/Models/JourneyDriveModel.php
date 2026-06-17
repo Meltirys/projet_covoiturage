@@ -156,6 +156,8 @@ class JourneyDriveModel extends Model
             $query->limit($numberOfJourney);
         }
 
+        $query->orderBy('departure', 'ASC');
+
         return $query->findAll();
     }
 }

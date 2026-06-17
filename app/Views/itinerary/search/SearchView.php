@@ -35,8 +35,8 @@ $error        = session()->getFlashdata('error');
     </div>
 
     <?php if (isset($journeys) && !empty($journeys)): ?>
-        <div id="journey-results"></div>
-        <div id="journey-pagination"></div>
+        <div id="journey-results" class="flex flex-col gap-3"></div>
+        <div id="journey-pagination" class="flex gap-2 mt-6"></div>
 
     <?php else: ?>
         <div class="flex items-center gap-3 bg-ocean-mid border border-ocean-light rounded-[14px] px-4 py-3 mt-6">
