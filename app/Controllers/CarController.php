@@ -55,7 +55,7 @@ class CarController extends BaseController
         }
 
         return redirect()->to('/myprofil')
-            ->with('car_success', 'Votre véhicule à bien été ajouté');
+            ->with('car_success', 'Votre véhicule a bien été ajouté');
     }
 
     /**
@@ -84,7 +84,7 @@ class CarController extends BaseController
         }
 
         return redirect()->to('/myprofil')
-            ->with('car_success', 'Votre véhicule à bien été supprimé');
+            ->with('car_success', 'Votre véhicule a bien été supprimé');
     }
 
     public function modify(int $idCar)
@@ -115,7 +115,7 @@ class CarController extends BaseController
                 ->with('error_in_modify_car_form', true) //This variable is meant to tell the view that it needs to show the form to modify a car on load
                 ->withInput()
                 ->with('errors', $validator->getErrors()) //We transfer the errors so the view can display it
-                ->with('idCar' , $idCar); //Transfering the id of the car so the form can point to the correct car
+                ->with('idCar', $idCar); //Transfering the id of the car so the form can point to the correct car
         }
 
         //Adding the user id for the database request
@@ -127,10 +127,10 @@ class CarController extends BaseController
             return redirect()->to('/myprofil')
                 ->with('errors', $errors)
                 ->withInput()
-                ->with('car_error', 'Une erreur est survenue lors de la mdoficiation du véhicule');
+                ->with('car_error', 'Une erreur est survenue lors de la modification du véhicule');
         }
 
         return redirect()->to('/myprofil')
-            ->with('car_success', 'Votre véhicule à bien été modifié');
+            ->with('car_success', 'Votre véhicule a bien été modifié');
     }
 }
