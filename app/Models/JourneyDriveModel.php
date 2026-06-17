@@ -156,7 +156,6 @@ class JourneyDriveModel extends Model
             $query->limit($numberOfJourney);
         }
 
-
         return $query->findAll();
     }
 }
