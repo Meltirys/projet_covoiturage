@@ -44,7 +44,7 @@ class CarValidator extends BaseValidator
                 ]
             ],
             'number_of_seat' => [
-                'rules'  => 'required|integer|greater_than[0]|less_than_equal_to[8]|no_journey_conflict[' . $this->carId . ']',
+                'rules'  => 'required|integer|greater_than[0]|less_than_equal_to[8]', //no_journey_conflict[''] to add 
                 'errors' => [
                     'required'            => 'Le nombre de places est obligatoire.',
                     'integer'             => 'Le nombre de places doit être un nombre entier.',
