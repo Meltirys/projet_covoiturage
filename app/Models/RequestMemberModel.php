@@ -4,10 +4,10 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class RequestModel extends Model
+class RequestMemberModel extends Model
 {
-    protected $table            = 'Request';
-    protected $primaryKey       = 'id_request';
+    protected $table            = 'RequestMember';
+    protected $primaryKey       = 'id_request_member';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
