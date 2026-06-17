@@ -301,7 +301,7 @@
 
             <!-- CONTENU PRINCIPAL -->
             <div class="px-4 md:px-8 py-6 max-w-5xl mx-auto">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 items-start">
 
                     <!-- FORMULAIRE RECHERCHE -->
                     <div class="bg-ocean-mid border border-ocean-light rounded-[14px] overflow-hidden">
