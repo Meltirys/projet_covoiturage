@@ -403,7 +403,7 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<?php if (!$_SESSION['logged_in']): ?>
+<?php if (!session('logged_in')): ?>
     <script src="/js/profile-address.js"></script>
 <?php else: ?>
     <script src="/js/geocoding.js"></script>
