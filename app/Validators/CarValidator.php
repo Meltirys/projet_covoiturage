@@ -6,6 +6,13 @@ use App\Validation\CustomRules;
 
 class CarValidator extends BaseValidator
 {
+    private ?int $carId;
+
+    public function __construct(?int $carId = null)
+    {
+        parent::__construct();
+        $this->carId = $carId ?? null;
+    }
 
     protected function rules(): array
     {

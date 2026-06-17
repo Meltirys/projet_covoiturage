@@ -8,7 +8,7 @@ use App\Validators\BaseValidator;
 class UpdateJourneyRequestValidator extends BaseValidator
 {
     /**
-     * List the rules that needs to be followed in order to be valid
+     * List of rules that needs to be followed for validation
      * @return array Array containing the rules
      */
     public function rules(): array
@@ -54,7 +54,6 @@ class UpdateJourneyRequestValidator extends BaseValidator
 
         return [
             // ===== START
-
             'start.label' => [
                 'rules' => 'permit_empty|min_length[2]|max_length[100]',
                 'errors' => [
