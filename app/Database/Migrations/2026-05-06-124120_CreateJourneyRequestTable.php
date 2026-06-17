@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class CreateUserJourneyRequestTable extends Migration
+class CreateJourneyRequestTable extends Migration
 {
     public function up()
     {
@@ -19,13 +19,13 @@ class CreateUserJourneyRequestTable extends Migration
             'start'              => ['type' => 'INT', 'unsigned' => true, 'null' => false],
             'end'                => ['type' => 'INT', 'unsigned' => true, 'null' => false],
             'deletion_date'      => ['type' => 'DATE', 'null' => true],
-            'id_user'            => ['type' => 'INT', 'unsigned' => true, 'null' => false],
+            'id_creator'            => ['type' => 'INT', 'unsigned' => true, 'null' => false],
 
         ]);
         $this->forge->addPrimaryKey('id_journey_request');
         $this->forge->addForeignKey('start', 'Location', 'id_location', 'RESTRICT', 'NO ACTION');
         $this->forge->addForeignKey('end', 'Location', 'id_location', 'RESTRICT', 'NO ACTION');
-        $this->forge->addForeignKey('id_user', 'Users', 'id_user', 'RESTRICT', 'NO ACTION');
+        $this->forge->addForeignKey('id_creator', 'Users', 'id_user', 'RESTRICT', 'NO ACTION');
         $this->forge->createTable('JourneyRequest');
     }
 
