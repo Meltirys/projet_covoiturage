@@ -32,7 +32,7 @@
                     <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/comment-ca-marche">Comment ça marche ?</a>
                     <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="<?= site_url('trajet') ?>">Trajets</a>
                     <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/nouveau-trajet">Proposer</a>
-                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="contact-page">Contact</a>
+                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/contact-page">Contact</a>
                     <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/myprofil">Mon profil</a>
                     <?php if (session('user_role') == 2): ?>
                         <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/backoffice">Admin</a>
@@ -157,7 +157,7 @@
                         <p class="text-gold uppercase mb-1" style="font-size: 9px; letter-spacing: 0.2em;">Informations</p>
                         <a href="/mentions-legales" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Mentions légales</a>
                         <a href="/cgu" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">CGU</a>
-                        <a href="contact-page" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Contact</a>
+                        <a href="/contact-page" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Contact</a>
                     </div>
                 </div>
 
