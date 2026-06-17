@@ -17,7 +17,15 @@ class PagesController extends BaseController
     {
         helper('form');
 
-        return view('HomeView');
+        $datas = [];
+
+        //If an user is logged in, we retrieve the latest journey available
+        if (session('logged_in')) {
+            $journeyDriveModel = new JourneyDriveModel();
+            $datas['journeysAvailable'] = $journeyDriveModel->getJourneyInfosByDates(date('d-m-y h:i:s')); // We retrieve the journey that start after the current day
+        }
+
+        return view('HomeView', $datas);
     }
 
     /**
