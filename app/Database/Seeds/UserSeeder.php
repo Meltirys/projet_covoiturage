@@ -45,8 +45,8 @@ class UserSeeder extends Seeder
                 'password'           => password_hash('password', PASSWORD_DEFAULT),
                 'email'              => 'add.mine@admin.fr',
                 'mobile'             => '',
-                'birth_date'         => '1948-06-21',
-                'gender'             => 'male',
+                'birth_date'         => '1998-07-24',
+                'gender'             => 'female',
                 'id_user_permission' => 2,
                 'is_validated' => true,
                 'id_location' => 1
@@ -403,6 +403,19 @@ class UserSeeder extends Seeder
                 'id_user_permission' => 1,
                 'is_validated'       => null,
                 'id_location'        => 1
+            ],
+            [
+                'id_user'            => 30,
+                'first_name'         => 'Brian',
+                'last_name'          => "O'Connor",
+                'password'           => password_hash('password', PASSWORD_DEFAULT),
+                'email'              => 'brian.oconnor@furious.us',
+                'mobile'             => '',
+                'birth_date'         => '1975-01-09',
+                'gender'             => 'male',
+                'id_user_permission' => 1,
+                'is_validated'       => null,
+                'id_location'        => 1
             ]
         ];
 
@@ -416,12 +429,36 @@ class UserSeeder extends Seeder
                 'id_user' => 1
             ],
             [
-                'brand' => 'FSO',
-                'model' => 'Warszawa',
-                'color' => 'Rouge',
-                'year' => 1958,
-                'number_of_seat' => 5,
+                'brand' => 'SKODA',
+                'model' => 'Superb',
+                'color' => 'Blanche',
+                'year' => 2024,
+                'number_of_seat' => 4,
                 'id_user' => 2
+            ],
+            [
+                'brand' => 'MERCEDES',
+                'model' => 'GLA',
+                'color' => 'Noire',
+                'year' => 2020,
+                'number_of_seat' => 5,
+                'id_user' => 13
+            ],
+            [
+                'brand' => 'AUDI',
+                'model' => 'R7',
+                'color' => 'Rouge',
+                'year' => 2017,
+                'number_of_seat' => 5,
+                'id_user' => 5
+            ],
+            [
+                'brand' => 'NISSAN',
+                'model' => 'Skyline R34',
+                'color' => 'Grise/Bleue',
+                'year' => 2002,
+                'number_of_seat' => 2,
+                'id_user' => 30
             ],
 
         ];
