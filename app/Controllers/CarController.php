@@ -107,7 +107,7 @@ class CarController extends BaseController
         ];
 
         //Calling the specific validator
-        $validator = new CarValidator();
+        $validator = new CarValidator($idCar);
 
         //If an error is detected, we redirect the errors to the profil controller
         if (!$validator->validate($car)) {
