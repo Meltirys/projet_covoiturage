@@ -6,6 +6,7 @@ use App\Models\BookingModel;
 use App\Models\CarModel;
 use App\Models\JourneyDriveModel;
 use App\Models\JourneyRequestModel;
+use App\Models\RequestMemberModel;
 use App\Models\StagesModel;
 use App\Models\TrackModel;
 use CodeIgniter\Database\BaseConnection;
@@ -17,6 +18,8 @@ class JourneyService
 
     private JourneyDriveModel $journeyDriveModel;
     private JourneyRequestModel $journeyRequestModel;
+
+    private RequestMemberModel $requestMemberModel;
 
     private StagesModel $stagesModel;
 
@@ -32,6 +35,7 @@ class JourneyService
         $this->db = db_connect();
         $this->journeyDriveModel = model(JourneyDriveModel::class);
         $this->journeyRequestModel = model(JourneyRequestModel::class);
+        $this->requestMemberModel = model(RequestMemberModel::class);
         $this->stagesModel = model(StagesModel::class);
         $this->locationService = service('locationService');
     }
@@ -44,9 +48,6 @@ class JourneyService
      */
     public function createJourneyDrive(array $input, int $userId): int
     {
-        $carModel       = model(CarModel::class);
-        $locationService = $this->locationService;
-
         $this->db->transBegin();
 
         // Removes all the empty stops and makes a new array with new indexes
@@ -407,8 +408,6 @@ class JourneyService
      */
     public function createJourneyRequest(array $input, int $userId): int
     {
-        $locationService = $this->locationService;
-
         $this->checkDatesValidity($input);
 
         $this->db->transBegin();
@@ -422,23 +421,34 @@ class JourneyService
                 throw new \DomainException('L\'heure de début de disponibilité doit être avant la fin');
             }
 
-            $input['range-of-time'] = $input['range-start'] . ' - ' . $input['range-end'];
+            $rangeOfTime = $input['range-start'] . ' - ' . $input['range-end'];
 
-            $journeyData = [
+            $journeyId = $this->journeyRequestModel->insert([
                 'description'   => $input['description'],
-                'range_of_time' => $input['range-of-time'],
-                'id_user'       => $userId,
+                'range_of_time' => $rangeOfTime,
                 'start'         => $locationIds['start'],
                 'end'           => $locationIds['end'],
-            ];
-
-            $journeyId = $this->journeyRequestModel->insert($journeyData, true);
+                'id_creator'       => $userId
+            ], true);
 
             if (! $journeyId) {
                 throw new \RuntimeException('Impossible de créer le trajet');
             }
 
-            // 3. Transaction safety
+            // 3. Request Member insertion
+            $status = $this->requestMemberModel->insert(
+                [
+                    'seat_taken' => $input['seats-taken'],
+                    'request_date' => $input['date'],
+                    'id_journey_request' => $journeyId
+                ]
+            );
+
+            if (!$status) {
+                throw new \RuntimeException('Impossible de créer la participation');
+            }
+
+            // 4. Transaction safety
             if ($this->db->transStatus() === false) {
                 throw new \RuntimeException('Transaction échouée');
             }
@@ -453,13 +463,63 @@ class JourneyService
     }
 
     /**
-     * 
+     * Updates a request
      */
-    public function updateJourneyRequest(int $id, array $input)
+    public function updateJourneyRequest(array $original, array $input, int $userId)
     {
-
-
         $rangeOfTime = $input['range-start'] . ' - ' . $input['range-end'];
+
+        $this->db->transBegin();
+
+        try {
+            // 1. Cities + Locations
+            $locationIds = $this->createStartEndLocations($input);
+
+            // 2. Journey
+            // Calculating the estimated_arrival
+            $departureTime = $this->getDeparture($input);
+            $estimatedArrival = $this->estimateJourneyArrival($idTrack, $departureTime);
+
+            // Formatting the data
+            $journeyData = [
+                'description'   =>  $input['description'],
+                'departure'         => $departureTime,
+                'estimated_arrival' => $estimatedArrival,
+                'id_car'            => $input['car'],
+                'start'             => $locationIds['start'],
+                'end'               => $locationIds['end'],
+                'driver'            => $userId,
+            ];
+
+            $journeyId = $original['id_journey_drive'];
+
+            $updateStatus = $this->journeyDriveModel->update($journeyId, $journeyData);
+
+            if ($updateStatus === false) {
+                throw new \RuntimeException('Impossible de modifier le trajet');
+            }
+
+            // 5. Stages (optional)
+            if ($routeChanged) {
+                // Deletes old itinerary's stages
+                $stageModel->where('id_journey_drive', $journeyId)->delete();
+
+                if (!empty($input['stops'])) {
+                    // Saves new stages if existing
+                    $this->saveStages($journeyId, $input['stops']);
+                }
+            }
+
+            // 6. Transaction safety
+            if ($this->db->transStatus() === false) {
+                throw new \RuntimeException('Transaction échouée');
+            }
+
+            $this->db->transCommit();
+        } catch (\Throwable $e) {
+            $this->db->transRollback();
+            throw $e;
+        }
     }
 
     /**
@@ -782,18 +842,24 @@ class JourneyService
         $oldEnd = ['lat' => $original['arrival_lat'], 'lon' => $original['arrival_lon']];
         $newEnd = ['lat' => $input['end']['lat'], 'lon' => $input['end']['lon']];
 
-        $normalizeStop = function ($stop) {
-            return ($stop['lat'] ?? '') . '|' . ($stop['lon'] ?? '');
-        };
+        $oldStops = '';
+        $newStops = '';
 
-        $oldStops = array_map($normalizeStop, $original['stages'] ?? []);
-        $newStops = array_map($normalizeStop, $input['stops'] ?? []);
+        $isDrive = (isset($original['stages']));
+        if ($isDrive) {
+            $normalizeStop = function ($stop) {
+                return ($stop['lat'] ?? '') . '|' . ($stop['lon'] ?? '');
+            };
+
+            $oldStops = array_map($normalizeStop, $original['stages'] ?? []);
+            $newStops = array_map($normalizeStop, $input['stops'] ?? []);
+        }
 
         // Has itinerary changed ?
         $routeChanged =
             $oldStart != $newStart ||
             $oldEnd != $newEnd ||
-            $oldStops != $newStops;
+            (!$isDrive || $oldStops != $newStops);
 
         return $routeChanged;
     }
