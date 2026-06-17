@@ -1,7 +1,7 @@
 /**
  * Fills additional fields with the matching data
- * @param {*} feature Data from geocoding API
- * @param {*} inputElement User input element
+ * @param {array} feature Data from geocoding API
+ * @param {array} inputElement User input element
  */
 function fillAddressFields(feature, inputElement) {
   const properties = feature.properties;
