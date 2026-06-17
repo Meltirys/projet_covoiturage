@@ -75,20 +75,35 @@ class SearchJourneyDriveValidator extends BaseValidator
             // ===== END
 
             'end.label' => [
-                'rules' => 'required|min_length[2]|max_length[100]',
+                'rules' => 'permit_empty|min_length[2]|max_length[100]',
                 'errors' => [
                     'required' => 'L\'adresse d\'arrivée est obligatoire',
                     'min_length' => 'L\'adresse d\'arrivée doit faire plus de 2 caractères',
                     'max_length' => 'L\'adresse d\'arrivée doit faire moins de 100 caractères',
                 ]
             ],
-            'end.city' => $cityRules,
-            'end.postcode' => $postcodeRules,
-            'end.lat' => $latRules,
-            'end.lon' => $lonRules,
+            'end.city' => [
+                'rules' => 'permit_empty',
+                'errors' => []
+            ],
+            'end.postcode' => [
+                'rules' => 'permit_empty|min_length[5]|max_length[10]',
+                'errors' => [
+                    'min_length'=> 'Le code postal est trop court',
+                    'max_length' => 'Le code postal est trop long',
+                ]
+            ],
+            'end.lat' => [
+                'rules' => 'permit_empty|greater_than_equal_to[-90]|less_than_equal_to[90]',
+                'errors' => []
+            ],
+            'end.lon' => [
+                'rules' => 'permit_empty|greater_than_equal_to[-180]|less_than_equal_to[180]',
+                'errors' => []
+            ],
 
             'end' => [
-                'rules' => 'location_different_from[start]',
+                'rules' => 'permit_empty|location_different_from[start]',
                 'errors' => [
                     'location_different_from' => 'L\'adresse d\'arrivée ne doit pas être la même que celle du départ',
                 ]

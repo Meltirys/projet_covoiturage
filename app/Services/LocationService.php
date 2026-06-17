@@ -27,7 +27,7 @@ class LocationService
         string $address,
         string $city,
         string $postcode,
-    ): array {
+    ): ?array {
         // 1. Retrieve the city
         $cityData = $this->cityModel
             ->where([

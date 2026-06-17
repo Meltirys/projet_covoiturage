@@ -33,7 +33,7 @@ $filter    = $request->getGet('filter') ?? '';
         <input class="address-input w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey placeholder:text-grey focus:outline-none focus:border-gold/40 transition-colors"
             type="text" name="end[label]" id="end"
             value="<?= esc($end['label'] ?? '') ?>"
-            placeholder="Entrez votre destination" required>
+            placeholder="Entrez votre destination">
         <?php $endError = $errors['end.label'] ?? $errors['end.lat'] ?? $errors['end.lon'] ?? $errors['end.city'] ?? $errors['end.postcode'] ?? null;
         if ($endError): ?>
             <span class="text-xs text-red"><?= esc($endError) ?></span>

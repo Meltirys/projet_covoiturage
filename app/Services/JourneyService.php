@@ -323,16 +323,22 @@ class JourneyService
             $departureCity,
             $departurePostcode
         );
-        $arrivalLocation = $locationService->findLocationByAddress(
-            $arrivalAddress,
-            $arrivalCity,
-            $arrivalPostcode
-        );
+
+        // 1. Arrivée : coordonnées GPS directes (évite la recherche exacte en base)
+        $arrivalLocation = null;
+        if (!empty($arrivalCity)) {
+            $arrivalLat = (float) ($input['end']['lat'] ?? 0);
+            $arrivalLon = (float) ($input['end']['lon'] ?? 0);
+            if ($arrivalLat && $arrivalLon) {
+                $arrivalLocation = ['latitude' => $arrivalLat, 'longitude' => $arrivalLon];
+            }
+        }
+
 
         $searchDate = $input['date'] ?? '';
         $requestedSeats = (int) ($input['free-seats'] ?? 1);
 
-        if (empty($departureLocation) || empty($arrivalLocation) || empty($searchDate)) {
+        if (empty($departureLocation) || empty($searchDate) || (!empty($arrivalCity) && empty($arrivalLocation))) {
             return [];
         }
 
@@ -390,7 +396,11 @@ class JourneyService
         }
 
         // 3. Acquisition des journeys correspondants par itinéraire
-        $matches = $this->matchJourneys($journeys, $stagesByJourney, $departureLocation, $arrivalLocation);
+        // Rayon élargi si recherche par ville sans adresse précise
+        $isDepartureCitySearch = ($departureAddress === $departureCity);
+        $isArrivalCitySearch = !empty($arrivalCity) && ($arrivalAddress === $arrivalCity);
+        $matches = $this->matchJourneys($journeys, $stagesByJourney, $departureLocation, $arrivalLocation, $isArrivalCitySearch, $isDepartureCitySearch);
+
 
         // 4. Filtre par disponibilité des places
         $journeys = $this->filterAvailableSeats($matches, $requestedSeats);
@@ -718,7 +728,7 @@ class JourneyService
      * @param array $arrivalLocation Lieu d'arrivée donné par l'utilisateur
      * @return array Tableau contenant les journeys
      */
-    private function matchJourneys(array $journeys, array $stagesByJourney, array $departureLocation, array $arrivalLocation): array
+    private function matchJourneys(array $journeys, array $stagesByJourney, array $departureLocation, ?array $arrivalLocation, bool $isArrivalCitySearch = false, bool $isDepartureCitySearch = false): array
     {
         $matches = [];
 
@@ -733,18 +743,22 @@ class JourneyService
             $departureMatch = null;
             $arrivalMatch = null;
 
-            $departureMatch = $this->matchUserPointToRoute($departureLocation, $route);
-            $arrivalMatch = $this->matchUserPointToRoute($arrivalLocation, $route);
+            // Adapte le rayon de correspondance selon la précision de la recherche (actuellemment 2500m)
+            $departureRadius = $isDepartureCitySearch ? 2500 : self::MATCH_RADIUS_METERS;
+            $departureMatch = $departureLocation ? $this->matchUserPointToRoute($departureLocation, $route, $departureRadius) : [];
 
-            if (
-                !empty($departureMatch)
-                && !empty($arrivalMatch)
-                && $departureMatch['route_position'] < $arrivalMatch['route_position']
-            ) {
-                // ajout des données du calcul de distance ()
-                $journey['departure_match'] = $departureMatch;
-                $journey['arrival_match'] = $arrivalMatch;
-                $matches[] = $journey;
+            $arrivalRadius = $isArrivalCitySearch ? 2500 : self::MATCH_RADIUS_METERS;
+            $arrivalMatch = $arrivalLocation ? $this->matchUserPointToRoute($arrivalLocation, $route, $arrivalRadius) : null;
+
+            if ($arrivalLocation !== null) {
+                if (!empty($departureMatch) && !empty($arrivalMatch) && $departureMatch['route_position'] < $arrivalMatch['route_position']) {
+                    $journey['arrival_match'] = $arrivalMatch;
+                    $matches[] = $journey;
+                }
+            } else {
+                if (!empty($departureMatch)) {
+                    $matches[] = $journey;
+                }
             }
         }
 
