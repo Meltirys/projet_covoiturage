@@ -105,11 +105,10 @@ class BookingController extends BaseController
         }
 
         return redirect()->back()
-            ->with('success', 'Réservation réussie');
+            ->with('success', 'Demande de réservation envoyée');
     }
 
     // Cancel the booking to the passenger with id_booking
-
     public function cancel($id_booking)
     {
         $bookingModel = new BookingModel();
@@ -129,7 +128,7 @@ class BookingController extends BaseController
 
         $bookingModel->delete($id_booking);
         return redirect()->back()
-            ->with('success', 'Réservation annulée');
+            ->with('success', 'Demande de réservation annulée');
     }
 
     // Set the 'is_validated' to true. Only to the journey driver with id_booking
