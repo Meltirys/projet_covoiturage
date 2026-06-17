@@ -2,21 +2,14 @@
 
 use App\Controllers\Backoffice\DashboardController;
 use App\Controllers\Backoffice\SearchController;
-use App\Controllers\Backoffice\UserManagementController;
-use App\Controllers\Backoffice\UserSuppressionController;
 use CodeIgniter\Router\RouteCollection;
 use App\Controllers\CarController;
 use App\Controllers\UserController;
 use App\Controllers\Backoffice\UserValidationController;
-use App\Controllers\Backoffice\UserBanController;
 use App\Controllers\Backoffice\UserRoleController;
-use App\Controllers\Journey\DriveController;
-
-use App\Controllers\Journey\RequestController;
 use App\Controllers\ProfilController;
 use App\Controllers\Debug;
 use App\Controllers\ReportController;
-use App\Services\AjaxRequests;
 
 /**
  * @var RouteCollection $routes
@@ -73,26 +66,26 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 
     // Création de trajets
     $routes->get('nouveau-trajet', 'PagesController::createJourney');
-    $routes->post('drive/save', 'Journey\DriveController::save'); // conduite
-    $routes->post('request/save', 'Journey\RequestController::save'); // requête
-    $routes->get('request/list', 'Journey\RequestController::index');
+    $routes->post('drive/save', 'Journey\JourneyDriveController::save'); // conduite
+    $routes->post('request/save', 'Journey\JourneyRequestController::save'); // requête
+    $routes->get('request/list', 'Journey\JourneyRequestController::index');
 
     // Modification de trajet conducteur
     $routes->get('trajet/modification/(:num)', 'PagesController::editJourneyDrive/$1');
-    $routes->post('drive/edit/(:num)', 'Journey\DriveController::update/$1');
+    $routes->post('drive/edit/(:num)', 'Journey\JourneyDriveController::update/$1');
 
     // Modification de demande de trajet
-    $routes->get('request/edit/(:num)', 'Journey\RequestController::edit/$1');
-    $routes->post('request/update/(:num)', 'Journey\RequestController::update/$1');
-    $routes->post('request/delete/(:num)', 'Journey\RequestController::delete/$1');
+    $routes->get('request/edit/(:num)', 'Journey\JourneyRequestController::edit/$1');
+    $routes->post('request/update/(:num)', 'Journey\JourneyRequestController::update/$1');
+    $routes->post('request/delete/(:num)', 'Journey\JourneyRequestController::delete/$1');
 
     // Recherche de trajets
-    $routes->get('trajet', 'Journey\DriveController::search'); // conduite
-    $routes->get('request/search', 'Journey\RequestController::search'); // requête
+    $routes->get('trajet', 'Journey\JourneyDriveController::search'); // conduite
+    $routes->get('request/search', 'Journey\JourneyRequestController::search'); // requête
 
     // Affichage de trajet individuel
-    $routes->get('drive/show/(:num)', 'Journey\DriveController::show/$1'); // conduite
-    $routes->get('request/show/(:num)', 'Journey\RequestController::show/$1'); // requête
+    $routes->get('drive/show/(:num)', 'Journey\JourneyDriveController::show/$1'); // conduite
+    $routes->get('request/show/(:num)', 'Journey\JourneyRequestController::show/$1'); // requête
 
     // Réservation
     $routes->get('reservation/(:num)',           'Journey\BookingController::show/$1');
