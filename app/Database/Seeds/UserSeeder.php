@@ -34,6 +34,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '0610928752',
                 'birth_date'         => '1948-06-21',
                 'gender'             => 'male',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated' => true,
                 'id_location' => 1
@@ -47,6 +48,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1998-07-24',
                 'gender'             => 'female',
+                'avatar_filename'    => null,
                 'id_user_permission' => 2,
                 'is_validated' => true,
                 'id_location' => 1
@@ -60,6 +62,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1948-06-21',
                 'gender'             => 'male',
+                'avatar_filename'    => null,
                 'id_user_permission' => 3,
                 'is_validated' => true,
                 'id_location' => 1
@@ -73,6 +76,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1948-06-21',
                 'gender'             => 'male',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated' => false,
                 'id_location' => 1
@@ -86,6 +90,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1948-06-21',
                 'gender'             => 'male',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated' => true,
                 'id_location' => 1
@@ -99,6 +104,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1948-06-21',
                 'gender'             => 'male',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated' => true,
                 'id_location' => 1
@@ -112,6 +118,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1948-06-21',
                 'gender'             => 'male',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => null,
                 'id_location' => 1
@@ -125,6 +132,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1990-03-15',
                 'gender'             => 'male',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => true,
                 'id_location'        => 1
@@ -138,6 +146,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1985-07-22',
                 'gender'             => 'female',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => true,
                 'id_location'        => 1
@@ -151,6 +160,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1992-11-08',
                 'gender'             => 'male',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => true,
                 'id_location'        => 1
@@ -164,6 +174,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1988-04-30',
                 'gender'             => 'female',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => true,
                 'id_location'        => 1
@@ -177,6 +188,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1995-09-14',
                 'gender'             => 'male',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => true,
                 'id_location'        => 1
@@ -190,6 +202,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1991-01-25',
                 'gender'             => 'female',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => true,
                 'id_location'        => 1
@@ -203,6 +216,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1987-06-03',
                 'gender'             => 'male',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => true,
                 'id_location'        => 1
@@ -216,6 +230,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1993-12-17',
                 'gender'             => 'female',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => true,
                 'id_location'        => 1
@@ -229,6 +244,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1989-08-09',
                 'gender'             => 'male',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => true,
                 'id_location'        => 1
@@ -242,19 +258,35 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1994-05-21',
                 'gender'             => 'female',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => true,
                 'id_location'        => 1
             ],
             [
                 'id_user'            => 18,
-                'first_name'         => 'Accepted',
-                'last_name'          => 'David',
+                'first_name'         => 'Dean',
+                'last_name'          => 'Winchester',
                 'password'           => password_hash('password', PASSWORD_DEFAULT),
-                'email'              => 'accepted.david@user.fr',
+                'email'              => 'eyesofthetiger@spn.us',
                 'mobile'             => '',
-                'birth_date'         => '1986-02-11',
+                'birth_date'         => '1979-07-22',
                 'gender'             => 'male',
+                'avatar_filename'    => null,
+                'id_user_permission' => 1,
+                'is_validated'       => true,
+                'id_location'        => 1
+            ],
+            [
+                'id_user'            => 34,
+                'first_name'         => 'Brian',
+                'last_name'          => "O'Connor",
+                'password'           => password_hash('password', PASSWORD_DEFAULT),
+                'email'              => 'brian.oconnor@furio.us',
+                'mobile'             => '',
+                'birth_date'         => '1975-01-09',
+                'gender'             => 'male',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => true,
                 'id_location'        => 1
@@ -270,6 +302,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1990-03-15',
                 'gender'             => 'male',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => null,
                 'id_location'        => 1
@@ -283,6 +316,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1985-07-22',
                 'gender'             => 'female',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => null,
                 'id_location'        => 1
@@ -296,6 +330,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1992-11-08',
                 'gender'             => 'male',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => null,
                 'id_location'        => 1
@@ -309,6 +344,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1988-04-30',
                 'gender'             => 'female',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => null,
                 'id_location'        => 1
@@ -322,6 +358,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1995-09-14',
                 'gender'             => 'male',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => null,
                 'id_location'        => 1
@@ -335,6 +372,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1991-01-25',
                 'gender'             => 'female',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => null,
                 'id_location'        => 1
@@ -348,6 +386,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1987-06-03',
                 'gender'             => 'male',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => null,
                 'id_location'        => 1
@@ -361,6 +400,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1993-12-17',
                 'gender'             => 'female',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => null,
                 'id_location'        => 1
@@ -374,6 +414,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1989-08-09',
                 'gender'             => 'male',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => null,
                 'id_location'        => 1
@@ -387,6 +428,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1994-05-21',
                 'gender'             => 'female',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => null,
                 'id_location'        => 1
@@ -400,23 +442,11 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1986-02-11',
                 'gender'             => 'male',
+                'avatar_filename'    => null,
                 'id_user_permission' => 1,
                 'is_validated'       => null,
                 'id_location'        => 1
             ],
-            [
-                'id_user'            => 30,
-                'first_name'         => 'Brian',
-                'last_name'          => "O'Connor",
-                'password'           => password_hash('password', PASSWORD_DEFAULT),
-                'email'              => 'brian.oconnor@furious.us',
-                'mobile'             => '',
-                'birth_date'         => '1975-01-09',
-                'gender'             => 'male',
-                'id_user_permission' => 1,
-                'is_validated'       => null,
-                'id_location'        => 1
-            ]
         ];
 
         $car = [
@@ -460,7 +490,14 @@ class UserSeeder extends Seeder
                 'number_of_seat' => 2,
                 'id_user' => 30
             ],
-
+            [
+                'brand' => 'CHEVROLET',
+                'model' => 'Impala',
+                'color' => 'Noire',
+                'year' => 1967,
+                'number_of_seat' => 3,
+                'id_user' => 18
+            ],
         ];
 
         $this->db->table('Users')->insertBatch($data);
