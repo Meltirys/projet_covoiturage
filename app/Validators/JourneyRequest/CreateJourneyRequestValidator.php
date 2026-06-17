@@ -49,17 +49,17 @@ class CreateJourneyRequestValidator extends BaseValidator
                 'less_than_equal_to' => 'La longitude doit être inférieure ou égale à 180.',
             ]
         ];
-        $datetimeRules = [
-            'rules' => 'required|valid_datetime',
+        $dateRules = [
+            'rules' => 'required|valid_date',
             'errors' => [
-                'required' => 'La date et heure sont obligatoires.',
-                'valid_datetime' => 'La date et heure sont invalides.',
+                'required' => 'La date est obligatoire.',
+                'valid_date' => 'La date est invalide.',
             ]
         ];
 
         return [
-            // ===== START
 
+            // ===== START
             'start.label' => [
                 'rules' => 'required|min_length[2]|max_length[100]',
                 'errors' => [
@@ -68,13 +68,12 @@ class CreateJourneyRequestValidator extends BaseValidator
                     'max_length' => 'L\'adresse de départ doit faire moins de 100 caractères',
                 ]
             ],
-            'start.city' => $cityRules,
-            'start.postcode' => $postcodeRules,
             'start.lat' => $latRules,
             'start.lon' => $lonRules,
+            'start.city' => $cityRules,
+            'start.postcode' => $postcodeRules,
 
             // ===== END
-
             'end.label' => [
                 'rules' => 'required|min_length[2]|max_length[100]',
                 'errors' => [
@@ -83,12 +82,13 @@ class CreateJourneyRequestValidator extends BaseValidator
                     'max_length' => 'L\'adresse d\'arrivée doit faire moins de 100 caractères',
                 ]
             ],
-            'end.city' => $cityRules,
-            'end.postcode' => $postcodeRules,
             'end.lat' => $latRules,
             'end.lon' => $lonRules,
-            // ===== OTHER
+            'end.city' => $cityRules,
+            'end.postcode' => $postcodeRules,
 
+            // ===== OTHER
+            'date' => $dateRules,
             'range-start' => [
                 'rules' => 'required|regex_match[/^([01]\d|2[0-3]):([0-5]\d)$/]|before_date[range-end]|',
                 'errors' => [
@@ -102,6 +102,12 @@ class CreateJourneyRequestValidator extends BaseValidator
                 'errors' => [
                     'required' => 'L\'heure de fin de disponibilité est obligatoire',
                     'regex_match' => 'L\'heure doit être dans le format HH:MM',
+                ]
+            ],
+            'description' => [
+                'rules' => 'permit_empty|max_length[500]',
+                'errors' => [
+                    'max_length' => 'La description ne doit pas dépasser 500 caractères.'
                 ]
             ],
             'options'   => [
