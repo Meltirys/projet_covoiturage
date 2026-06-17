@@ -71,10 +71,10 @@ class SearchJourneyDriveValidator extends BaseValidator
                     'max_length' => 'L\'adresse de départ doit faire moins de 100 caractères',
                 ]
             ],
-            'start.city' => $cityRules,
-            'start.postcode' => $postcodeRules,
             'start.lat' => $latRules,
             'start.lon' => $lonRules,
+            'start.city' => $cityRules,
+            'start.postcode' => $postcodeRules,
 
             // ===== END
 
@@ -86,17 +86,6 @@ class SearchJourneyDriveValidator extends BaseValidator
                     'max_length' => 'L\'adresse d\'arrivée doit faire moins de 100 caractères',
                 ]
             ],
-            'end.city' => [
-                'rules' => 'permit_empty',
-                'errors' => []
-            ],
-            'end.postcode' => [
-                'rules' => 'permit_empty|min_length[5]|max_length[10]',
-                'errors' => [
-                    'min_length'=> 'Le code postal est trop court',
-                    'max_length' => 'Le code postal est trop long',
-                ]
-            ],
             'end.lat' => [
                 'rules' => 'permit_empty|greater_than_equal_to[-90]|less_than_equal_to[90]',
                 'errors' => []
@@ -104,6 +93,17 @@ class SearchJourneyDriveValidator extends BaseValidator
             'end.lon' => [
                 'rules' => 'permit_empty|greater_than_equal_to[-180]|less_than_equal_to[180]',
                 'errors' => []
+            ],
+            'end.city' => [
+                'rules' => 'permit_empty',
+                'errors' => []
+            ],
+            'end.postcode' => [
+                'rules' => 'permit_empty|min_length[5]|max_length[10]',
+                'errors' => [
+                    'min_length' => 'Le code postal est trop court',
+                    'max_length' => 'Le code postal est trop long',
+                ]
             ],
 
             'end' => [
@@ -133,7 +133,6 @@ class SearchJourneyDriveValidator extends BaseValidator
                 ]
             ],
             'date' => $dateRules,
-            //'start-time' => $timeRules,
             'options'   => [
                 'rules' => 'permit_empty',
                 'errors' => [],

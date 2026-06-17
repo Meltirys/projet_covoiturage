@@ -72,10 +72,10 @@ class EditJourneyDriveValidator extends BaseValidator
                     'max_length' => 'L\'adresse de départ doit faire moins de 100 caractères',
                 ]
             ],
-            'start.city' => $cityRules,
-            'start.postcode' => $postcodeRules,
             'start.lat' => $latRules,
             'start.lon' => $lonRules,
+            'start.city' => $cityRules,
+            'start.postcode' => $postcodeRules,
 
             // ===== END
 
@@ -87,10 +87,10 @@ class EditJourneyDriveValidator extends BaseValidator
                     'max_length' => 'L\'adresse d\'arrivée doit faire moins de 100 caractères',
                 ]
             ],
-            'end.city' => $cityRules,
-            'end.postcode' => $postcodeRules,
             'end.lat' => $latRules,
             'end.lon' => $lonRules,
+            'end.city' => $cityRules,
+            'end.postcode' => $postcodeRules,
 
             'end' => [
                 'rules' => 'location_different_from[start]',
