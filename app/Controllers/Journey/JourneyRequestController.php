@@ -192,7 +192,7 @@ class RequestController extends BaseController
     }
 
     /**
-     * Edit an existing itinerary
+     * Shows edition page for an itinerary
      * @param int $id
      * @return string|RedirectResponse
      */
