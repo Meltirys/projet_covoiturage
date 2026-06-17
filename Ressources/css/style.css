@@ -171,6 +171,45 @@ html.dark {
   .orb-2 { width:120px; height:120px; bottom:-40px; left:-30px; opacity:.08; animation:float2 10s ease-in-out infinite; }
   .orb-3 { width:80px; height:80px; bottom:30%; right:10%; opacity:.15; animation:float3 12s ease-in-out infinite; }
   .orb-4 { width:300px; height:300px; top:50%; left:50%; transform:translate(-50%,-50%); opacity:.04; animation:pulse-orb 6s ease-in-out infinite; }
+
+  .checkbox-pennride {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+    border: 1px solid color-mix(in srgb, var(--color-gold) 35%, transparent);
+    background-color: var(--color-ocean-light);
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    transition: background-color 0.2s, border-color 0.2s;
+  }
+
+  .checkbox-pennride:hover {
+    border-color: color-mix(in srgb, var(--color-gold) 60%, transparent);
+  }
+
+  .checkbox-pennride:checked {
+    background-color: var(--color-gold);
+    border-color: var(--color-gold);
+  }
+
+  .checkbox-pennride:checked::after {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 3px;
+    width: 4px;
+    height: 8px;
+    border: solid var(--color-ocean);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  .checkbox-pennride:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-gold) 30%, transparent);
+  }
 }
 
 /* ===== KEYFRAMES ===== */
