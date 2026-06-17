@@ -382,7 +382,6 @@ class JourneyService
     public function getNextAvailableJourneys(int $numberOfJourneys = -1): array
     {
         $journeyDriveModel = new JourneyDriveModel();
-        var_dump(date('d-m-y h:i:s'));
         $allJouneys = $journeyDriveModel->getJourneyInfosByDates(date('Y-m-d H:i:s'), null, $numberOfJourneys); // We retrieve the journey that start after the current day
 
         return $this->filterAvailableSeats($allJouneys, 1);
