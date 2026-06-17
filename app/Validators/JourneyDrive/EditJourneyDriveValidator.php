@@ -7,6 +7,10 @@ use App\Validators\BaseValidator;
 
 class EditJourneyDriveValidator extends BaseValidator
 {
+    /**
+     * List of rules that needs to be followed for validation
+     * @return array Array containing the rules
+     */
     protected function rules(): array
     {
 
