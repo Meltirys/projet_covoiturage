@@ -4,12 +4,12 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class CreateRequestTable extends Migration
+class CreateRequestMemberTable extends Migration
 {
     public function up()
     {
         $this->forge->addField([
-            'id_request' => [
+            'id_request_member' => [
                 'type'           => 'INT',
                 'unsigned'       => true,
                 'auto_increment' => true,
@@ -25,11 +25,11 @@ class CreateRequestTable extends Migration
         $this->forge->addPrimaryKey('id_request');
         $this->forge->addForeignKey('id_journey_request', 'JourneyRequest', 'id_journey_request', 'CASCADE', 'NO ACTION');
         $this->forge->addForeignKey('id_user', 'Users', 'id_user', 'RESTRICT', 'NO ACTION');
-        $this->forge->createTable('Request');
+        $this->forge->createTable('RequestMember');
     }
 
     public function down()
     {
-        $this->forge->dropTable('Request');
+        $this->forge->dropTable('RequestMember');
     }
 }
