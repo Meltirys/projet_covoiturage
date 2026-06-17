@@ -341,7 +341,7 @@ class JourneyService
         $endDay = date('Y-m-d H:i:s', strtotime($startDay . ' +1 day'));
 
         $journeys = $this->journeyDriveModel->getJourneyInfosByDates($startDay, $endDay);
-            
+
 
         if (empty($journeys)) {
             return [];
@@ -370,6 +370,21 @@ class JourneyService
         $journeys = $this->filterAvailableSeats($matches, $requestedSeats);
 
         return $journeys;
+    }
+
+
+    /**
+     * Returns a set number of available journey
+     * @param int $numberOfJourneys The number of journey to return
+     * 
+     * @return array An array that contains all the values needed for the display
+     */
+    public function getNextAvailableJourneys(int $numberOfJourneys): array
+    {
+        $journeyDriveModel = new JourneyDriveModel();
+        $allJouneys = $journeyDriveModel->getJourneyInfosByDates(date('d-m-y h:i:s'), null, $numberOfJourneys); // We retrieve the journey that start after the current day
+
+        return $this->filterAvailableSeats($allJouneys, 1);
     }
 
 

@@ -115,10 +115,11 @@ class JourneyDriveModel extends Model
      * Returns all the journey infos where the date is in the given range. It returns all the informations needed for the view to display a research card
      * @param string $startDay The starting day requested by the user
      * @param ?string $endDay Optionnal : Defines the range of research. If not setted, will returns all the journeys after the start day
+     * @param int $numberOfJourney Optionnal : Defines the number of journey that are returned. By default, returns all the journeys found
      * 
      * @return array All the journeys that are in the given range of time
      */
-    public function getJourneyInfosByDates(string $startDay, ?string $endDay = null): array
+    public function getJourneyInfosByDates(string $startDay, ?string $endDay = null, int $numberOfJourney = -1): array
     {
         $query = $this->select('JourneyDrive.*, 
                     departure_location.address AS departure_address,
@@ -149,6 +150,10 @@ class JourneyDriveModel extends Model
         //Adding the end day to the query if it is setted
         if ($endDay) {
             $query->where('JourneyDrive.departure <', $endDay);
+        }
+
+        if($numberOfJourney > 0){
+            $query->limit($numberOfJourney);
         }
 
 
