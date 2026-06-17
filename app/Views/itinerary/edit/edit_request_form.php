@@ -45,65 +45,34 @@
 </div>
 <!--  -->
 
-<!-- Date départ -->
+<!-- Date -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
 
     <div class="flex flex-col gap-1">
-        <label for="request-start-date" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Date de départ</label>
-        <input type="date" name="request[start-date]" id="request-start-date"
-            value="<?= esc(old('request.start-date', $journey['departure_date'])) ?>"
+        <label for="request-date" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Date</label>
+        <input type="date" name="request[date]" id="request-date"
+            value="<?= esc(old('request.date', $journey['departure_date'])) ?>"
             class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
-        <?php if (isset($errors['start-date'])): ?>
-            <span class="text-xs text-red-500"><?= esc($errors['start-date']) ?></span>
-        <?php endif ?>
-    </div>
-
-    <div class="flex flex-col gap-1">
-        <label for="request-start-time" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Heure de départ</label>
-        <input type="time" name="request[start-time]" id="request-start-time"
-            value="<?= esc(old('request.start-time', $journey['departure_time'])) ?>"
-            class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
-        <?php if (isset($errors['start-time'])): ?>
-            <span class="text-xs text-red-500"><?= esc($errors['start-time']) ?></span>
+        <?php if (isset($errors['date'])): ?>
+            <span class="text-xs text-red-500"><?= esc($errors['date']) ?></span>
         <?php endif ?>
     </div>
 </div>
 <!--  -->
 
-<!-- Date arrivée -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
-
-    <div class="flex flex-col gap-1">
-        <label for="request-end-date" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Date de départ</label>
-        <input type="date" name="request[end-date]" id="request-end-date"
-            value="<?= esc(old('request.end-date', $journey['departure_date'])) ?>"
-            class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
-        <?php if (isset($errors['end-date'])): ?>
-            <span class="text-xs text-red-500"><?= esc($errors['end-date']) ?></span>
-        <?php endif ?>
-    </div>
-
-    <div class="flex flex-col gap-1">
-        <label for="request-end-time" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Heure de départ</label>
-        <input type="time" name="request[end-time]" id="request-end-time"
-            value="<?= esc(old('request.end-time', $journey['departure_time'])) ?>"
-            class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey" required>
-        <?php if (isset($errors['end-time'])): ?>
-            <span class="text-xs text-red-500"><?= esc($errors['end-time']) ?></span>
-        <?php endif ?>
-    </div>
-</div>
-<!--  -->
-
-<!-- Véhicule / Places -->
-
+<!-- Nombre de participants -->
 <div class="flex flex-col gap-1">
     <label for="request-seats" class="text-xs font-poppins tracking-[0.15em] text-bluegrey uppercase">Nombre de participants</label>
-    <select value="1" name="request[seats]" id="request-seats" required
-        class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey bg-white">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
+    <?php $selectedPlaces = session()->getFlashdata('car_success') ? '1' : old('places', '1'); ?>
+    <select id="places" name="places"
+        class="border border-babyblue rounded-lg px-3 py-2 text-sm text-bluegrey focus:outline-none focus:border-bluegrey">
+        <option value="1" <?= $selectedPlaces === '1' ? 'selected' : '' ?>>1</option>
+        <option value="2" <?= $selectedPlaces === '2' ? 'selected' : '' ?>>2</option>
+        <option value="3" <?= $selectedPlaces === '3' ? 'selected' : '' ?>>3</option>
+        <option value="4" <?= $selectedPlaces === '4' ? 'selected' : '' ?>>4</option>
+        <option value="5" <?= $selectedPlaces === '5' ? 'selected' : '' ?>>5</option>
+        <option value="6" <?= $selectedPlaces === '6' ? 'selected' : '' ?>>6</option>
+        <option value="7" <?= $selectedPlaces === '7' ? 'selected' : '' ?>>7</option>
     </select>
     <?php if (isset($errors['seats'])): ?>
         <span class="text-xs text-red-500"><?= esc($errors['seats']) ?></span>

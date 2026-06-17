@@ -1,7 +1,9 @@
 <?= form_open('request/save', ['class' => 'flex flex-col gap-4']) ?>
 
+<!-- Départ / Arrivée -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 items-start">
 
+    <!-- Départ -->
     <div class="flex flex-col gap-1">
         <label for="request-start" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Départ</label>
         <input class="address-input w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey placeholder:text-grey focus:outline-none focus:border-gold/40 transition-colors"
@@ -13,13 +15,14 @@
             <span class="text-xs text-red"><?= esc($startError) ?></span>
         <?php endif ?>
         <div class="results"></div>
-        <input type="hidden" name="request[start][label]"    value="<?= esc(old('request[start][label]')) ?>">
-        <input type="hidden" name="request[start][lat]"      value="<?= esc(old('request[start][lat]')) ?>">
-        <input type="hidden" name="request[start][lon]"      value="<?= esc(old('request[start][lon]')) ?>">
-        <input type="hidden" name="request[start][city]"     value="<?= esc(old('request[start][city]')) ?>">
+        <input type="hidden" name="request[start][label]" value="<?= esc(old('request[start][label]')) ?>">
+        <input type="hidden" name="request[start][lat]" value="<?= esc(old('request[start][lat]')) ?>">
+        <input type="hidden" name="request[start][lon]" value="<?= esc(old('request[start][lon]')) ?>">
+        <input type="hidden" name="request[start][city]" value="<?= esc(old('request[start][city]')) ?>">
         <input type="hidden" name="request[start][postcode]" value="<?= esc(old('request[start][postcode]')) ?>">
     </div>
 
+    <!-- Arrivée -->
     <div class="flex flex-col gap-1">
         <label for="request-end" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Arrivée</label>
         <input class="address-input w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey placeholder:text-grey focus:outline-none focus:border-gold/40 transition-colors"
@@ -31,57 +34,31 @@
             <span class="text-xs text-red"><?= esc($endError) ?></span>
         <?php endif ?>
         <div class="results"></div>
-        <input type="hidden" name="request[end][label]"    value="<?= esc(old('request[end][label]')) ?>">
-        <input type="hidden" name="request[end][lat]"      value="<?= esc(old('request[end][lat]')) ?>">
-        <input type="hidden" name="request[end][lon]"      value="<?= esc(old('request[end][lon]')) ?>">
-        <input type="hidden" name="request[end][city]"     value="<?= esc(old('request[end][city]')) ?>">
+        <input type="hidden" name="request[end][label]" value="<?= esc(old('request[end][label]')) ?>">
+        <input type="hidden" name="request[end][lat]" value="<?= esc(old('request[end][lat]')) ?>">
+        <input type="hidden" name="request[end][lon]" value="<?= esc(old('request[end][lon]')) ?>">
+        <input type="hidden" name="request[end][city]" value="<?= esc(old('request[end][city]')) ?>">
         <input type="hidden" name="request[end][postcode]" value="<?= esc(old('request[end][postcode]')) ?>">
     </div>
 
 </div>
+<!--  -->
 
+<!-- Date -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
     <div class="flex flex-col gap-1">
-        <label for="request-start-date" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Date de départ</label>
-        <input type="date" name="request[start-date]" id="request-start-date"
-            value="<?= esc(old('request[start-date]')) ?>"
+        <label for="request-date" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Date</label>
+        <input type="date" name="request[date]" id="request-date"
+            value="<?= esc(old('request[date]')) ?>"
             class="w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey focus:outline-none focus:border-gold/40 transition-colors" required>
-        <?php if (isset($errors['start-date'])): ?>
-            <span class="text-xs text-red"><?= esc($errors['start-date']) ?></span>
-        <?php endif ?>
-    </div>
-    <div class="flex flex-col gap-1">
-        <label for="request-start-time" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Heure de départ</label>
-        <input type="time" name="request[start-time]" id="request-start-time"
-            value="<?= esc(old('request[start-time]')) ?>"
-            class="w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey focus:outline-none focus:border-gold/40 transition-colors" required>
-        <?php if (isset($errors['start-time'])): ?>
-            <span class="text-xs text-red"><?= esc($errors['start-time']) ?></span>
+        <?php if (isset($errors['date'])): ?>
+            <span class="text-xs text-red"><?= esc($errors['date']) ?></span>
         <?php endif ?>
     </div>
 </div>
+<!--  -->
 
-<div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
-    <div class="flex flex-col gap-1">
-        <label for="request-end-date" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Date d'arrivée</label>
-        <input type="date" name="request[end-date]" id="request-end-date"
-            value="<?= esc(old('request[end-date]')) ?>"
-            class="w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey focus:outline-none focus:border-gold/40 transition-colors" required>
-        <?php if (isset($errors['end-date'])): ?>
-            <span class="text-xs text-red"><?= esc($errors['end-date']) ?></span>
-        <?php endif ?>
-    </div>
-    <div class="flex flex-col gap-1">
-        <label for="request-end-time" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Heure d'arrivée</label>
-        <input type="time" name="request[end-time]" id="request-end-time"
-            value="<?= esc(old('request[end-time]')) ?>"
-            class="w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey focus:outline-none focus:border-gold/40 transition-colors" required>
-        <?php if (isset($errors['end-time'])): ?>
-            <span class="text-xs text-red"><?= esc($errors['end-time']) ?></span>
-        <?php endif ?>
-    </div>
-</div>
-
+<!-- Horaire de disponibilité -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
     <div class="flex flex-col gap-1">
         <label for="request-range-start" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Début de disponibilité</label>
@@ -102,17 +79,43 @@
         <?php endif ?>
     </div>
 </div>
+<!--  -->
 
+<!-- Description -->
 <div class="flex flex-col gap-1">
     <label for="request-description" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Description</label>
     <textarea name="request[description]" id="request-description"
         placeholder="Entrez une description"
-        class="w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey placeholder:text-grey focus:outline-none focus:border-gold/40 transition-colors"><?= esc(old('request[description]')) ?></textarea>
+        class="w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey placeholder:text-grey focus:outline-none focus:border-gold/40 transition-colors">
+        <?= esc(old('request[description]')) ?>
+    </textarea>
     <?php if (isset($errors['description'])): ?>
         <span class="text-xs text-red"><?= esc($errors['description']) ?></span>
     <?php endif ?>
 </div>
+<!--  -->
 
+<!-- Nombre de participants -->
+<div class="flex flex-col gap-1">
+    <label for="request-seats" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Nombre de participants</label>
+    <?php $selectedPlaces = session()->getFlashdata('car_success') ? '1' : old('places', '1'); ?>
+    <select id="places" name="places"
+        class="w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey placeholder:text-grey focus:outline-none focus:border-gold/40 transition-colors">
+        <option value="1" <?= $selectedPlaces === '1' ? 'selected' : '' ?>>1</option>
+        <option value="2" <?= $selectedPlaces === '2' ? 'selected' : '' ?>>2</option>
+        <option value="3" <?= $selectedPlaces === '3' ? 'selected' : '' ?>>3</option>
+        <option value="4" <?= $selectedPlaces === '4' ? 'selected' : '' ?>>4</option>
+        <option value="5" <?= $selectedPlaces === '5' ? 'selected' : '' ?>>5</option>
+        <option value="6" <?= $selectedPlaces === '6' ? 'selected' : '' ?>>6</option>
+        <option value="7" <?= $selectedPlaces === '7' ? 'selected' : '' ?>>7</option>
+    </select>
+    <?php if (isset($errors['seats'])): ?>
+        <span class="text-xs text-red-500"><?= esc($errors['seats']) ?></span>
+    <?php endif ?>
+</div>
+<!--  -->
+
+<!-- Options -->
 <div class="flex flex-col gap-1">
     <label for="request-options" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">
         Options <span class="normal-case font-normal tracking-normal text-grey">(optionnel)</span>
@@ -125,6 +128,7 @@
         <span class="text-xs text-red"><?= esc($errors['options']) ?></span>
     <?php endif ?>
 </div>
+<!--  -->
 
 <div class="flex justify-end mt-2">
     <button type="submit"
