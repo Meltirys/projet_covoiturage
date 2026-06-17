@@ -67,7 +67,7 @@ class DriveController extends BaseController
             $getData['journeys'] = $this->journeyService->getNextAvailableJourneys();
         }
 
-
+        $getData['journeys'] = json_encode($getData['journeys']);
         return view('itinerary/search/SearchView', $getData);
     }
 

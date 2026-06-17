@@ -35,7 +35,9 @@ $error        = session()->getFlashdata('error');
     </div>
 
     <?php if (isset($journeys) && !empty($journeys)): ?>
-        <?= view('/itinerary/search/journeyCard', $journeys) ?>
+        <div id="journey-results"></div>
+        <div id="journey-pagination"></div>
+
     <?php else: ?>
         <div class="flex items-center gap-3 bg-ocean-mid border border-ocean-light rounded-[14px] px-4 py-3 mt-6">
             <div class="w-8 h-8 rounded-lg bg-ocean-light flex items-center justify-center text-sm flex-shrink-0">🔍</div>
@@ -49,4 +51,14 @@ $error        = session()->getFlashdata('error');
 <?= $this->section('scripts') ?>
 <script src="/js/geocoding.js"></script>
 <script src="/js/address-fields.js"></script>
+<script src="/js/pagination.js"></script>
+<script src="/js/journey-card.js"></script>
+<script>
+    let journeys = <?= $journeys ?>;
+    //If there are datas available, load them
+    if (journeys) {
+        journeyPaginator.load(journeys)
+    }
+</script>
+
 <?= $this->endSection() ?>
