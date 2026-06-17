@@ -95,7 +95,7 @@
         </div>
 
         <?php if (session('logged_in')): ?>
-            <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="#" onclick="toggleMobileMenu()">Comment ça marche ?</a>
+            <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="/comment-ca-marche" onclick="toggleMobileMenu()">Comment ça marche ?</a>
             <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="<?= site_url('trajet') ?>" onclick="toggleMobileMenu()">Trajets</a>
             <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="/nouveau-trajet" onclick="toggleMobileMenu()">Proposer un trajet</a>
             <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="/contact-page" onclick="toggleMobileMenu()">Contact</a>
