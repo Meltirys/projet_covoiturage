@@ -97,8 +97,9 @@
         </label>
         <div class="flex flex-wrap gap-3">
             <?php foreach (['monday' => 'Lun', 'tuesday' => 'Mar', 'wednesday' => 'Mer', 'thursday' => 'Jeu', 'friday' => 'Ven', 'saturday' => 'Sam', 'sunday' => 'Dim'] as $value => $label): ?>
-                <label class="flex items-center gap-1 text-sm text-lightgrey cursor-pointer">
+                <label class="flex items-center gap-2 text-sm text-lightgrey cursor-pointer">
                     <input type="checkbox" name="drive[recurrence][]" value="<?= $value ?>"
+                        class="checkbox-pennride"
                         <?= in_array($value, old('drive.recurrence', [])) ? 'checked' : '' ?>>
                     <?= $label ?>
                 </label>

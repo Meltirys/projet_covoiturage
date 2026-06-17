@@ -111,7 +111,7 @@
             </div>
             <div class="flex gap-3">
                 <a href="/trajet" class="text-xs font-medium text-lightgrey border rounded-full px-5 py-2.5 hover:border-gold hover:text-gold transition-colors" style="border-color: rgba(180,140,60,0.3);">Voir les trajets</a>
-                <a href="/" class="text-xs font-semibold text-ocean bg-gold rounded-full px-5 py-2.5 hover:opacity-90 transition-opacity">Proposer un trajet</a>
+                <a href="/nouveau-trajet" class="text-xs font-semibold text-ocean bg-gold rounded-full px-5 py-2.5 hover:opacity-90 transition-opacity">Proposer un trajet</a>
             </div>
         </div>
 

@@ -247,6 +247,7 @@
                     </div>
                 </div>
 
+<<<<<<< HEAD
                 <span class="absolute bottom-2 right-3 text-lightgrey/40" style="font-size:9px;">© OpenStreetMap contributors</span>
 
                 <!-- Contenu hero superposé -->
@@ -269,8 +270,85 @@
                                 </div>
                                 <div class="text-grey" style="font-size:10px;">
                                     <?= $next_trip['is_driver'] ? ($next_trip['passenger_count'] ?? 0) . ' passager(s) confirmé(s)' : 'Réservé' ?>
+=======
+        <!-- CONTENU PRINCIPAL -->
+        <div class="px-4 md:px-8 py-6 max-w-5xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+                <!-- FORMULAIRE RECHERCHE -->
+                <div class="bg-ocean-mid border border-ocean-light rounded-[14px] overflow-hidden">
+                    <div class="h-0.5 bg-linear-to-r from-gold/40 to-transparent"></div>
+                    <div class="p-5">
+                        <p class="section-title flex items-center gap-2 text-[0.625rem] tracking-[0.2em] uppercase font-bold text-gold mb-4">Rechercher un trajet</p>
+                        <?= form_open('/trajet/search') ?>
+                        <div class="flex flex-col gap-3">
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Départ</label>
+                                <input class="address-input w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey placeholder:text-grey focus:outline-none focus:border-gold/40 transition-colors" type="text" name="departure" placeholder="Ex : GRETA Vannes">
+                                <div class="results"></div>
+                            </div>
+                            <div class="flex flex-col gap-1.5">
+                                <label class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Arrivée</label>
+                                <input class="address-input w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey placeholder:text-grey focus:outline-none focus:border-gold/40 transition-colors" type="text" name="arrival" placeholder="Ex : Gare SNCF Auray">
+                                <div class="results"></div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div class="flex flex-col gap-1.5">
+                                    <label class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Date</label>
+                                    <input class="w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey focus:outline-none focus:border-gold/40 transition-colors" type="date" name="date">
+                                </div>
+                                <div class="flex flex-col gap-1.5">
+                                    <label class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Passagers</label>
+                                    <select class="w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey focus:outline-none focus:border-gold/40 transition-colors" name="passengers">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                    </select>
                                 </div>
                             </div>
+                            <button type="submit" class="w-full bg-gold text-ocean font-semibold rounded-[14px] py-3 text-sm hover:bg-gold-light transition-colors cursor-pointer mt-1">
+                                Rechercher →
+                            </button>
+                        </div>
+                        <?= form_close() ?>
+                    </div>
+                </div>
+
+                <!-- TRAJETS DISPONIBLES -->
+                <div class="bg-ocean-mid border border-ocean-light rounded-[14px] overflow-hidden">
+                    <div class="h-0.5 bg-linear-to-r from-gold/40 to-transparent"></div>
+                    <div class="p-5">
+                        <div class="flex items-baseline justify-between mb-4">
+                            <p class="section-title flex items-center gap-2 text-[0.625rem] tracking-[0.2em] uppercase font-bold text-gold mb-0">Trajets disponibles</p>
+                            <a href="/trajet" class="text-xs text-grey hover:text-gold transition-colors">Voir tout →</a>
+                        </div>
+                        <?php if (!empty($trajets)): ?>
+                            <div class="flex flex-col gap-0">
+                                <?php foreach (array_slice($trajets, 0, 5) as $trajet): ?>
+                                <div class="flex items-center justify-between py-3 border-b border-ocean-light last:border-b-0">
+                                    <div>
+                                        <div class="font-pfd text-sm text-lightgrey font-light">
+                                            <?= esc($trajet['departure_label'] ?? $trajet['departure_address']) ?>
+                                            <em class="italic text-gold mx-1">→</em>
+                                            <?= esc($trajet['arrival_label'] ?? $trajet['arrival_address']) ?>
+                                        </div>
+                                        <div class="text-xs text-grey mt-1">
+                                            <?= date('D. d M · H\hi', strtotime($trajet['departure_datetime'])) ?>
+                                            · <?= esc($trajet['first_name'] ?? '') ?> <?= esc(substr($trajet['last_name'] ?? '', 0, 1)) ?>.
+                                        </div>
+                                        <span class="inline-block mt-1 text-[0.625rem] text-grey border border-ocean-light rounded-full px-2 py-0.5">
+                                            <?= $trajet['available_seats'] ?> place<?= $trajet['available_seats'] > 1 ? 's' : '' ?>
+                                        </span>
+                                    </div>
+                                    <div class="text-right ml-4 shrink-0">
+                                        <div class="font-pfd text-lg text-gold font-light"><?= $trajet['price'] ?> €</div>
+                                        <a href="/trajet/<?= $trajet['id_itinerary'] ?>" class="text-[0.625rem] text-grey hover:text-gold transition-colors">Voir →</a>
+                                    </div>
+>>>>>>> 515f5ffb419a0d7c2a0e4f9a815459a63e684de9
+                                </div>
+                                <?php endforeach; ?>
+                            </div>
+<<<<<<< HEAD
                             <?php if ($next_trip_count > 0): ?>
                                 <div class="flex flex-col items-center justify-center gap-0.5 px-4 py-3" style="flex-shrink:0;">
                                     <span class="font-pfd text-gold font-light" style="font-size:18px;line-height:1;">+<?= $next_trip_count ?></span>
@@ -296,9 +374,20 @@
                             </div>
                         </div>
                     <?php endif; ?>
+=======
+                        <?php else: ?>
+                            <div class="flex flex-col items-center justify-center py-8 text-grey">
+                                <p class="font-pfd italic text-xl text-gold/40 mb-2">Aucun trajet</p>
+                                <p class="text-xs">Aucun trajet disponible pour le moment.</p>
+                                <a href="/nouveau-trajet" class="mt-4 text-gold border border-gold/30 rounded-full px-4 py-1.5 text-xs hover:bg-gold/10 transition-colors">Proposer le premier →</a>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+>>>>>>> 515f5ffb419a0d7c2a0e4f9a815459a63e684de9
                 </div>
             </div>
 
+<<<<<<< HEAD
             <!-- CONTENU PRINCIPAL -->
             <div class="px-4 md:px-10 py-6 max-w-5xl mx-auto">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -374,6 +463,29 @@
                         </a>
                     <?php endif; ?>
                 </div>
+=======
+            <!-- LIENS RAPIDES -->
+            <div class="grid grid-cols-3 gap-3 mt-5">
+                <a href="/nouveau-trajet" class="flex flex-col items-center gap-2 bg-ocean-mid border border-ocean-light rounded-[14px] py-4 px-3 text-center hover:border-gold/30 transition-colors group no-underline">
+                    <span class="text-lg text-gold/60 group-hover:text-gold transition-colors">+</span>
+                    <span class="text-[0.625rem] text-grey uppercase tracking-[0.2em]">Proposer</span>
+                </a>
+                <a href="/myprofil" class="flex flex-col items-center gap-2 bg-ocean-mid border border-ocean-light rounded-[14px] py-4 px-3 text-center hover:border-gold/30 transition-colors group no-underline">
+                    <span class="text-lg text-gold/60 group-hover:text-gold transition-colors">◎</span>
+                    <span class="text-[0.625rem] text-grey uppercase tracking-[0.2em]">Mon profil</span>
+                </a>
+                <?php if (session('user_role') == 2): ?>
+                <a href="/backoffice" class="flex flex-col items-center gap-2 bg-ocean-mid border border-gold/20 rounded-[14px] py-4 px-3 text-center hover:border-gold/50 transition-colors group no-underline">
+                    <span class="text-lg text-gold/60 group-hover:text-gold transition-colors">⊞</span>
+                    <span class="text-[0.625rem] text-gold/70 uppercase tracking-[0.2em]">Admin</span>
+                </a>
+                <?php else: ?>
+                <a href="/logout" class="flex flex-col items-center gap-2 bg-ocean-mid border border-ocean-light rounded-[14px] py-4 px-3 text-center hover:border-red/30 transition-colors group no-underline">
+                    <span class="text-lg text-grey group-hover:text-red transition-colors">⏻</span>
+                    <span class="text-[0.625rem] text-grey uppercase tracking-[0.2em]">Quitter</span>
+                </a>
+                <?php endif; ?>
+>>>>>>> 515f5ffb419a0d7c2a0e4f9a815459a63e684de9
             </div>
         </div>
 
