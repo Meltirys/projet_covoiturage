@@ -8,9 +8,8 @@ use App\Validators\BaseValidator;
 class CreateJourneyRequestValidator extends BaseValidator
 {
     /**
-     * List all the rules that needs to be followed in order to be valid
-     * 
-     * @return array Array containing all the rules
+     * List of rules that needs to be followed for validation
+     * @return array Array containing the rules
      */
     public function rules(): array
     {

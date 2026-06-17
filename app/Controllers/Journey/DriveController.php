@@ -63,8 +63,11 @@ class DriveController extends BaseController
                     ->withInput();
             }
         }
+        else{
+            $getData['journeys'] = $this->journeyService->getNextAvailableJourneys();
+        }
 
-
+        $getData['journeys'] = json_encode($getData['journeys']);
         return view('itinerary/search/SearchView', $getData);
     }
 
@@ -227,12 +230,12 @@ class DriveController extends BaseController
         log_message('debug', 'Validation passed. Editing journey...');
 
         try {
-            // Acquiring the data of the journey before edition
+            // Acquiring the original journey's data
             $originalJourney = $this->journeyDriveModel->getAllJourneyInfos($id);
 
             if ($originalJourney === null) {
                 log_message('debug', 'Existing journey not found');
-                throw new \DomainException('Ce trajet n\'existe pas');
+                throw new \DomainException('Le trajet n\'existe pas');
             }
 
             $this->canManageJourney($originalJourney['driver']); // authorization check

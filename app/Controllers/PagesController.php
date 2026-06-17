@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\CarModel;
 use App\Models\JourneyDriveModel;
+use App\Services\JourneyService;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use DateTime;
 
@@ -17,7 +18,15 @@ class PagesController extends BaseController
     {
         helper('form');
 
-        return view('HomeView');
+        $datas = [];
+
+        //If an user is logged in, we retrieve the latest journey available
+        if (session('logged_in')) {
+            $journeyService = new JourneyService();
+            $datas['journeys'] = $journeyService->getNextAvailableJourneys(5); //Loads the available journeys
+        }
+
+        return view('HomeView', $datas);
     }
 
     /**

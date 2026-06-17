@@ -6,12 +6,12 @@ use App\Validation\CustomRules;
 
 class CarValidator extends BaseValidator
 {
-    private int $carId;
+    private ?int $carId;
 
-    public function __construct(int $carId)
+    public function __construct(?int $carId = null)
     {
         parent::__construct();
-        $this->carId = $carId;
+        $this->carId = $carId ?? null;
     }
 
     protected function rules(): array
@@ -51,7 +51,7 @@ class CarValidator extends BaseValidator
                 ]
             ],
             'number_of_seat' => [
-                'rules'  => 'required|integer|greater_than[0]|less_than_equal_to[8]|no_journey_conflict[' . $this->carId . ']',
+                'rules'  => 'required|integer|greater_than[0]|less_than_equal_to[8]|no_journey_conflict['. $this->carId .']', 
                 'errors' => [
                     'required'            => 'Le nombre de places est obligatoire.',
                     'integer'             => 'Le nombre de places doit être un nombre entier.',

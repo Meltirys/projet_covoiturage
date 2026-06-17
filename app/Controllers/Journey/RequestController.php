@@ -238,15 +238,15 @@ class RequestController extends BaseController
         log_message('debug', 'Validation passed. Updating journey...');
 
         try {
-            $request = $this->journeyRequestModel->find($id);
+            $original = $this->journeyRequestModel->find($id);
 
-            if (!$request) {
-                throw new \DomainException('Ce trajet n\'existe pas');
+            if (!$original) {
+                throw new \DomainException('Le trajet n\'existe pas');
             }
 
-            $this->canManageJourney($request('id_user'));
+            $this->canManageJourney($original('id_user'));
 
-            $this->journeyService->updateJourneyRequest($id, $data, session()->user_id);
+            $this->journeyService->updateJourneyRequest($original, $data, session()->user_id);
 
             log_message('debug', 'Journey updated successfully.');
 
@@ -304,15 +304,14 @@ class RequestController extends BaseController
     }
 
     /**
-     * Checks the user's authorization to manage journey
+     * Checks the user's authorization to manage a journey
      * @param int $ownerId
      */
     private function canManageJourney(int $ownerId): void
     {
         $isOwner = session()->user_id === $ownerId;
-        $isAdmin = in_array(session()->user_role, [2, 3], true);
 
-        if (!$isOwner && !$isAdmin) {
+        if (!$isOwner) {
             throw new \DomainException('Vous n\'avez pas la permission nécessaire pour modifier ce trajet.');
         }
     }

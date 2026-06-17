@@ -346,34 +346,8 @@ class JourneyService
         $startDay = $searchDate . ' 00:00:00';
         $endDay = date('Y-m-d H:i:s', strtotime($startDay . ' +1 day'));
 
-        $journeys = $this->journeyDriveModel
-            ->select('JourneyDrive.*, 
-                    departure_location.address AS departure_address,
-                    departure_location.latitude AS departure_lat,
-                    departure_location.longitude AS departure_lon,
-                    departure_city.postcode AS departure_postcode,
-                    departure_city.name AS departure_city,
-                    arrival_location.address AS arrival_address,
-                    arrival_location.latitude AS arrival_lat,
-                    arrival_location.longitude AS arrival_lon,
-                    arrival_city.postcode AS arrival_postcode,
-                    arrival_city.name AS arrival_city,
-                    Car.brand AS car_brand,
-                    Car.model AS car_model,
-                    Users.first_name AS driver_first_name,
-                    Users.last_name AS driver_last_name,
-                    Track.distance AS distance,
-                    Track.duration AS duration')
-            ->join('Location AS departure_location', 'departure_location.id_location = JourneyDrive.start')
-            ->join('City AS departure_city', 'departure_city.id_city = departure_location.id_city')
-            ->join('Location AS arrival_location', 'arrival_location.id_location = JourneyDrive.end')
-            ->join('City AS arrival_city', 'arrival_city.id_city = arrival_location.id_city')
-            ->join('Users', 'Users.id_user = JourneyDrive.driver')
-            ->join('Car', 'Car.id_car = JourneyDrive.id_car')
-            ->join('Track', 'Track.id_track = JourneyDrive.id_track')
-            ->where('JourneyDrive.departure >=', $startDay)
-            ->where('JourneyDrive.departure <', $endDay)
-            ->findAll();
+        $journeys = $this->journeyDriveModel->getJourneyInfosByDates($startDay, $endDay);
+
 
         if (empty($journeys)) {
             return [];
@@ -406,6 +380,21 @@ class JourneyService
         $journeys = $this->filterAvailableSeats($matches, $requestedSeats);
 
         return $journeys;
+    }
+
+
+    /**
+     * Returns a set number of available journey
+     * @param int $numberOfJourneys Optionnal : The number of journey to return. By default returns all the journeys available
+     * 
+     * @return array An array that contains all the values needed for the display
+     */
+    public function getNextAvailableJourneys(int $numberOfJourneys = -1): array
+    {
+        $journeyDriveModel = new JourneyDriveModel();
+        $allJouneys = $journeyDriveModel->getJourneyInfosByDates(date('Y-m-d H:i:s'), null, $numberOfJourneys); // We retrieve the journey that start after the current day
+
+        return $this->filterAvailableSeats($allJouneys, 1);
     }
 
 

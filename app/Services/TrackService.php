@@ -18,7 +18,7 @@ class TrackService
 
     /**
      * Save the track in the database.
-     * @param array $start The starting point of the track in an array form.
+     * @param array $start The starting point of the track in an array form. First value of the array must longitude and the the second one is latitude
      * @param array $end The end point of the track
      * @param array $stops Optional : Stops on the track
      * @param ?int $trackId = null Optional : Existing track ID for editing

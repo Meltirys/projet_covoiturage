@@ -1,31 +1,37 @@
 <?= $this->extend('layouts/main') ?>
+
 <?= $this->section('content') ?>
 
 <?php $range = array_map('trim', explode('-', $request['range_of_time'], 2)) ?>
 
-<main>
-    <?= form_open('request/update/' . $request['id_journey_request']) ?>
+<div class="profile-hero px-4 md:px-8 py-10 md:py-14 mb-8">
+    <div class="relative z-10 max-w-5xl mx-auto">
+        <p class="section-title flex items-center gap-2 text-[0.625rem] tracking-[0.2em] uppercase font-bold text-gold mb-5">
+            Trajets
+        </p>
+        <h1 class="font-pfd text-4xl md:text-6xl font-light leading-[0.92] tracking-tight text-lightgrey">
+            Modifier<br>
+            <em class="italic text-gold">ma demande</em>
+        </h1>
+    </div>
+</div>
 
-        <div>
-            <label for="request-description">Description</label>
-            <textarea name="request[description]" id="request-description"><?= esc($request['description']) ?></textarea>
+<main class="w-full max-w-5xl mx-auto px-4 md:px-8 pb-12 font-poppins">
+
+    <div class="bg-ocean-mid border border-ocean-light rounded-[14px] overflow-hidden">
+        <div class="h-0.5 bg-linear-to-r from-gold/40 to-transparent"></div>
+        <div class="p-5">
+            <?= view('itinerary/edit/edit_request_form', [
+                'errors' => $errors,
+            ]) ?>
         </div>
+    </div>
 
-        <div>
-            <label for="request-range-start">Début de disponibilité</label>
-            <input type="time" name="request[range-start]" id="request-range-start"
-                value="<?= esc($range[0]) ?>">
-        </div>
-
-        <div>
-            <label for="request-range-end">Fin de disponibilité</label>
-            <input type="time" name="request[range-end]" id="request-range-end"
-                value="<?= esc($range[1]) ?>">
-        </div>
-
-        <button type="submit">Mettre à jour</button>
-
-    <?= form_close() ?>
 </main>
 
+<?= $this->endSection() ?>
+
+<?= $this->section('scripts') ?>
+<script src="/js/geocoding.js"></script>
+<script src="/js/address-fields.js"></script>
 <?= $this->endSection() ?>

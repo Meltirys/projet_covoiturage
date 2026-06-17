@@ -110,4 +110,54 @@ class JourneyDriveModel extends Model
             ->where('departure < ', date('Y-m-d H:i:s'))
             ->findAll();
     }
+
+    /**
+     * Returns all the journey infos where the date is in the given range. It returns all the informations needed for the view to display a research card
+     * @param string $startDay The starting day requested by the user
+     * @param ?string $endDay Optionnal : Defines the range of research. If not setted, will returns all the journeys after the start day
+     * @param int $numberOfJourney Optionnal : Defines the number of journey that are returned. By default, returns all the journeys found
+     * 
+     * @return array All the journeys that are in the given range of time
+     */
+    public function getJourneyInfosByDates(string $startDay, ?string $endDay = null, int $numberOfJourney = -1): array
+    {
+        $query = $this->select('JourneyDrive.*, 
+                    departure_location.address AS departure_address,
+                    departure_location.latitude AS departure_lat,
+                    departure_location.longitude AS departure_lon,
+                    departure_city.postcode AS departure_postcode,
+                    departure_city.name AS departure_city,
+                    arrival_location.address AS arrival_address,
+                    arrival_location.latitude AS arrival_lat,
+                    arrival_location.longitude AS arrival_lon,
+                    arrival_city.postcode AS arrival_postcode,
+                    arrival_city.name AS arrival_city,
+                    Car.brand AS car_brand,
+                    Car.model AS car_model,
+                    Users.first_name AS driver_first_name,
+                    Users.last_name AS driver_last_name,
+                    Track.distance AS distance,
+                    Track.duration AS duration')
+            ->join('Location AS departure_location', 'departure_location.id_location = JourneyDrive.start')
+            ->join('City AS departure_city', 'departure_city.id_city = departure_location.id_city')
+            ->join('Location AS arrival_location', 'arrival_location.id_location = JourneyDrive.end')
+            ->join('City AS arrival_city', 'arrival_city.id_city = arrival_location.id_city')
+            ->join('Users', 'Users.id_user = JourneyDrive.driver')
+            ->join('Car', 'Car.id_car = JourneyDrive.id_car')
+            ->join('Track', 'Track.id_track = JourneyDrive.id_track')
+            ->where('JourneyDrive.departure >=', $startDay);
+
+        //Adding the end day to the query if it is setted
+        if ($endDay) {
+            $query->where('JourneyDrive.departure <', $endDay);
+        }
+
+        if($numberOfJourney > 0){
+            $query->limit($numberOfJourney);
+        }
+
+        $query->orderBy('departure', 'ASC');
+
+        return $query->findAll();
+    }
 }

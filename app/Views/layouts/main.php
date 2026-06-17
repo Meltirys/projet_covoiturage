@@ -95,7 +95,7 @@
         </div>
 
         <?php if (session('logged_in')): ?>
-            <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="#" onclick="toggleMobileMenu()">Comment ça marche ?</a>
+            <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="/comment-ca-marche" onclick="toggleMobileMenu()">Comment ça marche ?</a>
             <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="<?= site_url('trajet') ?>" onclick="toggleMobileMenu()">Trajets</a>
             <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="/nouveau-trajet" onclick="toggleMobileMenu()">Proposer un trajet</a>
             <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="/contact-page" onclick="toggleMobileMenu()">Contact</a>
@@ -142,7 +142,7 @@
                         <img src="/img/logo_golden.png" alt="PennRide" class="w-7 h-7 rounded-lg opacity-80">
                         <span class="font-pfd text-base text-bluegrey">Penn<em class="italic text-gold">Ride</em></span>
                     </div>
-                    <p class="text-grey leading-relaxed" style="font-size: 11px; max-width: 180px;">Covoiturage solidaire · GRETA</p>
+                    <p class="text-grey leading-relaxed" style="font-size: 11px; max-width: 180px;">Le covoiturage solidaire</p>
                 </div>
 
                 <!-- Liens -->
@@ -165,7 +165,7 @@
 
             <!-- Barre du bas -->
             <div class="flex items-center justify-between pt-5" style="border-top: 0.5px solid rgba(180,140,60,0.1);">
-                <p class="text-grey" style="font-size: 10px;">© 2026 <span class="text-gold">PennRide</span> · Développé en Bretagne</p>
+                <p class="text-grey" style="font-size: 10px;">© 2026 <span class="text-gold">PennRide</span> · GRETA Bretagne Sud, Agence de Vannes · Développé en Bretagne avec amour</p>
                 <div class="flex items-center gap-2">
                     <a href="https://github.com/Meltirys/projet_covoiturage.git" class="text-grey hover:text-gold transition-colors" style="font-size: 13px;"><i class="fa-brands fa-github"></i></a>
                     <a href="#" class="text-grey hover:text-gold transition-colors" style="font-size: 13px;"><i class="fa-regular fa-envelope"></i></a>

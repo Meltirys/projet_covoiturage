@@ -70,6 +70,7 @@ $error         = session()->getFlashdata('error');
 <script src="/js/address-fields.js"></script>
 <script>
     // Tabs
+
     function switchTab(tab) {
         const isDrive = tab === 'drive'
         document.getElementById('panel-drive').style.display = isDrive ? 'block' : 'none'
@@ -84,7 +85,11 @@ $error         = session()->getFlashdata('error');
         document.getElementById('tab-request').classList.toggle('text-grey', isDrive)
     }
 
-    // Car fields
+    <?php if (!empty($requestErrors)): ?>
+        switchTab('request');
+    <?php endif ?>
+
+    // Car and seats
     document.addEventListener('DOMContentLoaded', () => {
         const cars = <?= json_encode($cars ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
         const carSelect = document.getElementById('drive-car')
@@ -109,9 +114,6 @@ $error         = session()->getFlashdata('error');
             populateSeats()
         }
 
-        <?php if (!empty($requestErrors)): ?>
-            switchTab('request')
-        <?php endif ?>
     })
 </script>
 <?= $this->endSection() ?>
