@@ -320,31 +320,8 @@
                                 <p class="section-title flex items-center gap-2 text-[0.625rem] tracking-[0.2em] uppercase font-bold text-gold mb-0">Trajets disponibles</p>
                                 <a href="/trajet" class="text-xs text-grey hover:text-gold transition-colors">Voir tout →</a>
                             </div>
-                            <?php if (!empty($trajets)): ?>
-                                <div class="flex flex-col gap-0">
-                                    <?php foreach (array_slice($trajets, 0, 5) as $trajet): ?>
-                                        <div class="flex items-center justify-between py-3 border-b border-ocean-light last:border-b-0">
-                                            <div>
-                                                <div class="font-pfd text-sm text-lightgrey font-light">
-                                                    <?= esc($trajet['departure_label'] ?? $trajet['departure_address']) ?>
-                                                    <em class="italic text-gold mx-1">→</em>
-                                                    <?= esc($trajet['arrival_label'] ?? $trajet['arrival_address']) ?>
-                                                </div>
-                                                <div class="text-xs text-grey mt-1">
-                                                    <?= date('D. d M · H\hi', strtotime($trajet['departure_datetime'])) ?>
-                                                    · <?= esc($trajet['first_name'] ?? '') ?> <?= esc(substr($trajet['last_name'] ?? '', 0, 1)) ?>.
-                                                </div>
-                                                <span class="inline-block mt-1 text-[0.625rem] text-grey border border-ocean-light rounded-full px-2 py-0.5">
-                                                    <?= $trajet['available_seats'] ?> place<?= $trajet['available_seats'] > 1 ? 's' : '' ?>
-                                                </span>
-                                            </div>
-                                            <div class="text-right ml-4 shrink-0">
-                                                <div class="font-pfd text-lg text-gold font-light"><?= $trajet['price'] ?> €</div>
-                                                <a href="/trajet/<?= $trajet['id_itinerary'] ?>" class="text-[0.625rem] text-grey hover:text-gold transition-colors">Voir →</a>
-                                            </div>
-                                        </div>
-                                    <?php endforeach; ?>
-                                </div>
+                            <?php if (!empty($journeys)): ?>
+                                <?= view('/itinerary/search/journeyCard', $journeys) ?>
                             <?php else: ?>
                                 <div class="flex flex-col items-center justify-center py-8 text-grey">
                                     <p class="font-pfd italic text-xl text-gold/40 mb-2">Aucun trajet</p>

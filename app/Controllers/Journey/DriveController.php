@@ -63,6 +63,9 @@ class DriveController extends BaseController
                     ->withInput();
             }
         }
+        else{
+            $getData['journeys'] = $this->journeyService->getNextAvailableJourneys();
+        }
 
 
         return view('itinerary/search/SearchView', $getData);

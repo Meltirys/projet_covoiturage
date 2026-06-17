@@ -375,11 +375,11 @@ class JourneyService
 
     /**
      * Returns a set number of available journey
-     * @param int $numberOfJourneys The number of journey to return
+     * @param int $numberOfJourneys Optionnal : The number of journey to return. By default returns all the journeys available
      * 
      * @return array An array that contains all the values needed for the display
      */
-    public function getNextAvailableJourneys(int $numberOfJourneys): array
+    public function getNextAvailableJourneys(int $numberOfJourneys = -1): array
     {
         $journeyDriveModel = new JourneyDriveModel();
         $allJouneys = $journeyDriveModel->getJourneyInfosByDates(date('d-m-y h:i:s'), null, $numberOfJourneys); // We retrieve the journey that start after the current day
