@@ -353,18 +353,24 @@ class JourneyService
             return [];
         }
 
-        $journeyIds = array_column($journeys, 'id_journey_drive');
+        // 3. Filtre par disponibilité des places
+        $journeys = $this->filterAvailableSeats($journeys, $requestedSeats);
+
+        // 4. Acquisition des journeys correspondants par itinéraire
+
+        $departurePoint = [$departureLocation['longitude'], $departureLocation['latitude']]; // Setting up the start point of the research
+        $endPoint = null; //The end point is null by default
+
+        //Setup up the end point if it's defined
+        if ($arrivalLocation) {
+            $endPoint = [$arrivalLocation['longitude'], $arrivalLocation['latitude']]; // Setting up the start point of the research
+
+        }
+
+        $journeys = $this->matchJourneys($journeys, $departurePoint, $endPoint);
 
 
-        // 3. Acquisition des journeys correspondants par itinéraire
-        // Rayon élargi si recherche par ville sans adresse précise
 
-        $departurePoint = [$departureLocation['longitude'], $departureLocation['latitude']];
-        $matches = $this->matchJourneys($journeys, $departurePoint);
-
-
-        // 4. Filtre par disponibilité des places
-        $journeys = $this->filterAvailableSeats($matches, $requestedSeats);
 
         return $journeys;
     }
@@ -675,16 +681,17 @@ class JourneyService
      * Trouve les journeys qui correspondent géographiquement à la requête de l'utilisateur
      * @param array $journeys Liste de journeys
      * @param array $departurePoint Lieu de départ donné par l'utilisateur (longitude en premier et latitude en deuxième, pas de clé nécessaire)
+     * @param array $endPoint Lieu d'arrivé donné par l'utilisateur (longitude en premier et latitude en deuxième, pas de clé nécessaire)
      * @param int $maxDistance Option: La distance maximale (en mètre) autorisé pour la recherche. La valeur par défaut est 2500m
      * @return array Tableau contenant les journeys
      */
-    private function matchJourneys(array $journeys, array $departurePoint, int $maxDistance = 2500): array
+    private function matchJourneys(array $journeys, array $departurePoint, ?array $endPoint, int $maxDistance = 2500): array
     {
         $matches = [];
         $trackService = service('TrackService');
 
         foreach ($journeys as $journey) {
-            if ($trackService->isOnTrack($departurePoint, $journey['id_track'], $maxDistance)) $matches[] = $journey; //Adds the journey to the array if there is a match
+            if ($trackService->isOnTrack($departurePoint, $endPoint, $journey['id_track'], $maxDistance)) $matches[] = $journey; //Adds the journey to the array if there is a match
 
         }
 

@@ -107,31 +107,38 @@ class TrackService
 
     /**
      * Checks if a given point is on a given track, within a given range of distance
-     * @param array $point An array where the first element is the longitude and the second element is the longitude. No keys needed
+     * @param array $startPoint An array where the first element is the longitude and the second element is the longitude. No keys needed
+     * @param ?array $endPoint An array where the first element is the longitude and the second element is the longitude. No keys needed
      * @param int $idTrack The id of the track
      * @param int $maxDistance Optionnal: The maximum distance between the point and a point on of the track, in meters. Default is 2500m
      * 
      * @return bool
      */
-    public function isOnTrack(array $point, int $idTrack, int $maxDistance = 2500): bool
+    public function isOnTrack(array $startPoint, ?array $endPoint, int $idTrack, int $maxDistance = 2500): bool
     {
 
         $track = $this->db->find($idTrack);
         $json = json_decode($track['geojson']);
         $trackPoints = $json->coordinates;
+        $startValidated = false; //Check if the starting point if validated
+        $endValidated = is_null($endPoint) ? true : false; //Check if the end point if validated. If no end point are given, then it's true by default
 
 
         foreach ($trackPoints as $trackPoint) {
+
             $distance = haversine_distance(
-                $point[0],
-                $point[1],
+                ($startValidated ? $endPoint : $startPoint)[0], //If the start is validated, we search the end, if not we search the start
+                ($startValidated ? $endPoint : $startPoint)[1], //If the start is validated, we search the end, if not we search the start
                 $trackPoint[0],
                 $trackPoint[1]
-            ); //We calculates the distance between the track point and the given point
+            );
 
             if ($distance < $maxDistance) {
-                return true; //We stop the execution on the first match
+                $startValidated ? $endValidated = true : $startValidated = true; //Validates the tested point
             }
+
+            // When both starting point and end point are on the track, stops the execution and returns true
+            if ($startValidated && $endValidated) return true;
         }
 
         return false;
