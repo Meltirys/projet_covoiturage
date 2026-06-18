@@ -10,7 +10,6 @@ use App\Models\RequestMemberModel;
 use App\Models\StagesModel;
 use App\Models\TrackModel;
 use CodeIgniter\Database\BaseConnection;
-use DateTime;
 
 class JourneyService
 {
@@ -24,9 +23,6 @@ class JourneyService
     private StagesModel $stagesModel;
 
     private LocationService $locationService;
-
-    // Constant which defines the radius to accept a location as a "match" when the user searches for itineraries
-    private const int MATCH_RADIUS_METERS = 1000;
 
     public function __construct()
     {
@@ -299,9 +295,6 @@ class JourneyService
      */
     public function searchJourneyDrive(array $input): array
     {
-        $stageModel = $this->stagesModel;
-        $locationService = $this->locationService;
-
         // searchJourneyDrive()
         // ├── resolve departure location
         // ├── resolve arrival location
@@ -310,68 +303,28 @@ class JourneyService
         // ├── filter by seats
         // └── return results
 
-        // 1. Lieux de départ et arrivée
-        $departureAddress = $input['start']['label'] ?? '';
-        $departureCity = $input['start']['city'] ??  '';
-        $departurePostcode = $input['start']['postcode'] ?? '';
+        // 1. Setting up the variables
+        $startDate = $input['date'];
+        $endDay = date('Y-m-d H:i:s', strtotime($startDate . ' +1 day'));
+        $requestedSeats = $input['free-seats'] ?? 1;
+        $departurePoint = [$input['start']['lon'], $input['start']['lat']];
+        $endPoint = $input['end']['lon'] && $input['end']['lat'] ?
+            [$input['end']['lon'], $input['end']['lat']] :
+            null; //Setting up the end point, if none is provided, sets it to null
 
-        $arrivalAddress = $input['end']['label'] ?? '';
-        $arrivalCity = $input['end']['city'] ?? '';
-        $arrivalPostcode = $input['end']['postcode'] ??  '';
+        // 2. Retrieves all the journeys that are within the good date range
+        $journeys = $this->journeyDriveModel->getJourneyInfosByDates($startDate, $endDay);
 
-        $departureLocation = $locationService->findLocationByAddress(
-            $departureAddress,
-            $departureCity,
-            $departurePostcode
-        );
+        if (empty($journeys)) return []; //Stop the execution if no results
 
-        // 1. Arrivée : coordonnées GPS directes (évite la recherche exacte en base)
-        $arrivalLocation = null;
-        if (!empty($arrivalCity)) {
-            $arrivalLat = (float) ($input['end']['lat'] ?? 0);
-            $arrivalLon = (float) ($input['end']['lon'] ?? 0);
-            if ($arrivalLat && $arrivalLon) {
-                $arrivalLocation = ['latitude' => $arrivalLat, 'longitude' => $arrivalLon];
-            }
-        }
-
-
-        $searchDate = $input['date'] ?? '';
-        $requestedSeats = (int) ($input['free-seats'] ?? 1);
-
-        if (empty($departureLocation) || empty($searchDate) || (!empty($arrivalCity) && empty($arrivalLocation))) {
-            return [];
-        }
-
-        // 2. Recherche des journeys correspondants par date
-        $startDay = $searchDate . ' 00:00:00';
-        $endDay = date('Y-m-d H:i:s', strtotime($startDay . ' +1 day'));
-
-        $journeys = $this->journeyDriveModel->getJourneyInfosByDates($startDay, $endDay);
-
-
-        if (empty($journeys)) {
-            return [];
-        }
-
-        // 3. Filtre par disponibilité des places
+        // 3. Filters the journeys with the available seats
         $journeys = $this->filterAvailableSeats($journeys, $requestedSeats);
 
-        // 4. Acquisition des journeys correspondants par itinéraire
+        if (empty($journeys)) return []; //Stop the execution if no results
 
-        $departurePoint = [$departureLocation['longitude'], $departureLocation['latitude']]; // Setting up the start point of the research
-        $endPoint = null; //The end point is null by default
 
-        //Setup up the end point if it's defined
-        if ($arrivalLocation) {
-            $endPoint = [$arrivalLocation['longitude'], $arrivalLocation['latitude']]; // Setting up the start point of the research
-
-        }
-
+        // 4. Filtering the journeys to keep only the one that are on the journey entered by the user
         $journeys = $this->matchJourneys($journeys, $departurePoint, $endPoint);
-
-
-
 
         return $journeys;
     }
@@ -379,14 +332,22 @@ class JourneyService
 
     /**
      * Returns a set number of available journey
-     * @param int $numberOfJourneys Optionnal : The number of journey to return. By default returns all the journeys available
-     * 
+     * @param string $type Whether it's for 'drive' or 'request' journeys
+     * @param int $numberOfJourneys Optional : The amount of journeys to return. By default returns all the journeys available
      * @return array An array that contains all the values needed for the display
      */
-    public function getNextAvailableJourneys(int $numberOfJourneys = -1): array
+    public function getNextAvailableJourneys(string $type, int $numberOfJourneys = -1): array
     {
-        $journeyDriveModel = new JourneyDriveModel();
-        $allJouneys = $journeyDriveModel->getJourneyInfosByDates(date('Y-m-d H:i:s'), null, $numberOfJourneys); // We retrieve the journey that start after the current day
+        switch ($type) {
+            case 'drive':
+                $allJouneys = $this->journeyDriveModel->getJourneyInfosByDates(date('Y-m-d H:i:s'), null, $numberOfJourneys); // We retrieve the journey that start after the current day
+                break;
+            case 'request':
+                $allJouneys = $this->journeyRequestModel->getJourneyInfosByDates(date('Y-m-d H:i:s'), null, $numberOfJourneys); // We retrieve the journey that start after the current day
+                break;
+            default:
+                return [];
+        }
 
         return $this->filterAvailableSeats($allJouneys, 1);
     }
@@ -412,14 +373,13 @@ class JourneyService
                 throw new \DomainException('L\'heure de début de disponibilité doit être avant la fin');
             }
 
-            $rangeOfTime = $input['range-start'] . ' - ' . $input['range-end'];
-
             $journeyRequestId = $this->journeyRequestModel->insert([
-                'description'   => $input['description'],
-                'range_of_time' => $rangeOfTime,
-                'start'         => $locationIds['start'],
-                'end'           => $locationIds['end'],
-                'id_creator'    => $userId
+                'description'        => $input['description'],
+                'earliest-departure' => $input['range-start'],
+                'latest-departure'   => $input['range-end'],
+                'start'              => $locationIds['start'],
+                'end'                => $locationIds['end'],
+                'id_creator'         => $userId
             ], true);
 
             if (! $journeyRequestId) {
@@ -467,15 +427,15 @@ class JourneyService
             // 2. Journey
 
             // Formatting the data
-            $rangeOfTime = $input['range-start'] . ' - ' . $input['range-end'];
             $journeyId = $original['id_journey_drive'];
 
             $updateStatus = $this->journeyDriveModel->update($journeyId, [
-                'description'   => $input['description'],
-                'range-of-time' => $rangeOfTime,
-                'start'         => $locationIds['start'],
-                'end'           => $locationIds['end'],
-                'id_creator'    => $userId,
+                'description'        => $input['description'],
+                'earliest-departure' => $input['range-start'],
+                'latest-departure'   => $input['range-end'],
+                'start'              => $locationIds['start'],
+                'end'                => $locationIds['end'],
+                'id_creator'         => $userId,
             ]);
 
             if ($updateStatus === false) {
@@ -682,7 +642,7 @@ class JourneyService
      * Trouve les journeys qui correspondent géographiquement à la requête de l'utilisateur
      * @param array $journeys Liste de journeys
      * @param array $departurePoint Lieu de départ donné par l'utilisateur (longitude en premier et latitude en deuxième, pas de clé nécessaire)
-     * @param array $endPoint Lieu d'arrivé donné par l'utilisateur (longitude en premier et latitude en deuxième, pas de clé nécessaire)
+     * @param array|null $endPoint Lieu d'arrivé donné par l'utilisateur (longitude en premier et latitude en deuxième, pas de clé nécessaire).
      * @param int $maxDistance Option: La distance maximale (en mètre) autorisé pour la recherche. La valeur par défaut est 2500m
      * @return array Tableau contenant les journeys
      */
@@ -692,7 +652,8 @@ class JourneyService
         $trackService = service('TrackService');
 
         foreach ($journeys as $journey) {
-            if ($trackService->isOnTrack($departurePoint, $endPoint, $journey['id_track'], $maxDistance)) $matches[] = $journey; //Adds the journey to the array if there is a match
+            if ($trackService->isOnTrack($departurePoint, $endPoint, $journey['id_track'], $maxDistance))
+                $matches[] = $journey; //Adds the journey to the array if there is a match
 
         }
 

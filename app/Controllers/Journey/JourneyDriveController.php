@@ -50,10 +50,18 @@ class JourneyDriveController extends BaseController
                     ->withInput();
             }
 
+            log_message('debug', 'Validation passed. Searching journeys');
+
             // Logic
             try {
                 // === Ajouter options quand possible !
-                $getData['journeys'] = $this->journeyService->searchJourneyDrive($getData);
+                $journeys = $this->journeyService->searchJourneyDrive($getData);
+
+                log_message('debug', 'Journeys searched successfully');
+
+                return redirect()->back()
+                    ->with('journeys', $journeys)
+                    ->withInput();
             } catch (\Throwable $e) {
                 // system error
                 log_message('error', $e->getMessage());
@@ -63,11 +71,10 @@ class JourneyDriveController extends BaseController
                     ->withInput();
             }
         } else {
-            $getData['journeys'] = $this->journeyService->getNextAvailableJourneys();
+            $journeys = $this->journeyService->getNextAvailableJourneys('drive');
         }
 
-        $getData['journeys'] = json_encode($getData['journeys']);
-        return view('itinerary/search/SearchView', $getData);
+        return view('itinerary/search/SearchDriveView', ['journeys' => $journeys]);
     }
 
     /**

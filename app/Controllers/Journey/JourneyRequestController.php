@@ -27,7 +27,7 @@ class JourneyRequestController extends BaseController
     /**
      * Displays the search page listing itineraries
      */
-    public function search()
+    public function search(): string|RedirectResponse
     {
         helper('form');
 
@@ -52,23 +52,31 @@ class JourneyRequestController extends BaseController
                     ->withInput();
             }
 
+            log_message('debug', 'Validation passed. Searching journeys');
+
             // Logic
-            $journeyService = $this->journeyService;
             try {
                 // === Ajouter options quand possible !
-                $getData['journeys'] = $journeyService->searchJourneyDrive($getData);
+                $journeys = $this->journeyService->searchJourneyRequest($getData);
+
+                log_message('debug', 'Journeys searched successfully');
+
+                return redirect()->back()
+                    ->with('journeys', $journeys)
+                    ->withInput();
             } catch (\Throwable $e) {
                 // system error
                 log_message('error', $e->getMessage());
 
                 return redirect()->back()
-                    ->with('error', 'Une erreur s\'est produite')
+                    ->with('error', 'Une erreur s\'est produite, veuillez réessayer plus tard.')
                     ->withInput();
             }
+        } else {
+            $journeys = $this->journeyService->getNextAvailableJourneys('request');
         }
 
-
-        return view('itinerary/search/SearchRequestView', $getData);
+        return view('itinerary/search/SearchRequestView', ['journeys' => $journeys]);
     }
 
     /**

@@ -46,10 +46,11 @@ class SearchJourneyDriveValidator extends BaseValidator
             ]
         ];
         $dateRules = [
-            'rules' => 'required|valid_date',
+            'rules' => 'required|valid_date|equal_or_after_now',
             'errors' => [
                 'required' => 'La date est obligatoire.',
                 'valid_date' => 'La date est invalide.',
+                'equal_or_after_now' => 'La date entrée ne peut pas être dans le passé'
             ]
         ];
         $timeRules = [
@@ -125,9 +126,8 @@ class SearchJourneyDriveValidator extends BaseValidator
             // ===== OTHER
 
             'free-seats'      => [
-                'rules' => 'required|greater_than_equal_to[1]|less_than_equal_to[8]',
+                'rules' => 'permit_empty|greater_than_equal_to[1]|less_than_equal_to[8]',
                 'errors' => [
-                    'required' => 'Le nombre de places disponsibles est obligatoire',
                     'greater_than_equal_to' => 'Le nombre de places choisi ne doit pas être inférieur à 1',
                     'less_than_equal_to' => 'Le nombre de places choisi est trop grand',
                 ]

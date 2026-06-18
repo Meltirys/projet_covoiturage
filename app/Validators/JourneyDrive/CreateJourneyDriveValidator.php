@@ -114,10 +114,11 @@ class CreateJourneyDriveValidator extends BaseValidator
             // ===== OTHER
 
             'car' => [
-                'rules' => 'required|is_natural_no_zero',
+                'rules' => 'required|is_natural_no_zero|is_car_owner',
                 'errors' => [
                     'required' => 'Le choix du véhicule est obligatoire',
                     'is_natural_no_zero' => 'Veuillez choisir un véhicule valide',
+                    'is_car_owner' => 'Vous devez être propriétaire du véhicule'
                 ]
             ],
             'seats'      => [

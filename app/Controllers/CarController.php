@@ -5,6 +5,8 @@ namespace App\Controllers;
 use App\Controllers\BaseController;
 use App\Models\CarModel;
 use App\Validators\CarValidator;
+use App\Validators\CarDeletionValidator;
+
 
 
 class CarController extends BaseController
@@ -65,22 +67,26 @@ class CarController extends BaseController
     public function delete(int $idCar)
     {
 
-        $carModel = new CarModel();
-        $isOwner = session()->user_id == $carModel->find($idCar)['id_user']; //Check if the user is the owner
+        //Calling the specific validator
+        $validator = new CarDeletionValidator();
+        $car['idCar'] = $idCar;
 
-
-        //If the user is not the owner, we redirect him
-        if (!$isOwner) {
-            return redirect('404');
+        //If an error is detected, we redirect the errors to the profil controller
+        if (!$validator->validate($car)) {
+            return redirect()->to('/myprofil')
+                ->with('error_in_add_car_form', true) //This variable is meant to tell the view that it needs to show the form to add a car on load
+                ->withInput()
+                ->with('errors', $validator->getErrors()); //We transfer the errors so the view can display it
         }
+
+        $carModel = model('CarModel');
 
         if (! $carModel->delete($idCar)) {
             $errors = $carModel->errors();
 
             return redirect()->to('/myprofil')
                 ->with('errors', $errors)
-                ->withInput()
-                ->with('car_error', 'Une erreur est survenue lors de la suppression du véhicule');
+                ->withInput();
         }
 
         return redirect()->to('/myprofil')
@@ -91,14 +97,9 @@ class CarController extends BaseController
     {
 
         $carModel = new CarModel();
-        $isOwner = session()->user_id == $carModel->find($idCar)['id_user']; //Check if the user is the owner
-
-        //If the user is not the owner, we redirect him
-        if (!$isOwner) {
-            return redirect('404');
-        }
 
         $car = [
+            'idCar' => $idCar,
             'brand'   => $this->request->getPost('brand'),
             'model'    => $this->request->getPost('model'),
             'color'        => $this->request->getPost('color'),

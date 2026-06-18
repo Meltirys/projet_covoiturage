@@ -67,7 +67,7 @@ class BookingController extends BaseController
                 ->with('error', 'Trajet complet');
         }
         $seatTaken = 1;
-        //
+
         $validator = new BookingValidator();
         $data = [
             'booking_date'     => date('Y-m-d'),
@@ -164,32 +164,37 @@ class BookingController extends BaseController
             ->get()->getRow()->seat_taken;
         if ($journey['number_of_place'] - $seatPicked < 1) {
             return redirect()->to('myprofil')
-            ->with('error', 'Aucune place disponible sur le trajet');
+                ->with('error', 'Aucune place disponible sur le trajet');
         }
 
         // Checking user validation if already booking
 
-        if($booking['is_validated']) {
+        if ($booking['is_validated']) {
             return redirect()->to('myprofil')
-            ->with('error', 'Ce trajet à déjà été validé');
+                ->with('error', 'Ce trajet à déjà été validé');
         }
 
         $bookingModel->update($id_booking, ['is_validated' => true]);
 
-        //Preparing the mail service
-        $mailService = new MailService();
+        try {
+            //Preparing the mail service
+            $mailService = new MailService();
 
-        //Retrieving the infos needed for the mail
-        $infos = $this->gatherMailInfos($id_booking, $booking['id_user']);
+            //Retrieving the infos needed for the mail
+            $infos = $this->gatherMailInfos($id_booking, $booking['id_user']);
 
-        //Send the mail to the passenger that it's application has been refused
-        $mailService->sendBookingAccepted($infos['passenger_email'], [
-            'passenger_name'       => $infos['passenger_name'],
-            'journey_date'         => $infos['departure'],
-            'journey_departure'    => $infos['start_address'],
-            'journey_arrival'      => $infos['end_address'],
-            'driver_name'          => $infos['driver_name'],
-        ]);
+            //Send the mail to the passenger that it's application has been refused
+            $mailService->sendBookingAccepted($infos['passenger_email'], [
+                'passenger_name'       => $infos['passenger_name'],
+                'journey_date'         => $infos['departure'],
+                'journey_departure'    => $infos['start_address'],
+                'journey_arrival'      => $infos['end_address'],
+                'driver_name'          => $infos['driver_name'],
+            ]);
+        } catch (\Exception $e) {
+            log_message('error', 'Erreur envoi mail : ' . $e->getMessage());
+        }
+
         return redirect()->to('myprofil')
             ->with('success', 'Demande acceptée !');
     }

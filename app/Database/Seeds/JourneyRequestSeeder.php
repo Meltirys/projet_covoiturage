@@ -17,7 +17,8 @@ class JourneyRequestSeeder extends Seeder
             [
                 'id_journey_request' => 1,
                 'description'        => 'Trajet Vannes → Lorient soir',
-                'range_of_time'      => '17:00 - 18:30',
+                'earliest_departure' => '17:00',
+                'latest_departure'   => '18:30',
                 'start'              => 1, // Greta Vannes
                 'end'                => 2, // Gare de Lorient
                 'id_creator'         => 1,
@@ -25,7 +26,8 @@ class JourneyRequestSeeder extends Seeder
             [
                 'id_journey_request' => 2,
                 'description'        => 'Auray → Vannes quotidien',
-                'range_of_time'      => '07:30 - 08:30',
+                'earliest_departure' => '07:30',
+                'latest_departure'   => '08:30',
                 'start'              => 3, // Auray
                 'end'                => 1, // Greta Vannes
                 'id_creator'         => 2,
@@ -33,7 +35,8 @@ class JourneyRequestSeeder extends Seeder
             [
                 'id_journey_request' => 3,
                 'description'        => 'Carnac → Ploërmel retour weekend',
-                'range_of_time'      => '18:00 - 20:00',
+                'earliest_departure' => '18:00',
+                'latest_departure'   => '20:00',
                 'start'              => 4, // Carnac
                 'end'                => 5, // Ploërmel
                 'id_creator'         => 5,

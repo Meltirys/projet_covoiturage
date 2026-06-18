@@ -5,7 +5,9 @@ $error  = session()->getFlashdata('error');
 $selectedCar = old('drive.car', $journey['id_car']);
 $selectedSeat = old('drive.seats', $journey['number_of_place']);
 ?>
+
 <?= $this->extend('layouts/main') ?>
+
 <?= $this->section('content') ?>
 
 <div class="profile-hero px-4 md:px-8 py-10 md:py-14 mb-8">
@@ -65,6 +67,7 @@ $selectedSeat = old('drive.seats', $journey['number_of_place']);
             // Initial population on page load
             populateSeats();
         }
+
         function populateSeats() {
             const selectedCarId = carSelect.value || selectedCar;
             const car = cars.find(c => String(c.id_car) === String(selectedCarId)); // match l'id des voitures dans cars à l'id sélectionné dans le dropdown

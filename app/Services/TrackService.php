@@ -106,7 +106,7 @@ class TrackService
     }
 
     /**
-     * Checks if a given point is on a given track, within a given range of distance
+     * Checks if a given point is on a given track, within a given range of distance.
      * @param array $startPoint An array where the first element is the longitude and the second element is the longitude. No keys needed
      * @param ?array $endPoint An array where the first element is the longitude and the second element is the longitude. No keys needed
      * @param int $idTrack The id of the track
@@ -118,10 +118,10 @@ class TrackService
     {
 
         $track = $this->db->find($idTrack);
-        $json = json_decode($track['geojson']);
+        $json = json_decode($track['geojson']); // We retrieve the points 
         $trackPoints = $json->coordinates;
-        $startValidated = false; //Check if the starting point if validated
-        $endValidated = is_null($endPoint) ? true : false; //Check if the end point if validated. If no end point are given, then it's true by default
+        $startValidated = false; 
+        $endValidated = is_null($endPoint) ? true : false; //If no end points are given, then it's true by default
 
 
         foreach ($trackPoints as $trackPoint) {

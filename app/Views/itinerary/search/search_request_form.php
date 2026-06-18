@@ -15,7 +15,7 @@ $filter    = $request->getGet('filter') ?? '';
         <label for="start" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Départ</label>
         <input class="address-input w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey placeholder:text-grey focus:outline-none focus:border-gold/40 transition-colors"
             type="text" name="start[label]" id="start"
-            value="<?= esc(old($start['label'] ?? '')) ?>"
+            value="<?= esc($start['label'] ?? '') ?>"
             placeholder="Entrez votre départ" required>
         <?php $startError = $errors['start.label'] ?? $errors['start.lat'] ?? $errors['start.lon'] ?? $errors['start.city'] ?? $errors['start.postcode'] ?? null;
         if ($startError): ?>

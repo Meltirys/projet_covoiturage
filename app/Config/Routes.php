@@ -68,7 +68,6 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('nouveau-trajet', 'PagesController::createJourney');
     $routes->post('drive/save', 'Journey\JourneyDriveController::save'); // conduite
     $routes->post('request/save', 'Journey\JourneyRequestController::save'); // requête
-    $routes->get('request/list', 'Journey\JourneyRequestController::index');
 
     // Modification de trajet conducteur
     $routes->get('trajet/modification/(:num)', 'PagesController::editJourneyDrive/$1');
@@ -81,7 +80,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 
     // Recherche de trajets
     $routes->get('trajet', 'Journey\JourneyDriveController::search'); // conduite
-    $routes->get('request/search', 'Journey\JourneyRequestController::search'); // requête
+    $routes->get('requetes', 'Journey\JourneyRequestController::search'); // requête
 
     // Affichage de trajet individuel
     $routes->get('drive/show/(:num)', 'Journey\JourneyDriveController::show/$1'); // conduite
