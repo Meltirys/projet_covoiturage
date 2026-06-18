@@ -20,7 +20,8 @@ class GlobalSeeder extends Seeder
 
         //Launching the other seeders
         $this->call('UserSeeder');
-        $this->call('JourneySeeder');
+        $this->call('JourneyDriveSeeder');
+        $this->call('JourneyRequestSeeder');
         $this->call('ReportSeeder');
     }
 }
