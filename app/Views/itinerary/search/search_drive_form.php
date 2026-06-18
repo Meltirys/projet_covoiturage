@@ -15,16 +15,16 @@ $filter    = $request->getGet('filter') ?? '';
         <label for="start" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Départ</label>
         <input class="address-input w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey placeholder:text-grey focus:outline-none focus:border-gold/40 transition-colors"
             type="text" name="start[label]" id="start"
-            value="<?= esc($start['label'] ?? '') ?>"
+            value="<?= esc(old($start['label'] ?? '')) ?>"
             placeholder="Entrez votre départ" required>
         <?php $startError = $errors['start.label'] ?? $errors['start.lat'] ?? $errors['start.lon'] ?? $errors['start.city'] ?? $errors['start.postcode'] ?? null;
         if ($startError): ?>
             <span class="text-xs text-red"><?= esc($startError) ?></span>
         <?php endif ?>
         <div class="results"></div>
-        <input type="hidden" name="start[lat]"      value="<?= esc($start['lat'] ?? '') ?>">
-        <input type="hidden" name="start[lon]"      value="<?= esc($start['lon'] ?? '') ?>">
-        <input type="hidden" name="start[city]"     value="<?= esc($start['city'] ?? '') ?>">
+        <input type="hidden" name="start[lat]" value="<?= esc($start['lat'] ?? '') ?>">
+        <input type="hidden" name="start[lon]" value="<?= esc($start['lon'] ?? '') ?>">
+        <input type="hidden" name="start[city]" value="<?= esc($start['city'] ?? '') ?>">
         <input type="hidden" name="start[postcode]" value="<?= esc($start['postcode'] ?? '') ?>">
     </div>
 
@@ -39,9 +39,9 @@ $filter    = $request->getGet('filter') ?? '';
             <span class="text-xs text-red"><?= esc($endError) ?></span>
         <?php endif ?>
         <div class="results"></div>
-        <input type="hidden" name="end[lat]"      value="<?= esc($end['lat'] ?? '') ?>">
-        <input type="hidden" name="end[lon]"      value="<?= esc($end['lon'] ?? '') ?>">
-        <input type="hidden" name="end[city]"     value="<?= esc($end['city'] ?? '') ?>">
+        <input type="hidden" name="end[lat]" value="<?= esc($end['lat'] ?? '') ?>">
+        <input type="hidden" name="end[lon]" value="<?= esc($end['lon'] ?? '') ?>">
+        <input type="hidden" name="end[city]" value="<?= esc($end['city'] ?? '') ?>">
         <input type="hidden" name="end[postcode]" value="<?= esc($end['postcode'] ?? '') ?>">
     </div>
 
