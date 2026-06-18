@@ -3,6 +3,7 @@ $status        = session()->getFlashdata('status');
 $driveErrors   = session()->getFlashdata('drive_errors') ?? [];
 $requestErrors = session()->getFlashdata('request_errors') ?? [];
 $error         = session()->getFlashdata('error');
+$oldTab        = session()->getFlashdata('tab');
 ?>
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
@@ -85,7 +86,7 @@ $error         = session()->getFlashdata('error');
         document.getElementById('tab-request').classList.toggle('text-grey', isDrive)
     }
 
-    <?php if (!empty($requestErrors)): ?>
+    <?php if (!empty($requestErrors) || $oldTab === 'request'): ?>
         switchTab('request');
     <?php endif ?>
 
