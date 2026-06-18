@@ -420,7 +420,7 @@ class JourneyService
 
             $rangeOfTime = $input['range-start'] . ' - ' . $input['range-end'];
 
-            $journeyId = $this->journeyRequestModel->insert([
+            $journeyRequestId = $this->journeyRequestModel->insert([
                 'description'   => $input['description'],
                 'range_of_time' => $rangeOfTime,
                 'start'         => $locationIds['start'],
@@ -428,7 +428,7 @@ class JourneyService
                 'id_creator'    => $userId
             ], true);
 
-            if (! $journeyId) {
+            if (! $journeyRequestId) {
                 throw new \RuntimeException('Impossible de créer le trajet');
             }
 
@@ -436,7 +436,7 @@ class JourneyService
             $status = $this->requestMemberModel->insert([
                 'seat_taken'         => $input['seats-taken'],
                 'request_date'       => $input['date'],
-                'id_journey_request' => $journeyId,
+                'id_journey_request' => $journeyRequestId,
                 'id_user'            => $userId
             ]);
 
@@ -451,7 +451,7 @@ class JourneyService
 
             $this->db->transCommit();
 
-            return $journeyId;
+            return $journeyRequestId;
         } catch (\Throwable $e) {
             $this->db->transRollback();
             throw $e;
