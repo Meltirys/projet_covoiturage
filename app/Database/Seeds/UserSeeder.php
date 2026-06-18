@@ -34,7 +34,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '0610928752',
                 'birth_date'         => '1948-06-21',
                 'gender'             => 'male',
-                'avatar_filename'    => null,
+                'avatar_filename'    => 'andrzej.png',
                 'id_user_permission' => 1,
                 'is_validated' => true,
                 'id_location' => 1
@@ -48,7 +48,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1998-07-24',
                 'gender'             => 'female',
-                'avatar_filename'    => null,
+                'avatar_filename'    => '1781163530_2029109cf0b7873d77ab.jpg',
                 'id_user_permission' => 2,
                 'is_validated' => true,
                 'id_location' => 1
@@ -62,7 +62,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1948-06-21',
                 'gender'             => 'male',
-                'avatar_filename'    => null,
+                'avatar_filename'    => 'mister_worldwide.jpeg',
                 'id_user_permission' => 3,
                 'is_validated' => true,
                 'id_location' => 1
@@ -104,7 +104,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1948-06-21',
                 'gender'             => 'male',
-                'avatar_filename'    => null,
+                'avatar_filename'    => 'dsk.png',
                 'id_user_permission' => 1,
                 'is_validated' => true,
                 'id_location' => 1
@@ -154,13 +154,13 @@ class UserSeeder extends Seeder
             [
                 'id_user'            => 10,
                 'first_name'         => 'Accepted',
-                'last_name'          => 'Bernard',
+                'last_name'          => 'Hollande',
                 'password'           => password_hash('password', PASSWORD_DEFAULT),
                 'email'              => 'accepted.bernard@user.fr',
                 'mobile'             => '',
-                'birth_date'         => '1992-11-08',
+                'birth_date'         => '1972-11-08',
                 'gender'             => 'male',
-                'avatar_filename'    => null,
+                'avatar_filename'    => 'depute_1654.png',
                 'id_user_permission' => 1,
                 'is_validated'       => true,
                 'id_location'        => 1
@@ -188,7 +188,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1995-09-14',
                 'gender'             => 'male',
-                'avatar_filename'    => null,
+                'avatar_filename'    => 'robert.png',
                 'id_user_permission' => 1,
                 'is_validated'       => true,
                 'id_location'        => 1
@@ -229,8 +229,8 @@ class UserSeeder extends Seeder
                 'email'              => 'accepted.laurent@user.fr',
                 'mobile'             => '',
                 'birth_date'         => '1993-12-17',
-                'gender'             => 'female',
-                'avatar_filename'    => null,
+                'gender'             => 'male',
+                'avatar_filename'    => 'laurent.png',
                 'id_user_permission' => 1,
                 'is_validated'       => true,
                 'id_location'        => 1
@@ -243,8 +243,8 @@ class UserSeeder extends Seeder
                 'email'              => 'accepted.leroy@user.fr',
                 'mobile'             => '',
                 'birth_date'         => '1989-08-09',
-                'gender'             => 'male',
-                'avatar_filename'    => null,
+                'gender'             => 'female',
+                'avatar_filename'    => 'leroy.png',
                 'id_user_permission' => 1,
                 'is_validated'       => true,
                 'id_location'        => 1
@@ -257,8 +257,8 @@ class UserSeeder extends Seeder
                 'email'              => 'accepted.roux@user.fr',
                 'mobile'             => '',
                 'birth_date'         => '1994-05-21',
-                'gender'             => 'female',
-                'avatar_filename'    => null,
+                'gender'             => 'male',
+                'avatar_filename'    => 'un_roux.png',
                 'id_user_permission' => 1,
                 'is_validated'       => true,
                 'id_location'        => 1
@@ -272,7 +272,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1979-07-22',
                 'gender'             => 'male',
-                'avatar_filename'    => null,
+                'avatar_filename'    => 'deanwin.png',
                 'id_user_permission' => 1,
                 'is_validated'       => true,
                 'id_location'        => 1
@@ -286,7 +286,7 @@ class UserSeeder extends Seeder
                 'mobile'             => '',
                 'birth_date'         => '1975-01-09',
                 'gender'             => 'male',
-                'avatar_filename'    => null,
+                'avatar_filename'    => '1781700622_c83f9e3660c3fc487bd6.png',
                 'id_user_permission' => 1,
                 'is_validated'       => true,
                 'id_location'        => 1
@@ -488,7 +488,7 @@ class UserSeeder extends Seeder
                 'color' => 'Grise/Bleue',
                 'year' => 2002,
                 'number_of_seat' => 2,
-                'id_user' => 30
+                'id_user' => 34
             ],
             [
                 'brand' => 'CHEVROLET',
