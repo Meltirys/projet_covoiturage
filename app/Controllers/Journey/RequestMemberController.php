@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 
-class RequestController extends BaseController
+class RequestMemberController extends BaseController
 {
     public function save(
         #

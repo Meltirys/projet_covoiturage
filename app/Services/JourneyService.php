@@ -46,7 +46,7 @@ class JourneyService
      * @param int $userId The user's ID
      * @return int The JourneyDrive ID
      */
-    public function createJourneyDrive(array $input, int $userId): int
+    public function createJourneyDrive(array $input, int $userId, ?int $idTrack = null): int
     {
         $this->db->transBegin();
 
@@ -79,8 +79,7 @@ class JourneyService
             }
 
             // 3. Generating the track
-            $idTrack = $this->buildTrack($input);
-
+            $idTrack = $idTrack ?? $this->buildTrack($input);
             if (!$idTrack) {
                 throw new \RuntimeException('Impossible de créer le tracé du trajet');
             }
@@ -143,6 +142,7 @@ class JourneyService
             'sunday'    => 7,
         ];
 
+        $idTrack = $this->buildTrack($input);
         foreach ($days as $day) {
             $targetDayNum = $dayNumbers[$day] ?? null;
             if ($targetDayNum === null) continue;
@@ -154,7 +154,7 @@ class JourneyService
             }
 
             $input['start-date'] = $date->format('Y-m-d');
-            $createIds[] = $this->createJourneyDrive($input, $userId);
+            $createIds[] = $this->createJourneyDrive($input, $userId, $idTrack);
         }
 
         return $createIds;
@@ -191,7 +191,8 @@ class JourneyService
             $idTrack = $original['id_track'];
 
             if ($routeChanged) {
-                $idTrack = $this->buildTrack($input, $idTrack);
+                $isShared = $this->journeyDriveModel->where('id_track', $idTrack)->countAllResults() > 1;
+                $idTrack = $this->buildTrack($input, $isShared ? null : $idTrack);
             }
 
             // 4. Journey
