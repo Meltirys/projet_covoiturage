@@ -46,9 +46,8 @@ class SearchJourneyDriveValidator extends BaseValidator
             ]
         ];
         $dateRules = [
-            'rules' => 'required|valid_date|equal_or_after_now',
+            'rules' => 'permit_empty|valid_date|equal_or_after_now',
             'errors' => [
-                'required' => 'La date est obligatoire.',
                 'valid_date' => 'La date est invalide.',
                 'equal_or_after_now' => 'La date entrée ne peut pas être dans le passé'
             ]
@@ -132,12 +131,7 @@ class SearchJourneyDriveValidator extends BaseValidator
                     'less_than_equal_to' => 'Le nombre de places choisi est trop grand',
                 ]
             ],
-            'date' => [
-                'rules' => 'permit_empty|valid_date',
-                'errors' => [
-                    'valid_date' => 'La date est invalide.',
-                ]
-            ],
+            'date' => $dateRules,
             'options'   => [
                 'rules' => 'permit_empty',
                 'errors' => [],
