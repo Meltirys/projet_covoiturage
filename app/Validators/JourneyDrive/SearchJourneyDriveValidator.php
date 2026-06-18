@@ -50,6 +50,7 @@ class SearchJourneyDriveValidator extends BaseValidator
             'errors' => [
                 'required' => 'La date est obligatoire.',
                 'valid_date' => 'La date est invalide.',
+                'equal_or_after_now' => 'La date entrée ne peut pas être dans le passé'
             ]
         ];
         $timeRules = [
