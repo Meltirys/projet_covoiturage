@@ -103,7 +103,7 @@ class JourneySeeder extends Seeder
                 'end'   => 1, // Vannes
                 'id_track'          => 3,
                 'id_car'            => 2,
-                'driver'            => 1
+                'driver'            => 2
             ],
             [
                 'number_of_place'   => 4,
@@ -113,7 +113,7 @@ class JourneySeeder extends Seeder
                 'end'   => 3, // Auray
                 'id_track'          => 4,
                 'id_car'            => 2,
-                'driver'            => 1
+                'driver'            => 2
             ],
 
             // --- FLUX DE CARNAC (ID 4) ---
@@ -124,8 +124,8 @@ class JourneySeeder extends Seeder
                 'start' => 4, // Carnac
                 'end'   => 1, // Vannes
                 'id_track'          => 5,
-                'id_car'            => 1,
-                'driver'            => 1
+                'id_car'            => 3,
+                'driver'            => 13
             ],
             [
                 'number_of_place'   => 2,
@@ -134,8 +134,8 @@ class JourneySeeder extends Seeder
                 'start' => 1, // Vannes
                 'end'   => 4, // Carnac
                 'id_track'          => 6,
-                'id_car'            => 1,
-                'driver'            => 1
+                'id_car'            => 3,
+                'driver'            => 13
             ],
 
             // --- FLUX DE PLOËRMEL (ID 5) ---
@@ -146,8 +146,8 @@ class JourneySeeder extends Seeder
                 'start' => 5, // Ploërmel
                 'end'   => 1, // Vannes
                 'id_track'          => 7,
-                'id_car'            => 3,
-                'driver'            => 1
+                'id_car'            => 4,
+                'driver'            => 5
             ],
             [
                 'number_of_place'   => 2,
@@ -156,8 +156,8 @@ class JourneySeeder extends Seeder
                 'start' => 1, // Vannes
                 'end'   => 5, // Ploërmel
                 'id_track'          => 8,
-                'id_car'            => 3,
-                'driver'            => 1
+                'id_car'            => 4,
+                'driver'            => 5
             ],
 
             // --- FLUX DE REDON (ID 6) ---
@@ -168,8 +168,8 @@ class JourneySeeder extends Seeder
                 'start' => 6, // Redon
                 'end'   => 1, // Vannes
                 'id_track'          => 9,
-                'id_car'            => 2,
-                'driver'            => 1
+                'id_car'            => 5,
+                'driver'            => 34
             ],
             [
                 'number_of_place'   => 3,
@@ -178,8 +178,8 @@ class JourneySeeder extends Seeder
                 'start' => 1, // Vannes
                 'end'   => 6, // Redon
                 'id_track'          => 10,
-                'id_car'            => 2,
-                'driver'            => 1
+                'id_car'            => 5,
+                'driver'            => 34
             ],
         ];
 
