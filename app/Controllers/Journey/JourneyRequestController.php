@@ -53,20 +53,20 @@ class JourneyRequestController extends BaseController
             }
 
             // Logic
-            $journeyService = $this->journeyService;
             try {
                 // === Ajouter options quand possible !
-                $getData['journeys'] = $journeyService->searchJourneyDrive($getData);
+                $getData['journeys'] = $this->journeyService->searchJourneyDrive($getData);
             } catch (\Throwable $e) {
                 // system error
                 log_message('error', $e->getMessage());
 
                 return redirect()->back()
-                    ->with('error', 'Une erreur s\'est produite')
+                    ->with('error', 'Une erreur s\'est produite, veuillez réessayer plus tard.')
                     ->withInput();
             }
+        } else {
+            $getData['journeys'] = $this->journeyService->getNextAvailableJourneys('request');
         }
-
 
         return view('itinerary/search/SearchRequestView', $getData);
     }
