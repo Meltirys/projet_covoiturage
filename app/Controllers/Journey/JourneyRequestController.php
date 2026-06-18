@@ -178,6 +178,7 @@ class JourneyRequestController extends BaseController
             // user error (e.g. chosen more seats than available in car)
             log_message('debug', 'Domain error: ' . $e->getMessage());
             return redirect()->back()
+                ->with('tab', 'request')
                 ->with('error', $e->getMessage())
                 ->withInput();
         } catch (\Throwable $e) {
@@ -185,7 +186,8 @@ class JourneyRequestController extends BaseController
             log_message('error', 'Error in save(): ' . $e->getMessage());
             log_message('error', 'Stack: ' . $e->getTraceAsString());
             return redirect()->back()
-                ->with('error', 'Une erreur s\'est produite')
+                ->with('tab', 'request')
+                ->with('error', 'Une erreur s\'est produite, veuillez réessayer plus tard.')
                 ->withInput();
         }
     }
@@ -262,7 +264,7 @@ class JourneyRequestController extends BaseController
             log_message('error', 'Error in update(): ' . $e->getMessage());
             log_message('error', 'Stack: ' . $e->getTraceAsString());
             return redirect()->back()
-                ->with('error', 'Une erreur s\'est produite')
+                ->with('error', 'Une erreur s\'est produite, veuillez réessayer plus tard.')
                 ->withInput();
         }
     }
@@ -298,7 +300,7 @@ class JourneyRequestController extends BaseController
             log_message('error', 'Stack: ' . $e->getTraceAsString());
 
             return redirect()->back()
-                ->with('error', 'Une erreur s\'est produite');
+                ->with('error', 'Une erreur s\'est produite, veuillez réessayer plus tard.');
         }
     }
 

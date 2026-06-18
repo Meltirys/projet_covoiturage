@@ -59,7 +59,7 @@ class JourneyDriveController extends BaseController
                 log_message('error', $e->getMessage());
 
                 return redirect()->back()
-                    ->with('error', 'Une erreur s\'est produite')
+                    ->with('error', 'Une erreur s\'est produite, veuillez réessayer plus tard.')
                     ->withInput();
             }
         } else {
@@ -191,7 +191,7 @@ class JourneyDriveController extends BaseController
             log_message('error', 'Stack: ' . $e->getTraceAsString());
 
             return redirect()->back()
-                ->with('error', 'Une erreur s\'est produite')
+                ->with('error', 'Une erreur s\'est produite, veuillez réessayer plus tard.')
                 ->withInput();
         }
     }
@@ -262,7 +262,7 @@ class JourneyDriveController extends BaseController
             log_message('error', 'Stack: ' . $e->getTraceAsString());
 
             return redirect()->back()
-                ->with('error', 'Une erreur s\'est produite')
+                ->with('error', 'Une erreur s\'est produite, veuillez réessayer plus tard.')
                 ->withInput();
         }
     }
@@ -302,7 +302,7 @@ class JourneyDriveController extends BaseController
             log_message('error', 'Stack: ' . $e->getTraceAsString());
 
             return redirect()->back()
-                ->with('error', 'Une erreur s\'est produite');
+                ->with('error', 'Une erreur s\'est produite, veuillez réessayer plus tard.');
         }
     }
 
