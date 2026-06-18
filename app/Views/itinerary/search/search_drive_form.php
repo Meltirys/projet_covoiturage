@@ -52,7 +52,7 @@ $filter    = $request->getGet('filter') ?? '';
         <label for="start-date" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Date</label>
         <input type="date" name="date" id="start-date"
             value="<?= esc($date) ?>"
-            class="w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey focus:outline-none focus:border-gold/40 transition-colors" required>
+            class="w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey focus:outline-none focus:border-gold/40 transition-colors">
         <?php if (isset($errors['date'])): ?>
             <span class="text-xs text-red"><?= esc($errors['date']) ?></span>
         <?php endif ?>

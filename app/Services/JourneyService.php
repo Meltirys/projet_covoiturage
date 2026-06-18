@@ -304,7 +304,7 @@ class JourneyService
         // └── return results
 
         // 1. Setting up the variables
-        $startDate = $input['date'];
+        $startDate = !empty($input['date']) ? $input['date'] : date('Y-m-d');
         $endDay = date('Y-m-d H:i:s', strtotime($startDate . ' +1 day'));
         $requestedSeats = $input['free-seats'] ?? 1;
         $departurePoint = [$input['start']['lon'], $input['start']['lat']];

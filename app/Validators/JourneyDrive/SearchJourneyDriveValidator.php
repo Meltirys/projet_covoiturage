@@ -132,7 +132,12 @@ class SearchJourneyDriveValidator extends BaseValidator
                     'less_than_equal_to' => 'Le nombre de places choisi est trop grand',
                 ]
             ],
-            'date' => $dateRules,
+            'date' => [
+                'rules' => 'permit_empty|valid_date',
+                'errors' => [
+                    'valid_date' => 'La date est invalide.',
+                ]
+            ],
             'options'   => [
                 'rules' => 'permit_empty',
                 'errors' => [],
