@@ -63,11 +63,10 @@ class JourneyDriveController extends BaseController
                     ->withInput();
             }
         } else {
-            $getData['journeys'] = $this->journeyService->getNextAvailableJourneys();
+            $getData['journeys'] = $this->journeyService->getNextAvailableJourneys('drive');
         }
 
-        $getData['journeys'] = json_encode($getData['journeys']);
-        return view('itinerary/search/SearchView', $getData);
+        return view('itinerary/search/SearchDriveView', $getData);
     }
 
     /**
