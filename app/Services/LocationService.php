@@ -39,7 +39,7 @@ class LocationService
             return [];
         }
 
-        // 3. Retrieve the location
+        // 2. Retrieve the location
         $locationData = $this->locationModel
             ->where([
                 'address'   => $address,
