@@ -85,10 +85,8 @@
 <div class="flex flex-col gap-1">
     <label for="request-description" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Description</label>
     <textarea name="request[description]" id="request-description"
-        placeholder="Entrez une description"
-        class="w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey placeholder:text-grey focus:outline-none focus:border-gold/40 transition-colors">
-        <?= esc(old('request[description]')) ?>
-    </textarea>
+        class="w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey placeholder:text-grey focus:outline-none focus:border-gold/40 transition-colors"
+        placeholder=" Entrez une description"><?= esc(old('request[description]')) ?></textarea>
     <?php if (isset($errors['description'])): ?>
         <span class="text-xs text-red"><?= esc($errors['description']) ?></span>
     <?php endif ?>
