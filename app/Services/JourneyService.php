@@ -355,25 +355,12 @@ class JourneyService
 
         $journeyIds = array_column($journeys, 'id_journey_drive');
 
-        $stages = $stageModel
-            ->select('Stages.*, Location.latitude, Location.longitude')
-            ->join('Location', 'Location.id_location = Stages.id_location')
-            ->whereIn('id_journey_drive', $journeyIds)
-            ->orderBy('id_journey_drive')
-            ->orderBy('order')
-            ->findAll();
-
-        $stagesByJourney = [];
-
-        foreach ($stages as $stage) {
-            $stagesByJourney[$stage['id_journey_drive']][] = $stage;
-        }
 
         // 3. Acquisition des journeys correspondants par itinéraire
         // Rayon élargi si recherche par ville sans adresse précise
-        $isDepartureCitySearch = ($departureAddress === $departureCity);
-        $isArrivalCitySearch = !empty($arrivalCity) && ($arrivalAddress === $arrivalCity);
-        $matches = $this->matchJourneys($journeys, $stagesByJourney, $departureLocation, $arrivalLocation, $isArrivalCitySearch, $isDepartureCitySearch);
+
+        $departurePoint = [$departureLocation['longitude'], $departureLocation['latitude']];
+        $matches = $this->matchJourneys($journeys, $departurePoint);
 
 
         // 4. Filtre par disponibilité des places
@@ -685,82 +672,20 @@ class JourneyService
     }
 
     /**
-     * Compare un lieu donné aux lieux appartenant à un itinéraire et retourne 
-     * @param array $location
-     * @param array $route
-     * @param int $maxDistance défaut : self::MATCH_RADIUS_METERS
-     * @return array format : ['route_position' => $bestIndex, 'distance' => $bestDistance, 'id_location' => $bestLocation] | vide [] si aucune correspondance
-     */
-    private function matchUserPointToRoute(array $location, array $route, int $maxDistance = self::MATCH_RADIUS_METERS): array
-    {
-        $bestDistance = PHP_INT_MAX; // var to find shortest distance
-        $bestIndex = null;
-        $bestLocation = null;
-
-        // Pour chaque lieu sur l'itinéraire
-        foreach ($route as $order => $routeLocation) {
-            // Obtiens la distance entre le lieu entré par l'utilisateur et le lieu de l'itinéraire à comparer
-            $distance = haversine_distance(
-                $location['latitude'],
-                $location['longitude'],
-                $routeLocation['latitude'],
-                $routeLocation['longitude']
-            );
-
-            if ($distance < $maxDistance && $distance < $bestDistance) {
-                $bestDistance = $distance; // remplace la meilleure distance par la nouvelle meilleure distance
-                $bestIndex = $order;
-                $bestLocation = $routeLocation['id_location'];
-            }
-        }
-
-        if ($bestIndex === null) {
-            return [];
-        }
-
-        return ['route_position' => $bestIndex, 'distance' => $bestDistance, 'id_location' => $bestLocation];
-    }
-
-    /**
      * Trouve les journeys qui correspondent géographiquement à la requête de l'utilisateur
      * @param array $journeys Liste de journeys
-     * @param array $stagesByJourney Liste des stages des journeys
-     * @param array $departureLocation Lieu de départ donné par l'utilisateur
-     * @param array $arrivalLocation Lieu d'arrivée donné par l'utilisateur
+     * @param array $departurePoint Lieu de départ donné par l'utilisateur (longitude en premier et latitude en deuxième, pas de clé nécessaire)
+     * @param int $maxDistance Option: La distance maximale (en mètre) autorisé pour la recherche. La valeur par défaut est 2500m
      * @return array Tableau contenant les journeys
      */
-    private function matchJourneys(array $journeys, array $stagesByJourney, array $departureLocation, ?array $arrivalLocation, bool $isArrivalCitySearch = false, bool $isDepartureCitySearch = false): array
+    private function matchJourneys(array $journeys, array $departurePoint, int $maxDistance = 2500): array
     {
         $matches = [];
+        $trackService = service('TrackService');
 
         foreach ($journeys as $journey) {
-            // $stages = [chaque stage dans stageByJourney qui a l'id_journey_drive du journey actuel]
-            $stages = $stagesByJourney[$journey['id_journey_drive']] ?? [];
+            if ($trackService->isOnTrack($departurePoint, $journey['id_track'], $maxDistance)) $matches[] = $journey; //Adds the journey to the array if there is a match
 
-            // Range l'itinéraire par l'ordre de passage
-            $route = $this->buildJourneyRoute($journey, $stages);
-
-            // Compare le début et la fin du trajet de l'utilisateur aux lieux appartenant à la route du trajet actuel
-            $departureMatch = null;
-            $arrivalMatch = null;
-
-            // Adapte le rayon de correspondance selon la précision de la recherche (actuellemment 2500m)
-            $departureRadius = $isDepartureCitySearch ? 2500 : self::MATCH_RADIUS_METERS;
-            $departureMatch = $departureLocation ? $this->matchUserPointToRoute($departureLocation, $route, $departureRadius) : [];
-
-            $arrivalRadius = $isArrivalCitySearch ? 2500 : self::MATCH_RADIUS_METERS;
-            $arrivalMatch = $arrivalLocation ? $this->matchUserPointToRoute($arrivalLocation, $route, $arrivalRadius) : null;
-
-            if ($arrivalLocation !== null) {
-                if (!empty($departureMatch) && !empty($arrivalMatch) && $departureMatch['route_position'] < $arrivalMatch['route_position']) {
-                    $journey['arrival_match'] = $arrivalMatch;
-                    $matches[] = $journey;
-                }
-            } else {
-                if (!empty($departureMatch)) {
-                    $matches[] = $journey;
-                }
-            }
         }
 
         return $matches;

@@ -3,10 +3,7 @@ const journeyPaginator = new Paginator(
     document.querySelector('#journey-pagination'),
     renderJourney
 )
-//If there are datas available, load them
-if(journeys){
-    journeyPaginator.load(journeys)
-}
+
 
 function renderJourney(journey) {
     const seats      = journey['available_seats'] ?? journey['number_of_place']

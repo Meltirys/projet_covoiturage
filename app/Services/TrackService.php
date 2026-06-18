@@ -9,11 +9,13 @@ class TrackService
 {
 
     private string $apiKey;
+    private TrackModel $db;
 
     public function __construct()
     {
         $config = config(OpenRoutesServices::class);
         $this->apiKey = $config->apiKey;
+        $this->db = model(TrackModel::class);
     }
 
     /**
@@ -57,7 +59,6 @@ class TrackService
         $summary  = $data['features'][0]['properties']['summary'];  // Distance & duration
 
         // Saving in database
-        $trackModel = model(TrackModel::class);
 
         $data = [
             'geojson'  => json_encode($geometry),   // The complete geometry
@@ -67,7 +68,7 @@ class TrackService
 
         // If $trackId isn't null, updates its existing row instead of inserting a new one
         if ($trackId !== null) {
-            $saved = $trackModel->update($trackId, $data);
+            $saved = $this->db->update($trackId, $data);
 
             if (!$saved) {
                 throw new \RuntimeException('Impossible de créer le tracé');
@@ -76,7 +77,7 @@ class TrackService
             return $trackId;
         }
 
-        return $trackModel->insert($data);
+        return $this->db->insert($data);
     }
 
     /**
@@ -102,5 +103,37 @@ class TrackService
         $res .= "]";
 
         return $res;
+    }
+
+    /**
+     * Checks if a given point is on a given track, within a given range of distance
+     * @param array $point An array where the first element is the longitude and the second element is the longitude. No keys needed
+     * @param int $idTrack The id of the track
+     * @param int $maxDistance Optionnal: The maximum distance between the point and a point on of the track, in meters. Default is 2500m
+     * 
+     * @return bool
+     */
+    public function isOnTrack(array $point, int $idTrack, int $maxDistance = 2500): bool
+    {
+
+        $track = $this->db->find($idTrack);
+        $json = json_decode($track['geojson']);
+        $trackPoints = $json->coordinates;
+
+
+        foreach ($trackPoints as $trackPoint) {
+            $distance = haversine_distance(
+                $point[0],
+                $point[1],
+                $trackPoint[0],
+                $trackPoint[1]
+            ); //We calculates the distance between the track point and the given point
+
+            if ($distance < $maxDistance) {
+                return true; //We stop the execution on the first match
+            }
+        }
+
+        return false;
     }
 }

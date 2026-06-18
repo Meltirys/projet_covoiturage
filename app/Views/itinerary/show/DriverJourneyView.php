@@ -58,12 +58,7 @@
         </div>
     </div>
 
-    <div class="flex justify-end mb-6">
-        <a href="<?= base_url('trajet/modification/' . $journey['id_journey_drive']) ?>"
-            class="text-sm text-gold border border-gold/30 rounded-full px-4 py-1.5 hover:bg-gold/10 transition-colors">
-            Modifier l'itinéraire
-        </a>
-    </div>
+
 
     <!-- CARTE MAP -->
     <div class="bg-ocean-mid border border-ocean-light rounded-[14px] overflow-hidden mb-6">
