@@ -298,9 +298,6 @@ class JourneyService
      */
     public function searchJourneyDrive(array $input): array
     {
-        $stageModel = $this->stagesModel;
-        $locationService = $this->locationService;
-
         // searchJourneyDrive()
         // ├── resolve departure location
         // ├── resolve arrival location
@@ -309,68 +306,28 @@ class JourneyService
         // ├── filter by seats
         // └── return results
 
-        // 1. Lieux de départ et arrivée
-        $departureAddress = $input['start']['label'] ?? '';
-        $departureCity = $input['start']['city'] ??  '';
-        $departurePostcode = $input['start']['postcode'] ?? '';
+        // 1. Setting up the variables
+        $startDate = $input['date'];
+        $endDay = date('Y-m-d H:i:s', strtotime($startDate . ' +1 day'));
+        $requestedSeats = $input['free-seats'];
+        $departurePoint = [$input['start']['lon'], $input['start']['lat']];
+        $endPoint = $input['end']['lon'] && $input['end']['lar'] ? 
+                                [$input['end']['lon'], $input['end']['lat']] :
+                                null; //Setting up the end point, if none is provided, sets it to null
 
-        $arrivalAddress = $input['end']['label'] ?? '';
-        $arrivalCity = $input['end']['city'] ?? '';
-        $arrivalPostcode = $input['end']['postcode'] ??  '';
+        // 2. Retrieves all the journeys that are within the good date range
+        $journeys = $this->journeyDriveModel->getJourneyInfosByDates($startDate, $endDay);
 
-        $departureLocation = $locationService->findLocationByAddress(
-            $departureAddress,
-            $departureCity,
-            $departurePostcode
-        );
+        if (empty($journeys)) return []; //Stop the execution if no results
 
-        // 1. Arrivée : coordonnées GPS directes (évite la recherche exacte en base)
-        $arrivalLocation = null;
-        if (!empty($arrivalCity)) {
-            $arrivalLat = (float) ($input['end']['lat'] ?? 0);
-            $arrivalLon = (float) ($input['end']['lon'] ?? 0);
-            if ($arrivalLat && $arrivalLon) {
-                $arrivalLocation = ['latitude' => $arrivalLat, 'longitude' => $arrivalLon];
-            }
-        }
-
-
-        $searchDate = $input['date'] ?? '';
-        $requestedSeats = (int) ($input['free-seats'] ?? 1);
-
-        if (empty($departureLocation) || empty($searchDate) || (!empty($arrivalCity) && empty($arrivalLocation))) {
-            return [];
-        }
-
-        // 2. Recherche des journeys correspondants par date
-        $startDay = $searchDate . ' 00:00:00';
-        $endDay = date('Y-m-d H:i:s', strtotime($startDay . ' +1 day'));
-
-        $journeys = $this->journeyDriveModel->getJourneyInfosByDates($startDay, $endDay);
-
-
-        if (empty($journeys)) {
-            return [];
-        }
-
-        // 3. Filtre par disponibilité des places
+        // 3. Filters the journeys with the available seats
         $journeys = $this->filterAvailableSeats($journeys, $requestedSeats);
 
+        if (empty($journeys)) return []; //Stop the execution if no results
+
+
         // 4. Acquisition des journeys correspondants par itinéraire
-
-        $departurePoint = [$departureLocation['longitude'], $departureLocation['latitude']]; // Setting up the start point of the research
-        $endPoint = null; //The end point is null by default
-
-        //Setup up the end point if it's defined
-        if ($arrivalLocation) {
-            $endPoint = [$arrivalLocation['longitude'], $arrivalLocation['latitude']]; // Setting up the start point of the research
-
-        }
-
         $journeys = $this->matchJourneys($journeys, $departurePoint, $endPoint);
-
-
-
 
         return $journeys;
     }

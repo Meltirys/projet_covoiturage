@@ -9,9 +9,10 @@ class UserSeeder extends Seeder
     public function run()
     {
 
-        $this->db->table('City')->insert(['name' => 'Vannes', 'postcode' => '56000']);
+        $this->db->table('City')->insert(['id_city' => 1, 'name' => 'Vannes', 'postcode' => '56000']);
         $cityId = $this->db->insertID();
         $this->db->table('Location')->insert([
+            'id_location' => 1,
             'address'   => '20 Rue Winston Churchill',
             'latitude'  => 47.64829,
             'longitude' => -2.77503,

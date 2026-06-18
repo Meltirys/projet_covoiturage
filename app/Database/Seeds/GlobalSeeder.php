@@ -10,6 +10,11 @@ class GlobalSeeder extends Seeder
     {
         $this->db->query('SET FOREIGN_KEY_CHECKS = 0'); //Temporarly desactivating que the foreign keys
         // We empty the tables before inserting the new values
+        $this->db->table('Booking')->truncate();
+        $this->db->table('Stages')->truncate();
+        $this->db->table('JourneyDrive')->truncate();
+        $this->db->table('Track')->truncate();
+        $this->db->table('Report')->truncate();
         $this->db->table('Car')->truncate();
         $this->db->table('Users')->truncate();
         $this->db->table('UserPermission')->truncate();
