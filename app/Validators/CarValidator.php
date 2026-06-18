@@ -17,6 +17,12 @@ class CarValidator extends BaseValidator
     protected function rules(): array
     {
         return [
+            'idCar' => [
+                'rules' => 'is_car_owner',
+                'errors' => [
+                    'is_car_owner' => 'Vous devez être propriétaire de la voiture que vous voulez modifier'
+                ]
+            ],
             'brand' => [
                 'rules'  => 'required|min_length[2]|max_length[50]',
                 'errors' => [
@@ -51,7 +57,7 @@ class CarValidator extends BaseValidator
                 ]
             ],
             'number_of_seat' => [
-                'rules'  => 'required|integer|greater_than[0]|less_than_equal_to[8]|no_journey_conflict['. $this->carId .']', 
+                'rules'  => 'required|integer|greater_than[0]|less_than_equal_to[8]|no_journey_conflict[' . $this->carId . ']',
                 'errors' => [
                     'required'            => 'Le nombre de places est obligatoire.',
                     'integer'             => 'Le nombre de places doit être un nombre entier.',

@@ -61,4 +61,16 @@ class CarModel extends Model
 
         return $cars;
     }
+
+    /**
+     * Return a boolean if the given user owns the given car
+     * @param int $idUser The id of the user to test    
+     * @param int $idCar The id of the car to test
+     * 
+     * @return array|null True if the user owns the car, false otherwise
+     */
+    public function getCarByUser(int $idUser, int $idCar): ?array
+    {
+        return $this->where('id_car', $idCar)->where('id_user', $idUser)->first();
+    }
 }

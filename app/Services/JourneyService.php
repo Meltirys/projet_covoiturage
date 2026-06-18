@@ -326,7 +326,7 @@ class JourneyService
         if (empty($journeys)) return []; //Stop the execution if no results
 
 
-        // 4. Acquisition des journeys correspondants par itinéraire
+        // 4. Filtering the journeys to keep only the one that are on the journey entered by the user
         $journeys = $this->matchJourneys($journeys, $departurePoint, $endPoint);
 
         return $journeys;
@@ -638,7 +638,7 @@ class JourneyService
      * Trouve les journeys qui correspondent géographiquement à la requête de l'utilisateur
      * @param array $journeys Liste de journeys
      * @param array $departurePoint Lieu de départ donné par l'utilisateur (longitude en premier et latitude en deuxième, pas de clé nécessaire)
-     * @param array $endPoint Lieu d'arrivé donné par l'utilisateur (longitude en premier et latitude en deuxième, pas de clé nécessaire)
+     * @param array|null $endPoint Lieu d'arrivé donné par l'utilisateur (longitude en premier et latitude en deuxième, pas de clé nécessaire).
      * @param int $maxDistance Option: La distance maximale (en mètre) autorisé pour la recherche. La valeur par défaut est 2500m
      * @return array Tableau contenant les journeys
      */
@@ -648,7 +648,8 @@ class JourneyService
         $trackService = service('TrackService');
 
         foreach ($journeys as $journey) {
-            if ($trackService->isOnTrack($departurePoint, $endPoint, $journey['id_track'], $maxDistance)) $matches[] = $journey; //Adds the journey to the array if there is a match
+            if ($trackService->isOnTrack($departurePoint, $endPoint, $journey['id_track'], $maxDistance)) 
+                $matches[] = $journey; //Adds the journey to the array if there is a match
 
         }
 

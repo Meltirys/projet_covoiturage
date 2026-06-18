@@ -130,7 +130,15 @@ class UserModel extends Model
         return $userList;
     }
 
+    /**
+     * Update the role of a given user, granting him the given role.
+     * @param int $idUser The id of the user
+     * @param int $newRole The new role we want to give
+     * 
+     * @return bool True if succes, false otherwise
+     */
     public function updateUserRole(int $idUser, int $newRole): bool {
         return $this->update($idUser, ['id_user_permission' => $newRole]);
     }
+
 }

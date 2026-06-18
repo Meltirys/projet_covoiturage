@@ -229,4 +229,19 @@ class CustomRules
 
         return empty($places) || max($places) <= (int) $value;
     }
+
+    /**
+     * Checks if the connected user owns a given car
+     * @param mixed $value The id of the car
+     * 
+     * @return bool True if he owns the car, false otherwise
+     */
+    public function is_car_owner(mixed $value): bool
+    {
+        if (!$value) return true; //If the id is not given, then returns true
+
+        $carModel = model('CarModel');
+        return $carModel->getCarByUser(session('user_id'), $value) ? true : false;
+    }
+
 }
