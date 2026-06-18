@@ -13,7 +13,7 @@ use App\Validators\JourneyRequest\UpdateJourneyRequestValidator;
 use CodeIgniter\Exceptions\PageNotFoundException;
 use CodeIgniter\HTTP\RedirectResponse;
 
-class RequestController extends BaseController
+class JourneyRequestController extends BaseController
 {
     private JourneyRequestModel $journeyRequestModel;
     private JourneyService $journeyService;

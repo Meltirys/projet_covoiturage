@@ -11,7 +11,7 @@ use App\Validators\JourneyDrive\EditJourneyDriveValidator;
 use App\Validators\JourneyDrive\SearchJourneyDriveValidator;
 use CodeIgniter\HTTP\RedirectResponse;
 
-class DriveController extends BaseController
+class JourneyDriveController extends BaseController
 {
     private JourneyDriveModel $journeyDriveModel;
     private JourneyService $journeyService;
@@ -62,8 +62,7 @@ class DriveController extends BaseController
                     ->with('error', 'Une erreur s\'est produite')
                     ->withInput();
             }
-        }
-        else{
+        } else {
             $getData['journeys'] = $this->journeyService->getNextAvailableJourneys();
         }
 
