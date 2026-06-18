@@ -407,8 +407,6 @@ class JourneyService
      */
     public function createJourneyRequest(array $input, int $userId): int
     {
-        $this->checkDatesValidity($input);
-
         $this->db->transBegin();
 
         try {
@@ -540,32 +538,6 @@ class JourneyService
     public function searchJourneyRequest()
     {
         // TODO
-    }
-
-    /**
-     * Validates the time of the start and end of the journey
-     * @param array $input
-     * @return void
-     */
-    private function checkDatesValidity(array $input): void
-    {
-        $input['start-datetime'] = (new DateTime(
-            $input['start-date'] . ' ' . $input['start-time']
-        ))->format('Y-m-d H:i:s');
-
-        $input['end-datetime'] = (new DateTime(
-            $input['end-date'] . ' ' . $input['end-time']
-        ))->format('Y-m-d H:i:s');
-
-        $now = new DateTime();
-
-        if ((new DateTime($input['start-datetime'])) <= $now) {
-            throw new \DomainException('La date de départ ne peut pas être dans le passé');
-        }
-
-        if ((new DateTime($input['end-datetime'])) <= (new DateTime($input['start-datetime']))) {
-            throw new \DomainException('La date d\'arrivée doit être après la date de départ');
-        }
     }
 
     /**

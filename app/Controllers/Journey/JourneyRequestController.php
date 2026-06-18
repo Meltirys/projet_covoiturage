@@ -149,7 +149,6 @@ class JourneyRequestController extends BaseController
          * options?
          */
         $data = $this->request->getPost('request');
-        log_message('debug', json_encode($data));
 
         // Validation
         $validator = new CreateJourneyRequestValidator;
