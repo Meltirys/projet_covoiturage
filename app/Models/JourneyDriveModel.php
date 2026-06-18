@@ -112,14 +112,14 @@ class JourneyDriveModel extends Model
     }
 
     /**
-     * Returns all the journey infos where the date is in the given range. It returns all the informations needed for the view to display a research card
+     * Returns data of all journeys where the date is in the given range. It returns all information needed for the view to display a research card
      * @param string $startDay The starting day requested by the user
-     * @param ?string $endDay Optionnal : Defines the range of research. If not setted, will returns all the journeys after the start day
-     * @param int $numberOfJourney Optionnal : Defines the number of journey that are returned. By default, returns all the journeys found
+     * @param ?string $endDay Optional : Defines the range of research. If not set, will returns all journeys after the start day
+     * @param int $resultAmount Optional : Defines the number of journey that are returned. By default, returns all journeys found
      * 
-     * @return array All the journeys that are in the given range of time
+     * @return array All journeys that are in the given range of time
      */
-    public function getJourneyInfosByDates(string $startDay, ?string $endDay = null, int $numberOfJourney = -1): array
+    public function getJourneyInfosByDates(string $startDay, ?string $endDay = null, int $resultAmount = -1): array
     {
         $query = $this->select('JourneyDrive.*, 
                     departure_location.address AS departure_address,
@@ -152,8 +152,8 @@ class JourneyDriveModel extends Model
             $query->where('JourneyDrive.departure <', $endDay);
         }
 
-        if($numberOfJourney > 0){
-            $query->limit($numberOfJourney);
+        if ($resultAmount > 0) {
+            $query->limit($resultAmount);
         }
 
         $query->orderBy('departure', 'ASC');
