@@ -12,7 +12,7 @@ class JourneyRequestModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
-    protected $allowedFields    = ['description', 'range_of_time', 'start', 'end', 'id_user'];
+    protected $allowedFields    = ['description', 'range_of_time', 'start', 'end', 'id_creator'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
