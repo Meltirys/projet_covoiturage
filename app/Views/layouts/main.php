@@ -34,7 +34,7 @@
                     <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/nouveau-trajet">Proposer</a>
                     <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/contact-page">Contact</a>
                     <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/myprofil">Mon profil</a>
-                    <?php if (session('user_role') == 2): ?>
+                    <?php if (session('user_role') == 2 || session('user_role') == 3): ?>
                         <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/backoffice">Admin</a>
                     <?php endif; ?>
                 </nav>
@@ -100,7 +100,7 @@
             <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="/nouveau-trajet" onclick="toggleMobileMenu()">Proposer un trajet</a>
             <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="/contact-page" onclick="toggleMobileMenu()">Contact</a>
             <a class="nav-m text-sm font-poppins text-grey w-full py-3 border-b border-ocean-light" href="/myprofil" onclick="toggleMobileMenu()">Mon profil</a>
-            <?php if (session('user_role') == 2): ?>
+            <?php if (session('user_role') == 2 || session('user_role') == 3): ?>
                 <a class="text-sm font-poppins font-medium text-sand w-full py-3 border-b border-ocean-light" href="/backoffice" onclick="toggleMobileMenu()">Dashboard admin</a>
             <?php endif; ?>
             <a class="text-sm font-poppins text-red w-full py-3 mt-2" href="/logout">Déconnexion</a>
