@@ -33,11 +33,11 @@ class JourneyService
         helper('geo');
 
         $this->db = db_connect();
-        $this->journeyDriveModel = model(JourneyDriveModel::class);
+        $this->journeyDriveModel   = model(JourneyDriveModel::class);
         $this->journeyRequestModel = model(JourneyRequestModel::class);
-        $this->requestMemberModel = model(RequestMemberModel::class);
-        $this->stagesModel = model(StagesModel::class);
-        $this->locationService = service('locationService');
+        $this->requestMemberModel  = model(RequestMemberModel::class);
+        $this->stagesModel         = model(StagesModel::class);
+        $this->locationService     = service('locationService');
     }
 
     /**
@@ -84,7 +84,6 @@ class JourneyService
             if (!$idTrack) {
                 throw new \RuntimeException('Impossible de créer le tracé du trajet');
             }
-
 
             // 4. Journey
 
@@ -135,13 +134,13 @@ class JourneyService
         $refDayNum = (int)$referenceDate->format('N'); // 1=lun, 7=dim
 
         $dayNumbers = [
-            'monday' => 1,
-            'tuesday' => 2,
+            'monday'    => 1,
+            'tuesday'   => 2,
             'wednesday' => 3,
-            'thursday' => 4,
-            'friday' => 5,
-            'saturday' => 6,
-            'sunday' => 7,
+            'thursday'  => 4,
+            'friday'    => 5,
+            'saturday'  => 6,
+            'sunday'    => 7,
         ];
 
         foreach ($days as $day) {
@@ -428,7 +427,7 @@ class JourneyService
                 'range_of_time' => $rangeOfTime,
                 'start'         => $locationIds['start'],
                 'end'           => $locationIds['end'],
-                'id_creator'       => $userId
+                'id_creator'    => $userId
             ], true);
 
             if (! $journeyId) {
@@ -436,13 +435,12 @@ class JourneyService
             }
 
             // 3. Request Member insertion
-            $status = $this->requestMemberModel->insert(
-                [
-                    'seat_taken' => $input['seats-taken'],
-                    'request_date' => $input['date'],
-                    'id_journey_request' => $journeyId
-                ]
-            );
+            $status = $this->requestMemberModel->insert([
+                'seat_taken'         => $input['seats-taken'],
+                'request_date'       => $input['date'],
+                'id_journey_request' => $journeyId,
+                'id_user'            => $userId
+            ]);
 
             if (!$status) {
                 throw new \RuntimeException('Impossible de créer la participation');
@@ -467,7 +465,6 @@ class JourneyService
      */
     public function updateJourneyRequest(array $original, array $input, int $userId)
     {
-        $rangeOfTime = $input['range-start'] . ' - ' . $input['range-end'];
 
         $this->db->transBegin();
 
@@ -476,41 +473,24 @@ class JourneyService
             $locationIds = $this->createStartEndLocations($input);
 
             // 2. Journey
-            // Calculating the estimated_arrival
-            $departureTime = $this->getDeparture($input);
-            $estimatedArrival = $this->estimateJourneyArrival($idTrack, $departureTime);
 
             // Formatting the data
-            $journeyData = [
-                'description'   =>  $input['description'],
-                'departure'         => $departureTime,
-                'estimated_arrival' => $estimatedArrival,
-                'id_car'            => $input['car'],
-                'start'             => $locationIds['start'],
-                'end'               => $locationIds['end'],
-                'driver'            => $userId,
-            ];
-
+            $rangeOfTime = $input['range-start'] . ' - ' . $input['range-end'];
             $journeyId = $original['id_journey_drive'];
 
-            $updateStatus = $this->journeyDriveModel->update($journeyId, $journeyData);
+            $updateStatus = $this->journeyDriveModel->update($journeyId, [
+                'description'   => $input['description'],
+                'range-of-time' => $rangeOfTime,
+                'start'         => $locationIds['start'],
+                'end'           => $locationIds['end'],
+                'id_creator'    => $userId,
+            ]);
 
             if ($updateStatus === false) {
                 throw new \RuntimeException('Impossible de modifier le trajet');
             }
 
-            // 5. Stages (optional)
-            if ($routeChanged) {
-                // Deletes old itinerary's stages
-                $stageModel->where('id_journey_drive', $journeyId)->delete();
-
-                if (!empty($input['stops'])) {
-                    // Saves new stages if existing
-                    $this->saveStages($journeyId, $input['stops']);
-                }
-            }
-
-            // 6. Transaction safety
+            // 3. Transaction safety
             if ($this->db->transStatus() === false) {
                 throw new \RuntimeException('Transaction échouée');
             }
@@ -711,22 +691,22 @@ class JourneyService
 
         $route[] = [
             'id_location' => $journey['start'],
-            'latitude' => $journey['departure_lat'],
-            'longitude' => $journey['departure_lon']
+            'latitude'    => $journey['departure_lat'],
+            'longitude'   => $journey['departure_lon']
         ];
 
         foreach ($stages as $stage) {
             $route[] = [
                 'id_location' => $stage['id_location'],
-                'latitude' => $stage['latitude'],
-                'longitude' => $stage['longitude']
+                'latitude'    => $stage['latitude'],
+                'longitude'   => $stage['longitude']
             ];
         }
 
         $route[] = [
             'id_location' => $journey['end'],
-            'latitude' => $journey['arrival_lat'],
-            'longitude' => $journey['arrival_lon']
+            'latitude'    => $journey['arrival_lat'],
+            'longitude'   => $journey['arrival_lon']
         ];
 
         return $route;
@@ -747,7 +727,7 @@ class JourneyService
 
         // Pour chaque lieu sur l'itinéraire
         foreach ($route as $order => $routeLocation) {
-            // Obtiens la distance entre le lieu utilisateur et le lieu de l'itinéraire
+            // Obtiens la distance entre le lieu entré par l'utilisateur et le lieu de l'itinéraire à comparer
             $distance = haversine_distance(
                 $location['latitude'],
                 $location['longitude'],
