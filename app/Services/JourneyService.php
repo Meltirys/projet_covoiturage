@@ -305,9 +305,9 @@ class JourneyService
         // 1. Setting up the variables
         $startDate = $input['date'];
         $endDay = date('Y-m-d H:i:s', strtotime($startDate . ' +1 day'));
-        $requestedSeats = $input['free-seats'];
+        $requestedSeats = $input['free-seats'] ?? 1;
         $departurePoint = [$input['start']['lon'], $input['start']['lat']];
-        $endPoint = $input['end']['lon'] && $input['end']['lar'] ?
+        $endPoint = $input['end']['lon'] && $input['end']['lat'] ?
             [$input['end']['lon'], $input['end']['lat']] :
             null; //Setting up the end point, if none is provided, sets it to null
 
@@ -651,7 +651,7 @@ class JourneyService
         $trackService = service('TrackService');
 
         foreach ($journeys as $journey) {
-            if ($trackService->isOnTrack($departurePoint, $endPoint, $journey['id_track'], $maxDistance)) 
+            if ($trackService->isOnTrack($departurePoint, $endPoint, $journey['id_track'], $maxDistance))
                 $matches[] = $journey; //Adds the journey to the array if there is a match
 
         }
