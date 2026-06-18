@@ -15,14 +15,13 @@ class CreateRequestMemberTable extends Migration
                 'auto_increment' => true,
             ],
             'seat_taken'         => ['type' => 'TINYINT', 'unsigned' => true, 'null' => false],
-            'request_date'       => ['type' => 'DATE'],
+            'request_date'       => ['type' => 'DATE', 'null' => false],
             'id_journey_request' => ['type' => 'INT', 'unsigned' => true, 'null' => false],
             'id_user'            => ['type' => 'INT', 'unsigned' => true, 'null' => false],
-            'id_journey_drive'   => ['type' => 'INT', 'unsigned' => true, 'null' => false],
-            'is_validated'       => ['type' => 'BOOLEAN', 'null' => true, 'default'],
+            'is_validated'       => ['type' => 'BOOLEAN', 'null' => false, 'default' => false],
             'deletion_date'      => ['type' => 'DATE', 'null' => true]
         ]);
-        $this->forge->addPrimaryKey('id_request');
+        $this->forge->addPrimaryKey('id_request_member');
         $this->forge->addForeignKey('id_journey_request', 'JourneyRequest', 'id_journey_request', 'CASCADE', 'NO ACTION');
         $this->forge->addForeignKey('id_user', 'Users', 'id_user', 'RESTRICT', 'NO ACTION');
         $this->forge->createTable('RequestMember');
