@@ -10,7 +10,6 @@ use App\Models\RequestMemberModel;
 use App\Models\StagesModel;
 use App\Models\TrackModel;
 use CodeIgniter\Database\BaseConnection;
-use DateTime;
 
 class JourneyService
 {
@@ -24,9 +23,6 @@ class JourneyService
     private StagesModel $stagesModel;
 
     private LocationService $locationService;
-
-    // Constant which defines the radius to accept a location as a "match" when the user searches for itineraries
-    private const int MATCH_RADIUS_METERS = 1000;
 
     public function __construct()
     {
@@ -311,9 +307,9 @@ class JourneyService
         $endDay = date('Y-m-d H:i:s', strtotime($startDate . ' +1 day'));
         $requestedSeats = $input['free-seats'];
         $departurePoint = [$input['start']['lon'], $input['start']['lat']];
-        $endPoint = $input['end']['lon'] && $input['end']['lar'] ? 
-                                [$input['end']['lon'], $input['end']['lat']] :
-                                null; //Setting up the end point, if none is provided, sets it to null
+        $endPoint = $input['end']['lon'] && $input['end']['lar'] ?
+            [$input['end']['lon'], $input['end']['lat']] :
+            null; //Setting up the end point, if none is provided, sets it to null
 
         // 2. Retrieves all the journeys that are within the good date range
         $journeys = $this->journeyDriveModel->getJourneyInfosByDates($startDate, $endDay);
@@ -335,14 +331,22 @@ class JourneyService
 
     /**
      * Returns a set number of available journey
-     * @param int $numberOfJourneys Optionnal : The number of journey to return. By default returns all the journeys available
-     * 
+     * @param string $type Whether it's for 'drive' or 'request' journeys
+     * @param int $numberOfJourneys Optional : The amount of journeys to return. By default returns all the journeys available
      * @return array An array that contains all the values needed for the display
      */
-    public function getNextAvailableJourneys(int $numberOfJourneys = -1): array
+    public function getNextAvailableJourneys(string $type, int $numberOfJourneys = -1): array
     {
-        $journeyDriveModel = new JourneyDriveModel();
-        $allJouneys = $journeyDriveModel->getJourneyInfosByDates(date('Y-m-d H:i:s'), null, $numberOfJourneys); // We retrieve the journey that start after the current day
+        switch ($type) {
+            case 'drive':
+                $allJouneys = $this->journeyDriveModel->getJourneyInfosByDates(date('Y-m-d H:i:s'), null, $numberOfJourneys); // We retrieve the journey that start after the current day
+                break;
+            case 'request':
+                $allJouneys = $this->journeyRequestModel->getJourneyInfosByDates(date('Y-m-d H:i:s'), null, $numberOfJourneys); // We retrieve the journey that start after the current day
+                break;
+            default:
+                return [];
+        }
 
         return $this->filterAvailableSeats($allJouneys, 1);
     }
@@ -368,14 +372,13 @@ class JourneyService
                 throw new \DomainException('L\'heure de début de disponibilité doit être avant la fin');
             }
 
-            $rangeOfTime = $input['range-start'] . ' - ' . $input['range-end'];
-
             $journeyRequestId = $this->journeyRequestModel->insert([
-                'description'   => $input['description'],
-                'range_of_time' => $rangeOfTime,
-                'start'         => $locationIds['start'],
-                'end'           => $locationIds['end'],
-                'id_creator'    => $userId
+                'description'        => $input['description'],
+                'earliest-departure' => $input['range-start'],
+                'latest-departure'   => $input['range-end'],
+                'start'              => $locationIds['start'],
+                'end'                => $locationIds['end'],
+                'id_creator'         => $userId
             ], true);
 
             if (! $journeyRequestId) {
@@ -423,15 +426,15 @@ class JourneyService
             // 2. Journey
 
             // Formatting the data
-            $rangeOfTime = $input['range-start'] . ' - ' . $input['range-end'];
             $journeyId = $original['id_journey_drive'];
 
             $updateStatus = $this->journeyDriveModel->update($journeyId, [
-                'description'   => $input['description'],
-                'range-of-time' => $rangeOfTime,
-                'start'         => $locationIds['start'],
-                'end'           => $locationIds['end'],
-                'id_creator'    => $userId,
+                'description'        => $input['description'],
+                'earliest-departure' => $input['range-start'],
+                'latest-departure'   => $input['range-end'],
+                'start'              => $locationIds['start'],
+                'end'                => $locationIds['end'],
+                'id_creator'         => $userId,
             ]);
 
             if ($updateStatus === false) {
