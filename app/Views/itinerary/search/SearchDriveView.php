@@ -2,6 +2,9 @@
 $status       = session()->getFlashdata('status');
 $searchErrors = session()->getFlashdata('errors') ?? [];
 $error        = session()->getFlashdata('error');
+if (session()->getFlashdata('journeys') !== null) {
+    $journeys    = session()->getFlashdata('journeys');
+}
 ?>
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>

@@ -22,9 +22,9 @@ $filter    = $request->getGet('filter') ?? '';
             <span class="text-xs text-red"><?= esc($startError) ?></span>
         <?php endif ?>
         <div class="results"></div>
-        <input type="hidden" name="start[lat]"      value="<?= esc($start['lat'] ?? '') ?>">
-        <input type="hidden" name="start[lon]"      value="<?= esc($start['lon'] ?? '') ?>">
-        <input type="hidden" name="start[city]"     value="<?= esc($start['city'] ?? '') ?>">
+        <input type="hidden" name="start[lat]" value="<?= esc($start['lat'] ?? '') ?>">
+        <input type="hidden" name="start[lon]" value="<?= esc($start['lon'] ?? '') ?>">
+        <input type="hidden" name="start[city]" value="<?= esc($start['city'] ?? '') ?>">
         <input type="hidden" name="start[postcode]" value="<?= esc($start['postcode'] ?? '') ?>">
     </div>
 
@@ -39,9 +39,9 @@ $filter    = $request->getGet('filter') ?? '';
             <span class="text-xs text-red"><?= esc($endError) ?></span>
         <?php endif ?>
         <div class="results"></div>
-        <input type="hidden" name="end[lat]"      value="<?= esc($end['lat'] ?? '') ?>">
-        <input type="hidden" name="end[lon]"      value="<?= esc($end['lon'] ?? '') ?>">
-        <input type="hidden" name="end[city]"     value="<?= esc($end['city'] ?? '') ?>">
+        <input type="hidden" name="end[lat]" value="<?= esc($end['lat'] ?? '') ?>">
+        <input type="hidden" name="end[lon]" value="<?= esc($end['lon'] ?? '') ?>">
+        <input type="hidden" name="end[city]" value="<?= esc($end['city'] ?? '') ?>">
         <input type="hidden" name="end[postcode]" value="<?= esc($end['postcode'] ?? '') ?>">
     </div>
 
