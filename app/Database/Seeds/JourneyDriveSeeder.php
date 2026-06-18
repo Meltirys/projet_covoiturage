@@ -4,7 +4,7 @@ namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
 
-class JourneySeeder extends Seeder
+class JourneyDriveSeeder extends Seeder
 {
     public function run()
     {
