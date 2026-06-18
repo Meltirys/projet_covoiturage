@@ -203,7 +203,7 @@ class JourneyRequestController extends BaseController
 
         $request = $this->journeyRequestModel->find($id);
 
-        if (! $request || $request['id_user'] != session('user_id')) {
+        if (! $request || $request['id_creator'] != session('user_id')) {
             return redirect()->to('request/list')
                 ->with('error', 'Demande introuvable');
         }
@@ -283,7 +283,7 @@ class JourneyRequestController extends BaseController
                 throw new \DomainException('Ce trajet n\'existe pas');
             }
 
-            $ownerId = $request['user_id'];
+            $ownerId = $request['id_creator'];
 
             $this->canManageJourney($ownerId);
 
