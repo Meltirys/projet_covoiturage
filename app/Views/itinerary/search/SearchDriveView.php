@@ -54,7 +54,7 @@ $error        = session()->getFlashdata('error');
 <script src="/js/pagination.js"></script>
 <script src="/js/journey-card.js"></script>
 <script>
-    let journeys = <?= $journeys ?>;
+    let journeys = <?= json_encode($journeys ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
     //If there are datas available, load them
     if (journeys) {
         journeyPaginator.load(journeys)
