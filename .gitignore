@@ -131,4 +131,3 @@ _modules/*
 /phpunit*.xml
 
 app/Controllers/Debug.php
-public/img/avatars
