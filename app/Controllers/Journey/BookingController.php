@@ -11,6 +11,8 @@ use App\Validators\BookingValidator;
 use App\Services\MailService;
 use PhpParser\Node\Expr\AssignOp\Mod;
 
+use function PHPUnit\Framework\isNull;
+
 class BookingController extends BaseController
 {
 
@@ -30,8 +32,8 @@ class BookingController extends BaseController
         $bookingModel = new BookingModel();
         $journeyID = $this->request->getPost('id_journey_drive');
         $journey   = $journeyModel->find($journeyID);
-        // If route doesn't exist
-        if (!$journey) {
+        // If route doesn't exist or has been deleted
+        if (!$journey || !isNull($journey['deletion_date'])) {
             return redirect()->back()
                 ->with('error', 'Trajet introuvable');
         }
@@ -139,9 +141,9 @@ class BookingController extends BaseController
         $journeyModel = new JourneyDriveModel();
         $journey      = $journeyModel->find($booking['id_journey_drive']);
 
-        if ($journey['departure'] <= date('Y-m-d H:i:s')) {
+        if ($journey['departure'] <= date('Y-m-d H:i:s') || !isNull($journey['deletion_date'])) {
             return redirect()->to('myprofil')
-                ->with('error', 'Impossible d\'annuler un trajet passé');
+                ->with('error', 'Impossible d\'annuler un trajet passé ou supprimé');
         }
 
         $infos = $this->gatherMailInfos($id_booking); //Gather infos before deletion
@@ -191,13 +193,12 @@ class BookingController extends BaseController
                 ->with('error', 'Action non autorisée');
         }
 
-        if ($journey['departure'] <= date('Y-m-d H:i:s')) {
+        if ($journey['departure'] <= date('Y-m-d H:i:s') || !isNull($journey['deletion_date'])) {
             return redirect()->to('myprofil')
-                ->with('error', 'Impossible de valider une réservation d\'un trajet passé');
+                ->with('error', 'Impossible de valider une réservation d\'un trajet passé ou supprimé');
         }
 
         // Cheking if seats are still available
-
         $seatPicked = (int) $bookingModel
             ->selectSum('seat_taken')
             ->where('id_journey_drive', $journey['id_journey_drive'])
@@ -264,9 +265,9 @@ class BookingController extends BaseController
                 ->with('error', 'Action non autorisée');
         }
 
-        if ($journey['departure'] <= date('Y-m-d H:i:s')) {
+        if ($journey['departure'] <= date('Y-m-d H:i:s' || !isNull($journey['deletion_date']))) {
             return redirect()->to('myprofil')
-                ->with('error', 'Refus impossible sur un trajet déjà passé');
+                ->with('error', 'Refus impossible sur un trajet déjà passé ou supprimé');
         }
 
 
@@ -344,7 +345,7 @@ class BookingController extends BaseController
     }
 
     // Canceling a trip from a driver
-    public function cancelJourney($id_journey_drive)
+    public function cancelJourney(int $id_journey_drive)
     {
         $journeyModel = new JourneyDriveModel();
         $bookingModel = new BookingModel();
@@ -355,9 +356,9 @@ class BookingController extends BaseController
                 ->with('error', 'Trajet introuvable ou action non autorisée');
         }
         // If the journey is no longer active
-        if ($journey['departure'] <= date('Y-m-d H:i:s')) {
+        if ($journey['departure'] <= date('Y-m-d H:i:s') || !isNull($journey['deletion_date'])) {
             return redirect()->to('myprofil')
-                ->with('error', 'Impossible d\'annuler un trajet passé');
+                ->with('error', 'Impossible d\'annuler un trajet passé ou déjà annulé');
         }
 
         //Retrivieving the ids of the users on the journey
@@ -373,12 +374,11 @@ class BookingController extends BaseController
             foreach ($bookings as $booking) {
                 //Retrieving the infos needed for the mail
                 $infos = $this->gatherMailInfos($booking['id_booking'], $booking['id_user']);
-                $body = EmailTemplates::requestAccepted(
+                $body = EmailTemplates::driverCancelledJourney(
                     $infos['passenger_name'],
                     $infos['start_address'],
                     $infos['end_address'],
                     $infos['departure'],
-                    $journey['id_journey_drive']
                 );
 
                 //Send the mail to the passenger that it's journey has been cancelled

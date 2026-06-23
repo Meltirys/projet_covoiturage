@@ -100,7 +100,7 @@ class JourneyDriveController extends BaseController
 
         //Checking if the journey exist. If there are no driver, do not display the page.
         if (!$data['journey'] || !$data['journey']['driver']) {
-            throw new PageNotFoundException('Impossible de trouver l\'itinéraire : ' . $slug);
+            throw new PageNotFoundException('Impossible de trouver le trajet demandé, il a pu être supprimé.');
         }
 
         $seatPicked = (int) model('BookingModel')
