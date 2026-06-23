@@ -77,10 +77,11 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('request/edit/(:num)', 'Journey\JourneyRequestController::edit/$1');
     $routes->post('request/update/(:num)', 'Journey\JourneyRequestController::update/$1');
     $routes->post('request/delete/(:num)', 'Journey\JourneyRequestController::delete/$1');
+    $routes->post('request/join/(:num)', 'Journey\JourneyRequestController::join/$1');
 
     // Recherche de trajets
     $routes->get('trajet', 'Journey\JourneyDriveController::search'); // conduite
-    $routes->get('requetes', 'Journey\JourneyRequestController::search'); // requête
+    $routes->get('requetes', 'Journey\JourneyRequestController::index'); // requête
 
     // Affichage de trajet individuel
     $routes->get('drive/show/(:num)', 'Journey\JourneyDriveController::show/$1'); // conduite

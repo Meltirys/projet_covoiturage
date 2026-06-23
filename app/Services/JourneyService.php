@@ -343,7 +343,7 @@ class JourneyService
                 $allJouneys = $this->journeyDriveModel->getJourneyInfosByDates(date('Y-m-d H:i:s'), null, $numberOfJourneys); // We retrieve the journey that start after the current day
                 break;
             case 'request':
-                $allJouneys = $this->journeyRequestModel->getJourneyInfosByDates(date('Y-m-d H:i:s'), null, $numberOfJourneys); // We retrieve the journey that start after the current day
+                $allJouneys = $this->journeyRequestModel->getJourneyInfosByDates(date('Y-m-d H:i:s'), null, $numberOfJourneys);
                 break;
             default:
                 return [];
@@ -375,8 +375,8 @@ class JourneyService
 
             $journeyRequestId = $this->journeyRequestModel->insert([
                 'description'        => $input['description'],
-                'earliest-departure' => $input['range-start'],
-                'latest-departure'   => $input['range-end'],
+                'earliest_departure' => $input['range-start'],
+                'latest_departure'   => $input['range-end'],
                 'start'              => $locationIds['start'],
                 'end'                => $locationIds['end'],
                 'id_creator'         => $userId
@@ -388,7 +388,7 @@ class JourneyService
 
             // 3. Request Member insertion
             $status = $this->requestMemberModel->insert([
-                'seat_taken'         => $input['seats-taken'],
+                'seat_taken'         => 1,
                 'request_date'       => $input['date'],
                 'id_journey_request' => $journeyRequestId,
                 'id_user'            => $userId
@@ -417,40 +417,20 @@ class JourneyService
      */
     public function updateJourneyRequest(array $original, array $input, int $userId)
     {
+        $journeyId = $original['id_journey_request'];
 
-        $this->db->transBegin();
+        if ($input['range-start'] >= $input['range-end']) {
+            throw new \DomainException('L\'heure de début de disponibilité doit être avant la fin');
+        }
 
-        try {
-            // 1. Cities + Locations
-            $locationIds = $this->createStartEndLocations($input);
+        $updateStatus = $this->journeyRequestModel->update($journeyId, [
+            'description'        => $input['description'],
+            'earliest_departure' => $input['range-start'],
+            'latest_departure'   => $input['range-end'],
+        ]);
 
-            // 2. Journey
-
-            // Formatting the data
-            $journeyId = $original['id_journey_drive'];
-
-            $updateStatus = $this->journeyDriveModel->update($journeyId, [
-                'description'        => $input['description'],
-                'earliest-departure' => $input['range-start'],
-                'latest-departure'   => $input['range-end'],
-                'start'              => $locationIds['start'],
-                'end'                => $locationIds['end'],
-                'id_creator'         => $userId,
-            ]);
-
-            if ($updateStatus === false) {
-                throw new \RuntimeException('Impossible de modifier le trajet');
-            }
-
-            // 3. Transaction safety
-            if ($this->db->transStatus() === false) {
-                throw new \RuntimeException('Transaction échouée');
-            }
-
-            $this->db->transCommit();
-        } catch (\Throwable $e) {
-            $this->db->transRollback();
-            throw $e;
+        if ($updateStatus === false) {
+            throw new \RuntimeException('Impossible de modifier la demande');
         }
     }
 

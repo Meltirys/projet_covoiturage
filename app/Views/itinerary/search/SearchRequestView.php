@@ -56,7 +56,7 @@ $error        = session()->getFlashdata('error');
 <script>
     let journeys = <?= json_encode($journeys ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
     //If there are datas available, load them
-    if (journeys) {
+    if (journeys && journeys.length > 0 && typeof journeyPaginator !== 'undefined') {
         journeyPaginator.load(journeys)
     }
 </script>
