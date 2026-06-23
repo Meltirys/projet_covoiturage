@@ -55,4 +55,28 @@ class BookingModel extends Model
             ->where('JourneyDrive.estimated_arrival <', date('Y-m-d H:i:s'))
             ->countAllResults();
     }
+
+    public function getDetailedBookingsByUserId(int $idUser)
+    {
+        return $this->select('
+                JourneyDrive.driver                                           AS id_user,
+                CONCAT(Users.first_name, " ", LEFT(Users.last_name, 1), ".")  AS name,
+                departure_city.postcode                                       AS departure_postcode,
+                departure_city.name                                           AS departure_city,
+                arrival_city.postcode                                         AS arrival_postcode,
+                arrival_city.name                                             AS arrival_city,
+
+            ')
+            ->join('JourneyDrive', "JourneyDrive.id_journey_drive = Booking.id_journey_drive")
+            ->join('Users',    'Users.id_user = JourneyDrive.driver')
+            ->join('Location as departure_location', 'departure_location.id_location = JourneyDrive.start')
+            ->join('City AS departure_city',         'departure_city.id_city = departure_location.id_city')
+            ->join('Location AS arrival_location',   'arrival_location.id_location = JourneyDrive.end')
+            ->join('City AS arrival_city',           'arrival_city.id_city = arrival_location.id_city')
+            ->where('Booking.id_user', $idUser)
+            ->where('JourneyDrive.deletion_date IS NULL')
+            ->where('JourneyDrive.departure >', date('Y-m-d H:i:s'))
+            ->where('Booking.is_validated', true)
+            ->findAll();
+    }
 }
