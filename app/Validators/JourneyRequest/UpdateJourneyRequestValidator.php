@@ -82,7 +82,12 @@ class UpdateJourneyRequestValidator extends BaseValidator
             'end.postcode' => $postcodeRules,
 
             // ===== OTHER
-            'date' => $dateRules,
+            'date' => [
+                'rules' => 'permit_empty|valid_date',
+                'errors' => [
+                    'valid_date' => 'La date est invalide.',
+                ]
+            ],
             'range-start' => [
                 'rules' => 'permit_empty|regex_match[/^([01]\d|2[0-3]):([0-5]\d)$/]|before_date[range-end]|equal_or_after_now',
                 'errors' => [

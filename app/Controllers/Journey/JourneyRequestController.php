@@ -100,15 +100,54 @@ class JourneyRequestController extends BaseController
 
         $request['start_address'] = $locationModel->getFormattedAddress($request['start']);
         $request['end_address']   = $locationModel->getFormattedAddress($request['end']);
-        $author = $userModel->find($request['id_user']);
+        $author = $userModel->find($request['id_creator']);
 
-        $ownRequest = $request['id_user'] == session('user_id');
+        $ownRequest = $request['id_creator'] == session('user_id');
+
+        $requestMemberModel = model('RequestMemberModel');
+        $hasJoined = $requestMemberModel
+            ->where('id_journey_request', $id)
+            ->where('id_user', session('user_id'))
+            ->where('deletion_date', null)
+            ->first() !== null;
 
         return view('itinerary/show/RequestShowView', [
             'request' => $request,
             'author' => $author,
             'ownRequest' => $ownRequest,
+            'hasJoined' => $hasJoined,
         ]);
+    }
+
+    public function join(int $id): RedirectResponse
+    {
+        $request = $this->journeyRequestModel->find($id);
+
+        if (!$request) {
+            return redirect()->back()->with('error', 'Demande introuvable');
+        }
+
+        $requestMemberModel = model('RequestMemberModel');
+
+        $alreadyJoined = $requestMemberModel
+            ->where('id_journey_request', $id)
+            ->where('id_user', session('user_id'))
+            ->where('deletion_date', null)
+            ->first();
+
+        if ($alreadyJoined) {
+            return redirect()->back()->with('error', 'Vous avez déjà rejoint cette demande');
+        }
+
+        $requestMemberModel->insert([
+            'seat_taken'         => 1,
+            'request_date'       => date('Y-m-d'),
+            'id_journey_request' => $id,
+            'id_user'            => session('user_id'),
+        ]);
+
+        return redirect()->to('request/show/' . $id)
+            ->with('success', 'Vous avez rejoint cette demande');
     }
 
 
@@ -129,12 +168,11 @@ class JourneyRequestController extends BaseController
      */
     public function index(): string|RedirectResponse
     {
-        $locationModel = model(LocationModel::class);
-        $allRequest = $this->journeyRequestModel->findAll();
+        $allRequest = $this->journeyRequestModel->getJourneyInfosByDates();
 
         foreach ($allRequest as &$request) {
-            $request['start_address'] = $locationModel->getFormattedAddress($request['start']);
-            $request['end_address'] = $locationModel->getFormattedAddress($request['end']);
+            $request['start_address'] = $request['departure_address'] . ', ' . $request['departure_postcode'] . ' ' . $request['departure_city'];
+            $request['end_address'] = $request['arrival_address'] . ', ' . $request['arrival_postcode'] . ' ' . $request['arrival_city'];
         }
 
         return view('itinerary/show/RequestListView', ['requests' => $allRequest]);
@@ -253,13 +291,13 @@ class JourneyRequestController extends BaseController
                 throw new \DomainException('Le trajet n\'existe pas');
             }
 
-            $this->canManageJourney($original('id_user'));
+            if ((int) $original['id_creator'] !== (int) session('user_id')) {
+                throw new \DomainException('Vous n\'avez pas la permission de modifier cette demande');
+            }
 
-            $this->journeyService->updateJourneyRequest($original, $data, session()->user_id);
+            $this->journeyService->updateJourneyRequest($original, $data, session('user_id'));
 
-            log_message('debug', 'Journey updated successfully.');
-
-            return redirect()->to('request/list')
+            return redirect()->to('request/show/' . $id)
                 ->with('success', 'Votre demande à bien été mise à jour');
         } catch (\DomainException $e) {
             // domain error
