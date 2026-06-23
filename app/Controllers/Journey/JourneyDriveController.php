@@ -28,6 +28,7 @@ class JourneyDriveController extends BaseController
     public function search(): string|RedirectResponse
     {
         helper('form');
+        helper('french_helper');
 
         /* Inputs :
         * start = ['label', 'city', 'postcode', 'lat', 'lon']
@@ -57,6 +58,12 @@ class JourneyDriveController extends BaseController
                 // === Ajouter options quand possible !
                 $journeys = $this->journeyService->searchJourneyDrive($getData);
 
+                //Transforming the dates
+                foreach ($journeys as &$journey) {
+                    $journey['departure'] = format_date_fr($journey['departure']);
+                }
+                unset($journey); //Cleaning the memory
+
                 log_message('debug', 'Journeys searched successfully');
 
                 return redirect()->back()
@@ -72,6 +79,12 @@ class JourneyDriveController extends BaseController
             }
         } else {
             $journeys = $this->journeyService->getNextAvailableJourneys('drive');
+            //Transforming the dates
+            foreach ($journeys as &$journey) {
+                $journey['departure'] = format_date_fr($journey['departure']);
+            }
+            unset($journey); //Cleaning the memory
+
         }
 
         return view('itinerary/search/SearchDriveView', ['journeys' => $journeys]);

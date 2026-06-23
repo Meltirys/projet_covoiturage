@@ -17,6 +17,7 @@ class PagesController extends BaseController
     public function home(): string
     {
         helper('form');
+        helper('french_helper');
 
         $datas = [];
 
@@ -24,6 +25,11 @@ class PagesController extends BaseController
         if (session('logged_in')) {
             $journeyService = new JourneyService();
             $datas['journeys'] = $journeyService->getNextAvailableJourneys('drive', 5); //Loads the available journeys
+            //Transforming the dates
+            foreach ($datas['journeys'] as &$journey) {
+                $journey['departure'] = format_date_fr($journey['departure']);
+            }
+            unset($journey); //Cleaning the memory
         }
 
         return view('HomeView', $datas);
