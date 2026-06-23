@@ -93,25 +93,6 @@
 </div>
 <!--  -->
 
-<!-- Nombre de participants -->
-<div class="flex flex-col gap-1">
-    <label for="request-seats" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Nombre de participants</label>
-    <?php $selectedPlaces = session()->getFlashdata('car_success') ? '1' : old('places', '1'); ?>
-    <select id="places" name="places"
-        class="w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey placeholder:text-grey focus:outline-none focus:border-gold/40 transition-colors">
-        <option value="1" <?= $selectedPlaces === '1' ? 'selected' : '' ?>>1</option>
-        <option value="2" <?= $selectedPlaces === '2' ? 'selected' : '' ?>>2</option>
-        <option value="3" <?= $selectedPlaces === '3' ? 'selected' : '' ?>>3</option>
-        <option value="4" <?= $selectedPlaces === '4' ? 'selected' : '' ?>>4</option>
-        <option value="5" <?= $selectedPlaces === '5' ? 'selected' : '' ?>>5</option>
-        <option value="6" <?= $selectedPlaces === '6' ? 'selected' : '' ?>>6</option>
-        <option value="7" <?= $selectedPlaces === '7' ? 'selected' : '' ?>>7</option>
-    </select>
-    <?php if (isset($errors['seats'])): ?>
-        <span class="text-xs text-red-500"><?= esc($errors['seats']) ?></span>
-    <?php endif ?>
-</div>
-<!--  -->
 
 <!-- Options -->
 <div class="flex flex-col gap-1">

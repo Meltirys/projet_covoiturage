@@ -1,8 +1,6 @@
-const journeyPaginator = new Paginator(
-    document.querySelector('#journey-results'),
-    document.querySelector('#journey-pagination'),
-    renderJourney
-)
+const resultsEl = document.querySelector('#journey-results')
+const paginationEl = document.querySelector('#journey-pagination')
+const journeyPaginator = resultsEl ? new Paginator(resultsEl, paginationEl, renderJourney) : null
 
 
 function renderJourney(journey) {

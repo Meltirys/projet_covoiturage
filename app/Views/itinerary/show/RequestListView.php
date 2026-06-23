@@ -1,20 +1,41 @@
 <?= $this->extend('layouts/main') ?>
 <?= $this->section('content') ?>
 
-<main class="w-full max-w-3xl mx-auto px-4 py-6 font-poppins">
-    <h2 class="text-xs tracking-[0.15em] text-bluegrey uppercase mb-4">Demandes de trajets</h2>
+<div class="profile-hero px-4 md:px-8 py-10 md:py-14 mb-8">
+    <div class="relative z-10 max-w-5xl mx-auto">
+        <p class="section-title flex items-center gap-2 text-[0.625rem] tracking-[0.2em] uppercase font-bold text-gold mb-5">
+            Demandes
+        </p>
+        <h1 class="font-pfd text-4xl md:text-6xl font-light leading-[0.92] tracking-tight text-lightgrey">
+            Demandes<br>
+            <em class="italic text-gold">de trajets</em>
+        </h1>
+    </div>
+</div>
 
-    <?php if (empty($requests)): ?>
-        <p>Aucune demande pour le moment.</p>
+<main class="w-full max-w-5xl mx-auto px-4 md:px-8 pb-12 font-poppins">
+
+    <?php if (!empty($requests)): ?>
+        <div id="request-results" class="flex flex-col gap-3"></div>
+        <div id="request-pagination" class="flex gap-2 mt-6"></div>
     <?php else: ?>
-        <?php foreach ($requests as $request): ?>
-            <div>
-                <p><?= esc($request['start_address']) ?> → <?= esc($request['end_address']) ?></p>
-                <p><?= esc($request['range_of_time']) ?></p>
-                <a href="<?= site_url('request/show/' . $request['id_journey_request']) ?>">Voir les détails</a>
-            </div>
-        <?php endforeach ?>
+        <div class="flex items-center gap-3 bg-ocean-mid border border-ocean-light rounded-[14px] px-4 py-3 mt-6">
+            <div class="w-8 h-8 rounded-lg bg-ocean-light flex items-center justify-center text-sm flex-shrink-0">🔍</div>
+            <p class="text-xs text-grey italic">Aucune demande de trajet pour le moment.</p>
+        </div>
     <?php endif ?>
+
 </main>
+
+<?= $this->endSection() ?>
+<?= $this->section('scripts') ?>
+<script src="/js/pagination.js"></script>
+<script src="/js/request-card.js"></script>
+<script>
+    let requests = <?= json_encode($requests ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
+    if (requests && requests.length > 0 && typeof requestPaginator !== 'undefined' && requestPaginator) {
+        requestPaginator.load(requests)
+    }
+</script>
 
 <?= $this->endSection() ?>
