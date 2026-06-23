@@ -89,14 +89,13 @@ class BookingController extends BaseController
             $mailService = new MailService();
             helper('mail_helper');
             $infos = $this->gatherMailInfos($idBooking);
-            /* Need to add a new mail templates for the user when making a request
-            $bodyPassenger = EmailTemplates::bookingRequestPending(
-                $infos['driver_name'],
+
+            $bodyPassenger = EmailTemplates::bookingRequestConfirmation(
                 $infos['passenger_name'],
                 $infos['start_address'],
                 $infos['end_address'],
                 $infos['departure']
-            );*/
+            );
 
             $bodyDriver = EmailTemplates::bookingRequestPending(
                 $infos['driver_name'],
@@ -325,13 +324,8 @@ class BookingController extends BaseController
         $booking = $bookingModel->find($idBooking);
         $journey = $journeyModel->find($booking['id_journey_drive']);
 
-
-
-
         $passenger = $userModel->find($idPassenger);
         $driver = $userModel->find($journey['driver']);
-
-
 
         //Prepare the infos in an array
         $infos['passenger_name'] = $passenger['first_name'] . " " . $passenger['last_name'];
@@ -341,9 +335,6 @@ class BookingController extends BaseController
         $infos['driver_name'] = $driver['first_name'] . " " . $driver['last_name'];
         $infos['driver_email'] = $driver['email'];
         $infos['driver_mobile'] = $driver['mobile'];
-
-
-
 
         $infos['departure'] = $journey['departure'];
         $infos['start_address'] = $locationModel->getFormattedAddress($journey['start']);
@@ -367,6 +358,38 @@ class BookingController extends BaseController
         if ($journey['departure'] <= date('Y-m-d H:i:s')) {
             return redirect()->to('myprofil')
                 ->with('error', 'Impossible d\'annuler un trajet passé');
+        }
+
+        //Retrivieving the ids of the users on the journey
+        $bookings =  $bookingModel
+            ->where('id_journey_drive', $id_journey_drive)
+            ->where('is_validated', true)
+            ->findAll();
+        try {
+            //Preparing the mail service
+            $mailService = new MailService();
+            helper('mail_helper');
+
+            foreach ($bookings as $booking) {
+                //Retrieving the infos needed for the mail
+                $infos = $this->gatherMailInfos($booking['id_booking'], $booking['id_user']);
+                $body = EmailTemplates::requestAccepted(
+                    $infos['passenger_name'],
+                    $infos['start_address'],
+                    $infos['end_address'],
+                    $infos['departure'],
+                    $journey['id_journey_drive']
+                );
+
+                //Send the mail to the passenger that it's journey has been cancelled
+                $mailService->send(
+                    $infos['passenger_email'],
+                    'Un conducteur a annulé un trajet sur lequel vous étiez inscrit',
+                    $body
+                );
+            }
+        } catch (\Exception $e) {
+            log_message('error', 'Erreur envoi mail : ' . $e->getMessage());
         }
 
         // Cancel the journey and all related reservations

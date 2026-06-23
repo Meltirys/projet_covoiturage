@@ -106,6 +106,7 @@ class JourneyDriveController extends BaseController
         $seatPicked = (int) model('BookingModel')
             ->selectSum('seat_taken')
             ->where('id_journey_drive', $slug)
+            ->where('is_validated', true)
             ->where('deletion_date IS NULL')
             ->get()->getRow()->seat_taken;
 
