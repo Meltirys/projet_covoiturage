@@ -11,6 +11,8 @@ class ContactController extends BaseController
     public function send()
     {
         helper('form');
+        helper('mail_helper');
+        
         $post = $this->request->getPost();
 
 
