@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Helpers\EmailTemplates;
 use App\Models\CarModel;
 use App\Models\UserModel;
 use CodeIgniter\Controller;
@@ -15,6 +16,7 @@ use App\Services\MailService;
 use App\Validators\AvatarValidator;
 use App\Validators\UpdateUserInfos;
 use App\Validators\BanUserValidator;
+use PHPUnit\TextUI\Help;
 
 class UserController extends BaseController
 {
@@ -78,14 +80,19 @@ class UserController extends BaseController
                 ->with('signup_error', 'Votre compte n\'a pas pu être créé');
         }
 
-        /* Mail: To uncomment in production
-        //Creating MailService object to be able to send the mail
-        $mailService = new MailService();
+        try { //Creating MailService object to be able to send the mail
+            $mailService = new MailService();
+            helper('mail_helper');
+            //Sending the welcome mail
+            $mailService->send(
+                $user['email'],
+                'Bienvenue chez les PennRiders',
+                EmailTemplates::accountCreated($user['first_name'])
+            );
+        } catch (\Exception $e) {
+            log_message('error', 'Email de bienvenue non envoyé pour : ' . $user['email'] . '. ' . $e->getMessage());
+        }
 
-        //We test if the mail is correctly sent or not, if not we insert a line in the logs
-        if (!$mailService->sendWelcome($user['email'], $user['first_name'])) {
-            log_message('error', 'Email de bienvenue non envoyé pour : ' . $user['email']);
-        }*/
 
         return redirect()->to('/')
             ->with('success', 'Compte créé avec succès !');
@@ -108,6 +115,7 @@ class UserController extends BaseController
 
         $userModel = new UserModel();
         $userName = $userModel->getUserName($idUser);
+        $userMail = $userModel->find($idUser)['email'];
 
         if (! $userModel->delete($idUser)) {
             $errors = $userModel->errors();
@@ -125,9 +133,23 @@ class UserController extends BaseController
             }
         }
 
+        try {
+            //Creating MailService object to be able to send the mail
+            $mailService = new MailService();
+            helper('mail_helper');
+
+            //Sending the welcome mail
+            $mailService->send(
+                $userMail,
+                'Votre compte chez les PennRiders a été supprimé',
+                EmailTemplates::accountDeleted($userName)
+            );
+        } catch (\Exception $e) {
+            log_message('error', 'Email de bienvenue non envoyé pour : ' . $userMail . '. ' . $e->getMessage());
+        }
+
         //Checking if the user that delete the account is the connected user, if so we disconnect him
         if ($idUser == session()->user_id) {
-
             //Logging the user out
             $authController = new AuthController();
             $authController->logout();
@@ -354,6 +376,7 @@ class UserController extends BaseController
 
         $datas['id_user'] = $idUser; //Preparing the datas for the validator
         $validator = new BanUserValidator();
+        $userInfos = $userModel->find($idUser);
 
         if (!$validator->validate($datas)) {
             return redirect()->to('/backoffice')
@@ -368,6 +391,22 @@ class UserController extends BaseController
             return redirect()->to('/backoffice')
                 ->with('ban_error', 'Une erreur est survenue lors du banissement de l\'utilisateur, veuillez réessayer')
                 ->with('show_ban', true);
+        }
+
+        //Sending the mail
+        try {
+            //Creating MailService object to be able to send the mail
+            $mailService = new MailService();
+            helper('mail_helper');
+
+            //Sending the welcome mail
+            $mailService->send(
+                $userInfos['email'],
+                'Bienvenue chez les PennRider',
+                EmailTemplates::accountBanned($userInfos['first_name'])
+            );
+        } catch (\Exception $e) {
+            log_message('error', 'Email de bienvenue non envoyé pour : ' . $userInfos['email'] . '. ' . $e->getMessage());
         }
 
         //If no errors

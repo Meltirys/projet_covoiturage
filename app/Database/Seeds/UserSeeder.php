@@ -283,7 +283,7 @@ class UserSeeder extends Seeder
                 'first_name'         => 'Brian',
                 'last_name'          => "O'Connor",
                 'password'           => password_hash('password', PASSWORD_DEFAULT),
-                'email'              => 'brian.oconnor@furio.us',
+                'email'              => 'brian.oconnor@furio.ujiojs',
                 'mobile'             => '',
                 'birth_date'         => '1975-01-09',
                 'gender'             => 'male',

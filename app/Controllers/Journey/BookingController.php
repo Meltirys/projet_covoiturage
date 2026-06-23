@@ -3,6 +3,7 @@
 namespace App\Controllers\Journey;
 
 use App\Controllers\BaseController;
+use App\Helpers\EmailTemplates;
 use App\Models\BookingModel;
 use App\Models\JourneyDriveModel;
 use App\Models\UserModel;
@@ -81,25 +82,42 @@ class BookingController extends BaseController
                 ->with('error', implode(' ', $validator->getErrors()));
         }
 
-        $idBooking = $bookingModel->save($data);
+        $idBooking = $bookingModel->insert($data);
 
         try {
             //Preparing the mail
             $mailService = new MailService();
+            helper('mail_helper');
             $infos = $this->gatherMailInfos($idBooking);
 
+            $bodyPassenger = EmailTemplates::bookingRequestConfirmation(
+                $infos['passenger_name'],
+                $infos['start_address'],
+                $infos['end_address'],
+                $infos['departure']
+            );
 
-            //Gathering the infos for the mail
-            $mailService->sendBookingRequest($infos['driver_email'], [
-                'driver_name'          => $infos['driver_name'],
-                'journey_date'         => $infos['departure'],
-                'journey_departure'    => $infos['start_address'],
-                'journey_arrival'      => $infos['end_address'],
-                'journey_seats'        => $availableSeat,
-                'passenger_name'       => $infos['passenger_name'],
-                'passenger_email'      => $infos['passenger_email'],
-                'passenger_mobile'     => $infos['passenger_mobile'],
-            ]);
+            $bodyDriver = EmailTemplates::bookingRequestPending(
+                $infos['driver_name'],
+                $infos['passenger_name'],
+                $infos['start_address'],
+                $infos['end_address'],
+                $infos['departure']
+            );
+
+            //Sending the mail to the user that the request has been sent
+            $mailService->send(
+                $infos['passenger_email'],
+                'Votre demande de participation a bien été envoyée',
+                $bodyPassenger
+            );
+
+            //Sending the mail to inform the driver a new reservation has been made
+            $mailService->send(
+                $infos['driver_email'],
+                'Une demande de validation de participation à un trajet en attente',
+                $bodyDriver
+            );
         } catch (\Exception $e) {
             log_message('error', 'Erreur envoi mail : ' . $e->getMessage());
         }
@@ -126,13 +144,37 @@ class BookingController extends BaseController
                 ->with('error', 'Impossible d\'annuler un trajet passé');
         }
 
+        $infos = $this->gatherMailInfos($id_booking); //Gather infos before deletion
+
         $bookingModel->delete($id_booking);
+
+        //Sending the mail
+        try {
+            //Preparing the mail service
+            $mailService = new MailService();
+            helper('mail_helper');
+
+            //Retrieving the infos needed for the mail
+            $body = EmailTemplates::passengerCancelledConfirmation(
+                $infos['passenger_name'],
+                $infos['start_address'],
+                $infos['end_address'],
+                $infos['departure'],
+            );
+            //Send the mail to the passenger that it's application has been refused
+            $mailService->send(
+                $infos['passenger_email'],
+                'Votre demande de participation à un trajet à bien été annulée',
+                $body
+            );
+        } catch (\Exception $e) {
+            log_message('error', 'Erreur envoi mail : ' . $e->getMessage());
+        }
         return redirect()->back()
             ->with('success', 'Demande de réservation annulée');
     }
 
     // Set the 'is_validated' to true. Only to the journey driver with id_booking
-
     public function accept($id_booking)
     {
         $bookingModel = new BookingModel();
@@ -176,21 +218,27 @@ class BookingController extends BaseController
 
         $bookingModel->update($id_booking, ['is_validated' => true]);
 
+        //Sending the mail
         try {
             //Preparing the mail service
             $mailService = new MailService();
+            helper('mail_helper');
 
             //Retrieving the infos needed for the mail
             $infos = $this->gatherMailInfos($id_booking, $booking['id_user']);
-
+            $body = EmailTemplates::requestAccepted(
+                $infos['passenger_name'],
+                $infos['start_address'],
+                $infos['end_address'],
+                $infos['departure'],
+                $journey['id_journey_drive']
+            );
             //Send the mail to the passenger that it's application has been refused
-            $mailService->sendBookingAccepted($infos['passenger_email'], [
-                'passenger_name'       => $infos['passenger_name'],
-                'journey_date'         => $infos['departure'],
-                'journey_departure'    => $infos['start_address'],
-                'journey_arrival'      => $infos['end_address'],
-                'driver_name'          => $infos['driver_name'],
-            ]);
+            $mailService->send(
+                $infos['passenger_email'],
+                'Votre demande de participation à un trajet à été accepté',
+                $body
+            );
         } catch (\Exception $e) {
             log_message('error', 'Erreur envoi mail : ' . $e->getMessage());
         }
@@ -200,7 +248,6 @@ class BookingController extends BaseController
     }
 
     // Delete the pending booking. Only to the journey driver with id_booking
-
     public function refuse($id_booking)
     {
         $bookingModel = new BookingModel();
@@ -223,22 +270,32 @@ class BookingController extends BaseController
         }
 
 
-        //Must be called before delete() because soft delete make booking unfindable with find()
+        //Must be called before delete() 
         $infos = $this->gatherMailInfos($id_booking, $booking['id_user']);
 
         $bookingModel->delete($id_booking);
 
-        //Preparing the mail service
-        $mailService = new MailService();
+        try {
+            //Preparing the mail service
+            $mailService = new MailService();
+            helper('mail_helper');
 
-        //Send the mail to the passenger that it's application has been refused
-        $mailService->sendBookingRefused($infos['passenger_email'], [
-            'passenger_name'       => $infos['passenger_name'],
-            'journey_date'         => $infos['departure'],
-            'journey_departure'    => $infos['start_address'],
-            'journey_arrival'      => $infos['end_address'],
-            'driver_name'          => $infos['driver_name'],
-        ]);
+            //Retrieving the infos needed for the mail
+            $body = EmailTemplates::requestRefused(
+                $infos['passenger_name'],
+                $infos['start_address'],
+                $infos['end_address'],
+                $infos['departure']
+            );
+            //Send the mail to the passenger that it's application has been refused
+            $mailService->send(
+                $infos['passenger_email'],
+                'Votre demande de participation à un trajet à été refusée',
+                $body
+            );
+        } catch (\Exception $e) {
+            log_message('error', 'Erreur envoi mail : ' . $e->getMessage());
+        }
 
         return redirect()->to('myprofil')
             ->with('success', 'Réservation refusée');
@@ -270,8 +327,6 @@ class BookingController extends BaseController
         $passenger = $userModel->find($idPassenger);
         $driver = $userModel->find($journey['driver']);
 
-
-
         //Prepare the infos in an array
         $infos['passenger_name'] = $passenger['first_name'] . " " . $passenger['last_name'];
         $infos['passenger_email'] = $passenger['email'];
@@ -284,10 +339,11 @@ class BookingController extends BaseController
         $infos['departure'] = $journey['departure'];
         $infos['start_address'] = $locationModel->getFormattedAddress($journey['start']);
         $infos['end_address'] = $locationModel->getFormattedAddress($journey['end']);
+
         return $infos;
     }
-    // Canceling a trip from a driver
 
+    // Canceling a trip from a driver
     public function cancelJourney($id_journey_drive)
     {
         $journeyModel = new JourneyDriveModel();
@@ -302,6 +358,38 @@ class BookingController extends BaseController
         if ($journey['departure'] <= date('Y-m-d H:i:s')) {
             return redirect()->to('myprofil')
                 ->with('error', 'Impossible d\'annuler un trajet passé');
+        }
+
+        //Retrivieving the ids of the users on the journey
+        $bookings =  $bookingModel
+            ->where('id_journey_drive', $id_journey_drive)
+            ->where('is_validated', true)
+            ->findAll();
+        try {
+            //Preparing the mail service
+            $mailService = new MailService();
+            helper('mail_helper');
+
+            foreach ($bookings as $booking) {
+                //Retrieving the infos needed for the mail
+                $infos = $this->gatherMailInfos($booking['id_booking'], $booking['id_user']);
+                $body = EmailTemplates::requestAccepted(
+                    $infos['passenger_name'],
+                    $infos['start_address'],
+                    $infos['end_address'],
+                    $infos['departure'],
+                    $journey['id_journey_drive']
+                );
+
+                //Send the mail to the passenger that it's journey has been cancelled
+                $mailService->send(
+                    $infos['passenger_email'],
+                    'Un conducteur a annulé un trajet sur lequel vous étiez inscrit',
+                    $body
+                );
+            }
+        } catch (\Exception $e) {
+            log_message('error', 'Erreur envoi mail : ' . $e->getMessage());
         }
 
         // Cancel the journey and all related reservations

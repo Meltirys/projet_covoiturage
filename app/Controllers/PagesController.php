@@ -23,7 +23,7 @@ class PagesController extends BaseController
         //If an user is logged in, we retrieve the latest journey available
         if (session('logged_in')) {
             $journeyService = new JourneyService();
-            $datas['journeys'] = $journeyService->getNextAvailableJourneys(5); //Loads the available journeys
+            $datas['journeys'] = $journeyService->getNextAvailableJourneys('drive', 5); //Loads the available journeys
         }
 
         return view('HomeView', $datas);
