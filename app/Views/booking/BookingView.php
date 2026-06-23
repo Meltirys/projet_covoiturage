@@ -34,10 +34,13 @@
         <?= form_close() ?>
     <?php endif ?>
 <?php else: ?>
-    <div class="flex justify-center mb-6">
+    <div class="flex justify-center mb-6 gap-3">
         <a href="<?= base_url('trajet/modification/' . $journey['id_journey_drive']) ?>"
             class="text-sm text-gold border border-gold/30 rounded-full px-4 py-1.5 hover:bg-gold/10 transition-colors">
             Modifier l'itinéraire
         </a>
+        <?= form_open('reservation/trajet/annuler/' . $journey['id_journey_drive']) ?>
+        <button type="submit" class="bg-gold text-ocean text-sm font-semibold px-6 py-2 rounded-full hover:opacity-90 transition-opacity cursor-pointer">Supprimer</button>
+        <?= form_close() ?>
     </div>
 <?php endif ?>

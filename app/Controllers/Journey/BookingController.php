@@ -344,7 +344,7 @@ class BookingController extends BaseController
     }
 
     // Canceling a trip from a driver
-    public function cancelJourney($id_journey_drive)
+    public function cancelJourney(int $id_journey_drive)
     {
         $journeyModel = new JourneyDriveModel();
         $bookingModel = new BookingModel();
@@ -373,12 +373,11 @@ class BookingController extends BaseController
             foreach ($bookings as $booking) {
                 //Retrieving the infos needed for the mail
                 $infos = $this->gatherMailInfos($booking['id_booking'], $booking['id_user']);
-                $body = EmailTemplates::requestAccepted(
+                $body = EmailTemplates::driverCancelledJourney(
                     $infos['passenger_name'],
                     $infos['start_address'],
                     $infos['end_address'],
                     $infos['departure'],
-                    $journey['id_journey_drive']
                 );
 
                 //Send the mail to the passenger that it's journey has been cancelled

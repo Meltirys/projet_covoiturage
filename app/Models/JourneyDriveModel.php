@@ -12,7 +12,7 @@ class JourneyDriveModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['number_of_place', 'departure', 'estimated_arrival', 'start', 'end', 'id_car', 'driver', 'id_track'];
+    protected $allowedFields    = ['number_of_place', 'departure', 'estimated_arrival', 'deletion_date', 'start', 'end', 'id_car', 'driver', 'id_track'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -79,6 +79,7 @@ class JourneyDriveModel extends Model
             ->join('Location AS arrival_location',   'arrival_location.id_location = JourneyDrive.end')
             ->join('City AS arrival_city',           'arrival_city.id_city = arrival_location.id_city')
             ->where('JourneyDrive.id_journey_drive', $idJourney)
+            ->where('JourneyDrive.deletion_date IS NULL')
             ->first();
 
         if (!$journey) return null;
@@ -145,7 +146,8 @@ class JourneyDriveModel extends Model
             ->join('Users', 'Users.id_user = JourneyDrive.driver')
             ->join('Car', 'Car.id_car = JourneyDrive.id_car')
             ->join('Track', 'Track.id_track = JourneyDrive.id_track')
-            ->where('JourneyDrive.departure >=', $startDay);
+            ->where('JourneyDrive.departure >=', $startDay)
+            ->where('JourneyDrive.deletion_date IS NULL');
 
         //Adding the end day to the query if it is setted
         if ($endDay) {

@@ -46,7 +46,7 @@ class ProfilController extends BaseController
         }
 
         // Partie conducteur
-        $myJourneys      = $journeyModel->where('driver', session('user_id'))->findAll();
+        $myJourneys      = $journeyModel->where('driver', session('user_id'))->where('JourneyDrive.deletion_date IS NULL')->findAll();
         $driveUpcoming   = [];
         $drivePast       = [];
         $pendingRequests = [];
