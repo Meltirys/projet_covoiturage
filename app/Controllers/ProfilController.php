@@ -21,7 +21,7 @@ class ProfilController extends BaseController
         $bookingModel = new BookingModel();
         $journeyModel = new JourneyDriveModel();
         $userModel    = new UserModel();
-        $today        = date('Y-m-d');
+        $today        = date('Y-m-d H:i:s');
 
         // Partie passager
         $allBookings       = $bookingModel->where('id_user', session('user_id'))->findAll();
@@ -46,7 +46,7 @@ class ProfilController extends BaseController
         }
 
         // Partie conducteur
-        $myJourneys      = $journeyModel->where('driver', session('user_id'))->findAll();
+        $myJourneys      = $journeyModel->where('driver', session('user_id'))->where('deletion_date', null)->findAll();
         $driveUpcoming   = [];
         $drivePast       = [];
         $pendingRequests = [];

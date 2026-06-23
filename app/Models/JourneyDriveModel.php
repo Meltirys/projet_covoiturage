@@ -12,7 +12,7 @@ class JourneyDriveModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['number_of_place', 'departure', 'estimated_arrival', 'start', 'end', 'id_car', 'driver', 'id_track'];
+    protected $allowedFields    = ['number_of_place', 'departure', 'estimated_arrival', 'start', 'end', 'id_car', 'driver', 'id_track', 'deletion_date'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -25,7 +25,7 @@ class JourneyDriveModel extends Model
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
-    protected $deletedField  = 'deleted_at';
+    protected $deletedField  = 'deletion_date';
 
     // Validation
     protected $validationRules      = [];

@@ -258,7 +258,7 @@ class JourneyService
             throw new \DomainException('Le trajet n\'existe pas');
         }
 
-        $journeyId = $journey['id'];
+        $journeyId = $journey['id_journey_drive'];
         $trackId = $journey['id_track'];
 
         try {
@@ -271,7 +271,7 @@ class JourneyService
             // Suppression du trajet
             $this->journeyDriveModel->delete($journeyId);
 
-            // Suppression du tracking
+            // Suppression du tracking (après le trajet pour respecter la contrainte FK)
             $trackModel->delete($trackId);
 
 
@@ -468,7 +468,7 @@ class JourneyService
             throw new \DomainException('Le trajet n\'existe pas');
         }
 
-        $journeyId = $journey['id'];
+        $journeyId = $journey['id_journey_drive'];
 
         try {
             // Suppression du trajet
