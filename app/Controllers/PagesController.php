@@ -64,7 +64,9 @@ class PagesController extends BaseController
      */
     public function contactPage(): string
     {
-        return view('ContactView');
+        helper('form');
+        $errors = session('errors') ?? [];
+        return view('ContactView', $errors);
     }
 
     /**

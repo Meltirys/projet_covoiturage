@@ -4,14 +4,23 @@ namespace App\Controllers;
 
 use App\Helpers\EmailTemplates;
 use App\Services\MailService;
+use App\Validators\ContactFormValidator;
 
 class ContactController extends BaseController
 {
     public function send()
     {
+        helper('form');
         $post = $this->request->getPost();
 
-        // Validation...
+
+        $contactValidator = new ContactFormValidator();
+
+        if (!$contactValidator->validate($post)) {
+            return redirect()->back()
+                ->withInput()
+                ->with('errors', $contactValidator->getErrors());
+        }
 
         $html = EmailTemplates::contactFormReceived(
             $post['first_name'],

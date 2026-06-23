@@ -7,6 +7,7 @@ use App\Controllers\CarController;
 use App\Controllers\UserController;
 use App\Controllers\Backoffice\UserValidationController;
 use App\Controllers\Backoffice\UserRoleController;
+use App\Controllers\ContactController;
 use App\Controllers\ProfilController;
 use App\Controllers\Debug;
 use App\Controllers\ReportController;
@@ -25,6 +26,7 @@ $routes->get('/mentions-legales', 'PagesController::mentionsLegales'); // mentio
 $routes->get('/cgu', 'PagesController::cgu'); // conditions générales d'utilisation
 $routes->get('/comment-ca-marche', 'PagesController::howItWorks'); // conseils d'utilisation
 $routes->get('/contact-page', 'PagesController::contactPage'); // page de contact
+$routes->post('/contact', [ContactController::class, 'send']);
 
 if (ENVIRONMENT === 'production') {
     $routes->set404Override(function () {
