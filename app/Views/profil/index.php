@@ -185,14 +185,22 @@
                                 </li>
                             <?php else: ?>
                                 <?php foreach ($driveUpcoming as $journey): ?>
-                                    <a href="drive/show/<?= $journey['id_journey_drive'] ?>" class="no-underline">
-                                        <li class="flex justify-between items-center bg-ocean-mid border border-ocean-light rounded-[14px] px-4 py-3 hover-border-gold transition-colors">
+                                    <li class="flex justify-between items-center bg-ocean-mid border border-ocean-light rounded-[14px] px-4 py-3 hover-border-gold transition-colors">
+                                        <a href="drive/show/<?= $journey['id_journey_drive'] ?>" class="no-underline flex-1">
                                             <p class="text-sm font-medium text-lightgrey"><?= format_date_fr($journey['departure']) ?></p>
+                                        </a>
+                                        <div class="flex items-center gap-2">
                                             <span class="text-xs font-bold bg-gold/10 border border-gold/20 text-gold rounded-full px-3 py-0.5 whitespace-nowrap">
                                                 <?= esc($journey['places_restantes']) ?>/<?= esc($journey['number_of_place']) ?>
                                             </span>
-                                        </li>
-                                    </a>
+                                            <form action="reservation/trajet/annuler/<?= $journey['id_journey_drive'] ?>" method="post" onsubmit="return confirm('Supprimer ce trajet ?')">
+                                                <?= csrf_field() ?>
+                                                <button type="submit" class="text-xs font-bold bg-red/10 border border-red/20 text-red rounded-full px-3 py-0.5 hover:bg-red/20 transition-colors">
+                                                    Supprimer
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </li>
                                 <?php endforeach; ?>
                             <?php endif; ?>
                         </ul>
