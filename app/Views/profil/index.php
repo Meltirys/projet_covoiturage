@@ -193,6 +193,10 @@
                                             <span class="text-xs font-bold bg-gold/10 border border-gold/20 text-gold rounded-full px-3 py-0.5 whitespace-nowrap">
                                                 <?= esc($journey['places_restantes']) ?>/<?= esc($journey['number_of_place']) ?>
                                             </span>
+                                            <a href="<?= base_url('trajet/modification/' . $journey['id_journey_drive']) ?>"
+                                                class="text-sm text-gold border border-gold/30 rounded-full px-4 py-1.5 hover:bg-gold/10 transition-colors">
+                                                Modifier
+                                            </a>
                                             <form action="reservation/trajet/annuler/<?= $journey['id_journey_drive'] ?>" method="post" onsubmit="return confirm('Supprimer ce trajet ?')">
                                                 <?= csrf_field() ?>
                                                 <button type="submit" class="text-xs font-bold bg-red/10 border border-red/20 text-red rounded-full px-3 py-0.5 hover:bg-red/20 transition-colors">
