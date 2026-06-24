@@ -49,9 +49,9 @@ $selectedSeat = old('drive.seats', $journey['number_of_place']);
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<script src="js/geocoding.js"></script>
-<script src="js/address-fields.js"></script>
-<script src="js/formation-handdler.js"></script>
+<script src="<?= base_url('js/geocoding.js') ?>"></script>
+<script src="<?= base_url('js/address-fields.js') ?>"></script>
+<script src="<?= base_url('js/formation-handdler.js') ?>"></script>
 <script>
     //The name of the school, needed in the formation-handdler.js
     const schoolName = "<?= $schoolName ?>";

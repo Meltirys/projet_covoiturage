@@ -52,10 +52,10 @@ if (session()->getFlashdata('journeys') !== null) {
 
 <?= $this->endSection() ?>
 <?= $this->section('scripts') ?>
-<script src="js/geocoding.js"></script>
-<script src="js/address-fields.js"></script>
-<script src="js/pagination.js"></script>
-<script src="js/journey-card.js"></script>
+<script src="<?= base_url('js/geocoding.js') ?>"></script>
+<script src="<?= base_url('js/address-fields.js') ?>"></script>
+<script src="<?= base_url('js/pagination.js') ?>"></script>
+<script src="<?= base_url('js/journey-card.js') ?>"></script>
 <script>
     let journeys = <?= json_encode($journeys ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
     //If there are datas available, load them

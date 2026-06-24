@@ -433,5 +433,5 @@
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<script src="js/profil.js"></script>
+<script src="<?= base_url('js/profil.js') ?>"></script>
 <?= $this->endSection() ?>

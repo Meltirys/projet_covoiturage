@@ -9,9 +9,9 @@
     <script>
         if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark')
     </script>
-    <link rel="icon" type="image/png" href="/img/logo_golden.png">
+    <link rel="icon" type="image/png" href="<?= base_url('img/logo_golden.png') ?>">
     <script src="js/theme-toggle.js"></script>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="<?= base_url('css/style.css') ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <title>PennRide</title>
 </head>
@@ -45,7 +45,7 @@
                     <div>
                         <div class="hidden md:flex items-center gap-2 border border-gold/30 rounded-full px-2 py-1">
                             <?php if (session('avatar_filename')): ?>
-                                <a href="/myprofil"><img src="<?= base_url('img/avatars/' . session('avatar_filename')) ?>" alt="Avatar" class="w-6 h-6 rounded-full object-cover"></a>
+                                <a href="<?= site_url('myprofil') ?>"><img src="<?= base_url('img/avatars/' . session('avatar_filename')) ?>" alt="Avatar" class="w-6 h-6 rounded-full object-cover"></a>
                             <?php else: ?>
                                 <span class="text-xs font-medium text-gold">
                                     <?= strtoupper(substr(session('user_first_name'), 0, 1)) ?><?= strtoupper(substr(session('user_last_name'), 0, 1)) ?>
