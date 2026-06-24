@@ -44,7 +44,7 @@
                     <div class="min-w-0">
                         <p class="text-sm font-medium text-lightgrey">
                             <?= esc($journey['driver_name']) ?>
-                            <a href="#" class="text-xs text-gold hover:opacity-70 transition-opacity ml-2">voir le profil</a>
+                            <a href="<?= site_url('profil/show/' . $journey['driver']) ?>" class="text-xs text-gold hover:opacity-70 transition-opacity ml-2">voir le profil</a>
                         </p>
                         <p class="text-xs text-grey mt-0.5">
                             <?= esc($journey['car_brand']) ?> <?= esc($journey['car_model']) ?> · <?= esc($journey['car_color']) ?>
@@ -59,6 +59,39 @@
     </div>
 
 
+
+    <?php if (!empty($passengers)): ?>
+    <div class="bg-ocean-mid border border-ocean-light rounded-[14px] overflow-hidden mb-6">
+        <div class="h-0.5 bg-linear-to-r from-gold/40 to-transparent"></div>
+        <div class="p-5">
+            <p class="text-[0.625rem] tracking-[0.2em] uppercase font-bold text-gold mb-3">Les passagers</p>
+            <div class="flex flex-col gap-3">
+                <?php foreach ($passengers as $passenger): ?>
+                    <div class="flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-12 h-12 rounded-full bg-gold/10 border border-gold/15 flex items-center justify-center text-sm font-medium text-gold flex-shrink-0 overflow-hidden">
+                                <?php if (!empty($passenger['avatar_filename'])): ?>
+                                    <img src="<?= base_url('img/avatars/' . $passenger['avatar_filename']) ?>" alt="<?= esc($passenger['first_name']) ?>" class="w-full h-full object-cover">
+                                <?php else: ?>
+                                    <?= strtoupper(substr($passenger['first_name'], 0, 1)) ?><?= strtoupper(substr($passenger['last_name'], 0, 1)) ?>
+                                <?php endif ?>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-sm font-medium text-lightgrey">
+                                    <?= esc($passenger['first_name']) ?> <?= esc(substr($passenger['last_name'], 0, 1)) ?>.
+                                    <a href="<?= site_url('profil/show/' . $passenger['id_user']) ?>" class="text-xs text-gold hover:opacity-70 transition-opacity ml-2">voir le profil</a>
+                                </p>
+                                <?php if (!empty($passenger['meeting_point'])): ?>
+                                    <p class="text-xs text-grey mt-0.5">RDV : <?= esc($passenger['meeting_point']) ?></p>
+                                <?php endif ?>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach ?>
+            </div>
+        </div>
+    </div>
+    <?php endif ?>
 
     <!-- CARTE MAP -->
     <div class="bg-ocean-mid border border-ocean-light rounded-[14px] overflow-hidden mb-6">

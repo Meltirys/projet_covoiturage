@@ -70,7 +70,8 @@ class JourneyRequestModel extends Model
                     Users.first_name AS creator_first_name,
                     Users.last_name AS creator_last_name,
 
-                    COUNT(RequestMember.id_request_member) AS member_count')
+                    COUNT(RequestMember.id_request_member) AS member_count,
+                    MIN(RequestMember.request_date) AS request_date')
             ->join('Location AS departure_location', 'departure_location.id_location = JourneyRequest.start')
             ->join('City AS departure_city', 'departure_city.id_city = departure_location.id_city')
 

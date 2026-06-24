@@ -26,10 +26,18 @@
         <?= form_open('reservation') ?>
         <input type="hidden" name="id_journey_drive" value="<?= esc($journey['id_journey_drive']) ?>">
         <input type="hidden" name="seat_taken" value="1">
-        <div class="flex justify-center mt-4">
-            <button type="submit" class="bg-gold text-ocean text-sm font-semibold px-6 py-2 rounded-full hover:opacity-90 transition-opacity cursor-pointer">
-                Demander une place
-            </button>
+        <div class="flex flex-col gap-3 mt-4 max-w-md mx-auto">
+            <div class="flex flex-col gap-1">
+                <label for="meeting_point" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Point de rendez-vous <span class="normal-case font-normal tracking-normal text-grey">(optionnel)</span></label>
+                <input type="text" name="meeting_point" id="meeting_point"
+                    placeholder="Ex: Arrêt de bus Place de la Mairie"
+                    class="w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2 text-sm text-lightgrey placeholder:text-grey focus:outline-none focus:border-gold/40 transition-colors">
+            </div>
+            <div class="flex justify-center">
+                <button type="submit" class="bg-gold text-ocean text-sm font-semibold px-6 py-2 rounded-full hover:opacity-90 transition-opacity cursor-pointer">
+                    Demander une place
+                </button>
+            </div>
         </div>
         <?= form_close() ?>
     <?php endif ?>
