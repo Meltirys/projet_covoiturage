@@ -168,11 +168,15 @@ class JourneyRequestController extends BaseController
      */
     public function index(): string|RedirectResponse
     {
+        helper('french');
         $allRequest = $this->journeyRequestModel->getJourneyInfosByDates();
 
         foreach ($allRequest as &$request) {
             $request['start_address'] = $request['departure_address'] . ', ' . $request['departure_postcode'] . ' ' . $request['departure_city'];
             $request['end_address'] = $request['arrival_address'] . ', ' . $request['arrival_postcode'] . ' ' . $request['arrival_city'];
+            if (!empty($request['request_date'])) {
+                $request['request_date'] = format_date_fr($request['request_date']);
+            }
         }
 
         return view('itinerary/show/RequestListView', ['requests' => $allRequest]);
