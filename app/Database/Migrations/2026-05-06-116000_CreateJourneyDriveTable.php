@@ -22,16 +22,16 @@ class CreateJourneyDriveTable extends Migration
             'id_track'           => ['type' => 'INT', 'null' => false, 'unsigned' => true],
             'start'              => ['type' => 'INT', 'null' => false, 'unsigned' => true],
             'end'                => ['type' => 'INT', 'null' => false, 'unsigned' => true],
-            'id_car'             => ['type' => 'INT', 'null' => false, 'unsigned' => true],
-            'driver'             => ['type' => 'INT', 'null' => false, 'unsigned' => true]
+            'id_car'             => ['type' => 'INT', 'null' => true, 'unsigned' => true],
+            'driver'             => ['type' => 'INT', 'null' => true, 'unsigned' => true]
         ]);
 
         $this->forge->addPrimaryKey('id_journey_drive');
         $this->forge->addForeignKey('id_track', 'Track', 'id_track', 'CASCADE', 'NO ACTION');
         $this->forge->addForeignKey('start', 'Location', 'id_location', 'RESTRICT', 'NO ACTION');
         $this->forge->addForeignKey('end', 'Location', 'id_location', 'RESTRICT', 'NO ACTION');
-        $this->forge->addForeignKey('id_car', 'Car', 'id_car', 'RESTRICT', 'NO ACTION');
-        $this->forge->addForeignKey('driver', 'Users', 'id_user', 'RESTRICT', 'NO ACTION');
+        $this->forge->addForeignKey('id_car', 'Car', 'id_car', 'CASCADE', 'SET NULL');
+        $this->forge->addForeignKey('driver', 'Users', 'id_user', 'CASCADE', 'SET NULL');
         $this->forge->createTable('JourneyDrive');
     }
 

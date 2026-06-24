@@ -480,10 +480,12 @@
         });
     });
 
-    <?php if (session()->getFlashdata('singup_error') || !empty($errors)): ?>
+    <?php if (session()->getFlashdata('singup_error')): ?>
         showTab('tab-inscription');
+    <?php elseif(session()->getFlashdata('contact_error')):  ?>
+        showTab('tab-contact');
     <?php else: ?>
-        showTab('tab-login');
+        showTab('tab-login')
     <?php endif; ?>
 </script>
 <?= $this->endSection() ?>

@@ -41,6 +41,14 @@
         <input type="hidden" name="drive[end][postcode]" value="<?= esc(old('drive.end.postcode', $journey['arrival_postcode'])) ?>">
     </div>
 
+    <div class="flex gap-3">
+        <label for="start-formation-drive" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Départ depuis le lieu de formation</label>
+        <input type="checkbox" name="drive[start-formation]" id="start-formation-drive" class="checkbox-pennride">
+    </div>
+    <div class="flex gap-3 ">
+        <label for="end-formation-drive" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Arrivée sur le lieu de formation</label>
+        <input type="checkbox" name="drive[end-formation]" id="end-formation-drive" class="checkbox-pennride">
+    </div>
 </div>
 <!--  -->
 

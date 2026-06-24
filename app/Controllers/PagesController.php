@@ -7,6 +7,7 @@ use App\Models\CarModel;
 use App\Models\JourneyDriveModel;
 use App\Services\JourneyService;
 use CodeIgniter\Exceptions\PageNotFoundException;
+use Config\School;
 use DateTime;
 
 class PagesController extends BaseController
@@ -17,6 +18,7 @@ class PagesController extends BaseController
     public function home(): string
     {
         helper('form');
+        helper('french_helper');
 
         $datas = [];
 
@@ -24,6 +26,15 @@ class PagesController extends BaseController
         if (session('logged_in')) {
             $journeyService = new JourneyService();
             $datas['journeys'] = $journeyService->getNextAvailableJourneys('drive', 5); //Loads the available journeys
+            //Transforming the dates
+            foreach ($datas['journeys'] as &$journey) {
+                $journey['departure'] = format_date_fr($journey['departure']);
+            }
+            unset($journey); //Cleaning the memory
+        }
+
+        if (session()->errors) {
+            $datas['errors'] = session()->errors; // Loading the errors of the contact form
         }
 
         return view('HomeView', $datas);
@@ -58,7 +69,12 @@ class PagesController extends BaseController
      */
     public function contactPage(): string
     {
-        return view('ContactView');
+        helper('form');
+        $datas = [];
+        if (session()->errors) {
+            $datas['errors'] = session()->errors; // Loading the errors of the contact form
+        }
+        return view('ContactView', $datas);
     }
 
     /**
@@ -67,12 +83,15 @@ class PagesController extends BaseController
     public function createJourney(): string
     {
         helper('form');
+        $school = config(School::class);
 
         $carModel = model(CarModel::class);
 
         $userId = session()->get('user_id');
 
         $cars = $carModel->getCarsByUser($userId);
+
+
 
         $data = [
             'cars' => array_map(fn($c) => [
@@ -81,6 +100,9 @@ class PagesController extends BaseController
                 'seats' => $c['number_of_seat'],
             ], $cars)
         ];
+
+        //Store the school name in a 
+        $data['schoolName'] = $school->name ?? 'Nom de l\'école introuvable';
 
         return view('itinerary/create/CreateView', $data);
     }
@@ -105,6 +127,9 @@ class PagesController extends BaseController
         if ($id === null) {
             throw PageNotFoundException::forPageNotFound();
         }
+
+        $school = config(School::class);
+        $schoolName = $school->name;
 
         helper('form');
 
@@ -145,6 +170,6 @@ class PagesController extends BaseController
 
         $cars = $carModel->where('id_user', $journey['driver'])->findAll();
 
-        return view('itinerary/edit/EditDriveView', ['journey' => $journey, 'cars' => $cars]);
+        return view('itinerary/edit/EditDriveView', ['journey' => $journey, 'cars' => $cars, 'schoolName' => $schoolName]);
     }
 }

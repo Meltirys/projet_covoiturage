@@ -4,12 +4,14 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Helpers\EmailTemplates;
+use App\Models\BookingModel;
 use App\Models\CarModel;
 use App\Models\UserModel;
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Validators\ChangePasswordValidator;
 use App\Models\CityModel;
+use App\Models\JourneyDriveModel;
 use App\Services\LocationService;
 use App\Validators\RegistrationValidator;
 use App\Services\MailService;
@@ -17,6 +19,7 @@ use App\Validators\AvatarValidator;
 use App\Validators\UpdateUserInfos;
 use App\Validators\BanUserValidator;
 use PHPUnit\TextUI\Help;
+use ReflectionUnionType;
 
 class UserController extends BaseController
 {
@@ -105,15 +108,50 @@ class UserController extends BaseController
      */
     public function delete(int $idUser = -1)
     {
+        //If no user is provided, then we retrieve the id of the connected user
         if ($idUser === -1) {
             $idUser = session()->user_id;
         }
 
-        //We delete the car of the user
+        //Setting up the models
+        $journeyModel = new JourneyDriveModel();
+        $bookingModel = new BookingModel();
         $carModel = new CarModel();
+        $userModel = new UserModel();
+
+
+        // ---- We retrieve the datas of the passengers which were supposed to be in a journey made by the deleted user
+        $passengerInfos = $journeyModel->getPassengerInfosByUserId($idUser);
+        $passengerInfos = $this->regroupInfosByUser($passengerInfos);
+
+        // ---- We retrieve the datas of the drivers where the deleted user had reservations
+        $driversInfos = $bookingModel->getDetailedBookingsByUserId($idUser);
+        $driversInfos = $this->regroupInfosByUser($driversInfos);
+
+
+        // ---- We delete the journey drive where the user is the driver
+        $journeyModel->where('driver', $idUser)
+            ->where('departure >=', date('Y-m-d'))
+            ->set('deletion_date', date('Y-m-d'))
+            ->update();
+
+        // ---- We delete the bookings of the deleted user
+        $bookingModel->where('id_user', $idUser)
+            ->whereIn('id_journey_drive', function ($builder) {
+                // This sub-query return the ids of all the futur journey
+                return $builder->select('id_journey_drive')
+                    ->from('JourneyDrive')
+                    ->where('departure >=', date('Y-m-d'));
+            })
+            ->set('deletion_date', date('Y-m-d'))
+            ->set('is_validated', false)
+            ->update();
+
+
+
+        // ---- We delete the car of the user
         $carModel->where('id_user', $idUser)->delete();
 
-        $userModel = new UserModel();
         $userName = $userModel->getUserName($idUser);
         $userMail = $userModel->find($idUser)['email'];
 
@@ -151,8 +189,8 @@ class UserController extends BaseController
         //Checking if the user that delete the account is the connected user, if so we disconnect him
         if ($idUser == session()->user_id) {
             //Logging the user out
-            $authController = new AuthController();
-            $authController->logout();
+            session_destroy();
+            redirect()->to('/');
         } else { //This means the account has been deleted by the admin
             return redirect()->to('/backoffice')
                 ->with('suppression_success', "L'utilisateur " . $userName . " à bien été supprimé")
@@ -402,7 +440,7 @@ class UserController extends BaseController
             //Sending the welcome mail
             $mailService->send(
                 $userInfos['email'],
-                'Bienvenue chez les PennRider',
+                'Votre compte a été banni du service offert par PennRiders',
                 EmailTemplates::accountBanned($userInfos['first_name'])
             );
         } catch (\Exception $e) {
@@ -413,5 +451,43 @@ class UserController extends BaseController
         return redirect()->to('/backoffice')
             ->with('ban_success', "L'utilisateur " . $userModel->getUserName($idUser) . " a été bannis avec succès")
             ->with('show_ban', true);
+    }
+
+    /**
+     * Regroups the datas retrivied via JourneyModel->getPassengerInfosByUserId or BookingModel->getDetailedBookingsByUserId in order to sort it by user. It returns an array with the name and the journey of the users
+     * @param array $infos Datas from JourneyModel->getPassengerInfosByUserId or BookingModel->getDetailedBookingsByUserId
+     * 
+     * @return array An associative array [
+     *      [idUser] => [
+     *                  'name' => The name of the user,
+     *                  'journeyInfos' => [
+     *                              [   ["departure_postcode"]=> string(5) "56100",
+     *                                  ["departure_city"]=> string(7) "Lorient",
+     *                                  ["arrival_postcode"]=> string(5) "56000",
+     *                                  ["arrival_city"]=> string(6) "Vannes"
+     *                              ],
+     *                              ...
+     *                          ]
+     *              ],
+     *         ....
+     * ]
+     */
+    private function regroupInfosByUser(array $infos): array
+    {
+        $result = [];
+
+        foreach ($infos as $info) {
+            if (!array_key_exists($info['id_user'], $result)) {
+                $result[$info['id_user']] = ['name' => $info['name']];
+                $result[$info['id_user']]['journeyInfo'] = [];
+            }
+
+            //Filtering the unused values and adding the rest to the journey infos
+            $unwantedKeys = ['id_user' => true, 'name' => true];
+            $journeyInfos = array_diff_key($info, $unwantedKeys);
+            array_push($result[$info['id_user']]['journeyInfo'], $journeyInfos);
+        }
+
+        return $result;
     }
 }

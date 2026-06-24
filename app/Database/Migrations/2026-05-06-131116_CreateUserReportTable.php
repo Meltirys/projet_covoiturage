@@ -18,12 +18,12 @@ class CreateUserReportTable extends Migration
             'date'        => ['type' => 'DATETIME', 'null' => false, 'default' => new RawSql('CURRENT_TIMESTAMP')],
             'comment'     => ['type' => 'TEXT'],
             'is_resolved' => ['type' => 'BOOLEAN', 'null' => false, 'default' => false],
-            'reporter'    => ['type' => 'INT', 'null' => false, 'unsigned' => true],
-            'reported'    => ['type' => 'INT', 'null' => false, 'unsigned' => true],
+            'reporter'    => ['type' => 'INT', 'null' => true, 'unsigned' => true],
+            'reported'    => ['type' => 'INT', 'null' => true, 'unsigned' => true],
         ]);
         $this->forge->addPrimaryKey('id_report');
-        $this->forge->addForeignKey('reporter', 'Users', 'id_user', 'RESTRICT', 'NO ACTION');
-        $this->forge->addForeignKey('reported', 'Users', 'id_user', 'RESTRICT', 'NO ACTION');
+        $this->forge->addForeignKey('reporter', 'Users', 'id_user', 'CASCADE', 'SET NULL');
+        $this->forge->addForeignKey('reported', 'Users', 'id_user', 'CASCADE', 'SET NULL');
         $this->forge->createTable('Report');
     }
 

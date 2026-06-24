@@ -17,21 +17,21 @@ class DashboardController extends BaseController
         $data['users'] = $dbUser->getNonValidatedUsers();
 
         $reportModel = model('ReportModel');
-        $data['reports'] = $reportModel->getReportInformations(); //Reetrieving the non resolved reports
+        $data['reports'] = $reportModel->getReportInformations(); //Retrieving the non resolved reports
 
-
-
+        //Transforming the dates
         foreach ($data['reports'] as &$report) {
             $report['date'] = format_date_fr($report['date']);
         }
-        unset($report);
+        unset($report); //Cleaning the memory
 
-        $data['reportsHistory'] = $reportModel->getReportInformations(true); //Reetrieving the resolved reports
+        $data['reportsHistory'] = $reportModel->getReportInformations(true); //Retrieving the resolved reports
 
+        //Transforming the dates
         foreach ($data['reportsHistory'] as &$report) {
             $report['date'] = format_date_fr($report['date']);
         }
-        unset($report);
+        unset($report); //Cleaning the memory
 
         return view('backoffice/Dashboard', $data);
     }

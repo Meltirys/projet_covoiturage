@@ -8,11 +8,6 @@ use App\Validators\ReportValidator;
 
 class ReportController extends BaseController
 {
-    public function showReportView()
-    {
-        helper('form');
-        return view('templates/ReportForm.php');
-    }
 
     public function report(int $idUser)
     {

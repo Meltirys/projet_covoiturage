@@ -42,6 +42,15 @@
         <input type="hidden" name="request[end][postcode]" value="<?= esc(old('request.end.postcode', $journey['arrival_postcode'])) ?>">
     </div>
 
+    <div class="flex gap-3">
+        <label for="start-formation-request" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Départ depuis le lieu de formation</label>
+        <input type="checkbox" name="request[start-formation]" id="start-formation-request" class="checkbox-pennride">
+    </div>
+    <div class="flex gap-3 ">
+        <label for="end-formation-request" class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold">Arrivée sur le lieu de formation</label>
+        <input type="checkbox" name="request[end-formation]" id="end-formation-request" class="checkbox-pennride">
+    </div>
+
 </div>
 <!--  -->
 

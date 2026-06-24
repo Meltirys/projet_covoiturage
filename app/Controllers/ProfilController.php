@@ -30,18 +30,23 @@ class ProfilController extends BaseController
         $pastJourney       = [];
         $passengerJourneyDone = 0;
         foreach ($allBookings as $booking) {
-            $journey = $journeyModel->find($booking['id_journey_drive']);
-            $booking['journey']     = $journey;
-            $driver                 = $userModel->find($journey['driver']);
-            $booking['driver_name'] = $driver['first_name'] . ' ' . substr($driver['last_name'], 0, 1) . '.';
-            if ($journey['departure'] < $today) {
-                $pastJourney[] = $booking;
-                if ($booking['is_validated']) $passengerJourneyDone++; //Updating the stats
+            $journey = $journeyModel->where('deletion_date IS NULL')
+                ->find($booking['id_journey_drive']);
 
-            } elseif ($booking['is_validated']) {
-                $upcomingConfirmed[] = $booking;
-            } else {
-                $upcomingPending[] = $booking;
+            //checking the journey still exists
+            if ($journey) {
+                $booking['journey']     = $journey;
+                $driver                 = $userModel->find($journey['driver']);
+                $booking['driver_name'] = $driver['first_name'] . ' ' . substr($driver['last_name'], 0, 1) . '.';
+                if ($journey['departure'] < $today) {
+                    $pastJourney[] = $booking;
+                    if ($booking['is_validated']) $passengerJourneyDone++; //Updating the stats
+
+                } elseif ($booking['is_validated']) {
+                    $upcomingConfirmed[] = $booking;
+                } else {
+                    $upcomingPending[] = $booking;
+                }
             }
         }
 
