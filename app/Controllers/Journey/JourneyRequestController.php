@@ -94,7 +94,7 @@ class JourneyRequestController extends BaseController
         $request = $this->journeyRequestModel->find($id);
 
         if (! $request) {
-            return redirect()->to('request/list')
+            return redirect()->to('requetes')
                 ->with('error', 'Demande introuvable');
         }
 
@@ -250,7 +250,7 @@ class JourneyRequestController extends BaseController
         $request = $this->journeyRequestModel->find($id);
 
         if (! $request || $request['id_creator'] != session('user_id')) {
-            return redirect()->to('request/list')
+            return redirect()->to('requetes')
                 ->with('error', 'Demande introuvable');
         }
 
@@ -329,13 +329,13 @@ class JourneyRequestController extends BaseController
                 throw new \DomainException('Ce trajet n\'existe pas');
             }
 
-            $ownerId = $request['id_creator'];
-
-            $this->canManageJourney($ownerId);
+            if ((int) $request['id_creator'] !== (int) session('user_id')) {
+                throw new \DomainException('Vous n\'avez pas la permission de supprimer cette demande');
+            }
 
             $this->journeyService->deleteJourneyRequest($id);
 
-            return redirect()->back()
+            return redirect()->to('requetes')
                 ->with('success', 'Suppression réussite');
         } catch (\DomainException $e) {
             log_message('debug', 'Domain error: ' . $e->getMessage());
@@ -350,16 +350,4 @@ class JourneyRequestController extends BaseController
         }
     }
 
-    /**
-     * Checks the user's authorization to manage a journey
-     * @param int $ownerId
-     */
-    private function canManageJourney(int $ownerId): void
-    {
-        $isOwner = session()->user_id === $ownerId;
-
-        if (!$isOwner) {
-            throw new \DomainException('Vous n\'avez pas la permission nécessaire pour modifier ce trajet.');
-        }
-    }
 }
