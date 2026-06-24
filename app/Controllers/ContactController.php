@@ -12,22 +12,22 @@ class ContactController extends BaseController
     {
         helper('form');
         helper('mail_helper');
-        
-        $post = $this->request->getPost();
 
+        $post = $this->request->getPost();
 
         $contactValidator = new ContactFormValidator();
 
         if (!$contactValidator->validate($post)) {
             return redirect()->back()
+                ->with('errors', $contactValidator->getErrors())
                 ->withInput()
-                ->with('errors', $contactValidator->getErrors());
+                ->with('contact_error', true);
         }
 
         $html = EmailTemplates::contactFormReceived(
-            $post['first_name'],
-            $post['last_name'],
-            $post['email'],
+            $post['first_name_contact'],
+            $post['last_name_contact'],
+            $post['email_contact'],
             $post['motif'],
             $post['message']
         );

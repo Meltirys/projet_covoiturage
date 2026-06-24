@@ -8,15 +8,7 @@ class ContactFormValidator extends BaseValidator
     protected function rules(): array
     {
         return [
-            'first_name' => [
-                'rules' => 'min_length[3]|max_length[50]',
-                'errors' => [
-                    'min_length' => 'Votre nom doit contenir au moins 3 caractères',
-                    'max_length' => 'Votre nom doit contenir au maximum 50 caractères',
-
-                ]
-            ],
-            'last_name' => [
+            'first_name_contact' => [
                 'rules' => 'min_length[3]|max_length[50]',
                 'errors' => [
                     'min_length' => 'Votre prénom doit contenir au moins 3 caractères',
@@ -24,7 +16,15 @@ class ContactFormValidator extends BaseValidator
 
                 ]
             ],
-            'email' => [
+            'last_name_contact' => [
+                'rules' => 'min_length[3]|max_length[50]',
+                'errors' => [
+                    'min_length' => 'Votre nom doit contenir au moins 3 caractères',
+                    'max_length' => 'Votre nom doit contenir au maximum 50 caractères',
+
+                ]
+            ],
+            'email_contact' => [
                 'rules'  => 'required|valid_email|max_length[255]',
                 'errors' => [
                     'required'    => 'L\'email est obligatoire.',

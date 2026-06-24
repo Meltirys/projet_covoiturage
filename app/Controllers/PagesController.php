@@ -32,6 +32,10 @@ class PagesController extends BaseController
             unset($journey); //Cleaning the memory
         }
 
+        if (session()->errors) {
+            $datas['errors'] = session()->errors; // Loading the errors of the contact form
+        }
+
         return view('HomeView', $datas);
     }
 
@@ -65,8 +69,11 @@ class PagesController extends BaseController
     public function contactPage(): string
     {
         helper('form');
-        $errors = session('errors') ?? [];
-        return view('ContactView', $errors);
+        $datas = [];
+        if (session()->errors) {
+            $datas['errors'] = session()->errors; // Loading the errors of the contact form
+        }
+        return view('ContactView', $datas);
     }
 
     /**
