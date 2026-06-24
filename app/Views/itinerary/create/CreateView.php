@@ -69,9 +69,11 @@ $oldTab        = session()->getFlashdata('tab');
 <?= $this->section('scripts') ?>
 <script src="/js/geocoding.js"></script>
 <script src="/js/address-fields.js"></script>
+<script src="/js/formation-handdler.js"></script>
 <script>
+    //The name of the school, needed in the formation-handdler.js
+    const schoolName = "<?= $schoolName ?>";
     // Tabs
-
     function switchTab(tab) {
         const isDrive = tab === 'drive'
         document.getElementById('panel-drive').style.display = isDrive ? 'block' : 'none'
@@ -90,7 +92,7 @@ $oldTab        = session()->getFlashdata('tab');
         switchTab('request');
     <?php endif ?>
 
-    // Car and seats
+    // Car, seats and school name
     document.addEventListener('DOMContentLoaded', () => {
         const cars = <?= json_encode($cars ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
         const carSelect = document.getElementById('drive-car')
@@ -116,5 +118,6 @@ $oldTab        = session()->getFlashdata('tab');
         }
 
     })
+
 </script>
 <?= $this->endSection() ?>

@@ -7,6 +7,7 @@ use App\Models\CarModel;
 use App\Models\JourneyDriveModel;
 use App\Services\JourneyService;
 use CodeIgniter\Exceptions\PageNotFoundException;
+use Config\School;
 use DateTime;
 
 class PagesController extends BaseController
@@ -82,12 +83,15 @@ class PagesController extends BaseController
     public function createJourney(): string
     {
         helper('form');
+        $school = config(School::class);
 
         $carModel = model(CarModel::class);
 
         $userId = session()->get('user_id');
 
         $cars = $carModel->getCarsByUser($userId);
+
+
 
         $data = [
             'cars' => array_map(fn($c) => [
@@ -96,6 +100,9 @@ class PagesController extends BaseController
                 'seats' => $c['number_of_seat'],
             ], $cars)
         ];
+
+        //Store the school name in a 
+        $data['schoolName'] = $school->name ?? 'Nom de l\'école introuvable';
 
         return view('itinerary/create/CreateView', $data);
     }
@@ -120,6 +127,9 @@ class PagesController extends BaseController
         if ($id === null) {
             throw PageNotFoundException::forPageNotFound();
         }
+
+        $school = config(School::class);
+        $schoolName = $school->name;
 
         helper('form');
 
@@ -160,6 +170,6 @@ class PagesController extends BaseController
 
         $cars = $carModel->where('id_user', $journey['driver'])->findAll();
 
-        return view('itinerary/edit/EditDriveView', ['journey' => $journey, 'cars' => $cars]);
+        return view('itinerary/edit/EditDriveView', ['journey' => $journey, 'cars' => $cars, 'schoolName' => $schoolName]);
     }
 }

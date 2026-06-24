@@ -10,6 +10,7 @@ use App\Validators\JourneyDrive\CreateJourneyDriveValidator;
 use App\Validators\JourneyDrive\EditJourneyDriveValidator;
 use App\Validators\JourneyDrive\SearchJourneyDriveValidator;
 use CodeIgniter\HTTP\RedirectResponse;
+use Config\School;
 
 class JourneyDriveController extends BaseController
 {
@@ -175,6 +176,29 @@ class JourneyDriveController extends BaseController
 
         $data = $this->request->getPost('drive');
 
+        //Checking if the datas should be auto-completed with the school informations
+        if (isset($data['start-formation']) && isset($data['end-formation'])) {
+            return redirect()->back()
+                ->with('error', 'Impossible de choisir l\'adresse de la formation comme départ et comme arrivé')
+                ->with('failed_form', 'drive')
+                ->withInput();
+        } else if (isset($data['start-formation'])) { //Adding the school info to the start
+            $school = config(School::class);
+            $data['start']['label'] = $school->address;
+            $data['start']['city'] = $school->city;
+            $data['start']['postcode'] = $school->postcode;
+            $data['start']['lat'] = $school->latitude;
+            $data['start']['lon'] = $school->longitude;
+        } else if (isset($data['end-formation'])) { //Adding the school info to the end
+            $school = config(School::class);
+            $data['end']['label'] = $school->address;
+            $data['end']['city'] = $school->city;
+            $data['end']['postcode'] = $school->postcode;
+            $data['end']['lat'] = $school->latitude;
+            $data['end']['lon'] = $school->longitude;
+        }
+
+
         // Validation
         $validator = new CreateJourneyDriveValidator;
 
@@ -235,6 +259,28 @@ class JourneyDriveController extends BaseController
 
         $data = $this->request->getPost('drive');
 
+
+        //Checking if the datas should be auto-completed with the school informations
+        if (isset($data['start-formation']) && isset($data['end-formation'])) {
+            return redirect()->back()
+                ->with('error', 'Impossible de choisir l\'adresse de la formation comme départ et comme arrivé')
+                ->with('failed_form', 'drive')
+                ->withInput();
+        } else if (isset($data['start-formation'])) { //Adding the school info to the start
+            $school = config(School::class);
+            $data['start']['label'] = $school->address;
+            $data['start']['city'] = $school->city;
+            $data['start']['postcode'] = $school->postcode;
+            $data['start']['lat'] = $school->latitude;
+            $data['start']['lon'] = $school->longitude;
+        } else if (isset($data['end-formation'])) { //Adding the school info to the end
+            $school = config(School::class);
+            $data['end']['label'] = $school->address;
+            $data['end']['city'] = $school->city;
+            $data['end']['postcode'] = $school->postcode;
+            $data['end']['lat'] = $school->latitude;
+            $data['end']['lon'] = $school->longitude;
+        }
 
         // Validation
         $validator = new EditJourneyDriveValidator;
