@@ -9,7 +9,7 @@ userRolePaginator = new Paginator(
 )
 
 document.addEventListener('DOMContentLoaded', () => {
-    fetch('/getAllPermissions/')
+    fetch(BASE_URL + 'getAllPermissions/')
         .then((r) => {
             if (r.ok) return r.json()
         })

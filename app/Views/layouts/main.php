@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="base-url" content="<?= base_url() ?>">
     <meta name="csrf-token" content="<?= csrf_hash() ?>">
     <meta name="csrf-name" content="<?= csrf_token() ?>">
     <script>
@@ -18,11 +19,7 @@
 
 <body class="min-h-screen font-poppins bg-ocean text-lightgrey">
 
-    <?php
-
-                                    use CodeIgniter\HTTP\SiteURI;
-
- if (session('logged_in') || uri_string() !== ''): ?>
+    <?php if (session('logged_in') || uri_string() !== ''): ?>
         <header class="flex items-center justify-between px-5 md:px-10 h-16 bg-ocean-mid border-b border-gold/30">
 
             <a href="<?= base_url('index.php') ?>" class="flex items-center gap-3">
@@ -120,6 +117,9 @@
 
     <?= $this->renderSection('scripts') ?>
     <script>
+
+        const BASE_URL = document.querySelector('meta[name="base-url"]').content
+
         function toggleMobileMenu() {
             const menu = document.getElementById('mobileMenu');
             const overlay = document.getElementById('menuOverlay');

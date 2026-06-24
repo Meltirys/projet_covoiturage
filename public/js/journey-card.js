@@ -6,7 +6,7 @@ const journeyPaginator = resultsEl ? new Paginator(resultsEl, paginationEl, rend
 function renderJourney(journey) {
     const seats      = journey['available_seats'] ?? journey['number_of_place']
     const seatsLabel = seats > 1 ? 'places' : 'place'
-    const url        = '/drive/show/' + journey['id_journey_drive']
+    const url        = BASE_URL + 'drive/show/' + journey['id_journey_drive']
 
     // Lien principal
     const a      = document.createElement('a')

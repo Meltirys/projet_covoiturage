@@ -8,7 +8,7 @@ userSuppressionPaginator = new Paginator(
 
 searchInputSuppression.addEventListener("input", () => {
     if (searchInputSuppression.value.length > 2) {
-        fetch('/searchUser/' + encodeURIComponent(searchInputSuppression.value))
+        fetch(BASE_URL + 'searchUser/' + encodeURIComponent(searchInputSuppression.value))
             .then((r) => {
                 if (r.ok) return r.json()
             })

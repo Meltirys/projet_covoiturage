@@ -3,7 +3,7 @@ const requestPaginationEl = document.querySelector('#request-pagination')
 const requestPaginator = requestResultsEl ? new Paginator(requestResultsEl, requestPaginationEl, renderRequest) : null
 
 function renderRequest(request) {
-    const url = '/request/show/' + request['id_journey_request']
+    const url = BASE_URL + 'request/show/' + request['id_journey_request']
 
     const a = document.createElement('a')
     a.href = url
