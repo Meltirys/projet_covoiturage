@@ -34,7 +34,7 @@
                     </div>
                     <h2 class="font-pfd text-2xl md:text-3xl font-light text-lightgrey">Je crée mon <em class="italic text-gold">compte</em></h2>
                     <p class="text-grey text-sm leading-relaxed max-w-lg">Inscris-toi avec tes informations personnelles. Ton compte sera validé par un administrateur du GRETA avant que tu puisses accéder au service — c'est ce qui garantit que PennRide reste réservé aux membres de la communauté.</p>
-                    <a href="/" class="inline-flex items-center gap-2 text-gold hover:opacity-70 transition-opacity mt-1" style="font-size: 11px; letter-spacing: 0.1em;">
+                    <a href="<?= site_url() ?>" class="inline-flex items-center gap-2 text-gold hover:opacity-70 transition-opacity mt-1" style="font-size: 11px; letter-spacing: 0.1em;">
                         Créer un compte <i class="fa-solid fa-arrow-right" style="font-size: 9px;"></i>
                     </a>
                 </div>
@@ -56,10 +56,10 @@
                     <h2 class="font-pfd text-2xl md:text-3xl font-light text-lightgrey">Je recherche ou propose <em class="italic text-gold">un trajet</em></h2>
                     <p class="text-grey text-sm leading-relaxed max-w-lg">Tu peux rechercher un trajet existant en renseignant ton point de départ, ta destination et ta date. Tu peux aussi proposer ton propre trajet si tu es conducteur — indique les détails et les places disponibles dans ton véhicule.</p>
                     <div class="flex gap-4 mt-1">
-                        <a href="/trajet" class="inline-flex items-center gap-2 text-gold hover:opacity-70 transition-opacity" style="font-size: 11px; letter-spacing: 0.1em;">
+                        <a href="<?= site_url('trajet') ?>" class="inline-flex items-center gap-2 text-gold hover:opacity-70 transition-opacity" style="font-size: 11px; letter-spacing: 0.1em;">
                             Rechercher <i class="fa-solid fa-arrow-right" style="font-size: 9px;"></i>
                         </a>
-                        <a href="/nouveau-trajet" class="inline-flex items-center gap-2 text-gold hover:opacity-70 transition-opacity" style="font-size: 11px; letter-spacing: 0.1em;">
+                        <a href="<?= site_url('nouveau-trajet') ?>" class="inline-flex items-center gap-2 text-gold hover:opacity-70 transition-opacity" style="font-size: 11px; letter-spacing: 0.1em;">
                             Proposer <i class="fa-solid fa-arrow-right" style="font-size: 9px;"></i>
                         </a>
                     </div>
@@ -110,8 +110,8 @@
                 <p class="text-grey" style="font-size: 12px;">Rejoins la communauté PennRide dès maintenant.</p>
             </div>
             <div class="flex gap-3">
-                <a href="/trajet" class="text-xs font-medium text-lightgrey border rounded-full px-5 py-2.5 hover:border-gold hover:text-gold transition-colors" style="border-color: rgba(180,140,60,0.3);">Voir les trajets</a>
-                <a href="/nouveau-trajet" class="text-xs font-semibold text-ocean bg-gold rounded-full px-5 py-2.5 hover:opacity-90 transition-opacity">Proposer un trajet</a>
+                <a href="<?= site_url('trajet') ?>" class="text-xs font-medium text-lightgrey border rounded-full px-5 py-2.5 hover:border-gold hover:text-gold transition-colors" style="border-color: rgba(180,140,60,0.3);">Voir les trajets</a>
+                <a href="<?= site_url('nouveau-trajet') ?>" class="text-xs font-semibold text-ocean bg-gold rounded-full px-5 py-2.5 hover:opacity-90 transition-opacity">Proposer un trajet</a>
             </div>
         </div>
 

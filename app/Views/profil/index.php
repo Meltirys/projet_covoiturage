@@ -186,7 +186,7 @@
                             <?php else: ?>
                                 <?php foreach ($driveUpcoming as $journey): ?>
                                     <li class="flex justify-between items-center bg-ocean-mid border border-ocean-light rounded-[14px] px-4 py-3 hover-border-gold transition-colors">
-                                        <a href="drive/show/<?= $journey['id_journey_drive'] ?>" class="no-underline flex-1">
+                                        <a href="<?= site_url('drive/show/' . $journey['id_journey_drive']) ?>" class="no-underline flex-1">
                                             <p class="text-sm font-medium text-lightgrey"><?= format_date_fr($journey['departure']) ?></p>
                                         </a>
                                         <div class="flex items-center gap-2">
@@ -218,7 +218,7 @@
                                 </li>
                             <?php else: ?>
                                 <?php foreach ($drivePast as $journey): ?>
-                                    <a href="drive/show/<?= $journey['id_journey_drive'] ?>" class="no-underline">
+                                    <a href="<?= site_url('drive/show/' . $journey['id_journey_drive']) ?>" class="no-underline">
                                         <li class="flex justify-between items-center bg-ocean-mid border border-ocean-light rounded-[14px] px-4 py-3 hover:bg-ocean-light transition-colors">
                                             <p class="text-sm font-medium text-lightgrey"><?= format_date_fr($journey['departure']) ?></p>
                                             <span class="text-xs font-medium bg-ocean-light text-grey rounded-full px-3 py-0.5">Effectué</span>
@@ -243,7 +243,7 @@
                                     </li>
                                 <?php else: ?>
                                     <?php foreach ($pendingRequests as $request): ?>
-                                        <a href="drive/show/<?= $request['id_journey_drive'] ?>" class="no-underline">
+                                        <a href="<?= site_url('drive/show/' . $request['id_journey_drive']) ?>" class="no-underline">
                                             <li class="flex justify-between items-center bg-ocean-mid border border-ocean-light rounded-[14px] px-4 py-3 hover-border-gold transition-colors gap-3">
                                                 <div class="min-w-0">
                                                     <p class="text-sm font-medium text-lightgrey truncate"><?= esc($request['passenger_name']) ?></p>
@@ -291,7 +291,7 @@
                                 </li>
                             <?php else: ?>
                                 <?php foreach ($upcomingConfirmed as $booking): ?>
-                                    <a href="drive/show/<?= $booking['id_journey_drive'] ?>" class="no-underline">
+                                    <a href="<?= site_url('drive/show/' . $booking['id_journey_drive']) ?>" class="no-underline">
                                         <li class="flex justify-between items-center bg-ocean-mid border border-ocean-light rounded-[14px] px-4 py-3 hover-border-gold transition-colors gap-3 flex-wrap">
                                             <div class="min-w-0">
                                                 <p class="text-sm font-medium text-lightgrey"><?= format_date_fr($booking['journey']['departure']) ?></p>
@@ -322,7 +322,7 @@
                                 </li>
                             <?php else: ?>
                                 <?php foreach ($upcomingPending as $booking): ?>
-                                    <a href="drive/show/<?= $booking['id_journey_drive'] ?>" class="no-underline">
+                                    <a href="<?= site_url('drive/show/' . $booking['id_journey_drive']) ?>" class="no-underline">
                                         <li class="flex justify-between items-center bg-ocean-mid border border-ocean-light rounded-[14px] px-4 py-3 hover-border-gold transition-colors gap-3 flex-wrap">
                                             <div class="min-w-0">
                                                 <p class="text-sm font-medium text-lightgrey"><?= format_date_fr($booking['journey']['departure']) ?></p>
@@ -353,7 +353,7 @@
                                 </li>
                             <?php else: ?>
                                 <?php foreach ($pastJourney as $booking): ?>
-                                    <a href="drive/show/<?= $booking['id_journey_drive'] ?>" class="no-underline">
+                                    <a href="<?= site_url('drive/show/' . $booking['id_journey_drive']) ?>" class="no-underline">
                                         <li class="flex justify-between items-center bg-ocean-mid border border-ocean-light rounded-[14px] px-4 py-3 hover:bg-ocean-light transition-colors gap-3">
                                             <div class="min-w-0">
                                                 <p class="text-sm font-medium text-lightgrey"><?= format_date_fr($booking['journey']['departure']) ?></p>
@@ -382,7 +382,7 @@
                     <h3 class="section-title flex items-center gap-2 text-[0.625rem] tracking-[0.2em] uppercase font-bold text-gold mb-3">Paramètres du compte</h3>
                     <div class="bg-ocean-mid border border-ocean-light rounded-[14px] overflow-hidden mb-2">
                         <div class="h-0.5 bg-linear-to-r from-gold/40 to-transparent"></div>
-                        <a href="profil/modify"
+                        <a href="<?= site_url('profil/modify') ?>"
                             class="flex items-center justify-between px-4 py-3 hover-border-gold border-b border-ocean-light transition-colors no-underline group gap-3">
                             <div class="flex items-center gap-3">
                                 <div class="w-9 h-9 rounded-[9px] bg-gold/10 border border-gold/15 flex items-center justify-center text-sm flex-shrink-0"><i class="fa-solid fa-user" style="color: var(--color-gold)"></i></div>
@@ -393,7 +393,7 @@
                             </div>
                             <span class="param-arrow text-grey text-base transition-all flex-shrink-0"><i class="fa-solid fa-angle-right" style="color: var(--color-gold)"></i></span>
                         </a>
-                        <a href="profil/changePassword"
+                        <a href="<?= site_url('profil/changePassword') ?>"
                             class="flex items-center justify-between px-4 py-3 hover-border-gold transition-colors no-underline group gap-3">
                             <div class="flex items-center gap-3">
                                 <div class="w-9 h-9 rounded-[9px] bg-ocean-light border border-ocean-light flex items-center justify-center text-sm flex-shrink-0"><i class="fa-solid fa-key" style="color: var(--color-gold)"></i></div>
@@ -418,7 +418,7 @@
                             <span><i class="fa-solid fa-trash-can" style="color: var(--color-gold)"></i></span> Supprimer mon compte
                         </button>
                     </form>
-                    <a href="/logout"
+                    <a href="<?= site_url('logout') ?>"
                         class="w-full flex items-center justify-center gap-2 bg-ocean-mid border border-ocean-light text-grey rounded-[14px] px-4 py-3 text-sm hover:border-white/20 hover:text-lightgrey transition-colors no-underline">
                         <span><i class="fa-solid fa-right-to-bracket" style="color: var(--color-gold)"></i></span> Se déconnecter
                     </a>
