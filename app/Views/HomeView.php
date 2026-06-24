@@ -385,6 +385,7 @@ use CodeIgniter\HTTP\SiteURI;
 
 <?= $this->section('scripts') ?>
 <?php if (!session('logged_in')): ?>
+    <script src="<?= base_url('js/geocoding.js') ?>"></script>
     <script src="<?= base_url('js/profile-address.js') ?>"></script>
 <?php else: ?>
     <script src="<?= base_url('js/geocoding.js') ?>"></script>
