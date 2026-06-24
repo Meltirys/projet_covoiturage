@@ -29,12 +29,12 @@
             <?php if (session('logged_in')): ?>
 
                 <nav class="hidden md:flex items-center gap-2">
-                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/comment-ca-marche">Comment ça marche ?</a>
+                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="<?= site_url('comment-ca-marche') ?>">Comment ça marche ?</a>
                     <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="<?= site_url('trajet') ?>">Trajets</a>
-                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/requetes">Requêtes</a>
-                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/nouveau-trajet">Proposer</a>
-                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/contact-page">Contact</a>
-                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/myprofil">Mon profil</a>
+                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="<?= site_url('requetes') ?>">Requêtes</a>
+                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="<?= site_url('nouveau-trajet') ?>">Proposer</a>
+                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="<?= site_url('contact-page') ?>">Contact</a>
+                    <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="<?= site_url('myprofil') ?>">Mon profil</a>
                     <?php if (session('user_role') == 2 || session('user_role') == 3): ?>
                         <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/backoffice">Admin</a>
                     <?php endif; ?>
