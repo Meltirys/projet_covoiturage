@@ -10,7 +10,7 @@
         if (localStorage.getItem('theme') === 'dark') document.documentElement.classList.add('dark')
     </script>
     <link rel="icon" type="image/png" href="<?= base_url('img/logo_golden.png') ?>">
-    <script src="js/theme-toggle.js"></script>
+    <script src="<?= base_url('js/theme-toggle.js') ?>"></script>
     <link rel="stylesheet" href="<?= base_url('css/style.css') ?>">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <title>PennRide</title>
@@ -18,11 +18,15 @@
 
 <body class="min-h-screen font-poppins bg-ocean text-lightgrey">
 
-    <?php if (session('logged_in') || uri_string() !== ''): ?>
+    <?php
+
+                                    use CodeIgniter\HTTP\SiteURI;
+
+ if (session('logged_in') || uri_string() !== ''): ?>
         <header class="flex items-center justify-between px-5 md:px-10 h-16 bg-ocean-mid border-b border-gold/30">
 
-            <a href="/" class="flex items-center gap-3">
-                <img src="/img/logo_golden.png" alt="PennRide" class="w-10 h-10 rounded-xl">
+            <a href="<?= base_url('index.php') ?>" class="flex items-center gap-3">
+                <img src="<?= base_url('img/logo_golden.png') ?>" alt="PennRide" class="w-10 h-10 rounded-xl">
                 <span class="hidden md:block font-pfd text-lg text-bluegrey">Penn<em class="italic text-gold">Ride</em></span>
             </a>
 
@@ -141,7 +145,7 @@
                 <!-- Brand -->
                 <div class="flex flex-col gap-3">
                     <div class="flex items-center gap-2">
-                        <img src="/img/logo_golden.png" alt="PennRide" class="w-7 h-7 rounded-lg opacity-80">
+                        <img src="<?= base_url('img/logo_golden.png') ?>" alt="PennRide" class="w-7 h-7 rounded-lg opacity-80">
                         <span class="font-pfd text-base text-bluegrey">Penn<em class="italic text-gold">Ride</em></span>
                     </div>
                     <p class="text-grey leading-relaxed" style="font-size: 11px; max-width: 180px;">Le covoiturage solidaire</p>
@@ -151,15 +155,15 @@
                 <div class="flex gap-12">
                     <div class="flex flex-col gap-2">
                         <p class="text-gold uppercase mb-1" style="font-size: 9px; letter-spacing: 0.2em;">Navigation</p>
-                        <a href="/trajet" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Trajets</a>
-                        <a href="/nouveau-trajet" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Proposer</a>
-                        <a href="/myprofil" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Mon profil</a>
+                        <a href="<?= site_url('trajet') ?>" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Trajets</a>
+                        <a href="<?= site_url('nouveau-trajet') ?>" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Proposer</a>
+                        <a href="<?= site_url('myprofil') ?>" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Mon profil</a>
                     </div>
                     <div class="flex flex-col gap-2">
                         <p class="text-gold uppercase mb-1" style="font-size: 9px; letter-spacing: 0.2em;">Informations</p>
-                        <a href="/mentions-legales" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Mentions légales</a>
-                        <a href="/cgu" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">CGU</a>
-                        <a href="/contact-page" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Contact</a>
+                        <a href="<?= site_url('mentions-legales') ?>" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Mentions légales</a>
+                        <a href="<?= site_url('cgu') ?>" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">CGU</a>
+                        <a href="<?= site_url('contact-page') ?>" class="text-grey hover:text-gold transition-colors" style="font-size: 11px;">Contact</a>
                     </div>
                 </div>
 

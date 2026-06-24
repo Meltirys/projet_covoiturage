@@ -4,7 +4,11 @@
 
 <main class="min-h-screen font-poppins bg-ocean" id="main-page">
 
-    <?php if (!session('logged_in')) : ?>
+    <?php
+
+use CodeIgniter\HTTP\SiteURI;
+
+ if (!session('logged_in')) : ?>
 
         <div class="flex flex-col md:flex-row md:min-h-screen">
 
@@ -256,7 +260,7 @@
 
                     <!-- BLOC PROCHAIN TRAJET -->
                     <?php if (!empty($next_trip)): ?>
-                        <a href="/myprofil" class="inline-flex items-center gap-0 rounded-xl overflow-hidden no-underline hover:opacity-90 transition-opacity" style="background:rgba(212,168,67,0.06);border:1px solid rgba(212,168,67,0.3);max-width:420px;">
+                        <a href="<?= site_url('myprofil') ?>" class="inline-flex items-center gap-0 rounded-xl overflow-hidden no-underline hover:opacity-90 transition-opacity" style="background:rgba(212,168,67,0.06);border:1px solid rgba(212,168,67,0.3);max-width:420px;">
                             <div class="flex flex-col gap-1.5 px-4 py-3" style="border-right:1px solid rgba(212,168,67,0.3);">
                                 <div class="flex items-center gap-1.5" style="font-size:8px;letter-spacing:0.12em;text-transform:uppercase;color:#d4a843;">
                                     <div style="width:5px;height:5px;border-radius:50%;background:#d4a843;flex-shrink:0;"></div>
@@ -318,7 +322,7 @@
                         <div class="p-5">
                             <div class="flex items-baseline justify-between mb-4">
                                 <p class="section-title flex items-center gap-2 text-[0.625rem] tracking-[0.2em] uppercase font-bold text-gold mb-0">Trajets disponibles</p>
-                                <a href="/trajet" class="text-xs text-grey hover:text-gold transition-colors">Voir tout →</a>
+                                <a href="<?= site_url('trajet') ?>" class="text-xs text-grey hover:text-gold transition-colors">Voir tout →</a>
                             </div>
                             <?php if (!empty($journeys)): ?>
                                 <?= view('/itinerary/search/journeyCard', $journeys) ?>
@@ -326,7 +330,7 @@
                                 <div class="flex flex-col items-center justify-center py-8 text-grey">
                                     <p class="font-pfd italic text-xl text-gold/40 mb-2">Aucun trajet</p>
                                     <p class="text-xs">Aucun trajet disponible pour le moment.</p>
-                                    <a href="/nouveau-trajet" class="mt-4 text-gold border border-gold/30 rounded-full px-4 py-1.5 text-xs hover:bg-gold/10 transition-colors">Proposer le premier →</a>
+                                    <a href="<?= site_url('nouveau-trajet') ?>" class="mt-4 text-gold border border-gold/30 rounded-full px-4 py-1.5 text-xs hover:bg-gold/10 transition-colors">Proposer le premier →</a>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -336,21 +340,21 @@
 
                 <!-- LIENS RAPIDES -->
                 <div class="grid grid-cols-3 gap-3 mt-5">
-                    <a href="/nouveau-trajet" class="flex flex-col items-center gap-2 bg-ocean-mid border border-ocean-light rounded-[14px] py-4 px-3 text-center hover:border-gold/30 transition-colors group no-underline">
+                    <a href="<?= site_url('nouveau-trajet') ?>" class="flex flex-col items-center gap-2 bg-ocean-mid border border-ocean-light rounded-[14px] py-4 px-3 text-center hover:border-gold/30 transition-colors group no-underline">
                         <span class="text-lg text-gold/60 group-hover:text-gold transition-colors">+</span>
                         <span class="text-[0.625rem] text-grey uppercase tracking-[0.2em]">Proposer</span>
                     </a>
-                    <a href="/myprofil" class="flex flex-col items-center gap-2 bg-ocean-mid border border-ocean-light rounded-[14px] py-4 px-3 text-center hover:border-gold/30 transition-colors group no-underline">
+                    <a href="<?= site_url('myprofil') ?>" class="flex flex-col items-center gap-2 bg-ocean-mid border border-ocean-light rounded-[14px] py-4 px-3 text-center hover:border-gold/30 transition-colors group no-underline">
                         <span class="text-lg text-gold/60 group-hover:text-gold transition-colors">◎</span>
                         <span class="text-[0.625rem] text-grey uppercase tracking-[0.2em]">Mon profil</span>
                     </a>
                     <?php if (session('user_role') == 2): ?>
-                        <a href="/backoffice" class="flex flex-col items-center gap-2 bg-ocean-mid border border-gold/20 rounded-[14px] py-4 px-3 text-center hover:border-gold/50 transition-colors group no-underline">
+                        <a href="<?= site_url('backoffice') ?>" class="flex flex-col items-center gap-2 bg-ocean-mid border border-gold/20 rounded-[14px] py-4 px-3 text-center hover:border-gold/50 transition-colors group no-underline">
                             <span class="text-lg text-gold/60 group-hover:text-gold transition-colors">⊞</span>
                             <span class="text-[0.625rem] text-gold/70 uppercase tracking-[0.2em]">Admin</span>
                         </a>
                     <?php else: ?>
-                        <a href="/logout" class="flex flex-col items-center gap-2 bg-ocean-mid border border-ocean-light rounded-[14px] py-4 px-3 text-center hover:border-red/30 transition-colors group no-underline">
+                        <a href="<?= site_url('logout') ?>" class="flex flex-col items-center gap-2 bg-ocean-mid border border-ocean-light rounded-[14px] py-4 px-3 text-center hover:border-red/30 transition-colors group no-underline">
                             <span class="text-lg text-grey group-hover:text-red transition-colors">⏻</span>
                             <span class="text-[0.625rem] text-grey uppercase tracking-[0.2em]">Quitter</span>
                         </a>
