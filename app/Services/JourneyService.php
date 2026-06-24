@@ -326,6 +326,13 @@ class JourneyService
         // 4. Filtering the journeys to keep only the one that are on the journey entered by the user
         $journeys = $this->matchJourneys($journeys, $departurePoint, $endPoint);
 
+        // 5. Removing the journey that have been proposed by the driver
+        foreach ($journeys as $key => $journey) {
+            if ($journey['driver'] === session('user_id'))
+                unset($journeys[$key]);
+        }
+        $journeys = array_values($journeys); //Reindexing the array
+
         return $journeys;
     }
 
@@ -341,6 +348,12 @@ class JourneyService
         switch ($type) {
             case 'drive':
                 $allJouneys = $this->journeyDriveModel->getJourneyInfosByDates(date('Y-m-d H:i:s'), null, $numberOfJourneys); // We retrieve the journey that start after the current day
+                // Removing the journey that have been proposed by the driver
+                foreach ($allJouneys as $key => $journey) {
+                    if ($journey['driver'] === session('user_id'))
+                        unset($allJouneys[$key]);
+                }
+                $allJouneys = array_values($allJouneys); //Reindexing the array
                 break;
             case 'request':
                 $allJouneys = $this->journeyRequestModel->getJourneyInfosByDates(date('Y-m-d H:i:s'), null, $numberOfJourneys);
