@@ -136,6 +136,44 @@ class ProfilController extends BaseController
             return redirect()->to('/')->with('error', 'Utilisateur introuvable');
         }
 
+        $connectedId   = session('user_id');
+        $isOwnProfile  = (int) $id === (int) $connectedId;
+
+        if (!$isOwnProfile) {
+            // Trajets où l'utilisateur connecté est conducteur et la cible est passager
+            $connectedDriverJourneys = $journeyModel->where('driver', $connectedId)->where('deletion_date', null)->findAll();
+            $connectedDriverIds      = array_column($connectedDriverJourneys, 'id_journey_drive');
+
+            // Trajets où l'utilisateur connecté est passager
+            $connectedBookings     = $bookingModel->where('id_user', $connectedId)->where('deletion_date IS NULL')->findAll();
+            $connectedPassengerIds = array_column($connectedBookings, 'id_journey_drive');
+
+            $allJourneyIds = array_unique(array_merge($connectedDriverIds, $connectedPassengerIds));
+
+            if (empty($allJourneyIds)) {
+                return redirect()->to('/')
+                    ->with('error', 'Vous n\'avez pas accès à ce profil');
+            }
+
+            // Vérifie si la cible est conducteur ou passager sur un de ces trajets
+            $targetIsDriver = $journeyModel
+                ->where('driver', $id)
+                ->whereIn('id_journey_drive', $allJourneyIds)
+                ->where('deletion_date', null)
+                ->first();
+
+            $targetIsPassenger = $bookingModel
+                ->where('id_user', $id)
+                ->whereIn('id_journey_drive', $allJourneyIds)
+                ->where('deletion_date IS NULL')
+                ->first();
+
+            if (!$targetIsDriver && !$targetIsPassenger) {
+                return redirect()->to('/')
+                    ->with('error', 'Vous n\'avez pas accès à ce profil');
+            }
+        }
+
         $driverJourneyDone = 0;
         $passengerTaken = 0;
 
@@ -157,8 +195,6 @@ class ProfilController extends BaseController
             ->where('is_validated', true)
             ->where('deletion_date IS NULL')
             ->countAllResults();
-
-        $isOwnProfile = (int) $id === (int) session('user_id');
 
         return view('profil/public', [
             'user'                 => $user,
