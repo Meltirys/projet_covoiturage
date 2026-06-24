@@ -381,10 +381,10 @@
 
 <?= $this->section('scripts') ?>
 <?php if (!session('logged_in')): ?>
-    <script src="/js/profile-address.js"></script>
+    <script src="js/profile-address.js"></script>
 <?php else: ?>
-    <script src="/js/geocoding.js"></script>
-    <script src="/js/address-fields.js"></script>
+    <script src="js/geocoding.js"></script>
+    <script src="js/address-fields.js"></script>
 <?php endif; ?>
 
 <script>

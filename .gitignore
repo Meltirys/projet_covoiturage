@@ -131,3 +131,4 @@ _modules/*
 /phpunit*.xml
 
 app/Controllers/Debug.php
+.env.online

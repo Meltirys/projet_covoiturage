@@ -29,8 +29,8 @@
 
 <?= $this->endSection() ?>
 <?= $this->section('scripts') ?>
-<script src="/js/pagination.js"></script>
-<script src="/js/request-card.js"></script>
+<script src="js/pagination.js"></script>
+<script src="js/request-card.js"></script>
 <script>
     let requests = <?= json_encode($requests ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
     if (requests && requests.length > 0 && typeof requestPaginator !== 'undefined' && requestPaginator) {

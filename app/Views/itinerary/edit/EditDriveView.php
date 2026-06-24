@@ -49,13 +49,13 @@ $selectedSeat = old('drive.seats', $journey['number_of_place']);
 <?= $this->endSection() ?>
 
 <?= $this->section('scripts') ?>
-<script src="/js/geocoding.js"></script>
-<script src="/js/address-fields.js"></script>
-<script src="/js/formation-handdler.js"></script>
+<script src="js/geocoding.js"></script>
+<script src="js/address-fields.js"></script>
+<script src="js/formation-handdler.js"></script>
 <script>
     //The name of the school, needed in the formation-handdler.js
     const schoolName = "<?= $schoolName ?>";
-    
+
     document.addEventListener('DOMContentLoaded', () => {
         // Création des nombres de places possibles
         const cars = <?= json_encode($cars ?? [], JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) ?>;
