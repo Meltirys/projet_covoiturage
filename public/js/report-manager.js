@@ -30,7 +30,7 @@ function renderReportManagement(element) {
     resolvedForm.appendChild(csrfToken)
     resolvedForm.appendChild(resolvedButton)
     resolvedForm.method = 'POST'
-    resolvedForm.action = 'report/solve/' + element['id_report']
+    resolvedForm.action = BASE_URL + 'report/solve/' + element['id_report']
     resolvedButton.type = 'submit'
     resolvedButton.textContent = 'Marquer comme résolu'
 

@@ -29,7 +29,7 @@ function renderValidationUser(user) {
     // Formulaire accepter
     const acceptForm   = document.createElement('form')
     acceptForm.method  = 'POST'
-    acceptForm.action  = '/userValidation/accept/' + user['id_user']
+    acceptForm.action  = BASE_URL + 'userValidation/accept/' + user['id_user']
     const acceptCsrf   = document.createElement('input')
     acceptCsrf.type    = 'hidden'
     acceptCsrf.name    = csrfName
@@ -44,7 +44,7 @@ function renderValidationUser(user) {
     // Formulaire refuser
     const refuseForm   = document.createElement('form')
     refuseForm.method  = 'POST'
-    refuseForm.action  = '/userValidation/refuse/' + user['id_user']
+    refuseForm.action  = BASE_URL + 'userValidation/refuse/' + user['id_user']
     const refuseCsrf   = document.createElement('input')
     refuseCsrf.type    = 'hidden'
     refuseCsrf.name    = csrfName

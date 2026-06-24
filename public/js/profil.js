@@ -49,7 +49,7 @@
     function setupModify(idCar) {
         showForm('modify-car-form')
         let form = document.querySelector('#modify-car-form form')
-        form.action = "car/modify/" + idCar
+        form.action = BASE_URL + "car/modify/" + idCar
         let brand = form.querySelector('#brand')
         let model = form.querySelector('#model')
         let year = form.querySelector('#year')

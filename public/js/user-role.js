@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 let searchInputRole = document.querySelector("#searchUserRole")
                 searchInputRole.addEventListener("input", () => {
                     if (searchInputRole.value.length > 2) {
-                        fetch('/searchUserWP/' + encodeURIComponent(searchInputRole.value))
+                        fetch(BASE_URL + 'searchUserWP/' + encodeURIComponent(searchInputRole.value))
                             .then((r) => {
                                 if (r.ok) return r.json()
                             })
@@ -56,7 +56,7 @@ function renderRoleResults(element) {
     suppressionForm.appendChild(csrfToken)
     suppressionForm.appendChild(suppressionButton)
     suppressionForm.method = 'POST'
-    suppressionForm.action = 'user/updateRole/' + element['id_user']
+    suppressionForm.action = BASE_URL + 'user/updateRole/' + element['id_user']
     suppressionButton.type = 'submit'
 
     csrfToken.type  = 'hidden'

@@ -37,7 +37,7 @@
                     <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="<?= site_url('contact-page') ?>">Contact</a>
                     <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="<?= site_url('myprofil') ?>">Mon profil</a>
                     <?php if (session('user_role') == 2 || session('user_role') == 3): ?>
-                        <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="/backoffice">Admin</a>
+                        <a class="nav-d text-xs font-poppins text-gold px-3 py-2 rounded-lg hover:bg-gold hover:text-ocean transition-colors" href="<?= site_url('backoffice') ?>">Admin</a>
                     <?php endif; ?>
                 </nav>
 
@@ -115,9 +115,7 @@
 
     <?= $this->renderSection('content') ?>
 
-    <?= $this->renderSection('scripts') ?>
     <script>
-
         const BASE_URL = document.querySelector('meta[name="base-url"]').content
 
         function toggleMobileMenu() {
@@ -135,6 +133,8 @@
             }
         }
     </script>
+    <?= $this->renderSection('scripts') ?>
+
 
     <footer class="mt-auto" style="border-top: 0.5px solid rgba(180,140,60,0.15); background: var(--color-ocean-mid);">
         <div class="px-5 md:px-10 py-8 max-w-5xl mx-auto">

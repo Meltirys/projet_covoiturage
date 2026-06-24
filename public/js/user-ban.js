@@ -35,7 +35,7 @@ function renderBanResults(element) {
     suppressionForm.appendChild(csrfToken)
     suppressionForm.appendChild(suppressionButton)
     suppressionForm.method = 'POST'
-    suppressionForm.action = 'user/ban/' + element['id_user']
+    suppressionForm.action = BASE_URL + 'user/ban/' + element['id_user']
     suppressionButton.type = 'submit'
 
     csrfToken.type  = 'hidden'
