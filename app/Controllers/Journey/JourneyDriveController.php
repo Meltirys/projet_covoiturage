@@ -151,6 +151,23 @@ class JourneyDriveController extends BaseController
             ->first();
 
         $data['geojson'] = model('TrackModel')->find($data['journey']['id_track'])['geojson'] ?? null;
+
+        $data['passengers'] = [];
+        if ($data['journey']['is_driver']) {
+            $bookings = $bookingModel
+                ->where('id_journey_drive', $slug)
+                ->where('is_validated', true)
+                ->where('deletion_date IS NULL')
+                ->findAll();
+            foreach ($bookings as $booking) {
+                $passenger = $userModel->find($booking['id_user']);
+                if ($passenger) {
+                    $passenger['meeting_point'] = $booking['meeting_point'] ?? null;
+                    $data['passengers'][] = $passenger;
+                }
+            }
+        }
+
         return view('/itinerary/show/DriverJourneyView', $data);
     }
 

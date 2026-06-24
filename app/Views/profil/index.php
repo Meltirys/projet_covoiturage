@@ -248,6 +248,9 @@
                                                 <div class="min-w-0">
                                                     <p class="text-sm font-medium text-lightgrey truncate"><?= esc($request['passenger_name']) ?></p>
                                                     <p class="text-xs text-grey"><?= esc($request['journey']['departure']) ?></p>
+                                                    <?php if (!empty($request['meeting_point'])): ?>
+                                                        <p class="text-xs text-gold">RDV : <?= esc($request['meeting_point']) ?></p>
+                                                    <?php endif ?>
                                                 </div>
                                                 <div class="flex gap-2 flex-shrink-0">
                                                     <form action="<?= site_url('reservation/accepter/' . $request['id_booking']) ?>" method="post">

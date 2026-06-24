@@ -17,6 +17,7 @@ class CreateBookingTable extends Migration
             ],
             'booking_date'        => ['type' => 'DATE', 'null' => false],
             'seat_taken'          => ['type' => 'TINYINT', 'unsigned' => true, 'null' => false],
+            'meeting_point'       => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true],
             'is_validated'        => ['type' => 'BOOLEAN', 'null' => false, 'default' => false],
             'deletion_date'       => ['type' => 'DATE', 'null' => true],
             'id_user'             => ['type' => 'INT', 'unsigned' => true, 'null' => true],

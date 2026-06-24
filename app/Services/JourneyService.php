@@ -468,10 +468,10 @@ class JourneyService
             throw new \DomainException('Le trajet n\'existe pas');
         }
 
-        $journeyId = $journey['id_journey_drive'];
+        $journeyId = $journey['id_journey_request'];
 
         try {
-            // Suppression du trajet
+            // Suppression de la demande
             $this->journeyRequestModel->delete($journeyId);
 
             // Transaction safety

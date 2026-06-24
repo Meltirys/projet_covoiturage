@@ -75,6 +75,7 @@ class BookingController extends BaseController
         $data = [
             'booking_date'     => date('Y-m-d'),
             'seat_taken'       => $seatTaken,
+            'meeting_point'    => $this->request->getPost('meeting_point') ?? null,
             'id_user'          => session('user_id'),
             'id_journey_drive' => $journeyID,
         ];

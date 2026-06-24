@@ -25,7 +25,12 @@ function renderRequest(request) {
     timeRange.className = 'text-xs text-grey mt-0.5'
     timeRange.textContent = 'Disponible : ' + request['earliest_departure'] + ' - ' + request['latest_departure']
 
+    const dateInfo = document.createElement('p')
+    dateInfo.className = 'text-xs text-grey mt-0.5'
+    dateInfo.textContent = 'Date : ' + (request['request_date'] ?? 'Non précisée')
+
     headerLeft.appendChild(cities)
+    headerLeft.appendChild(dateInfo)
     headerLeft.appendChild(timeRange)
 
     const memberSpan = document.createElement('span')

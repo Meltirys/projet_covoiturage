@@ -121,6 +121,54 @@ class ProfilController extends BaseController
         return view('profil/modify', $data);
     }
 
+    public function show(int $id)
+    {
+        helper('form');
+
+        $userModel    = new UserModel();
+        $journeyModel = new JourneyDriveModel();
+        $bookingModel = new BookingModel();
+        $today        = date('Y-m-d H:i:s');
+
+        $user = $userModel->find($id);
+
+        if (!$user) {
+            return redirect()->to('/')->with('error', 'Utilisateur introuvable');
+        }
+
+        $driverJourneyDone = 0;
+        $passengerTaken = 0;
+
+        $myJourneys = $journeyModel->where('driver', $id)->where('deletion_date', null)->findAll();
+        foreach ($myJourneys as $journey) {
+            if ($journey['departure'] < $today) {
+                $driverJourneyDone++;
+                $passengerTaken += (int) $bookingModel
+                    ->selectSum('seat_taken')
+                    ->where('id_journey_drive', $journey['id_journey_drive'])
+                    ->where('is_validated', true)
+                    ->where('deletion_date IS NULL')
+                    ->get()->getRow()->seat_taken;
+            }
+        }
+
+        $passengerJourneyDone = $bookingModel
+            ->where('id_user', $id)
+            ->where('is_validated', true)
+            ->where('deletion_date IS NULL')
+            ->countAllResults();
+
+        $isOwnProfile = (int) $id === (int) session('user_id');
+
+        return view('profil/public', [
+            'user'                 => $user,
+            'driverJourneyDone'    => $driverJourneyDone,
+            'passengerTaken'       => $passengerTaken,
+            'passengerJourneyDone' => $passengerJourneyDone,
+            'isOwnProfile'         => $isOwnProfile,
+        ]);
+    }
+
     /*
     * Shows the page where the password can be changed. Access route is /profil/changePassword
     */
