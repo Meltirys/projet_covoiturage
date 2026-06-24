@@ -9,6 +9,10 @@ use App\Validators\ReportValidator;
 class ReportController extends BaseController
 {
 
+    /**
+     * Reports a given user. The reporter is setted to be the connected user.
+     * @param int $idUser The user to report
+     */
     public function report(int $idUser)
     {
         helper('form');

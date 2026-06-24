@@ -3,6 +3,12 @@
 if (!function_exists('haversine_distance')) {
     /**
      * Calculates distance between two points using the haversine formula
+     * @param float $lat1 The latitude of the first location
+     * @param float $lon1 The longitude of the first location
+     * @param float $lat2 The latitude of the second location
+     * @param float $lon2 The longitude of the second location     
+     * 
+     * @return float The distance between the two given points
      */
     function haversine_distance(
         float $lat1,

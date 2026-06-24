@@ -11,8 +11,6 @@ use Exception;
 class AuthController extends BaseController
 {
 
-    public function index() {}
-
     /**
      * Returns the login view
      */

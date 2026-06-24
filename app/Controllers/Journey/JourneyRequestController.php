@@ -26,66 +26,10 @@ class JourneyRequestController extends BaseController
     }
 
     /**
-     * Displays the search page listing itineraries
-     */
-    public function search(): string|RedirectResponse
-    {
-        helper('form');
-
-        /* Inputs :
-        * start = ['label', 'city', 'postcode', 'lat', 'lon']
-        * end = [...]
-        * date
-        * free-seats (default 1)
-        * (optional) filters
-        */
-
-        $getData = $this->request->getGet();
-
-        if (isset($getData['start'])) {
-            // Validation
-            $validator = new SearchJourneyRequestValidator;
-
-            if (! $validator->validate($getData)) {
-                log_message('debug', 'Validation failed. Errors: ' . json_encode($validator->getErrors()));
-                return redirect()->back()
-                    ->with('errors', $validator->getErrors())
-                    ->withInput();
-            }
-
-            log_message('debug', 'Validation passed. Searching journeys');
-
-            // Logic
-            try {
-                // === Ajouter options quand possible !
-                $journeys = $this->journeyService->searchJourneyRequest($getData);
-
-                log_message('debug', 'Journeys searched successfully');
-
-                return redirect()->back()
-                    ->with('journeys', $journeys)
-                    ->withInput();
-            } catch (\Throwable $e) {
-                // system error
-                log_message('error', $e->getMessage());
-
-                return redirect()->back()
-                    ->with('error', 'Une erreur s\'est produite, veuillez réessayer plus tard.')
-                    ->withInput();
-            }
-        } else {
-            $journeys = $this->journeyService->getNextAvailableJourneys('request');
-        }
-
-        return view('itinerary/search/SearchRequestView', ['journeys' => $journeys]);
-    }
-
-    /**
      * Displays the page for a specific trip
      * @param int $id Journey ID
-     * @return string|RedirectResponse
      */
-    public function show(int $id): string|RedirectResponse
+    public function show(int $id)
     {
         helper('form');
 
@@ -120,7 +64,11 @@ class JourneyRequestController extends BaseController
         ]);
     }
 
-    public function join(int $id): RedirectResponse
+    /**
+     * Called when someone wants to join an existing request
+     * @param int $id The id of the request to join
+     */
+    public function join(int $id)
     {
         $request = $this->journeyRequestModel->find($id);
 
@@ -153,10 +101,9 @@ class JourneyRequestController extends BaseController
 
 
     /**
-     * Displays the creation page for a new itinerary
-     * @return string|RedirectResponse
+     * Displays the creation page for a new itineraryse
      */
-    public function create(): string|RedirectResponse
+    public function create()
     {
         helper('form');
         return view('itinerary/create/CreateView');
@@ -164,10 +111,8 @@ class JourneyRequestController extends BaseController
 
     /**
      *  Display the list of all journey
-     * 
-     * @return string|RedirectResponse
      */
-    public function index(): string|RedirectResponse
+    public function index()
     {
         $allRequest = $this->journeyRequestModel->getJourneyInfosByDates();
 
@@ -264,9 +209,8 @@ class JourneyRequestController extends BaseController
     /**
      * Shows edition page for an itinerary
      * @param int $id
-     * @return string|RedirectResponse
      */
-    public function edit(int $id): string|RedirectResponse
+    public function edit(int $id)
     {
         helper('form');
 
@@ -283,9 +227,8 @@ class JourneyRequestController extends BaseController
     /**
      * Updates an existing itinerary
      * @param int $id
-     * @return string|RedirectResponse
      */
-    public function update(?int $id = null): string|RedirectResponse
+    public function update(?int $id = null)
     {
         if ($id === null) {
             log_message('debug', 'Journey ID not found');
@@ -341,9 +284,8 @@ class JourneyRequestController extends BaseController
     /**
      * Deletes an existing itinerary
      * @param int $id
-     * @return RedirectResponse
      */
-    public function delete(int $id): RedirectResponse
+    public function delete(int $id)
     {
         try {
             $request = $this->journeyRequestModel->find($id);
@@ -377,7 +319,7 @@ class JourneyRequestController extends BaseController
      * Checks the user's authorization to manage a journey
      * @param int $ownerId
      */
-    private function canManageJourney(int $ownerId): void
+    private function canManageJourney(int $ownerId)
     {
         $isOwner = session()->user_id === $ownerId;
 

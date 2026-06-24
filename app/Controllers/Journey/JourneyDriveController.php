@@ -94,9 +94,8 @@ class JourneyDriveController extends BaseController
     /**
      * Displays the page for a specific trip
      * @param ?string $slug défaut : null | itinerary id
-     * @return string|RedirectResponse
      */
-    public function show(?string $slug = null): string|RedirectResponse
+    public function show(?string $slug = null)
     {
         if ($slug === null) {
             throw PageNotFoundException::forPageNotFound();
@@ -158,7 +157,7 @@ class JourneyDriveController extends BaseController
     /**
      * Saves an itinerary
      */
-    public function save(): string|RedirectResponse
+    public function save()
     {
         helper('form');
 
@@ -242,11 +241,10 @@ class JourneyDriveController extends BaseController
     }
 
     /**
-     * Updates an existing itinerary
+     * Updates an existing itinerary.
      * @param int $id The journey's id
-     * @return string|RedirectResponse
      */
-    public function update(?int $id = null): string|RedirectResponse
+    public function update(?int $id = null)
     {
         /*
          * Inputs :
@@ -337,9 +335,8 @@ class JourneyDriveController extends BaseController
     /**
      * Deletes an existing itinerary
      * @param int $id The journey's id
-     * @return RedirectResponse
      */
-    public function delete(int $id): RedirectResponse
+    public function delete(int $id)
     {
         try {
             $journey = $this->journeyDriveModel->find($id);
@@ -375,8 +372,7 @@ class JourneyDriveController extends BaseController
 
     /**
      * Throws new DomainException if user is not authorized to manage this journey
-     * @param int $ownerId
-     * @return void
+     * @param int $ownerId The id of the owner
      */
     private function canManageJourney(int $ownerId): void
     {

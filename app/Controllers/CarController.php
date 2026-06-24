@@ -93,6 +93,10 @@ class CarController extends BaseController
             ->with('car_success', 'Votre véhicule a bien été supprimé');
     }
 
+    /**
+     * Modify the given car with post values.
+     * @param int $idCar The of the cat to modify
+     */
     public function modify(int $idCar)
     {
 

@@ -25,7 +25,7 @@ class UserController extends BaseController
 {
 
     /**
-     * Attempts registration from post content
+     * Attempts registration of the user from post content
      */
     public function saveUser()
     {
@@ -102,7 +102,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Delete the user from the data base. Access route is /user/delete
+     * Delete the user from the data base. Access route is /user/delete. When no id, deletes the connected user.
      * @param int $idUser Optionnal : The id of the user to delete. If no id is provided, delete the connected user.
      * 
      */
@@ -198,6 +198,9 @@ class UserController extends BaseController
         }
     }
 
+    /**
+     * Updates the informations of the connected user with the post content. Doesn't intend to change avator nor password, they have dedicated functions
+     */
     public function update()
     {
         helper('form');
@@ -405,7 +408,7 @@ class UserController extends BaseController
     }
 
     /**
-     * Ban the given user. Access route is /user/ban/{idUser}
+     * Ban the given user. Access route is /user/ban/{idUser} (only for admins)
      * @param int $idUser The id of the user we want to ban
      */
     public function ban(int $idUser)

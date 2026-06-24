@@ -10,6 +10,9 @@ use App\Models\UserModel;
 
 class ProfilController extends BaseController
 {
+    /**
+     * Shows the profil of the connected user
+     */
     public function index()
     {
         helper('form');
@@ -98,6 +101,9 @@ class ProfilController extends BaseController
         ]);
     }
 
+    /**
+     * Show the view which allows to modify the user information (except for the password)
+     */
     public function modify()
     {
         helper('form');

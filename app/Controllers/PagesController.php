@@ -110,7 +110,7 @@ class PagesController extends BaseController
     /**
      * Itinerary search page (currently only JourneyDrive searching)
      */
-    public function searchJourney(): string
+    public function searchJourney()
     {
         helper('form');
 
@@ -120,9 +120,8 @@ class PagesController extends BaseController
     /**
      * JourneyDrive edition page
      * @param ?int $id = null
-     * @return string|PageNotFoundException
      */
-    public function editJourneyDrive(?int $id = null): string|PageNotFoundException
+    public function editJourneyDrive(?int $id = null)
     {
         if ($id === null) {
             throw PageNotFoundException::forPageNotFound();

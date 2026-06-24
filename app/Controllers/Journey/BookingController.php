@@ -128,7 +128,10 @@ class BookingController extends BaseController
             ->with('success', 'Demande de réservation envoyée');
     }
 
-    // Cancel the booking to the passenger with id_booking
+    /**
+     * Cancel the booking of the passenger with id_booking
+     * @param mixed $id_booking The if of the id to cancel
+     */
     public function cancel($id_booking)
     {
         $bookingModel = new BookingModel();
@@ -248,7 +251,11 @@ class BookingController extends BaseController
             ->with('success', 'Demande acceptée !');
     }
 
-    // Delete the pending booking. Only to the journey driver with id_booking
+
+    /**
+     * Delete the pending booking. Only to the journey driver can refuse
+     * @param mixed $id_booking The id of the booking to refuse
+     */
     public function refuse($id_booking)
     {
         $bookingModel = new BookingModel();
@@ -344,7 +351,10 @@ class BookingController extends BaseController
         return $infos;
     }
 
-    // Canceling a trip from a driver
+    /**
+     * Used when a driver wants to cancel his journey. It desactivates all the booking and soft delete the journey
+     * @param int $id_journey_drive
+     */
     public function cancelJourney(int $id_journey_drive)
     {
         $journeyModel = new JourneyDriveModel();

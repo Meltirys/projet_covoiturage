@@ -122,6 +122,14 @@ class JourneyService
         }
     }
 
+    /**
+     * Creates a journey drive for each given days 
+     * @param array $input The informations of the journey
+     * @param int $userId The id of the user that created the journey
+     * @param array $days A list of days like ['monday','tuesday',...]
+     * 
+     * @return array An array that contains all the ids of the journeys created
+     */
     public function createRecurringJourneyDrive(array $input, int $userId, array $days): array
     {
         $createIds = [];
@@ -159,7 +167,7 @@ class JourneyService
      * Updates an existing itinerary
      * @param array $original The original journey data
      * @param array $input The updated journey data
-     * @param int $userId
+     * @param int $userId The id of the user that updates the journey
      */
     public function updateJourneyDrive(array $original, array $input, int $userId): void
     {
@@ -242,7 +250,6 @@ class JourneyService
     /**
      * Deletes a journey drive
      * @param int $id The journey ID
-     * @return void
      */
     public function deleteJourneyDrive(int $id): void
     {
@@ -480,14 +487,6 @@ class JourneyService
     }
 
     /**
-     * 
-     */
-    public function searchJourneyRequest()
-    {
-        // TODO
-    }
-
-    /**
      * Gets the start and end location IDs from journey data
      * @param array $input Journey data
      * @return array [$startLocationId, $endLocationId];
@@ -599,39 +598,6 @@ class JourneyService
     }
 
     /**
-     * Sorts an itinerary by its route order
-     * @param array $journey An itinerary containing a 'start' location id, 'departure_lat', 'departure_lon', and an 'end' location id, 'arrival_lat' and 'arrival_lon'
-     * @param array $stages The corresponding itinerary's stages each containing 'id_location', 'latitude' and 'longitude'
-     * @return array The route sorted in order of passage
-     */
-    private function buildJourneyRoute(array $journey, array $stages): array
-    {
-        $route = [];
-
-        $route[] = [
-            'id_location' => $journey['start'],
-            'latitude'    => $journey['departure_lat'],
-            'longitude'   => $journey['departure_lon']
-        ];
-
-        foreach ($stages as $stage) {
-            $route[] = [
-                'id_location' => $stage['id_location'],
-                'latitude'    => $stage['latitude'],
-                'longitude'   => $stage['longitude']
-            ];
-        }
-
-        $route[] = [
-            'id_location' => $journey['end'],
-            'latitude'    => $journey['arrival_lat'],
-            'longitude'   => $journey['arrival_lon']
-        ];
-
-        return $route;
-    }
-
-    /**
      * Trouve les journeys qui correspondent géographiquement à la requête de l'utilisateur
      * @param array $journeys Liste de journeys
      * @param array $departurePoint Lieu de départ donné par l'utilisateur (longitude en premier et latitude en deuxième, pas de clé nécessaire)
@@ -705,7 +671,7 @@ class JourneyService
 
     /**
      * Builds a journey's track
-     * @param array $input
+     * @param array $input The informations of the track, must have one start key and one end key, with longitude first and then latitude
      * @return int The track id
      */
     private function buildTrack(array $input, ?int $idTrack = null): int

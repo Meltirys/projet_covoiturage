@@ -53,8 +53,8 @@ class LocationService
     /**
      * Retrieves or creates a complete location from address data.
      * Can be called with or without coordinates.
-     * @param string $address
-     * @param string $city
+     * @param string $address 
+     * @param string $city 
      * @param string $postcode 
      * @param ?float $latitude 
      * @param ?float $longitude 

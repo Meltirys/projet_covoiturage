@@ -1,6 +1,12 @@
 <?php
 
 if (!function_exists('format_date_fr')) {
+    /**
+     * Format the given date to be displayed in a french understable way
+     * @param string $datetime The date to convert
+     * 
+     * @return string The converted date
+     */
     function format_date_fr(string $datetime): string
     {
         $jours = ['Dimanche', 'Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi'];
@@ -12,13 +18,5 @@ if (!function_exists('format_date_fr')) {
         $time  = date('H\hi', $timestamp);
 
         return "$jour. $num $month - $time";
-    }
-}
-if (!function_exists('secondsToTime')) {
-    function secondsToTime($seconds)
-    {
-        $dtF = new \DateTime('@0');
-        $dtT = new \DateTime("@$seconds");
-        return $dtF->diff($dtT)->format('%a days, %h hours, %i minutes and %s seconds');
     }
 }

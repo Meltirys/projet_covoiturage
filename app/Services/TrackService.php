@@ -59,7 +59,6 @@ class TrackService
         $summary  = $data['features'][0]['properties']['summary'];  // Distance & duration
 
         // Saving in database
-
         $data = [
             'geojson'  => json_encode($geometry),   // The complete geometry
             'distance' => $summary['distance'],     // The number of meters
@@ -112,7 +111,7 @@ class TrackService
      * @param int $idTrack The id of the track
      * @param int $maxDistance Optionnal: The maximum distance between the point and a point on of the track, in meters. Default is 2500m
      * 
-     * @return bool
+     * @return bool True if the given point is on track, false otherwise
      */
     public function isOnTrack(array $startPoint, ?array $endPoint, int $idTrack, int $maxDistance = 2500): bool
     {
