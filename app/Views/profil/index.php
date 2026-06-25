@@ -411,7 +411,7 @@
              SESSION
         ════════════════════════════ -->
                 <section class="flex flex-col gap-2">
-                    <form action="user/delete" method="post" class="w-full">
+                    <form id="delete-form" action="user/delete" method="post" class="w-full">
                         <?= csrf_field() ?>
                         <button type="submit"
                             class="w-full flex items-center justify-center gap-2 bg-transparent border border-red/30 text-red rounded-[14px] px-4 py-3 text-sm hover:bg-red/15 transition-colors cursor-pointer">
