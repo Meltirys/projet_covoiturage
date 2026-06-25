@@ -24,7 +24,9 @@ class UserValidationController extends BaseController
             'is_validated' => true
         ])) {
             return redirect()->to('/backoffice')
-                ->with('user_validation_error', "Une erreur est survenue lors de l'acceptation de l'utilisateur, veuillez réessayer.");
+                ->with('user_validation_error', "Une erreur est survenue lors de l'acceptation de l'utilisateur, veuillez réessayer.")
+                ->with('active_subtab', 'subtab-validation')
+                ->with('active_tab', 'tab-utilisateurs');
         }
 
         //Sending the mail
@@ -44,6 +46,8 @@ class UserValidationController extends BaseController
         }
 
         return redirect()->to('/backoffice')
+            ->with('active_tab', 'tab-utilisateurs')
+            ->with('active_subtab', 'subtab-validation')
             ->with('user_validation_success', $dbUser->getUserName($idUser) . " a bien été accepté.");;
     }
 
@@ -60,9 +64,13 @@ class UserValidationController extends BaseController
             'is_validated' => false
         ])) {
             return redirect()->to('/backoffice')
+                ->with('active_tab', 'tab-utilisateurs')
+                ->with('active_subtab', 'subtab-validation')
                 ->with('user_validation_error', "Une erreur est survenue lors du refus de l'utilisateur, veuillez réessayer.");
         }
         return redirect()->to('/backoffice')
+            ->with('active_tab', 'tab-utilisateurs')
+            ->with('active_subtab', 'subtab-validation')
             ->with('user_validation_success', "Le refus de " . $dbUser->getUserName($idUser) . " a bien été pris en compte.");
     }
 }

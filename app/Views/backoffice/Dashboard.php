@@ -41,7 +41,7 @@
                 <span class="flex flex-col gap-0.5">
                     <span class="text-grey uppercase tracking-widest" style="font-size: 9px; letter-spacing: 0.15em;">Rôles</span>
                     <span class="font-pfd text-xl font-light text-grey"><?= $totalRoles ?? '—' ?></span>
-        </span>
+                </span>
             </button>
         <?php endif; ?>
     </div>
@@ -212,9 +212,25 @@
     initTabs('.report-tab-btn', '.report-panel', 'report-tab-indicator', 'subtab-signalements-encours');
     initTabs('.user-tab-btn', '.user-panel', 'user-tab-indicator', 'subtab-validation');
 
-    setTimeout(() => {
-        setCardActive(document.querySelector('.admin-tab-btn[data-tab="tab-signalements"]'));
-        showAdminPanel('tab-signalements');
-    }, 50);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        // 1. Gestion de l'onglet principal (Flashdata ou par défaut 'tab-signalements')
+        const targetTab = "<?= session()->getFlashdata('active_tab') ?? 'tab-signalements' ?>";
+        const btn = document.querySelector(`.admin-tab-btn[data-tab="${targetTab}"]`);
+
+        if (btn) {
+            setCardActive(btn);
+            showAdminPanel(targetTab);
+        }
+
+        // 2. Gestion du sous-onglet (Ex: si tu envoies 'subtab-validation', 'subtab-bannir'...)
+        const targetSubTab = "<?= session()->getFlashdata('active_subtab') ?? 'subtab-validation' ?>";
+        const subBtn = document.querySelector(`[data-tab="${targetSubTab}"]`);
+
+        if (subBtn) {
+            // Un léger sursis pour laisser initTabs s'installer, puis on simule un clic propre
+            setTimeout(() => subBtn.click(), 60);
+        }
+    });
 </script>
 <?= $this->endSection() ?>

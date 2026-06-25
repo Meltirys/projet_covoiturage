@@ -41,10 +41,9 @@ class UserController extends BaseController
         //If an error is detected, return to the form with the errors described
         if (!$validator->validate($post)) {
             return redirect()->back()
-            ->with('signup_error', true)
-            ->withInput()
-            ->with('errors', $validator->getErrors());
-    
+                ->with('signup_error', true)
+                ->withInput()
+                ->with('errors', $validator->getErrors());
         }
         // --- Saving the location --- 
         $location = [
@@ -199,7 +198,8 @@ class UserController extends BaseController
             } else { //This means the account has been deleted by the admin
                 return redirect()->to('/backoffice')
                     ->with('suppression_error', "Une erreur est survenue lors de la suppression du compte")
-                    ->with('show_suppression', true);
+                    ->with('active_tab', 'tab-utilisateurs')
+                    ->with('active_subtab', 'subtab-supprimer');
             }
         }
 
@@ -226,7 +226,8 @@ class UserController extends BaseController
         } else { //This means the account has been deleted by the admin
             return redirect()->to('/backoffice')
                 ->with('suppression_success', "L'utilisateur " . $userName . " à bien été supprimé")
-                ->with('show_suppression', true);
+                ->with('active_tab', 'tab-utilisateurs')
+                ->with('active_subtab', 'subtab-supprimer');
         }
     }
 
@@ -454,7 +455,8 @@ class UserController extends BaseController
         if (!$validator->validate($datas)) {
             return redirect()->to('/backoffice')
                 ->with('ban_error', $validator->getError('id_user'))
-                ->with('show_ban', true);
+                ->with('active_tab', 'tab-utilisateurs')
+                ->with('active_subtab', 'subtab-bannir');
         }
 
         //Checking if an error happens when banning the user
@@ -462,8 +464,9 @@ class UserController extends BaseController
             'is_validated' => 0
         ])) {
             return redirect()->to('/backoffice')
-                ->with('ban_error', 'Une erreur est survenue lors du banissement de l\'utilisateur, veuillez réessayer')
-                ->with('show_ban', true);
+                ->with('active_tab', 'tab-utilisateurs')
+                ->with('active_subtab', 'subtab-bannir')
+                ->with('ban_error', 'Une erreur est survenue lors du banissement de l\'utilisateur, veuillez réessayer');
         }
 
         //Sending the mail
@@ -485,7 +488,8 @@ class UserController extends BaseController
         //If no errors
         return redirect()->to('/backoffice')
             ->with('ban_success', "L'utilisateur " . $userModel->getUserName($idUser) . " a été bannis avec succès")
-            ->with('show_ban', true);
+            ->with('active_tab', 'tab-utilisateurs')
+            ->with('active_subtab', 'subtab-bannir');
     }
 
     /**
