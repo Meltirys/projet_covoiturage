@@ -52,7 +52,10 @@ class TrackService
 
         $data = json_decode($response, true);
 
-        if (empty($data['features'])) return false;
+        if (empty($data['features'])) {
+            log_message('error', 'No features. Full response: ' . json_encode($data));
+            throw new \RuntimeException('ORS returned no route');
+        }
 
         //Retrieving the geometries
         $geometry = $data['features'][0]['geometry'];               // LineString GeoJSON
@@ -76,7 +79,15 @@ class TrackService
             return $trackId;
         }
 
-        return $this->db->insert($data);
+        $insertId = $this->db->insert($data, true);
+
+        if (!$insertId) {
+            log_message('error', 'Track insert failed');
+            log_message('error', json_encode($this->db->errors()));
+            log_message('error', json_encode($data));
+        }
+
+        return $insertId;
     }
 
     /**
@@ -89,19 +100,17 @@ class TrackService
      */
     private function buildCoordinates(array $start, array $end, array $stops = []): string
     {
-        $res = "[";
-
-        $res .= "[" . $start[0] . ',' . $start[1] . "], ";
+        $coordinates = [$start];
 
         foreach ($stops as $stop) {
-            $res .= "[" . $stop[0] . ',' . $stop[1] . "], ";
+            if (isset($stop[0], $stop[1])) {
+                $coordinates[] = $stop;
+            }
         }
 
-        $res .= "[" . $end[0] . ',' . $end[1] . "]";
+        $coordinates[] = $end;
 
-        $res .= "]";
-
-        return $res;
+        return json_encode($coordinates);
     }
 
     /**
@@ -119,7 +128,7 @@ class TrackService
         $track = $this->db->find($idTrack);
         $json = json_decode($track['geojson']); // We retrieve the points 
         $trackPoints = $json->coordinates;
-        $startValidated = false; 
+        $startValidated = false;
         $endValidated = is_null($endPoint) ? true : false; //If no end points are given, then it's true by default
 
 

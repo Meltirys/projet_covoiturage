@@ -57,7 +57,7 @@ class JourneyDriveController extends BaseController
             // Logic
             try {
                 // === Ajouter options quand possible !
-                $journeys = $this->journeyService->searchJourneyDrive($getData);
+                $journeys = $this->journeyService->searchJourneyDrive($getData, session()->user_id);
 
                 //Transforming the dates
                 foreach ($journeys as &$journey) {
