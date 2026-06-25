@@ -59,8 +59,8 @@ class CreateJourneyDriveValidator extends BaseValidator
         $timeRules = [
             'rules' => 'required|valid_time',
             'errors' => [
-                'required' => 'Le temps est obligatoire.',
-                'valid_time' => 'Le temps est invalide.',
+                'required' => 'L\'horaire de départ est obligatoire.',
+                'valid_time' => 'L\'horaire entré est invalide.',
             ]
         ];
 

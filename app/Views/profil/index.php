@@ -90,7 +90,7 @@
                         <?php if (session()->getFlashdata('car_error')): ?>
                             <p class="text-xs text-red mb-2"><?= session()->getFlashdata('car_error') ?></p>
                         <?php endif ?>
-                        <?php if (isset($errors) && $errors['idCar']): ?>
+                        <?php if (isset($errors['idCar'])): ?>
                             <p class="text-xs text-red mb-2"><?= $errors['idCar'] ?></p>
                         <?php endif; ?>
 
@@ -411,7 +411,7 @@
              SESSION
         ════════════════════════════ -->
                 <section class="flex flex-col gap-2">
-                    <form action="user/delete" method="post" class="w-full">
+                    <form id="delete-form" action="user/delete" method="post" class="w-full">
                         <?= csrf_field() ?>
                         <button type="submit"
                             class="w-full flex items-center justify-center gap-2 bg-transparent border border-red/30 text-red rounded-[14px] px-4 py-3 text-sm hover:bg-red/15 transition-colors cursor-pointer">

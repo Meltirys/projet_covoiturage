@@ -99,7 +99,6 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->post('reservation/retirer/(:num)', 'Journey\BookingController::kick/$1');
 
     //Report
-    $routes->get('report', [ReportController::class, 'showReportView']);
     $routes->post('user/report/(:num)', [ReportController::class, 'report']);
 });
 

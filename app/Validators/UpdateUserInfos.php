@@ -76,11 +76,12 @@ class UpdateUserInfos extends BaseValidator
             ],
 
             'birth_date' => [
-                'rules'  => 'required|valid_date[Y-m-d]|is_adult',
+                'rules'  => 'required|valid_date[Y-m-d]|is_adult|greater_than_equal_to[1901]',
                 'errors' => [
                     'required'   => 'L\'adresse est obligatoire.',
                     'valid_date' => 'Veuillez entrer une date au bon format',
-                    'is_adult' => 'Vous devez être majeur pour vous inscrire'
+                    'is_adult' => 'Vous devez être majeur pour vous inscrire',
+                    'greater_than_equal_to' => 'Veuillez entrer une date de naissance après 1901.'
                 ]
             ],
 

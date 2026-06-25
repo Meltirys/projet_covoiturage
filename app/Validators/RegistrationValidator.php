@@ -92,12 +92,12 @@ class RegistrationValidator extends BaseValidator
             ],
 
             'birth_date' => [
-                'rules'  => 'required|valid_date[Y-m-d]|is_adult|date_greater_than_1901',
+                'rules'  => 'required|valid_date[Y-m-d]|is_adult|greater_than_equal_to[1901]',
                 'errors' => [
                     'required'   => 'La date de naissance est obligatoire.',
                     'valid_date' => 'Veuillez entrer une date au bon format',
                     'is_adult' => 'Vous devez être majeur pour vous inscrire',
-                    'date_greater_than_1901' => 'Veuillez entrer une date de naissance après 1901.'
+                    'greater_than_equal_to' => 'Veuillez entrer une date de naissance après 1901.'
                 ]
             ],
 
