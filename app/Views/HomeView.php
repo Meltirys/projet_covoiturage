@@ -47,12 +47,12 @@
                     </div>
                     <div class="w-px bg-ocean-light self-stretch"></div>
                     <div class="flex flex-col gap-1">
-                        <span class="font-pfd text-2xl font-light text-gold">Nombre de conducteur unique</span>
+                        <span class="font-pfd text-2xl font-light text-gold">Nombre de conducteurs uniques</span>
                         <span class="text-[0.625rem] tracking-[0.2em] uppercase text-grey"><?= $numberOfDrivers ?></span>
                     </div>
                     <div class="w-px bg-ocean-light self-stretch"></div>
                     <div class="flex flex-col gap-1">
-                        <span class="font-pfd text-2xl font-light text-gold">Nombre de passager transportés</span>
+                        <span class="font-pfd text-2xl font-light text-gold">Nombre de passagers transportés</span>
                         <span class="text-[0.625rem] tracking-[0.2em] uppercase text-grey"><?= $numberOfPassenger ?></span>
                     </div>
                 </div>

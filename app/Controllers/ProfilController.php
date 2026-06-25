@@ -131,6 +131,9 @@ class ProfilController extends BaseController
         $today        = date('Y-m-d H:i:s');
 
         $user = $userModel->find($id);
+        
+        //Storing the id of the user we consult in session to ensure the reported user is valid
+        session()->set('viewed_user_id', $id);
 
         if (!$user) {
             return redirect()->to('/')->with('error', 'Utilisateur introuvable');
