@@ -174,6 +174,10 @@ class ProfilController extends BaseController
             }
         }
 
+        else{
+            return redirect()->to('/myprofil');
+        }
+
         $driverJourneyDone = 0;
         $passengerTaken = 0;
 

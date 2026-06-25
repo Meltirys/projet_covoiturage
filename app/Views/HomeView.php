@@ -42,18 +42,18 @@
                 <!-- Stats desktop -->
                 <div class="hidden md:flex gap-8 relative z-10 penn-stats">
                     <div class="flex flex-col gap-1">
-                        <span class="font-pfd text-2xl font-light text-gold">Texte</span>
-                        <span class="text-[0.625rem] tracking-[0.2em] uppercase text-grey">Texte</span>
+                        <span class="font-pfd text-2xl font-light text-gold">Nombre de trajets effectués</span>
+                        <span class="text-[0.625rem] tracking-[0.2em] uppercase text-grey"><?= $numberOfJourney ?></span>
                     </div>
                     <div class="w-px bg-ocean-light self-stretch"></div>
                     <div class="flex flex-col gap-1">
-                        <span class="font-pfd text-2xl font-light text-gold">Texte</span>
-                        <span class="text-[0.625rem] tracking-[0.2em] uppercase text-grey">Texte</span>
+                        <span class="font-pfd text-2xl font-light text-gold">Nombre de conducteur unique</span>
+                        <span class="text-[0.625rem] tracking-[0.2em] uppercase text-grey"><?= $numberOfDrivers ?></span>
                     </div>
                     <div class="w-px bg-ocean-light self-stretch"></div>
                     <div class="flex flex-col gap-1">
-                        <span class="font-pfd text-2xl font-light text-gold">Texte</span>
-                        <span class="text-[0.625rem] tracking-[0.2em] uppercase text-grey">Texte</span>
+                        <span class="font-pfd text-2xl font-light text-gold">Nombre de passager transportés</span>
+                        <span class="text-[0.625rem] tracking-[0.2em] uppercase text-grey"><?= $numberOfPassenger ?></span>
                     </div>
                 </div>
 
