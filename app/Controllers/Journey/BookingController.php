@@ -11,7 +11,6 @@ use App\Validators\BookingValidator;
 use App\Services\MailService;
 use PhpParser\Node\Expr\AssignOp\Mod;
 
-use function PHPUnit\Framework\isNull;
 
 class BookingController extends BaseController
 {
@@ -33,7 +32,7 @@ class BookingController extends BaseController
         $journeyID = $this->request->getPost('id_journey_drive');
         $journey   = $journeyModel->find($journeyID);
         // If route doesn't exist or has been deleted
-        if (!$journey || !isNull($journey['deletion_date'])) {
+        if (!$journey || !is_null($journey['deletion_date'])) {
             return redirect()->back()
                 ->with('error', 'Trajet introuvable');
         }
@@ -145,7 +144,7 @@ class BookingController extends BaseController
         $journeyModel = new JourneyDriveModel();
         $journey      = $journeyModel->find($booking['id_journey_drive']);
 
-        if ($journey['departure'] <= date('Y-m-d H:i:s') || !isNull($journey['deletion_date'])) {
+        if ($journey['departure'] <= date('Y-m-d H:i:s') || !is_null($journey['deletion_date'])) {
             return redirect()->to('myprofil')
                 ->with('error', 'Impossible d\'annuler un trajet passé ou supprimé');
         }
@@ -197,7 +196,7 @@ class BookingController extends BaseController
                 ->with('error', 'Action non autorisée');
         }
 
-        if ($journey['departure'] <= date('Y-m-d H:i:s') || !isNull($journey['deletion_date'])) {
+        if ($journey['departure'] <= date('Y-m-d H:i:s') || !is_null($journey['deletion_date'])) {
             return redirect()->to('myprofil')
                 ->with('error', 'Impossible de valider une réservation d\'un trajet passé ou supprimé');
         }
@@ -273,7 +272,7 @@ class BookingController extends BaseController
                 ->with('error', 'Action non autorisée');
         }
 
-        if ($journey['departure'] <= date('Y-m-d H:i:s' || !isNull($journey['deletion_date']))) {
+        if ($journey['departure'] <= date('Y-m-d H:i:s') || !is_null($journey['deletion_date'])) {
             return redirect()->to('myprofil')
                 ->with('error', 'Refus impossible sur un trajet déjà passé ou supprimé');
         }
@@ -367,7 +366,7 @@ class BookingController extends BaseController
                 ->with('error', 'Trajet introuvable ou action non autorisée');
         }
         // If the journey is no longer active
-        if ($journey['departure'] <= date('Y-m-d H:i:s') || !isNull($journey['deletion_date'])) {
+        if ($journey['departure'] <= date('Y-m-d H:i:s') || !is_null($journey['deletion_date'])) {
             return redirect()->to('myprofil')
                 ->with('error', 'Impossible d\'annuler un trajet passé ou déjà annulé');
         }

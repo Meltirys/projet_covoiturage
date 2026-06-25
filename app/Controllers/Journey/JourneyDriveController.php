@@ -393,7 +393,7 @@ class JourneyDriveController extends BaseController
      */
     private function canManageJourney(int $ownerId): void
     {
-        if (!session()->user_id === $ownerId) {
+        if ((int) session('user_id') !== $ownerId) {
             throw new \DomainException('Vous n\'avez pas la permission nécessaire pour modifier ce trajet.');
         }
     }
