@@ -103,7 +103,7 @@
                             <div class="flex flex-col gap-4 mb-5">
                                 <div class="flex flex-col gap-1.5">
                                     <label class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold" for="email-auth">Email</label>
-                                    <input class="penn-input w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2.5 text-xs text-lightgrey placeholder:text-grey focus:outline-none focus:border-gold/40 transition-all duration-200" type="email" id="email-auth" name="email-auth" placeholder="ton@email.fr" required>
+                                    <input class="penn-input w-full rounded-xl bg-ocean-light border border-ocean-light px-3 py-2.5 text-xs text-lightgrey placeholder:text-grey focus:outline-none focus:border-gold/40 transition-all duration-200" type="email" id="email-auth" name="email-auth" value="<?= old('email-auth') ?>" placeholder="ton@email.fr" required>
                                 </div>
                                 <div class="flex flex-col gap-1.5">
                                     <label class="text-[0.625rem] tracking-[0.2em] uppercase font-semibold text-gold" for="password-auth">Mot de passe</label>
