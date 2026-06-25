@@ -1,0 +1,312 @@
+@import "tailwindcss";
+@source "../../app/Views/**/*.php";
+@source "./public/**/*.js";
+
+/* ===== FONTS ===== */
+@font-face {
+  font-display: swap; font-family: "Poppins"; font-style: normal; font-weight: 200;
+  src: url("/fonts/poppins-v24-latin-200.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap; font-family: "Poppins"; font-style: normal; font-weight: 300;
+  src: url("/fonts/poppins-v24-latin-300.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap; font-family: "Poppins"; font-style: italic; font-weight: 300;
+  src: url("/fonts/poppins-v24-latin-300italic.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap; font-family: "Poppins"; font-style: normal; font-weight: 400;
+  src: url("/fonts/poppins-v24-latin-regular.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap; font-family: "Poppins"; font-style: normal; font-weight: 600;
+  src: url("/fonts/poppins-v24-latin-600.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap; font-family: "Poppins"; font-style: normal; font-weight: 700;
+  src: url("/fonts/poppins-v24-latin-700.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap; font-family: "Playfair Display"; font-style: normal; font-weight: 400;
+  src: url("/fonts/playfair-display-v40-latin-regular.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap; font-family: "Playfair Display"; font-style: italic; font-weight: 400;
+  src: url("/fonts/playfair-display-v40-latin-italic.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap; font-family: "Playfair Display"; font-style: normal; font-weight: 500;
+  src: url("/fonts/playfair-display-v40-latin-500.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap; font-family: "Playfair Display"; font-style: italic; font-weight: 500;
+  src: url("/fonts/playfair-display-v40-latin-500italic.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap; font-family: "Playfair Display"; font-style: normal; font-weight: 600;
+  src: url("/fonts/playfair-display-v40-latin-600.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap; font-family: "Playfair Display"; font-style: italic; font-weight: 600;
+  src: url("/fonts/playfair-display-v40-latin-600italic.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap; font-family: "Playfair Display"; font-style: normal; font-weight: 700;
+  src: url("/fonts/playfair-display-v40-latin-700.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap; font-family: "Playfair Display"; font-style: italic; font-weight: 700;
+  src: url("/fonts/playfair-display-v40-latin-700italic.woff2") format("woff2");
+}
+@font-face {
+  font-display: swap; font-family: "Playfair Display"; font-style: normal; font-weight: 800;
+  src: url("/fonts/playfair-display-v40-latin-800.woff2") format("woff2");
+}
+
+/* ===== VARIABLES DE THÈME ===== */
+
+/* Thème clair (défaut) */
+:root {
+  --color-ocean:        #F0EDE8;
+  --color-ocean-mid:    #E8E4DE;
+  --color-ocean-light:  #DDD9D2;
+  --color-lightgrey:    #1A1510;
+  --color-grey:         #6B6358;
+  --color-bluegrey:     #9A9188;
+  --color-gold:         #B8832A;
+  --color-gold-light:   #D4A843;
+  --color-cyan:         #2A8A84;
+  --color-red:          #C0392B;
+  --color-green:        #2E8B57;
+  --color-sand:         #1A1510;
+  --color-input-bg:     #E0DCD6;
+  --color-input-border: rgba(100, 80, 50, 0.2);
+}
+
+/* Thème sombre */
+html.dark {
+  --color-ocean:        #12171b;
+  --color-ocean-mid:    #131720;
+  --color-ocean-light:  #1C2128;
+  --color-lightgrey:    #E8EAF0;
+  --color-grey:         #6B7380;
+  --color-bluegrey:     #3D4450;
+  --color-gold:         #D4A843;
+  --color-gold-light:   #F0C866;
+  --color-cyan:         #4ECDC4;
+  --color-red:          #D94F4F;
+  --color-green:        #3DB870;
+  --color-sand:         #F5E6C8;
+  --color-input-bg:     #111418;
+  --color-input-border: rgba(255,255,255,0.07);
+}
+
+/* ===== THÈME — tokens Tailwind pointent vers les variables ===== */
+@theme inline {
+  --font-poppins: "Poppins", sans-serif;
+  --font-pfd:     "Playfair Display", serif;
+
+  --color-ocean:        var(--color-ocean);
+  --color-ocean-mid:    var(--color-ocean-mid);
+  --color-ocean-light:  var(--color-ocean-light);
+  --color-lightgrey:    var(--color-lightgrey);
+  --color-grey:         var(--color-grey);
+  --color-bluegrey:     var(--color-bluegrey);
+  --color-gold:         var(--color-gold);
+  --color-gold-light:   var(--color-gold-light);
+  --color-cyan:         var(--color-cyan);
+  --color-red:          var(--color-red);
+  --color-green:        var(--color-green);
+  --color-sand:         var(--color-sand);
+  --color-input-bg:     var(--color-input-bg);
+  --color-input-border: var(--color-input-border);
+}
+
+/* ===== BASE ===== */
+@layer base {
+  body, main {
+    background-color: theme(colors.ocean);
+    color: theme(colors.lightgrey);
+    font-family: "Poppins", sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  input, textarea, select {
+    background-color: theme(colors.ocean-mid);
+    border-color: theme(colors.ocean-light);
+    color: theme(colors.lightgrey);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+  }
+  input::placeholder, textarea::placeholder {
+    color: theme(colors.grey);
+  }
+}
+
+/* ===== COMPOSANTS ===== */
+@layer components {
+
+  #mode-toggle { background: theme(colors.ocean-light); border: 1px solid theme(colors.gold); transition: background 0.3s; }
+  #mode-toggle.active { background: theme(colors.gold); }
+
+  .m-menu {
+    position: fixed; top: 0; right: 0;
+    width: 50%; height: 100vh; z-index: 50;
+    display: flex; flex-direction: column; align-items: flex-end;
+    background-color: theme(colors.ocean);
+    padding: 2rem 1.25rem; gap: 1rem;
+    box-shadow: -4px 0 24px rgba(0,0,0,0.15);
+    transform: translateX(100%);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .m-menu.open { transform: translateX(0); }
+
+  .penn-eyebrow { opacity:0; transform:translateY(10px); }
+  .penn-hero    { opacity:0; transform:translateY(14px); }
+  .penn-stats   { opacity:0; transform:translateY(14px); }
+  .penn-card    { opacity:0; transform:translateY(20px); }
+  .auth-panel   { animation: fadeSlideIn 0.3s ease forwards; }
+
+  .orb { pointer-events:none; z-index:0; position:absolute; border-radius:9999px; }
+  .orb-1 { width:220px; height:220px; top:-80px; right:-60px; opacity:.25; animation:float1 8s ease-in-out infinite; }
+  .orb-2 { width:120px; height:120px; bottom:-40px; left:-30px; opacity:.08; animation:float2 10s ease-in-out infinite; }
+  .orb-3 { width:80px; height:80px; bottom:30%; right:10%; opacity:.15; animation:float3 12s ease-in-out infinite; }
+  .orb-4 { width:300px; height:300px; top:50%; left:50%; transform:translate(-50%,-50%); opacity:.04; animation:pulse-orb 6s ease-in-out infinite; }
+
+  .checkbox-pennride {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 6px;
+    border: 1px solid color-mix(in srgb, var(--color-gold) 35%, transparent);
+    background-color: var(--color-ocean-light);
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    transition: background-color 0.2s, border-color 0.2s;
+  }
+
+  .checkbox-pennride:hover {
+    border-color: color-mix(in srgb, var(--color-gold) 60%, transparent);
+  }
+
+  .checkbox-pennride:checked {
+    background-color: var(--color-gold);
+    border-color: var(--color-gold);
+  }
+
+  .checkbox-pennride:checked::after {
+    content: "";
+    position: absolute;
+    left: 6px;
+    top: 3px;
+    width: 4px;
+    height: 8px;
+    border: solid var(--color-ocean);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+
+  .checkbox-pennride:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 2px color-mix(in srgb, var(--color-gold) 30%, transparent);
+  }
+}
+
+/* ===== KEYFRAMES ===== */
+@keyframes float1 {
+  0%,100% { transform:translate(0,0) scale(1); }
+  33%     { transform:translate(-12px,14px) scale(1.04); }
+  66%     { transform:translate(8px,-10px) scale(0.97); }
+}
+@keyframes float2 {
+  0%,100% { transform:translate(0,0); }
+  50%     { transform:translate(10px,-16px); }
+}
+@keyframes float3 {
+  0%,100% { transform:translate(0,0) scale(1); }
+  50%     { transform:translate(-8px,12px) scale(1.08); }
+}
+@keyframes pulse-orb {
+  0%,100% { transform:translate(-50%,-50%) scale(1); opacity:.04; }
+  50%     { transform:translate(-50%,-50%) scale(1.1); opacity:.07; }
+}
+@keyframes fadeSlideIn {
+  from { opacity:0; transform:translateY(8px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes shake {
+  10%,90% { transform:translateX(-2px); }
+  20%,80% { transform:translateX(4px); }
+  30%,50%,70% { transform:translateX(-4px); }
+  40%,60% { transform:translateX(4px); }
+}
+
+/* ===== PROFIL ===== */
+@layer components {
+
+  .profile-hero {
+    position: relative;
+    overflow: hidden;
+    background-color: theme(colors.ocean);
+    border-bottom: 1px solid theme(colors.ocean-light);
+    transition: background-color 0.3s ease;
+  }
+  .profile-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 75% 120% at 0% 55%, color-mix(in oklch, theme(colors.gold) 15%, transparent), transparent 60%),
+      radial-gradient(ellipse 40% 60% at 100% 20%, color-mix(in oklch, theme(colors.cyan) 4%, transparent), transparent 50%),
+      repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(0,0,0,0.018) 80px),
+      repeating-linear-gradient(0deg,  transparent, transparent 39px, rgba(0,0,0,0.012) 40px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .profile-monogram {
+    background: linear-gradient(145deg, color-mix(in oklch, theme(colors.gold) 15%, theme(colors.ocean)), theme(colors.ocean));
+    border-color: color-mix(in oklch, theme(colors.gold) 28%, transparent);
+  }
+
+  .section-title::before {
+    content: '';
+    display: block;
+    width: 1.25rem;
+    height: 1px;
+    background: linear-gradient(90deg, theme(colors.gold), transparent);
+    flex-shrink: 0;
+  }
+
+  @media (min-width: 768px) {
+    .profile-stats {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      gap: 0;
+      padding-left: clamp(1.5rem, 3vw, 3rem);
+      border-left: 1px solid theme(colors.ocean-light);
+      flex-shrink: 0;
+      min-width: 160px;
+    }
+    .profile-stat {
+      background: transparent !important;
+      border: none !important;
+      border-radius: 0 !important;
+      border-bottom: 1px solid theme(colors.ocean-light) !important;
+      padding: 0.875rem 0 !important;
+      flex-direction: column;
+      align-items: flex-end !important;
+      gap: 0.375rem;
+    }
+    .profile-stat:last-child { border-bottom: none !important; }
+    .profile-stat-n {
+      font-size: clamp(2rem, 4vw, 3rem) !important;
+      color: theme(colors.lightgrey) !important;
+    }
+    .profile-stat-l { text-align: right; }
+  }
+
+  .hover-border-gold:hover    { border-color: color-mix(in oklch, theme(colors.gold) 28%, transparent); }
+  .hover-border-gold-sm:hover { border-color: color-mix(in oklch, theme(colors.gold) 40%, transparent); }
+  .param-link:hover .param-arrow { color: theme(colors.gold); transform: translateX(3px); }
+}

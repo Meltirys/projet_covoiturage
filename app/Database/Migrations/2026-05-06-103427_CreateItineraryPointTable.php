@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Database\Migrations;
+
+use CodeIgniter\Database\Migration;
+
+class CreateLocationTable extends Migration
+{
+    public function up()
+    {
+        $this->forge->addField([
+            'id_location'   => [
+                'type'              => 'INT',
+                'unsigned'          => true,
+                'auto_increment'    => true,
+            ],
+            'address'       => ['type' => 'VARCHAR', 'constraint' => 100],
+            'latitude'      => ['type' => 'DECIMAL', 'constraint' => '10,8'],
+            'longitude'     => ['type' => 'DECIMAL', 'constraint' => '11,8'],
+            'id_city'       => ['type' => 'INT', 'unsigned' => true, 'null' => false],
+        ]);
+        $this->forge->addPrimaryKey('id_location');
+        $this->forge->addForeignKey('id_city', 'City', 'id_city', 'RESTRICT', 'NO ACTION');
+        $this->forge->addUniqueKey(['address', 'id_city']);
+        $this->forge->createTable('Location');
+    }
+
+    public function down()
+    {
+        $this->forge->dropTable('Location');
+    }
+}

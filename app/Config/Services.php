@@ -3,6 +3,10 @@
 namespace Config;
 
 use CodeIgniter\Config\BaseService;
+use App\Services\JourneyService;
+use App\Services\LocationService;
+use App\Services\MailService;
+use App\Services\TrackService;
 
 /**
  * Services Configuration file.
@@ -29,4 +33,40 @@ class Services extends BaseService
      *     return new \CodeIgniter\Example();
      * }
      */
+
+    public static function journeyService($getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('journeyService');
+        }
+
+        return new JourneyService();
+    }
+
+    public static function locationService($getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('locationService');
+        }
+
+        return new LocationService();
+    }
+
+    public static function mailService($getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('mailService');
+        }
+
+        return new MailService();
+    }
+
+    public static function trackService($getShared = true)
+    {
+        if ($getShared) {
+            return static::getSharedInstance('trackService');
+        }
+
+        return new TrackService();
+    }
 }

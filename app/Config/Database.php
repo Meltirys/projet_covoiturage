@@ -26,12 +26,10 @@ class Database extends Config
      */
     public array $default = [
         'DSN'          => '',
-        'hostname'     => '127.0.0.1',
-        // 127.0.0.1 instead of localhost because localhost doesn't work 
-        // (makes PHP try to connect through a Unix socket and it can't find the MariaDB socket file)
+        'hostname'     => 'localhost',
         'username'     => 'root',
         'password'     => '',
-        'database'     => 'ci4tutorial',
+        'database'     => 'pennRide',
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,

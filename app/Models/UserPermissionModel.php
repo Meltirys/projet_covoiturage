@@ -1,0 +1,58 @@
+<?php
+
+namespace App\Models;
+
+use CodeIgniter\Model;
+
+class UserPermissionModel extends Model
+{
+    protected $table            = 'UserPermission';
+    protected $primaryKey       = 'id_user_permission';
+    protected $useAutoIncrement = true;
+    protected $returnType       = 'array';
+    protected $useSoftDeletes   = false;
+    protected $protectFields    = true;
+    protected $allowedFields    = ['id_user_permission', 'user_permission_label'];
+
+    protected bool $allowEmptyInserts = false;
+    protected bool $updateOnlyChanged = true;
+
+    protected array $casts = [];
+    protected array $castHandlers = [];
+
+    // Dates
+    protected $useTimestamps = false;
+    protected $dateFormat    = 'datetime';
+    protected $createdField  = 'created_at';
+    protected $updatedField  = 'updated_at';
+    protected $deletedField  = 'deleted_at';
+
+    // Validation
+    protected $validationRules      = [];
+    protected $validationMessages   = [];
+    protected $skipValidation       = false;
+    protected $cleanValidationRules = true;
+
+    // Callbacks
+    protected $allowCallbacks = true;
+    protected $beforeInsert   = [];
+    protected $afterInsert    = [];
+    protected $beforeUpdate   = [];
+    protected $afterUpdate    = [];
+    protected $beforeFind     = [];
+    protected $afterFind      = [];
+    protected $beforeDelete   = [];
+    protected $afterDelete    = [];
+
+    /**
+     * @return array The availables roles, except for the super-admin
+     */
+    public function getAvailablesRoles() : array{
+        $roles = $this->distinct()
+                    ->select("id_user_permission AS level, user_permission_label as label")
+                    ->where("user_permission_label != 'super-admin'")
+                    ->findAll();
+
+        return $roles;
+    }
+}
