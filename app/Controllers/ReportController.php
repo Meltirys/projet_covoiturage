@@ -22,6 +22,11 @@ class ReportController extends BaseController
                 ->with('error', "Vous ne pouvez pas vous reporter vous même");
         }
 
+        if (session('viewed_user_id') != $idUser) {
+            return redirect()->back()
+                ->with('error', "Vous ne pouvez pas signaler un utilisateur dont vous ne consulter pas la page de profil");
+        }
+
         $datas = [
             'reporter' => session()->user_id,
             'reported' => $idUser,

@@ -31,6 +31,35 @@ class PagesController extends BaseController
                 $journey['departure'] = format_date_fr($journey['departure']);
             }
             unset($journey); //Cleaning the memory
+        } else {
+            $journeyDriveModel = new JourneyDriveModel();
+
+            //Counting the number of journey made
+            $numberOfJourney =  $journeyDriveModel->select('COUNT(id_journey_drive) as total')
+                ->where('departure >', date('Y-m-d'))
+                ->where('deletion_date IS NULL')
+                ->first();
+
+            $datas['numberOfJourney'] = $numberOfJourney ? $numberOfJourney['total'] : 0;
+
+            //Counting the number passenger taken
+            $numberOfPassenger = $journeyDriveModel->select('COUNT(id_booking) as total')
+                                                    ->join('Booking', 'ON JourneyDrive.id_journey_drive = Booking.id_journey_drive ')
+                                                    ->where('Booking.deletion_date IS NULL')
+                                                    ->where('JourneyDrive.deletion_date IS NULL')
+                                                    ->where('Booking.deletion_date IS NULL')
+                                                    ->where('is_validated', true)
+                                                    ->first();
+
+            $datas['numberOfPassenger'] = $numberOfPassenger ? $numberOfPassenger['total'] : 0;
+
+            //Counting the unique drivers
+            $result = $journeyDriveModel->select('COUNT(DISTINCT driver) as total')
+                ->where('departure >', date('Y-m-d'))
+                ->where('deletion_date IS NULL')
+                ->first();
+
+            $datas['numberOfDrivers'] = $result ? $result['total'] : 0;
         }
 
         if (session()->errors) {

@@ -132,7 +132,10 @@ class JourneyService
      */
     public function createRecurringJourneyDrive(array $input, int $userId, array $days): array
     {
+        $this->db->transBegin();
+
         $createIds = [];
+        $input['stops'] = $this->sanitizeStops($input['stops'] ?? []);
         $referenceDate = new \DateTime($input['start-date']);
         $refDayNum = (int)$referenceDate->format('N'); // 1=lun, 7=dim
 
@@ -146,23 +149,37 @@ class JourneyService
             'sunday'    => 7,
         ];
 
-        $idTrack = $this->buildTrack($input);
-        foreach ($days as $day) {
-            $targetDayNum = $dayNumbers[$day] ?? null;
-            if ($targetDayNum === null) continue;
+        try {
 
-            $diff = ($targetDayNum - $refDayNum + 7) % 7;
-            $date = clone $referenceDate;
-            if ($diff > 0) {
-                $date->modify('+' . $diff . ' days');
+
+            $idTrack = $this->buildTrack($input);
+            foreach ($days as $day) {
+                $targetDayNum = $dayNumbers[$day] ?? null;
+                if ($targetDayNum === null) continue;
+
+                $diff = ($targetDayNum - $refDayNum + 7) % 7;
+                $date = clone $referenceDate;
+                if ($diff > 0) {
+                    $date->modify('+' . $diff . ' days');
+                }
+
+                $input['start-date'] = $date->format('Y-m-d');
+                $createIds[] = $this->createJourneyDrive($input, $userId, $idTrack);
+            }
+            // Transaction safety
+            if ($this->db->transStatus() === false) {
+                throw new \RuntimeException('Transaction échouée');
             }
 
-            $input['start-date'] = $date->format('Y-m-d');
-            $createIds[] = $this->createJourneyDrive($input, $userId, $idTrack);
-        }
+            $this->db->transCommit();
 
-        return $createIds;
+            return $createIds;
+        } catch (\Throwable $e) {
+            $this->db->transRollback();
+            throw $e;
+        }
     }
+
     /**
      * Updates an existing itinerary
      * @param array $original The original journey data
@@ -279,7 +296,13 @@ class JourneyService
             $this->journeyDriveModel->delete($journeyId);
 
             // Suppression du tracking (après le trajet pour respecter la contrainte FK)
-            $trackModel->delete($trackId);
+            if (
+                $this->journeyDriveModel
+                ->where('id_track', $trackId)
+                ->countAllResults() <= 1
+            ) {
+                $trackModel->delete($trackId);
+            }
 
 
             // Transaction safety
@@ -298,9 +321,10 @@ class JourneyService
     /**
      * Gets a list of journeys matching the user's request
      * @param array $input The user's inputs
+     * @param int $userId
      * @return array $journeys The matching journeys
      */
-    public function searchJourneyDrive(array $input): array
+    public function searchJourneyDrive(array $input, int $userId): array
     {
         // searchJourneyDrive()
         // ├── resolve departure location
@@ -311,8 +335,8 @@ class JourneyService
         // └── return results
 
         // 1. Setting up the variables
-        $startDate = !empty($input['date']) ? $input['date'] : date('Y-m-d');
-        $endDay = date('Y-m-d H:i:s', strtotime($startDate . ' +1 day'));
+        $startDate = !empty($input['date']) ? $input['date'] : date('Y-m-d'); //If no date is given, takes the current date
+        $endDay = !empty($input['date ?']) ? date('Y-m-d H:i:s', strtotime($startDate . ' +1 day')) : null;
         $requestedSeats = $input['free-seats'] ?? 1;
         $departurePoint = [$input['start']['lon'], $input['start']['lat']];
         $endPoint = $input['end']['lon'] && $input['end']['lat'] ?
@@ -335,7 +359,7 @@ class JourneyService
 
         // 5. Removing the journey that have been proposed by the driver
         foreach ($journeys as $key => $journey) {
-            if ($journey['driver'] === session('user_id'))
+            if ($journey['driver'] === $userId)
                 unset($journeys[$key]);
         }
         $journeys = array_values($journeys); //Reindexing the array
@@ -354,22 +378,22 @@ class JourneyService
     {
         switch ($type) {
             case 'drive':
-                $allJouneys = $this->journeyDriveModel->getJourneyInfosByDates(date('Y-m-d H:i:s'), null, $numberOfJourneys); // We retrieve the journey that start after the current day
+                $allJourneys = $this->journeyDriveModel->getJourneyInfosByDates(date('Y-m-d H:i:s'), null, $numberOfJourneys); // We retrieve the journey that start after the current day
                 // Removing the journey that have been proposed by the driver
-                foreach ($allJouneys as $key => $journey) {
+                foreach ($allJourneys as $key => $journey) {
                     if ($journey['driver'] === session('user_id'))
-                        unset($allJouneys[$key]);
+                        unset($allJourneys[$key]);
                 }
-                $allJouneys = array_values($allJouneys); //Reindexing the array
+                $allJourneys = array_values($allJourneys); //Reindexing the array
                 break;
             case 'request':
-                $allJouneys = $this->journeyRequestModel->getJourneyInfosByDates(date('Y-m-d H:i:s'), null, $numberOfJourneys);
+                $allJourneys = $this->journeyRequestModel->getJourneyInfosByDates(date('Y-m-d H:i:s'), null, $numberOfJourneys);
                 break;
             default:
                 return [];
         }
 
-        return $this->filterAvailableSeats($allJouneys, 1);
+        return $this->filterAvailableSeats($allJourneys, 1);
     }
 
 
