@@ -16,33 +16,33 @@
     <!-- ===== ONGLETS PRINCIPAUX — CARDS ===== -->
     <div class="grid grid-cols-3 gap-3 mb-8" id="admin-tabs">
         <button class="admin-tab-btn text-left p-3 rounded-xl border transition-all duration-200 flex items-center gap-3"
-                data-tab="tab-signalements"
-                style="border-color: rgba(180,140,60,0.5); background: rgba(180,140,60,0.08);">
+            data-tab="tab-signalements"
+            style="border-color: rgba(180,140,60,0.5); background: rgba(180,140,60,0.08);">
             <i class="fa-regular fa-flag text-gold" style="font-size: 16px;"></i>
-            <div class="flex flex-col gap-0.5">
+            <span class="flex flex-col gap-0.5">
                 <span class="text-gold uppercase tracking-widest" style="font-size: 9px; letter-spacing: 0.15em;">Signalements</span>
                 <span class="font-pfd text-xl font-light text-gold"><?= $totalReports ?? '—' ?></span>
-            </div>
+            </span>
         </button>
         <button class="admin-tab-btn text-left p-3 rounded-xl border transition-all duration-200 flex items-center gap-3"
-                data-tab="tab-utilisateurs"
-                style="border-color: rgba(180,140,60,0.2); background: var(--color-ocean-mid);">
+            data-tab="tab-utilisateurs"
+            style="border-color: rgba(180,140,60,0.2); background: var(--color-ocean-mid);">
             <i class="fa-regular fa-user text-grey" style="font-size: 16px; opacity: 0.6;"></i>
-            <div class="flex flex-col gap-0.5">
+            <span class="flex flex-col gap-0.5">
                 <span class="text-grey uppercase tracking-widest" style="font-size: 9px; letter-spacing: 0.15em;">Utilisateurs</span>
                 <span class="font-pfd text-xl font-light text-grey"><?= $totalUsers ?? '—' ?></span>
-            </div>
+            </span>
         </button>
         <?php if (session()->user_role == 3): ?>
-        <button class="admin-tab-btn text-left p-3 rounded-xl border transition-all duration-200 flex items-center gap-3"
+            <button class="admin-tab-btn text-left p-3 rounded-xl border transition-all duration-200 flex items-center gap-3"
                 data-tab="tab-roles"
                 style="border-color: rgba(180,140,60,0.2); background: var(--color-ocean-mid);">
-            <i class="fa-regular fa-shield text-grey" style="font-size: 16px; opacity: 0.6;"></i>
-            <div class="flex flex-col gap-0.5">
-                <span class="text-grey uppercase tracking-widest" style="font-size: 9px; letter-spacing: 0.15em;">Rôles</span>
-                <span class="font-pfd text-xl font-light text-grey"><?= $totalRoles ?? '—' ?></span>
-            </div>
-        </button>
+                <i class="fa-regular fa-shield text-grey" style="font-size: 16px; opacity: 0.6;"></i>
+                <span class="flex flex-col gap-0.5">
+                    <span class="text-grey uppercase tracking-widest" style="font-size: 9px; letter-spacing: 0.15em;">Rôles</span>
+                    <span class="font-pfd text-xl font-light text-grey"><?= $totalRoles ?? '—' ?></span>
+        </span>
+            </button>
         <?php endif; ?>
     </div>
 
@@ -82,9 +82,9 @@
 
     <!-- ===== PANNEAU RÔLES ===== -->
     <?php if (session()->user_role == 3): ?>
-    <div id="tab-roles" class="admin-panel hidden">
-        <?= view('backoffice/UserRole') ?>
-    </div>
+        <div id="tab-roles" class="admin-panel hidden">
+            <?= view('backoffice/UserRole') ?>
+        </div>
     <?php endif; ?>
 
 </main>
@@ -98,70 +98,46 @@
 <script src="<?= base_url('js/user-validation.js') ?>"></script>
 <script src="<?= base_url('js/report-manager.js') ?>"></script>
 <?php if (session()->user_role == 3): ?>
-<script src="<?= base_url('js/user-role.js') ?>"></script>
+    <script src="<?= base_url('js/user-role.js') ?>"></script>
 <?php endif; ?>
 
 <script>
-const reports         = <?= json_encode($reports) ?>;
-const reportHistory   = <?= json_encode($reportsHistory) ?>;
-const toValidateUsers = <?= json_encode($users) ?>;
-reportManagementPaginator.load(reports);
-reportHistoryPaginator.load(reportHistory);
-validationPaginator.load(toValidateUsers);
+    const reports = <?= json_encode($reports) ?>;
+    const reportHistory = <?= json_encode($reportsHistory) ?>;
+    const toValidateUsers = <?= json_encode($users) ?>;
+    reportManagementPaginator.load(reports);
+    reportHistoryPaginator.load(reportHistory);
+    validationPaginator.load(toValidateUsers);
 
-function setCardActive(btn) {
-    document.querySelectorAll('.admin-tab-btn').forEach(b => {
-        b.style.borderColor = 'rgba(180,140,60,0.2)';
-        b.style.background  = 'var(--color-ocean-mid)';
-        b.querySelectorAll('i').forEach(i => { i.style.opacity = '0.6'; i.classList.remove('text-gold'); i.classList.add('text-grey'); });
-        b.querySelectorAll('span').forEach(s => { s.classList.remove('text-gold'); s.classList.add('text-grey'); });
-    });
-    btn.style.borderColor = 'rgba(180,140,60,0.5)';
-    btn.style.background  = 'rgba(180,140,60,0.08)';
-    btn.querySelectorAll('i').forEach(i => { i.style.opacity = '1'; i.classList.remove('text-grey'); i.classList.add('text-gold'); });
-    btn.querySelectorAll('span').forEach(s => { s.classList.remove('text-grey'); s.classList.add('text-gold'); });
-}
-
-function showAdminPanel(tabId) {
-    document.querySelectorAll('.admin-panel').forEach(p => {
-        p.classList.add('hidden');
-        p.style.opacity = '';
-        p.style.transform = '';
-        p.style.transition = '';
-    });
-    const panel = document.getElementById(tabId);
-    if (panel) {
-        panel.style.opacity = '0';
-        panel.style.transform = 'translateY(6px)';
-        panel.classList.remove('hidden');
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-            panel.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
-            panel.style.opacity = '1';
-            panel.style.transform = 'translateY(0)';
-        }));
-    }
-}
-
-document.querySelectorAll('.admin-tab-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        setCardActive(btn);
-        showAdminPanel(btn.dataset.tab);
-    });
-});
-
-function initTabs(btnSelector, panelSelector, indicatorId, defaultTab) {
-    const btns      = document.querySelectorAll(btnSelector);
-    const panels    = document.querySelectorAll(panelSelector);
-    const indicator = document.getElementById(indicatorId);
-
-    function moveIndicator(btn) {
-        if (!indicator || !btn) return;
-        indicator.style.left  = btn.offsetLeft + 'px';
-        indicator.style.width = btn.offsetWidth + 'px';
+    function setCardActive(btn) {
+        document.querySelectorAll('.admin-tab-btn').forEach(b => {
+            b.style.borderColor = 'rgba(180,140,60,0.2)';
+            b.style.background = 'var(--color-ocean-mid)';
+            b.querySelectorAll('i').forEach(i => {
+                i.style.opacity = '0.6';
+                i.classList.remove('text-gold');
+                i.classList.add('text-grey');
+            });
+            b.querySelectorAll('span').forEach(s => {
+                s.classList.remove('text-gold');
+                s.classList.add('text-grey');
+            });
+        });
+        btn.style.borderColor = 'rgba(180,140,60,0.5)';
+        btn.style.background = 'rgba(180,140,60,0.08)';
+        btn.querySelectorAll('i').forEach(i => {
+            i.style.opacity = '1';
+            i.classList.remove('text-grey');
+            i.classList.add('text-gold');
+        });
+        btn.querySelectorAll('span').forEach(s => {
+            s.classList.remove('text-grey');
+            s.classList.add('text-gold');
+        });
     }
 
-    function showTab(tabId) {
-        panels.forEach(p => {
+    function showAdminPanel(tabId) {
+        document.querySelectorAll('.admin-panel').forEach(p => {
             p.classList.add('hidden');
             p.style.opacity = '';
             p.style.transform = '';
@@ -178,26 +154,67 @@ function initTabs(btnSelector, panelSelector, indicatorId, defaultTab) {
                 panel.style.transform = 'translateY(0)';
             }));
         }
-        btns.forEach(b => { b.classList.remove('text-gold'); b.classList.add('text-grey'); });
-        const activeBtn = document.querySelector(`${btnSelector}[data-tab="${tabId}"]`);
-        if (activeBtn) {
-            activeBtn.classList.remove('text-grey');
-            activeBtn.classList.add('text-gold');
-            moveIndicator(activeBtn);
-        }
     }
 
-    btns.forEach(btn => btn.addEventListener('click', () => showTab(btn.dataset.tab)));
-    window.addEventListener('resize', () => moveIndicator(document.querySelector(`${btnSelector}.text-gold`)));
-    setTimeout(() => showTab(defaultTab), 50);
-}
+    document.querySelectorAll('.admin-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            setCardActive(btn);
+            showAdminPanel(btn.dataset.tab);
+        });
+    });
 
-initTabs('.report-tab-btn', '.report-panel', 'report-tab-indicator', 'subtab-signalements-encours');
-initTabs('.user-tab-btn',   '.user-panel',   'user-tab-indicator',   'subtab-validation');
+    function initTabs(btnSelector, panelSelector, indicatorId, defaultTab) {
+        const btns = document.querySelectorAll(btnSelector);
+        const panels = document.querySelectorAll(panelSelector);
+        const indicator = document.getElementById(indicatorId);
 
-setTimeout(() => {
-    setCardActive(document.querySelector('.admin-tab-btn[data-tab="tab-signalements"]'));
-    showAdminPanel('tab-signalements');
-}, 50);
+        function moveIndicator(btn) {
+            if (!indicator || !btn) return;
+            indicator.style.left = btn.offsetLeft + 'px';
+            indicator.style.width = btn.offsetWidth + 'px';
+        }
+
+        function showTab(tabId) {
+            panels.forEach(p => {
+                p.classList.add('hidden');
+                p.style.opacity = '';
+                p.style.transform = '';
+                p.style.transition = '';
+            });
+            const panel = document.getElementById(tabId);
+            if (panel) {
+                panel.style.opacity = '0';
+                panel.style.transform = 'translateY(6px)';
+                panel.classList.remove('hidden');
+                requestAnimationFrame(() => requestAnimationFrame(() => {
+                    panel.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+                    panel.style.opacity = '1';
+                    panel.style.transform = 'translateY(0)';
+                }));
+            }
+            btns.forEach(b => {
+                b.classList.remove('text-gold');
+                b.classList.add('text-grey');
+            });
+            const activeBtn = document.querySelector(`${btnSelector}[data-tab="${tabId}"]`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-grey');
+                activeBtn.classList.add('text-gold');
+                moveIndicator(activeBtn);
+            }
+        }
+
+        btns.forEach(btn => btn.addEventListener('click', () => showTab(btn.dataset.tab)));
+        window.addEventListener('resize', () => moveIndicator(document.querySelector(`${btnSelector}.text-gold`)));
+        setTimeout(() => showTab(defaultTab), 50);
+    }
+
+    initTabs('.report-tab-btn', '.report-panel', 'report-tab-indicator', 'subtab-signalements-encours');
+    initTabs('.user-tab-btn', '.user-panel', 'user-tab-indicator', 'subtab-validation');
+
+    setTimeout(() => {
+        setCardActive(document.querySelector('.admin-tab-btn[data-tab="tab-signalements"]'));
+        showAdminPanel('tab-signalements');
+    }, 50);
 </script>
 <?= $this->endSection() ?>
