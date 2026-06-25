@@ -222,7 +222,7 @@ class UserController extends BaseController
         if ($idUser == session()->user_id) {
             //Logging the user out
             session_destroy();
-            redirect()->to('/');
+            return redirect()->to('/');
         } else { //This means the account has been deleted by the admin
             return redirect()->to('/backoffice')
                 ->with('suppression_success', "L'utilisateur " . $userName . " à bien été supprimé")
