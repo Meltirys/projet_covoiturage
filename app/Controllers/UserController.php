@@ -18,8 +18,6 @@ use App\Services\MailService;
 use App\Validators\AvatarValidator;
 use App\Validators\UpdateUserInfos;
 use App\Validators\BanUserValidator;
-use PHPUnit\TextUI\Help;
-use ReflectionUnionType;
 
 class UserController extends BaseController
 {
