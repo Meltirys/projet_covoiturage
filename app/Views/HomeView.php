@@ -361,20 +361,6 @@
             </div>
         </div>
 
-        <style>
-            @keyframes pulse-map {
-                0% {
-                    transform: translate(-50%, -50%) scale(1);
-                    opacity: 0.6;
-                }
-
-                100% {
-                    transform: translate(-50%, -50%) scale(2.5);
-                    opacity: 0;
-                }
-            }
-        </style>
-
     <?php endif; ?>
 
 </main>
@@ -483,7 +469,7 @@
         });
     });
 
-    <?php if (session()->getFlashdata('singup_error')): ?>
+    <?php if (session()->getFlashdata('signup_error')): ?>
         showTab('tab-inscription');
     <?php elseif(session()->getFlashdata('contact_error')):  ?>
         showTab('tab-contact');

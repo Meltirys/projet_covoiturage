@@ -12,6 +12,8 @@ use CodeIgniter\HTTP\ResponseInterface;
 use App\Validators\ChangePasswordValidator;
 use App\Models\CityModel;
 use App\Models\JourneyDriveModel;
+use App\Models\JourneyRequestModel;
+use App\Models\RequestMemberModel;
 use App\Services\LocationService;
 use App\Validators\RegistrationValidator;
 use App\Services\MailService;
@@ -38,9 +40,11 @@ class UserController extends BaseController
 
         //If an error is detected, return to the form with the errors described
         if (!$validator->validate($post)) {
-            return view('HomeView', [
-                'errors' => $validator->getErrors()
-            ]);
+            return redirect()->back()
+            ->with('signup_error', true)
+            ->withInput()
+            ->with('errors', $validator->getErrors());
+    
         }
         // --- Saving the location --- 
         $location = [
@@ -116,6 +120,8 @@ class UserController extends BaseController
         $bookingModel = new BookingModel();
         $carModel = new CarModel();
         $userModel = new UserModel();
+        $journeyRequestModel = new JourneyRequestModel();
+        $requestMemberModel = new RequestMemberModel();
 
 
         // ---- We retrieve the datas of the passengers which were supposed to be in a journey made by the deleted user
@@ -146,6 +152,34 @@ class UserController extends BaseController
             ->update();
 
 
+        // ---- We delete the request of the user
+        $journeyRequestModel->builder()
+            ->where('id_creator', $idUser)
+            ->where('deletion_date IS NULL')
+            ->set('deletion_date', date('Y-m-d'))
+            ->update();
+
+        //Deleting the request members linked to the deleted requests
+        $requestIds = $journeyRequestModel->where('id_creator', $idUser)
+            ->where('deletion_date', date('Y-m-d'))
+            ->findColumn('id_journey_request');
+
+        if (!empty($requestIds)) {
+            $requestMemberModel->builder()
+                ->whereIn('id_journey_request', $requestIds)
+                ->where('deletion_date IS NULL')
+                ->set('deletion_date', date('Y-m-d'))
+                ->set('is_validated', false)
+                ->update();
+        }
+
+        // ---- We delete the participation of the user in requests
+        $requestMemberModel->builder()
+            ->where('id_user', $idUser)
+            ->where('deletion_date IS NULL')
+            ->set('deletion_date', date('Y-m-d'))
+            ->set('is_validated', false)
+            ->update();
 
         // ---- We delete the car of the user
         $carModel->where('id_user', $idUser)->delete();
@@ -188,7 +222,7 @@ class UserController extends BaseController
         if ($idUser == session()->user_id) {
             //Logging the user out
             session_destroy();
-            redirect()->to('/');
+            return redirect()->to('/');
         } else { //This means the account has been deleted by the admin
             return redirect()->to('/backoffice')
                 ->with('suppression_success', "L'utilisateur " . $userName . " à bien été supprimé")

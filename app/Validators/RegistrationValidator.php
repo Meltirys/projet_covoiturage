@@ -47,7 +47,7 @@ class RegistrationValidator extends BaseValidator
                 'rules'  => 'required|valid_email|is_unique[Users.email]|max_length[255]',
                 'errors' => [
                     'required'    => 'L\'email est obligatoire.',
-                    'valid_email' => 'Format d\'email invalide.',
+                    'valid_email' => 'Format d\'email est invalide.',
                     'is_unique'   => 'Cet email est déjà utilisé.',
                     'max_length'  => 'L\'adresse mail ne doit pas dépasser 255 caractères'
                 ]
@@ -92,11 +92,12 @@ class RegistrationValidator extends BaseValidator
             ],
 
             'birth_date' => [
-                'rules'  => 'required|valid_date[Y-m-d]|is_adult',
+                'rules'  => 'required|valid_date[Y-m-d]|is_adult|date_greater_than_1901',
                 'errors' => [
-                    'required'   => 'L\'adresse est obligatoire.',
+                    'required'   => 'La date de naissance est obligatoire.',
                     'valid_date' => 'Veuillez entrer une date au bon format',
-                    'is_adult' => 'Vous devez être majeur pour vous inscrire'
+                    'is_adult' => 'Vous devez être majeur pour vous inscrire',
+                    'date_greater_than_1901' => 'Veuillez entrer une date de naissance après 1901.'
                 ]
             ],
 
