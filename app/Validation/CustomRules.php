@@ -177,17 +177,6 @@ class CustomRules
         return $data[$params] !== $value;
     }
 
-    public function date_greater_than_1901(string $str, ?string &$error = null): bool
-    {
-        if (empty($str)) return true; //Avoid having a wrong message error if no date is entered
-
-        if (date('Y', strtotime($str)) <= 1901) {
-            return false;
-        }
-
-        return true;
-    }
-
     /**
      * Checks if a date occurs before another
      * @param string $value

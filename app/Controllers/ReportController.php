@@ -24,7 +24,7 @@ class ReportController extends BaseController
 
         if (session('viewed_user_id') != $idUser) {
             return redirect()->back()
-                ->with('error', "Vous ne pouvez pas signaler un utilisateur dont vous ne consulter pas la page de profil");
+                ->with('error', "Vous ne pouvez pas signaler un utilisateur dont vous ne consultez pas la page de profil");
         }
 
         $datas = [
@@ -36,18 +36,18 @@ class ReportController extends BaseController
         $validator = new ReportValidator();
 
         if (!$validator->validate($datas)) {
-            return redirect()->to('report')
+            return redirect()->back()
                 ->with('error', 'Un champ n\'était pas valide');
         }
 
         $reportModel = model('ReportModel');
 
         if (!$reportModel->save($datas)) {
-            return redirect()->to('report')
+            return redirect()->back()
                 ->with('error', 'Une erreur est survenue lors de l\'enregistrement du signalement, veuillez réessayer');
         }
 
-        return redirect()->to('report')
+        return redirect()->back()
             ->with('success', 'Le signalement à bien été pris en compte, il sera le traité le plus rapidement possible par nos administrateurs');
     }
 

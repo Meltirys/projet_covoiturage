@@ -98,7 +98,6 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->post('reservation/trajet/annuler/(:num)', 'Journey\BookingController::cancelJourney/$1');
 
     //Report
-    $routes->get('report', [ReportController::class, 'showReportView']);
     $routes->post('user/report/(:num)', [ReportController::class, 'report']);
 });
 
