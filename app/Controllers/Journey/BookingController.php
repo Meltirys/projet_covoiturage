@@ -160,7 +160,14 @@ class BookingController extends BaseController
             helper('mail_helper');
 
             //Retrieving the infos needed for the mail
-            $body = EmailTemplates::passengerCancelledConfirmation(
+            $bodyPassenger = EmailTemplates::passengerCancelledConfirmation(
+                $infos['passenger_name'],
+                $infos['start_address'],
+                $infos['end_address'],
+                $infos['departure'],
+            );
+            $bodyDriver = EmailTemplates::passengerCancelledNotifyDriver(
+                $infos['driver_name'],
                 $infos['passenger_name'],
                 $infos['start_address'],
                 $infos['end_address'],
@@ -170,7 +177,14 @@ class BookingController extends BaseController
             $mailService->send(
                 $infos['passenger_email'],
                 'Votre demande de participation à un trajet à bien été annulée',
-                $body
+                $bodyPassenger
+            );
+
+            //Send the mail to the drive that passenger cancelled his reservation
+            $mailService->send(
+                $infos['driver_email'],
+                'Un passager a annulé un trajet avec vous',
+                $bodyPassenger
             );
         } catch (\Exception $e) {
             log_message('error', 'Erreur envoi mail : ' . $e->getMessage());
@@ -370,7 +384,33 @@ class BookingController extends BaseController
             return redirect()->back()->with('error', 'Impossible de retirer un passager d\'un trajet passé ou supprimé');
         }
 
+        //Must be called before delete
+        $infos = $this->gatherMailInfos($id_booking, $booking['id_user']);
         $bookingModel->delete($id_booking);
+
+
+        try {
+            //Preparing the mail service
+            $mailService = new MailService();
+            helper('mail_helper');
+
+            //Retrieving the infos needed for the mail
+            $body = EmailTemplates::driverRemovedPassenger(
+                $infos['passenger_name'],
+                $infos['driver_name'],
+                $infos['start_address'],
+                $infos['end_address'],
+                $infos['departure']
+            );
+            //Send the mail to the passenger that it's application has been refused
+            $mailService->send(
+                $infos['passenger_email'],
+                'Votre demande de participation à un trajet à été refusée',
+                $body
+            );
+        } catch (\Exception $e) {
+            log_message('error', 'Erreur envoi mail : ' . $e->getMessage());
+        }
 
         return redirect()->to('drive/show/' . $journey['id_journey_drive'])
             ->with('success', 'Le passager a été retiré du trajet');

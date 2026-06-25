@@ -414,4 +414,56 @@ class EmailTemplates
             $body
         );
     }
+
+    // =====================================================================
+    // 13. Le passager annule sa participation (notification au conducteur)
+    // =====================================================================
+    public static function passengerCancelledNotifyDriver(string $driverFirstName, string $passengerName, string $departure, string $arrival, string $date): string
+    {
+        $body = '
+        <p style="margin:0 0 16px 0;">Bonjour ' . htmlspecialchars($driverFirstName) . ',</p>
+        <p style="margin:0 0 16px 0;"><strong>' . htmlspecialchars($passengerName) . '</strong> a annulé sa participation à ton trajet :</p>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F7F4EE; border-radius:10px; margin:0 0 16px 0;">
+            <tr><td style="padding:14px 18px; font-size:14px; color:#2A2A2A;">
+                <strong>' . htmlspecialchars($departure) . '</strong> → <strong>' . htmlspecialchars($arrival) . '</strong><br>
+                <span style="color:' . self::GREY . '; font-size:12px;">' . htmlspecialchars($date) . '</span>
+            </td></tr>
+        </table>
+        <p style="margin:0;">Une place s\'est libérée sur ton trajet. D\'autres passagers peuvent désormais la réserver.</p>
+    ';
+
+        return self::layout(
+            'Annulation passager',
+            'Un passager a <em style="font-style:italic; color:' . self::GREY . ';">annulé</em>',
+            $body,
+            ['label' => 'Voir mon trajet', 'url' => self::SITE_URL . '/myprofil'],
+            self::GREY
+        );
+    }
+
+    // =====================================================================
+    // 14. Le conducteur retire un passager de son trajet (notification au passager)
+    // =====================================================================
+    public static function driverRemovedPassenger(string $passengerFirstName, string $driverName, string $departure, string $arrival, string $date): string
+    {
+        $body = '
+        <p style="margin:0 0 16px 0;">Bonjour ' . htmlspecialchars($passengerFirstName) . ',</p>
+        <p style="margin:0 0 16px 0;">Le conducteur <strong>' . htmlspecialchars($driverName) . '</strong> t\'a retiré du trajet suivant :</p>
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#FBEAE8; border-radius:10px; margin:0 0 16px 0;">
+            <tr><td style="padding:14px 18px; font-size:14px; color:#2A2A2A;">
+                <strong>' . htmlspecialchars($departure) . '</strong> → <strong>' . htmlspecialchars($arrival) . '</strong><br>
+                <span style="color:' . self::GREY . '; font-size:12px;">' . htmlspecialchars($date) . '</span>
+            </td></tr>
+        </table>
+        <p style="margin:0;">Pas d\'inquiétude, d\'autres trajets sont disponibles sur PennRide !</p>
+    ';
+
+        return self::layout(
+            'Retrait du trajet',
+            'Tu as été <em style="font-style:italic; color:' . self::RED . ';">retiré</em> d\'un trajet',
+            $body,
+            ['label' => 'Rechercher un autre trajet', 'url' => self::SITE_URL . '/trajet'],
+            self::RED
+        );
+    }
 }
