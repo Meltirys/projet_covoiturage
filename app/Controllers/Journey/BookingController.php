@@ -405,7 +405,7 @@ class BookingController extends BaseController
             //Send the mail to the passenger that it's application has been refused
             $mailService->send(
                 $infos['passenger_email'],
-                'Votre demande de participation à un trajet à été refusée',
+                'Un conducteur vous a retiré d\'un trajet',
                 $body
             );
         } catch (\Exception $e) {
