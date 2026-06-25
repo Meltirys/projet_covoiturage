@@ -69,7 +69,7 @@ const deleteForm = document.getElementById('delete-form');
 
 if (deleteForm) {
     deleteForm.addEventListener('submit', (e) => {
-        const confirmation = confirm("Êtes-vous sûr de vouloir envoyer ce formulaire ?");
+        const confirmation = confirm("Êtes-vous sûr de vouloir supprimer votre compte ?");
 
         if (!confirmation) 
             e.preventDefault(); 

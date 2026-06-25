@@ -90,7 +90,7 @@
                         <?php if (session()->getFlashdata('car_error')): ?>
                             <p class="text-xs text-red mb-2"><?= session()->getFlashdata('car_error') ?></p>
                         <?php endif ?>
-                        <?php if (isset($errors) && $errors['idCar']): ?>
+                        <?php if (isset($errors['idCar'])): ?>
                             <p class="text-xs text-red mb-2"><?= $errors['idCar'] ?></p>
                         <?php endif; ?>
 
