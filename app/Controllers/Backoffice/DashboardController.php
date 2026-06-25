@@ -33,6 +33,10 @@ class DashboardController extends BaseController
         }
         unset($report); //Cleaning the memory
 
+        $data['totalReports'] = count($data['reports']);
+        $data['totalUsers']   = count($data['users']);
+        $data['totalRoles']   = 3; // nombre de rôles en dur (user, admin, super-admin)
+
         return view('backoffice/Dashboard', $data);
     }
 }
