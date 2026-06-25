@@ -63,7 +63,7 @@ class PagesController extends BaseController
         }
 
         if (session()->errors) {
-            $datas['errors'] = session()->errors; // Loading the errors of the contact form
+            $datas['errors'] = session()->errors; // Loading the errors encountered
         }
 
         return view('HomeView', $datas);

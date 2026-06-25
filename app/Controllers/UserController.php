@@ -42,9 +42,11 @@ class UserController extends BaseController
 
         //If an error is detected, return to the form with the errors described
         if (!$validator->validate($post)) {
-            return view('HomeView', [
-                'errors' => $validator->getErrors()
-            ]);
+            return redirect()->back()
+            ->with('signup_error', true)
+            ->withInput()
+            ->with('errors', $validator->getErrors());
+    
         }
         // --- Saving the location --- 
         $location = [

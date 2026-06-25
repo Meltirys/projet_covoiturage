@@ -469,7 +469,7 @@
         });
     });
 
-    <?php if (session()->getFlashdata('singup_error')): ?>
+    <?php if (session()->getFlashdata('signup_error')): ?>
         showTab('tab-inscription');
     <?php elseif(session()->getFlashdata('contact_error')):  ?>
         showTab('tab-contact');
