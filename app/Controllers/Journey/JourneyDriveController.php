@@ -163,6 +163,7 @@ class JourneyDriveController extends BaseController
                 $passenger = $userModel->find($booking['id_user']);
                 if ($passenger) {
                     $passenger['meeting_point'] = $booking['meeting_point'] ?? null;
+                    $passenger['id_booking'] = $booking['id_booking'];
                     $data['passengers'][] = $passenger;
                 }
             }

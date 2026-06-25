@@ -50,7 +50,7 @@
         <p class="text-xs text-red border border-red/30 rounded-lg px-3 py-2 mb-4"><?= esc(session()->getFlashdata('error')) ?></p>
     <?php endif ?>
 
-    <?php if (!$isOwnProfile): ?>
+    <?php if ($canReport): ?>
         <div class="bg-ocean-mid border border-ocean-light rounded-[14px] overflow-hidden">
             <div class="h-0.5 bg-linear-to-r from-gold/40 to-transparent"></div>
             <div class="p-5">

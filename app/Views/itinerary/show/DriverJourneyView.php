@@ -86,6 +86,11 @@
                                 <?php endif ?>
                             </div>
                         </div>
+                        <?= form_open('reservation/retirer/' . $passenger['id_booking'], ['onsubmit' => "return confirm('Retirer ce passager du trajet ?')"]) ?>
+                            <button type="submit" class="text-xs font-bold bg-red/10 border border-red/20 text-red rounded-full px-3 py-0.5 hover:bg-red/20 transition-colors cursor-pointer">
+                                Retirer
+                            </button>
+                        <?= form_close() ?>
                     </div>
                 <?php endforeach ?>
             </div>

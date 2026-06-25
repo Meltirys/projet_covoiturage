@@ -351,6 +351,31 @@ class BookingController extends BaseController
         return $infos;
     }
 
+    public function kick(int $id_booking)
+    {
+        $bookingModel = new BookingModel();
+        $journeyModel = new JourneyDriveModel();
+
+        $booking = $bookingModel->find($id_booking);
+        if (!$booking) {
+            return redirect()->back()->with('error', 'Réservation introuvable');
+        }
+
+        $journey = $journeyModel->find($booking['id_journey_drive']);
+        if (!$journey || $journey['driver'] != session('user_id')) {
+            return redirect()->back()->with('error', 'Action non autorisée');
+        }
+
+        if ($journey['departure'] <= date('Y-m-d H:i:s') || !is_null($journey['deletion_date'])) {
+            return redirect()->back()->with('error', 'Impossible de retirer un passager d\'un trajet passé ou supprimé');
+        }
+
+        $bookingModel->delete($id_booking);
+
+        return redirect()->to('drive/show/' . $journey['id_journey_drive'])
+            ->with('success', 'Le passager a été retiré du trajet');
+    }
+
     /**
      * Used when a driver wants to cancel his journey. It desactivates all the booking and soft delete the journey
      * @param int $id_journey_drive

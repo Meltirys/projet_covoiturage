@@ -142,23 +142,21 @@ class ProfilController extends BaseController
         $connectedId   = session('user_id');
         $isOwnProfile  = (int) $id === (int) $connectedId;
 
-        if (!$isOwnProfile) {
-            // Trajets où l'utilisateur connecté est conducteur et la cible est passager
-            $connectedDriverJourneys = $journeyModel->where('driver', $connectedId)->where('deletion_date', null)->findAll();
-            $connectedDriverIds      = array_column($connectedDriverJourneys, 'id_journey_drive');
+        if ($isOwnProfile) {
+            return redirect()->to('/myprofil');
+        }
 
-            // Trajets où l'utilisateur connecté est passager
-            $connectedBookings     = $bookingModel->where('id_user', $connectedId)->where('deletion_date IS NULL')->findAll();
-            $connectedPassengerIds = array_column($connectedBookings, 'id_journey_drive');
+        // Vérifie si les deux utilisateurs partagent un trajet (pour le signalement)
+        $canReport = false;
+        $connectedDriverJourneys = $journeyModel->where('driver', $connectedId)->where('deletion_date', null)->findAll();
+        $connectedDriverIds      = array_column($connectedDriverJourneys, 'id_journey_drive');
 
-            $allJourneyIds = array_unique(array_merge($connectedDriverIds, $connectedPassengerIds));
+        $connectedBookings     = $bookingModel->where('id_user', $connectedId)->where('deletion_date IS NULL')->findAll();
+        $connectedPassengerIds = array_column($connectedBookings, 'id_journey_drive');
 
-            if (empty($allJourneyIds)) {
-                return redirect()->to('/')
-                    ->with('error', 'Vous n\'avez pas accès à ce profil');
-            }
+        $allJourneyIds = array_unique(array_merge($connectedDriverIds, $connectedPassengerIds));
 
-            // Vérifie si la cible est conducteur ou passager sur un de ces trajets
+        if (!empty($allJourneyIds)) {
             $targetIsDriver = $journeyModel
                 ->where('driver', $id)
                 ->whereIn('id_journey_drive', $allJourneyIds)
@@ -171,14 +169,7 @@ class ProfilController extends BaseController
                 ->where('deletion_date IS NULL')
                 ->first();
 
-            if (!$targetIsDriver && !$targetIsPassenger) {
-                return redirect()->to('/')
-                    ->with('error', 'Vous n\'avez pas accès à ce profil');
-            }
-        }
-
-        else{
-            return redirect()->to('/myprofil');
+            $canReport = $targetIsDriver || $targetIsPassenger;
         }
 
         $driverJourneyDone = 0;
@@ -208,7 +199,7 @@ class ProfilController extends BaseController
             'driverJourneyDone'    => $driverJourneyDone,
             'passengerTaken'       => $passengerTaken,
             'passengerJourneyDone' => $passengerJourneyDone,
-            'isOwnProfile'         => $isOwnProfile,
+            'canReport'            => $canReport,
         ]);
     }
 

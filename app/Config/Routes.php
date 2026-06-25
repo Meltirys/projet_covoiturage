@@ -96,6 +96,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->post('reservation/accepter/(:num)', 'Journey\BookingController::accept/$1');
     $routes->post('reservation/refuser/(:num)',  'Journey\BookingController::refuse/$1');
     $routes->post('reservation/trajet/annuler/(:num)', 'Journey\BookingController::cancelJourney/$1');
+    $routes->post('reservation/retirer/(:num)', 'Journey\BookingController::kick/$1');
 
     //Report
     $routes->get('report', [ReportController::class, 'showReportView']);
