@@ -6,8 +6,6 @@
 
     <?php
 
-use CodeIgniter\HTTP\SiteURI;
-
  if (!session('logged_in')) : ?>
 
         <div class="flex flex-col md:flex-row md:min-h-screen">

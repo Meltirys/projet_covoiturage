@@ -132,3 +132,4 @@ _modules/*
 
 app/Controllers/Debug.php
 .env.online
+.htaccess

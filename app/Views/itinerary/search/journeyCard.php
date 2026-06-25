@@ -1,7 +1,7 @@
 <div class="flex flex-col gap-3 mt-6">
     <?php foreach ($journeys as $journey): ?>
-        <a href="<?= site_url('drive/show/' . $journey['id_journey_drive']) ?>">
-            <div class="bg-ocean-mid border border-ocean-light rounded-[14px] px-5 py-4 hover-border-gold transition-colors">
+            <div class="bg-ocean-mid border border-ocean-light rounded-[14px] px-5 py-4 hover-border-gold transition-colors"
+            onclick="window.location='<?= site_url('drive/show/' . $journey['id_journey_drive']) ?>'">
                 <div class="flex flex-col gap-2 md:flex-row md:items-center md:justify-between mb-3">
                     <div>
                         <p class="text-sm font-medium text-lightgrey">
@@ -27,11 +27,11 @@
 
                 <div class="flex justify-end">
                     <a href="<?= site_url('drive/show/' . $journey['id_journey_drive']) ?>"
-                        class="bg-gold text-ocean font-semibold text-xs px-5 py-2 rounded-full hover:opacity-90 transition-opacity">
+                        class="bg-gold text-ocean font-semibold text-xs px-5 py-2 rounded-full hover:opacity-90 transition-opacity"
+                        onclick="event.stopPropagation()">
                         Réserver
                     </a>
                 </div>
             </div>
-        </a>
     <?php endforeach ?>
 </div>
